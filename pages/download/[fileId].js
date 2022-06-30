@@ -11,7 +11,7 @@ export default function FileId() {
     event.preventDefault()
     try {
       const { data: { path, name } } = await axios.post(`${process.env.NEXT_PUBLIC_API}file/${fileId}`, { pass: password.current.value })
-      const pathList = path.split('\\')
+      const pathList = path.split('/')
       const response = await axios({
         url: `${process.env.NEXT_PUBLIC_API}download/${pathList[pathList.length - 1]}`,
         responseType: 'blob', // important for downlaoding file

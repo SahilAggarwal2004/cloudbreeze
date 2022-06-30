@@ -28,7 +28,7 @@ export default function Home() {
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={password} className='border rounded' />
       <button type="submit" className='col-span-2 border border-black rounded bg-gray-100'>Share</button>
-      {link && <Link href={`/download/${link}`} className='col-span-2'>Click here to download the file</Link>}
+      {link && <a className='col-span-2 text-center'><Link href={`/download/${link}`}>Click here to download the file</Link></a>}
     </form>
   </div>
 }
