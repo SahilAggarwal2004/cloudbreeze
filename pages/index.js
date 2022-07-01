@@ -43,7 +43,7 @@ export default function Home() {
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={password} className='border rounded' />
       <button type="submit" disabled={upPercent} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50'>Upload</button>
-      {upPercent == 100 && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
+      {link && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
     {Boolean(upPercent) && <div className='w-full flex items-center justify-evenly'>
