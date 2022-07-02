@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/router'
-import axios from 'axios'
+import React, { useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 import { toast } from 'react-toastify';
+import { File } from 'megajs';
 
 export default function FileId() {
   const router = useRouter()
@@ -13,22 +14,24 @@ export default function FileId() {
   async function downloadFile(event) {
     event.preventDefault()
     try {
-      const { data: { filename, originalname } } = await axios.post(`${process.env.NEXT_PUBLIC_API}file/${fileId}`, { pass: password.current.value })
-      const response = await axios({
-        url: `${process.env.NEXT_PUBLIC_API}download/${filename}`,
-        responseType: 'blob', // important for downloading file
-        onDownloadProgress: ({ loaded, total }) => setDownPercent(Math.round((loaded * 100) / total))
+      const { data: { link, name } } = await axios.post(`${process.env.NEXT_PUBLIC_API}file/${fileId}`, { pass: password.current.value })
+      const file = File.fromURL(link)
+      const stream = file.download();
+      let dataList = [];
+      stream.on('data', data => dataList = dataList.concat(Array.from(data)))
+      stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
+        setDownPercent(Math.round((bytesLoaded * 100) / bytesTotal))
+        if (bytesLoaded == bytesTotal) {
+          const data = new Uint8Array(dataList)
+          const url = window.URL.createObjectURL(new Blob([data]));
+          toast.success('File downloaded successfully!')
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = name; // giving default name to download prompt
+          a.click();
+        }
       })
-      toast.success('File downloaded successfully!')
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = originalname; // giving default name to download prompt
-      link.click();
-    } catch (error) {
-      toast.error('Some error occurred...')
-      console.log(error.response.data)
-    }
+    } catch (error) { toast.error(error.response?.data || 'Some error occurred...') }
   }
 
   return <div className='max-w-[400px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col space-y-5 justify-center items-center px-2'>

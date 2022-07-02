@@ -9,7 +9,12 @@ export default function Home() {
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
 
-  function updateFile(event) { setFile(event.target.files[0]) }
+  function updateFile(event) {
+    if (event.target.files[0]?.size > 25 * 1048576) { // 25MB
+      toast.warning("File is too big!");
+      event.target.value = "";
+    } else setFile(event.target.files[0])
+  }
 
   function reset() {
     setLink();
@@ -31,8 +36,8 @@ export default function Home() {
       toast.success('File uploaded successfully!')
       setLink(fileId)
     } catch (error) {
-      toast.error('Some error occurred...')
-      console.log(error.response.data)
+      toast.error(error.response?.data || 'Some error occurred...')
+      setLink('error')
     }
   }
 
@@ -46,13 +51,18 @@ export default function Home() {
       {link && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
-    {Boolean(upPercent) && <div className='w-full flex items-center justify-evenly'>
+    {Boolean(upPercent) && link != 'error' && <div className='w-full flex items-center justify-evenly'>
       <div className='bg-gray-300 rounded-full h-1 w-4/5'>
         <div className={`bg-green-500 rounded-full h-1`} style={{ width: `${upPercent}%` }} />
       </div>
       {upPercent}%
     </div>}
 
-    {link && <Link href={`/download/${link}`}>Click here to download the file</Link>}
+    {upPercent == 100 && !link && <div className='flex items-center space-x-2'>
+      <div className='w-[1.375rem] h-[1.375rem] border-2 border-transparent border-t-black border-b-black rounded-[50%] animate-spin-fast' />
+      <div>Please wait, processing the file...</div>
+    </div>}
+
+    {link && link != 'error' && <Link href={`/download/${link}`}>Click here to download the file</Link>}
   </div >
 }
