@@ -38,14 +38,14 @@ export default function FileId() {
     }
   }
 
-  return <div className='max-w-[400px] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col space-y-5 justify-center items-center px-2'>
+  return <div className='flex flex-col space-y-5 justify-center items-center p-4'>
     <form onSubmit={downloadFile} className="grid grid-cols-[auto_1fr] gap-3 place-content-center">
       <label htmlFor="password">Password (if any):</label>
       <input type="password" id='password' ref={password} className='border rounded' />
       <button type="submit" disabled={downPercent && downPercent != 100} className='col-span-2 py-0.5 border border-black rounded bg-gray-100 disabled:opacity-50'>{downPercent == 100 ? 'Download Again' : 'Download'}</button>
     </form>
 
-    {Boolean(downPercent) ? <div className='w-full flex items-center justify-evenly'>
+    {Boolean(downPercent) ? <div className='w-full flex items-center justify-evenly max-w-[400px]'>
       <div className='bg-gray-300 rounded-full h-1 w-4/5'>
         <div className={`bg-green-500 rounded-full h-1`} style={{ width: `${downPercent}%` }} />
       </div>
