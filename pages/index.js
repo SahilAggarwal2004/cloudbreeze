@@ -61,7 +61,7 @@ export default function Home() {
     }
   }
 
-  return <div className='flex flex-col space-y-5 justify-center items-center px-2 py-5'>
+  return <div className='flex flex-col space-y-5 justify-center items-center px-4 py-5'>
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 place-content-center">
       <label htmlFor="files">File(s):</label>
       <input type="file" id='files' required onChange={updateFile} multiple />
