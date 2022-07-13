@@ -38,7 +38,7 @@ export default function FileId() {
     }
   }
 
-  return <div className='flex flex-col space-y-5 justify-center items-center p-4'>
+  return <div className='flex flex-col space-y-5 justify-center items-center px-2 py-5'>
     <form onSubmit={downloadFile} className="grid grid-cols-[auto_1fr] gap-3 place-content-center">
       <label htmlFor="password">Password (if any):</label>
       <input type="password" id='password' ref={password} className='border rounded' />
