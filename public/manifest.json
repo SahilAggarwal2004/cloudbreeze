@@ -5,17 +5,44 @@
   "author": "Sahil Aggarwal",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "icons/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "logo.png",
+      "src": "icons/manifest-icon-192.maskable.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "sizes": "192x192 256x256 512x512"
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/manifest-icon-512.maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/",
+  "share_target": {
+    "action": "/",
+    "params": {
+      "files": [
+        {
+          "name": "file",
+          "accept": [
+            "*"
+          ]
+        }
+      ]
+    }
+  },
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
