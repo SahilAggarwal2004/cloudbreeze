@@ -16,9 +16,16 @@ export default function MyApp({ Component, pageProps }) {
 
   return <>
     <Head>
+      <meta charset="utf-8" />
       <title>CloudBreeze - Breeze your files on the cloud!</title>
+      <link rel="icon" href="./favicon.ico" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta name="theme-color" content="#ffffff" />
+      <meta name="keywords"
+        content="cloud, breeze, cloudbreeze, platform, encryption, security, save, share, netlify, reactjs, nextjs, online, online platform, free, access, anywhere, anytime, fast, independent, web app, world, files, password, protected" />
       <meta name="description" content="CloudBreeze is an online platform to where you can share files via cloud between your friends. We respect your privacy and that's why we make sure your files are totally encrypted and password protected." />
-      <link rel="icon" href="/favicon.ico" />
+      <link rel='manifest' href='/manifest.json' />
+
       <link rel="apple-touch-icon" href="icons/apple-icon-180.png" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <link rel="apple-touch-startup-image" href="icons/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
