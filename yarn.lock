@@ -4209,7 +4209,7 @@ workbox-range-requests@6.5.3:
   dependencies:
     workbox-core "6.5.3"
 
-workbox-recipes@6.5.3, workbox-recipes@^6.5.3:
+workbox-recipes@6.5.3:
   version "6.5.3"
   resolved "https://registry.yarnpkg.com/workbox-recipes/-/workbox-recipes-6.5.3.tgz#15beac9d8ae7a3a1c100218094a824b4dd3fd59a"
   integrity sha512-IcgiKYmbGiDvvf3PMSEtmwqxwfQ5zwI7OZPio3GWu4PfehA8jI8JHI3KZj+PCfRiUPZhjQHJ3v1HbNs+SiSkig==
