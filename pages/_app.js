@@ -4,8 +4,10 @@ import { Workbox } from 'workbox-window';
 import { ToastContainer } from 'react-toastify';
 import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
+import ContextProvider from '../context/ContextProvider';
 
 export default function MyApp({ Component, pageProps }) {
+  
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       const wb = new Workbox('sw.js', { scope: '/' })
@@ -14,7 +16,7 @@ export default function MyApp({ Component, pageProps }) {
     }
   }, [])
 
-  return <>
+  return <ContextProvider>
     <Head>
       <meta charset="utf-8" />
       <title>CloudBreeze - Breeze your files on the cloud!</title>
@@ -75,5 +77,5 @@ export default function MyApp({ Component, pageProps }) {
     </Head>
     <Component {...pageProps} />
     <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' />
-  </>
+  </ContextProvider>
 }

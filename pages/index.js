@@ -1,14 +1,15 @@
 import axios from 'axios'
 import Link from 'next/link'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
 import JSZip from 'jszip';
 import Loader from '../components/Loader';
 import Qr from '../components/Qr';
+import { useFileContext } from '../context/ContextProvider';
 
 export default function Home() {
   const password = useRef()
-  const [files, setFiles] = useState()
+  const { files, setFiles } = useFileContext()
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
 
@@ -60,6 +61,15 @@ export default function Home() {
       setLink('error')
     }
   }
+
+  useEffect(() => {
+    navigator.serviceWorker?.addEventListener('message', function (e) {
+      if (searchParams.has('receiving-file-share')) {
+        console.log(e.data.files); //contains the file(s)
+      }
+    });
+  }, [])
+
 
   return <div className='flex flex-col space-y-5 justify-center items-center px-4 py-5'>
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 place-content-center">

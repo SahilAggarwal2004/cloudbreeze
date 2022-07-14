@@ -31,13 +31,15 @@
   ],
   "start_url": "/",
   "share_target": {
-    "action": "/",
+    "action": "/?share-target=1",
+    "method": "POST",
+    "enctype": "multipart/form-data",
     "params": {
       "files": [
         {
-          "name": "file",
+          "name": "files",
           "accept": [
-            "*"
+            "image/*"
           ]
         }
       ]
