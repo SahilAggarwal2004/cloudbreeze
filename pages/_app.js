@@ -74,6 +74,6 @@ export default function MyApp({ Component, pageProps }) {
       <link rel="apple-touch-startup-image" href="icons/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
     </Head>
     <Component {...pageProps} />
-    <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} />
+    <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' />
   </>
 }
