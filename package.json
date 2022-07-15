@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "formidable": "^2.0.1",
+    "fs": "^0.0.1-security",
     "jszip": "^3.10.0",
     "megajs": "^1.0.5",
     "next": "12.2.0",
