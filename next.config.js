@@ -153,10 +153,29 @@ module.exports = withPWA({
             maxEntries: 16,
             maxAgeSeconds: 24 * 60 * 60 // 24 hours
           },
-          networkTimeoutSeconds: 10 // fall back to cache if api does not response within 10 seconds
+          networkTimeoutSeconds: 10, // fall back to cache if api does not response within 10 seconds
         }
       },
-      // removed 'others' cache
+      {
+        urlPattern: ({ url }) => {
+          const isSameOrigin = self.origin === url.origin
+          if (!isSameOrigin) return false
+          const pathname = url.pathname
+          if (pathname.startsWith('/api/')) return false
+          if (url.searchParams.has('share')) return false // added manually
+          return true
+        },
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'others',
+          expiration: {
+            maxEntries: 32,
+            maxAgeSeconds: 24 * 60 * 60 // 24 hours
+          },
+          networkTimeoutSeconds: 10,
+          precacheFallback: { fallbackURL: '/_offline' } // added manually
+        }
+      },
       {
         urlPattern: ({ url }) => {
           const isSameOrigin = self.origin === url.origin
