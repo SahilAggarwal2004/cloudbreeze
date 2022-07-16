@@ -1,21 +1,10 @@
 import Head from 'next/head'
-import { useEffect } from 'react';
-import { Workbox } from 'workbox-window';
 import { ToastContainer } from 'react-toastify';
 import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
 import ContextProvider from '../context/ContextProvider';
 
 export default function MyApp({ Component, pageProps }) {
-
-      useEffect(() => {
-            if ('serviceWorker' in navigator) {
-                  const wb = new Workbox('sw.js', { scope: '/' })
-                  wb.addEventListener('installed', event => { if (event.isUpdate) window.location.reload() })
-                  wb.register()
-            }
-      }, [])
-
       return <ContextProvider>
             <Head>
                   <meta charSet="utf-8" />

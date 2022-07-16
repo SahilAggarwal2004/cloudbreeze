@@ -86,7 +86,7 @@ export default function Home(props) {
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={password} className='border rounded' />
       <button type="submit" disabled={upPercent} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50'>Upload</button>
-      {link && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
+      {link && link != 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
     {Boolean(upPercent) && link != 'error' && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
@@ -109,9 +109,8 @@ export default function Home(props) {
   </div >
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({ req, query }) {
   try {
-    const { req, query } = context
     if (req.method !== 'POST' || !query.share) return { props: { share: false } }
 
     const form = new formidable.IncomingForm();
@@ -125,5 +124,5 @@ export async function getServerSideProps(context) {
     const shareFile = JSON.parse(JSON.stringify(data)).data // uint8array
     const { originalFilename: shareFileName, size: shareFileSize } = shareFileObject
     return { props: { share: true, shareFile, shareFileName, shareFileSize } }
-  } catch { return { props: { share: false } } }
+  } catch (error) { console.log(error); return { props: { share: false } } }
 }

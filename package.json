@@ -19,14 +19,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-qr-code": "^2.0.7",
-    "react-toastify": "^9.0.5",
-    "workbox-cacheable-response": "^6.5.3",
-    "workbox-core": "^6.5.3",
-    "workbox-expiration": "^6.5.3",
-    "workbox-precaching": "^6.5.3",
-    "workbox-routing": "^6.5.3",
-    "workbox-strategies": "^6.5.3",
-    "workbox-window": "^6.5.3"
+    "react-toastify": "^9.0.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
