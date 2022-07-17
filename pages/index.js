@@ -108,5 +108,3 @@ export default function Home(props) {
     </div>}
   </div >
 }
-
-export async function getServerSideProps() { return { props: { share: false } } }
