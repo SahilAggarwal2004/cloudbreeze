@@ -7,8 +7,6 @@ import JSZip from 'jszip';
 import Loader from '../components/Loader';
 import Qr from '../components/Qr';
 import { useFileContext } from '../context/ContextProvider';
-import formidable from 'formidable';
-import { readFileSync } from 'fs';
 
 export default function Home(props) {
   const password = useRef()
@@ -16,9 +14,12 @@ export default function Home(props) {
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
   const [share, setShare] = useState(props.share)
-  const [shareFile, setShareFile] = useState(props.shareFile)
-  const [shareFileName, setShareFileName] = useState(props.shareFileName)
-  const [shareFileSize, setShareFileSize] = useState(props.shareFileSize)
+
+  function calcSize(files) {
+    let size = 0;
+    for (let i = 0; i < files.length; i++) size += files[i].size
+    return size
+  }
 
   function updateFile(event) {
     const { files } = event.target
@@ -26,9 +27,7 @@ export default function Home(props) {
       event.target.value = "";
       return toast.warning("Cannot select more than 10 files!");
     }
-    let size = 0;
-    for (let i = 0; i < files.length; i++) size += files[i].size
-    if (size > 50 * 1048576) { // 50MB
+    if (calcSize(files) > 50 * 1048576) { // 50MB
       event.target.value = "";
       return toast.warning("Total file(s) size exceed 50MB!");
     }
@@ -39,9 +38,6 @@ export default function Home(props) {
     setLink();
     setUpPercent(0);
     setShare(false);
-    setShareFile();
-    setShareFileName();
-    setShareFileSize(0);
   }
 
   async function handleSubmit(event) {
@@ -57,7 +53,6 @@ export default function Home(props) {
     const data = new FormData();
     data.append('files', content) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
     data.append('length', files.length)
-    if (share) data.append('shareFileName', shareFileName)
     if (password) data.append('password', password.current.value)
 
     try {
@@ -75,13 +70,19 @@ export default function Home(props) {
   }
 
   useEffect(() => {
-    if (share) shareFileSize > 50 * 1048576 ? toast.warning("Total file(s) size exceed 50MB!") : setFiles([new Blob([new Uint8Array(shareFile)])])
+    navigator.serviceWorker?.addEventListener('message', ({ data: { files } }) => {
+      if (calcSize(files) > 50 * 1048576) toast.warning("Total file(s) size exceed 50MB!")
+      else {
+        setFiles(files);
+        setShare(true)
+      }
+    })
   }, [])
 
   return <div className='flex flex-col space-y-5 justify-center items-center px-4 py-5'>
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 place-content-center">
       <label htmlFor="files">File(s):</label>
-      {share ? <div>{shareFileName} selected</div>
+      {share ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
         : <input type="file" id='files' required onChange={updateFile} multiple />}
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={password} className='border rounded' />
@@ -109,20 +110,4 @@ export default function Home(props) {
   </div >
 }
 
-export async function getServerSideProps({ req, query }) {
-  try {
-    if (req.method !== 'POST' || !query.share) return { props: { share: false } }
-
-    const form = new formidable.IncomingForm();
-    const { files } = await new Promise((resolve, reject) => { // Promisifying form.parse
-      form.parse(req, function (err, _fields, files) { err ? reject({ err }) : resolve({ files }); });
-    });
-    const shareFileObject = files?.files
-    if (!shareFileObject) return { props: { share: false } }
-
-    const data = readFileSync(shareFileObject.filepath) // buffer
-    const shareFile = JSON.parse(JSON.stringify(data)).data // uint8array
-    const { originalFilename: shareFileName, size: shareFileSize } = shareFileObject
-    return { props: { share: true, shareFile, shareFileName, shareFileSize } }
-  } catch (error) { console.log(error); return { props: { share: false } } }
-}
+export async function getServerSideProps() { return { props: { share: false } } }
