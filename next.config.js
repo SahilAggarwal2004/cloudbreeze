@@ -9,7 +9,8 @@ const nextConfig = {
 module.exports = withPWA({
   pwa: {
     dest: 'public',
-    swSrc: './sw.js'
+    swSrc: './sw.js',
+    reloadOnOnline: false
   },
   ...nextConfig
 })
