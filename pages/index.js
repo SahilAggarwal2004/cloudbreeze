@@ -85,7 +85,7 @@ export default function Home(props) {
         : <input type="file" id='files' required onChange={updateFile} multiple />}
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={password} className='border rounded' />
-      <button type="submit" disabled={upPercent} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50'>Upload</button>
+      <button type="submit" disabled={upPercent} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50'>{link === 'error' ? 'Retry' : 'Upload'}</button>
       {link && link != 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
