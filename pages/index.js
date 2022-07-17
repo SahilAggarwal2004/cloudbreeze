@@ -6,11 +6,10 @@ import { toast } from 'react-toastify';
 import JSZip from 'jszip';
 import Loader from '../components/Loader';
 import Qr from '../components/Qr';
-import { useFileContext } from '../context/ContextProvider';
 
 export default function Home(props) {
   const password = useRef()
-  const { files, setFiles } = useFileContext()
+  const [files, setFiles] = useState()
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
   const [share, setShare] = useState(props.share)
