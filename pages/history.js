@@ -5,14 +5,14 @@ import { FaRegCopy, FaRegTrashAlt } from 'react-icons/fa'
 import { toast } from 'react-toastify'
 
 export default function History() {
-    const { uploadFiles, downloadFiles } = useFileContext()
+    const { uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles } = useFileContext()
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
-    const filter = 'All';
+    const filter = 'Uploaded';
 
     useEffect(() => { setHistory(uploadFiles.concat(downloadFiles)) }, [])
 
-    function copyUrl(fileId) {
-        navigator.clipboard.writeText(`${window.location.origin}/download/${fileId}`)
+    function copyUrl(url) {
+        navigator.clipboard.writeText(url)
         toast.success('URL copied to clipboard')
     }
 
@@ -35,11 +35,16 @@ export default function History() {
                         </tr>
                     </thead>
                     <tbody>
-                        {history.map(({ nameList, fileId, createdAt, type }, i) => {
+                        {history.map(({ nameList, fileId, createdAt, link }, i) => {
                             const daysLeft = 30 - Math.ceil((Date.now() - new Date(createdAt)) / (30 * 24 * 60 * 60 * 1000))
                             if (daysLeft < 0) {
-                                const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
-                                setUploadFiles(updatedFiles)
+                                if (filter === 'Uploaded') {
+                                    const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
+                                    setUploadFiles(updatedFiles)
+                                } else {
+                                    const updatedFiles = downloadFiles.filter(file => file.fileId !== fileId)
+                                    setDownloadFiles(updatedFiles)
+                                }
                                 return;
                             }
                             return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
@@ -51,8 +56,10 @@ export default function History() {
                                 </td>
                                 <td className="text-sm text-gray-900 font-light px-5 py-4">{daysLeft} day(s)</td>
                                 <td className="text-sm text-gray-900 font-light px-5 py-4 space-y-4 sm:space-x-5 sm:space-y-0">
-                                    <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(fileId)} />
-                                    {type === 'upload' && <FaRegTrashAlt className='cursor-pointer scale-110 sm:inline' onClick={() => deleteFile(fileId)} />}
+                                    {filter === 'Uploaded' ? <>
+                                        <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(`${window.location.origin}/download/${fileId}`)} />
+                                        <FaRegTrashAlt className='cursor-pointer scale-110 sm:inline' onClick={() => deleteFile(fileId)} />
+                                    </> : <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(link)} />}
                                 </td>
                             </tr>
                         })}

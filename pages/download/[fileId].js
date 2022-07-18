@@ -9,6 +9,7 @@ import Loader from '../../components/Loader';
 import useFetch from '../../hooks/useFetch';
 
 export default function FileId() {
+  const { downloadFiles, setDownloadFiles } = useFileContext()
   const router = useRouter()
   const { fileId } = router.query
   const password = useRef()
@@ -20,7 +21,7 @@ export default function FileId() {
     event.preventDefault()
     setLoading(true)
     setDownPercent(0)
-    const { link, name, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value } })
+    const { link, name, createdAt, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value } })
     if (!error) {
       const file = File.fromURL(link)
       const stream = file.download();
@@ -32,6 +33,8 @@ export default function FileId() {
           setLoading(false)
           const data = new Uint8Array(dataList)
           download(data, name)
+          const updatedFiles = downloadFiles.concat({ nameList: [name], link, createdAt })
+          setDownloadFiles(updatedFiles)
         }
       })
     } else {

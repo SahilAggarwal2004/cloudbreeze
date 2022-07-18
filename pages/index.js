@@ -65,10 +65,9 @@ export default function Home(props) {
     if (!error) {
       toast.success('Files uploaded successfully!')
       setLink(`/download/${fileId}`)
-      // const nameList = files.map(file => file.name)
       const nameList = []
       for (let i = 0; i < files.length; i++) { nameList.push(files[i].name); }
-      const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId, type: 'upload' })
+      const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId })
       setUploadFiles(updatedFiles)
     } else {
       toast.error(error)
