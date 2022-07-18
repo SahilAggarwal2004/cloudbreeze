@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { File } from 'megajs';
 import download from '../../utilities/download';
 import Loader from '../../components/Loader';
 import useFetch from '../../hooks/useFetch';
+import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function FileId() {
   const { downloadFiles, setDownloadFiles } = useFileContext()
