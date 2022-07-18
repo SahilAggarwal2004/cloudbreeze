@@ -2,9 +2,14 @@ import Head from 'next/head'
 import { ToastContainer } from 'react-toastify';
 import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
+import ContextProvider from '../contexts/ContextProvider';
+import Navbar from '../components/Navbar';
+import { useRouter } from 'next/router';
 
 export default function MyApp({ Component, pageProps }) {
-    return <>
+    const router = useRouter()
+
+    return <ContextProvider>
         <Head>
             <meta charSet="utf-8" />
             <title>CloudBreeze - Breeze your files on the cloud!</title>
@@ -63,7 +68,8 @@ export default function MyApp({ Component, pageProps }) {
             <link rel="apple-touch-startup-image" href="icons/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
             <link rel="apple-touch-startup-image" href="icons/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
         </Head>
+        {router.pathname !== "/_error" && <Navbar />}
         <Component {...pageProps} />
         <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' />
-    </>
+    </ContextProvider>
 }

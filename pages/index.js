@@ -1,18 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import axios from 'axios'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
-import JSZip from 'jszip';
+import JSZip, { file } from 'jszip';
 import Loader from '../components/Loader';
 import Qr from '../components/Qr';
+import useFetch from '../hooks/useFetch';
+import { useFileContext } from '../contexts/ContextProvider';
 
 export default function Home(props) {
+  const { uploadFiles, setUploadFiles } = useFileContext()
   const password = useRef()
   const [files, setFiles] = useState()
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
   const [share, setShare] = useState(props.share)
+  const fetchApp = useFetch()
 
   function calcSize(files) {
     let size = 0;
@@ -54,16 +57,21 @@ export default function Home(props) {
     data.append('length', files.length)
     if (password) data.append('password', password.current.value)
 
-    try {
-      const { data: fileId } = await axios.post(`${process.env.NEXT_PUBLIC_API}upload/files`, data,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-          onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
-        })
+    const { fileId, createdAt, error } = await fetchApp({
+      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', options: {
+        onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
+      }
+    })
+    if (!error) {
       toast.success('Files uploaded successfully!')
-      setLink(fileId)
-    } catch (error) {
-      toast.error(error.response?.data || 'Some error occurred...')
+      setLink(`/download/${fileId}`)
+      // const nameList = files.map(file => file.name)
+      const nameList = []
+      for (let i = 0; i < files.length; i++) { nameList.push(files[i].name); }
+      const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId, type: 'upload' })
+      setUploadFiles(updatedFiles)
+    } else {
+      toast.error(error)
       setLink('error')
     }
   }
@@ -78,20 +86,20 @@ export default function Home(props) {
     })
   }, [])
 
-  return <div className='flex flex-col space-y-5 justify-center items-center px-4 py-5'>
+  return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5'>
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 place-content-center">
       <label htmlFor="files">File(s):</label>
       {share ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
         : <input type="file" id='files' required onChange={updateFile} multiple />}
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={password} className='border rounded' />
-      <button type="submit" disabled={upPercent} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50'>{link === 'error' ? 'Retry' : 'Upload'}</button>
+      <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50'>{link === 'error' ? 'Retry' : 'Upload'}</button>
       {link && link != 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
     {Boolean(upPercent) && link != 'error' && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
       <div className='bg-gray-300 rounded-full h-1 w-4/5'>
-        <div className={`bg-green-500 rounded-full h-1`} style={{ width: `${upPercent}%` }} />
+        <div className='bg-green-500 rounded-full h-1' style={{ width: `${upPercent}%` }} />
       </div>
       {upPercent}%
     </div>}
@@ -102,9 +110,9 @@ export default function Home(props) {
     </div>}
 
     {link && link != 'error' && <div className='text-center space-y-2'>
-      <Link href={`/download/${link}`}>Click here to download the file(s)</Link>
+      <Link href={link}>Click here to download the file(s)</Link>
       <div className='font-bold'>OR</div>
-      <Qr link={`${window.location.origin}/download/${link}`} />
+      <Qr link={`${window.location.origin}${link}`} />
     </div>}
   </div >
 }

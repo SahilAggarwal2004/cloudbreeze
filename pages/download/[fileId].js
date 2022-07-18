@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { File } from 'megajs';
 import download from '../../utilities/download';
 import Loader from '../../components/Loader';
+import useFetch from '../../hooks/useFetch';
 
 export default function FileId() {
   const router = useRouter()
@@ -13,13 +14,14 @@ export default function FileId() {
   const password = useRef()
   const [downPercent, setDownPercent] = useState(0)
   const [loading, setLoading] = useState(false)
+  const fetchApp = useFetch()
 
   async function downloadFile(event) {
     event.preventDefault()
-    try {
-      setLoading(true)
-      setDownPercent(0)
-      const { data: { link, name } } = await axios.post(`${process.env.NEXT_PUBLIC_API}file/${fileId}`, { pass: password.current.value })
+    setLoading(true)
+    setDownPercent(0)
+    const { link, name, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value } })
+    if (!error) {
       const file = File.fromURL(link)
       const stream = file.download();
       let dataList = [];
@@ -32,13 +34,13 @@ export default function FileId() {
           download(data, name)
         }
       })
-    } catch (error) {
+    } else {
       setLoading(false)
-      toast.error(error.response?.data || 'Some error occurred...')
+      toast.error(error)
     }
   }
 
-  return <div className='flex flex-col space-y-5 justify-center items-center px-4 py-5'>
+  return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5'>
     <form onSubmit={downloadFile} className="grid grid-cols-[auto_1fr] gap-3 place-content-center">
       <label htmlFor="password">Password (if any):</label>
       <input type="password" id='password' ref={password} className='border rounded' />
@@ -47,7 +49,7 @@ export default function FileId() {
 
     {Boolean(downPercent) ? <div className='w-full flex items-center justify-evenly max-w-[400px]'>
       <div className='bg-gray-300 rounded-full h-1 w-4/5'>
-        <div className={`bg-green-500 rounded-full h-1`} style={{ width: `${downPercent}%` }} />
+        <div className='bg-green-500 rounded-full h-1' style={{ width: `${downPercent}%` }} />
       </div>
       {downPercent}%
     </div> : loading && <div className='flex items-center space-x-2'>
