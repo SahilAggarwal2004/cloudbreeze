@@ -18,7 +18,7 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         if (token.value || token.change) {
-            const { error } = fetchApp({ url: 'verify', authtoken: token.value })
+            const { error } = fetchApp({ url: 'auth/verify', authtoken: token.value })
             error ? setToken({ value: '', change: false }) : setToken({ value: token.value, change: false })
         }
     }, [token.change])
