@@ -34,8 +34,8 @@ registerRoute(({ url }) => url.pathname.startsWith('/file'), new CacheFirst({
 self.addEventListener('fetch', (event) => {
     const { request } = event
     const url = new URL(request.url);
-    if (request.method === 'POST' && url.pathname === '/' && url.searchParams.has('share')) {
-        event.respondWith(Response.redirect('/')); // important to tackle cannot post '/' error
+    if (request.method === 'POST' && url.pathname === '/file/upload' && url.searchParams.has('share')) {
+        event.respondWith(Response.redirect('/file/upload')); // important to tackle cannot post '/file/upload' error
         event.waitUntil(async function () {
             const client = await self.clients.get(event.resultingClientId);
             const data = await event.request.formData();

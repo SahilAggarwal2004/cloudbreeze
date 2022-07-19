@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head'
 import { ToastContainer } from 'react-toastify';
 import '../styles/globals.css'
@@ -9,7 +10,7 @@ import { useRouter } from 'next/router';
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
 
-    return <ContextProvider>
+    return <ContextProvider router={router}>
         <Head>
             <meta charSet="utf-8" />
             <title>CloudBreeze - Breeze your files on the cloud!</title>

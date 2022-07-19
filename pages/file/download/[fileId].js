@@ -1,16 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState } from 'react';
-import { useRouter } from 'next/router';
-import { toast } from 'react-toastify';
 import { File } from 'megajs';
-import download from '../../utilities/download';
-import Loader from '../../components/Loader';
-import useFetch from '../../hooks/useFetch';
-import { useFileContext } from '../../contexts/ContextProvider';
+import download from '../../../utilities/download';
+import Loader from '../../../components/Loader';
+import useFetch from '../../../hooks/useFetch';
+import { useFileContext } from '../../../contexts/ContextProvider';
 
 export default function FileId() {
-  const { downloadFiles, setDownloadFiles } = useFileContext()
-  const router = useRouter()
+  const { router, token, downloadFiles, setDownloadFiles } = useFileContext()
   const { fileId } = router.query
   const password = useRef()
   const [downPercent, setDownPercent] = useState(0)
@@ -21,7 +18,7 @@ export default function FileId() {
     event.preventDefault()
     setLoading(true)
     setDownPercent(0)
-    const { link, name, createdAt, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value } })
+    const { link, name, createdAt, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value }, authtoken: token.value })
     if (!error) {
       const file = File.fromURL(link)
       const stream = file.download();
@@ -37,10 +34,7 @@ export default function FileId() {
           setDownloadFiles(updatedFiles)
         }
       })
-    } else {
-      setLoading(false)
-      toast.error(error)
-    }
+    } else setLoading(false)
   }
 
   return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5'>

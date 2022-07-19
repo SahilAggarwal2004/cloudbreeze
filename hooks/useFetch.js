@@ -1,10 +1,11 @@
 import axios from "axios";
+import { toast } from 'react-toastify'
+
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 
-async function fetchApp({ url, method = 'GET', type = 'application/json', data = null, options = {} }) {
+async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = null, options = {} }) {
     let json;
     try {
-        const authtoken = localStorage.getItem('token')
         const response = await axios({
             url, method, data, ...options,
             headers: { authtoken, 'Content-Type': type }
@@ -12,9 +13,13 @@ async function fetchApp({ url, method = 'GET', type = 'application/json', data =
         json = response.data;
 
         // if (json.success && api===) localStorage.setItem('files', JSON.stringify({ ...json, local: true }))
-    } catch (error) {
+    } catch (err) {
         // (api === ) ? json = JSON.parse(localStorage.getItem('files'));
-        if (!json) json = { success: false, error: error.response?.data?.error || "Some error occured..." }
+        if (!json) {
+            const error = err.response?.data?.error || "Some error occured..."
+            json = { success: false, error }
+            toast.error(error)
+        }
     }
     return json
 }

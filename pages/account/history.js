@@ -1,15 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import { useFileContext } from '../contexts/ContextProvider'
+import { useFileContext } from '../../contexts/ContextProvider'
 import { FaRegCopy, FaRegTrashAlt } from 'react-icons/fa'
 import { toast } from 'react-toastify'
+import useFetch from '../../hooks/useFetch'
 
 export default function History() {
-    const { uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles } = useFileContext()
+    const { token, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles } = useFileContext()
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
-    const filter = 'Uploaded';
+    const filters = ['Uploaded', 'Downloaded']
+    const [filter, setFilter] = useState('Uploaded');
+    const [limit, setLimit] = useState(30);
+    const fetchApp = useFetch()
 
-    useEffect(() => { setHistory(uploadFiles.concat(downloadFiles)) }, [])
+    useEffect(() => {
+        // to be verified via backend
+        if (!localStorage.getItem('authtoken')) setLimit(limit / 10)
+    }, [])
+
+    useEffect(() => { setHistory(filter === 'Uploaded' ? uploadFiles : downloadFiles) }, [filter])
 
     function copyUrl(url) {
         navigator.clipboard.writeText(url)
@@ -17,14 +26,22 @@ export default function History() {
     }
 
     async function deleteFile(fileId) {
-        const { error } = await fetchApp({ url: `file/get/${fileId}`, method: 'DELETE' })
-        error ? toast.error(error) : toast.success('File deleted successfully!')
+        const { success } = await fetchApp({ url: `file/get/${fileId}`, method: 'DELETE', authtoken: token.value })
+        if (success) {
+            const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
+            setUploadFiles(updatedFiles)
+            toast.success('File deleted successfully!')
+        }
     }
 
     return <>
-        <h1 className='text-center text-xl font-bold mb-2'>{filter} Files</h1>
-        <div className="overflow-x-auto">
-            <div className="py-2 inline-block min-w-full">
+        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-1 space-x-0.5">
+            {filters.map(value => <li key={value} className={`inline-block px-4 py-3 rounded-t-lg ${filter === value ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`} onClick={() => setFilter(value)}>{value} Files</li>)}
+        </ul>
+        {!history.length ? <div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+            No files to show
+        </div> : <div className="overflow-x-auto">
+            <div className="pb-2 inline-block min-w-full">
                 <table className="min-w-full">
                     <thead className="border-b">
                         <tr>
@@ -36,7 +53,7 @@ export default function History() {
                     </thead>
                     <tbody>
                         {history.map(({ nameList, fileId, createdAt, link }, i) => {
-                            const daysLeft = 30 - Math.ceil((Date.now() - new Date(createdAt)) / (30 * 24 * 60 * 60 * 1000))
+                            const daysLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (30 * 24 * 60 * 60 * 1000))
                             if (daysLeft < 0) {
                                 if (filter === 'Uploaded') {
                                     const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
@@ -54,10 +71,10 @@ export default function History() {
                                         {nameList.map(name => <li key={name}>{name}</li>)}
                                     </ul> : nameList[0]}
                                 </td>
-                                <td className="text-sm text-gray-900 font-light px-5 py-4">{daysLeft} day(s)</td>
+                                <td className="text-sm text-gray-900 font-light px-5 py-4">{daysLeft ? `${daysLeft} day(s)` : 'Less than a day'}</td>
                                 <td className="text-sm text-gray-900 font-light px-5 py-4 space-y-4 sm:space-x-5 sm:space-y-0">
                                     {filter === 'Uploaded' ? <>
-                                        <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(`${window.location.origin}/download/${fileId}`)} />
+                                        <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(`${window.location.origin}/file/download/${fileId}`)} />
                                         <FaRegTrashAlt className='cursor-pointer scale-110 sm:inline' onClick={() => deleteFile(fileId)} />
                                     </> : <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(link)} />}
                                 </td>
@@ -66,6 +83,6 @@ export default function History() {
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div>}
     </>
 }
