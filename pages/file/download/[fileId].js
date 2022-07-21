@@ -18,7 +18,7 @@ export default function FileId() {
     event.preventDefault()
     setLoading(true)
     setDownPercent(0)
-    const { fileId, link, name, createdAt, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value }, authtoken: token.value })
+    const { fileId: id, link, name, createdAt, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value }, authtoken: token.value })
     if (!error) {
       const file = File.fromURL(link)
       const stream = file.download();
@@ -30,7 +30,7 @@ export default function FileId() {
           setLoading(false)
           const data = new Uint8Array(dataList)
           download(data, name)
-          const updatedFiles = downloadFiles.concat({ nameList: [name], fileId, createdAt })
+          const updatedFiles = downloadFiles.concat({ nameList: [name], fileId: id, createdAt })
           setDownloadFiles(updatedFiles)
         }
       })
