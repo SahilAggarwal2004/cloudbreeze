@@ -10,20 +10,25 @@ export const useFileContext = () => useContext(Context)
 export default function ContextProvider({ children, router }) {
     const [uploadFiles, setUploadFiles] = useStorage('upload-files', [])
     const [downloadFiles, setDownloadFiles] = useStorage('download-files', [])
-    const [guestName, setGuestName] = useStorage('guestName')
+    const [guest, setGuest] = useStorage('guest', { id: '', name: '' })
     const [token, setToken] = useStorage('token', { value: '', change: true })
     const fetchApp = useFetch()
 
-    useEffect(() => { if (!guestName) setGuestName(randomName()) }, [])
-
     useEffect(() => {
         if (token.value || token.change) {
-            const { error } = fetchApp({ url: 'auth/verify', authtoken: token.value })
-            error ? setToken({ value: '', change: false }) : setToken({ value: token.value, change: false })
+            fetchApp({ url: 'auth/verify', method: 'POST', authtoken: token.value, showError: false }).then(({ error }) => {
+                if (error) {
+                    setToken({ value: '', change: false })
+                    if (!guest.id) setGuest({ id: Date.now(), name: randomName() })
+                } else {
+                    setToken({ value: token.value, change: false })
+                    setGuest({ id: '', name: '' })
+                }
+            })
         }
-    }, [token.change])
+    }, [token])
 
-    return <Context.Provider value={{ router, guestName, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles }}>
+    return <Context.Provider value={{ router, guest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles }}>
         {children}
     </Context.Provider>
 }

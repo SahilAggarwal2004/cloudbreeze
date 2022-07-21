@@ -9,7 +9,7 @@ import useFetch from '../../hooks/useFetch';
 import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function Upload(props) {
-  const { token, uploadFiles, setUploadFiles } = useFileContext()
+  const { guest, token, uploadFiles, setUploadFiles } = useFileContext()
   const password = useRef()
   const [files, setFiles] = useState()
   const [link, setLink] = useState()
@@ -56,6 +56,7 @@ export default function Upload(props) {
     data.append('files', content) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
     data.append('length', files.length)
     if (password) data.append('password', password.current.value)
+    if (guest.id) data.append('guest', guest.id)
 
     const { fileId, createdAt, error } = await fetchApp({
       url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token.value, options: {
@@ -89,8 +90,8 @@ export default function Upload(props) {
         : <input type="file" id='files' required onChange={updateFile} multiple />}
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={password} className='border rounded' />
-      <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50'>{link === 'error' ? 'Retry' : 'Upload'}</button>
-      {link && link != 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
+      <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50' onClick={() => { if (link === 'error') reset() }}>Upload</button>
+      {link && link !== 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
     {Boolean(upPercent) && link != 'error' && <div className='w-full flex items-center justify-evenly max-w-[400px]'>

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 import useFetch from '../../hooks/useFetch'
 
 export default function History() {
-    const { token, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles } = useFileContext()
+    const { guest, token, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles } = useFileContext()
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
     const filters = ['Uploaded', 'Downloaded']
     const [filter, setFilter] = useState('Uploaded');
@@ -18,7 +18,7 @@ export default function History() {
         if (!localStorage.getItem('authtoken')) setLimit(limit / 10)
     }, [])
 
-    useEffect(() => { setHistory(filter === 'Uploaded' ? uploadFiles : downloadFiles) }, [filter])
+    useEffect(() => { setHistory(filter === 'Uploaded' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])
 
     function copyUrl(url) {
         navigator.clipboard.writeText(url)
@@ -26,7 +26,7 @@ export default function History() {
     }
 
     async function deleteFile(fileId) {
-        const { success } = await fetchApp({ url: `file/get/${fileId}`, method: 'DELETE', authtoken: token.value })
+        const { success } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: token.value, data: { guestId: guest.id } })
         if (success) {
             const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
             setUploadFiles(updatedFiles)
@@ -52,7 +52,7 @@ export default function History() {
                         </tr>
                     </thead>
                     <tbody>
-                        {history.map(({ nameList, fileId, createdAt, link }, i) => {
+                        {history.map(({ nameList, fileId, createdAt }, i) => {
                             const daysLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (30 * 24 * 60 * 60 * 1000))
                             if (daysLeft < 0) {
                                 if (filter === 'Uploaded') {
@@ -73,10 +73,8 @@ export default function History() {
                                 </td>
                                 <td className="text-sm text-gray-900 font-light px-5 py-4">{daysLeft ? `${daysLeft} day(s)` : 'Less than a day'}</td>
                                 <td className="text-sm text-gray-900 font-light px-5 py-4 space-y-4 sm:space-x-5 sm:space-y-0">
-                                    {filter === 'Uploaded' ? <>
-                                        <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(`${window.location.origin}/file/download/${fileId}`)} />
-                                        <FaRegTrashAlt className='cursor-pointer scale-110 sm:inline' onClick={() => deleteFile(fileId)} />
-                                    </> : <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(link)} />}
+                                    <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(`${window.location.origin}/file/download/${fileId}`)} />
+                                    {filter === 'Uploaded' && <FaRegTrashAlt className='cursor-pointer scale-110 sm:inline' onClick={() => deleteFile(fileId)} />}
                                 </td>
                             </tr>
                         })}

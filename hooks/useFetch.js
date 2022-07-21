@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 
-async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = null, options = {} }) {
+async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = null, options = {}, showError = true }) {
     let json;
     try {
         const response = await axios({
@@ -18,7 +18,7 @@ async function fetchApp({ url, authtoken = '', method = 'GET', type = 'applicati
         if (!json) {
             const error = err.response?.data?.error || "Some error occured..."
             json = { success: false, error }
-            toast.error(error)
+            if (showError) toast.error(error)
         }
     }
     return json
