@@ -3,22 +3,20 @@ import React, { useRef, useState } from 'react';
 import { File } from 'megajs';
 import download from '../../../utilities/download';
 import Loader from '../../../components/Loader';
-import useFetch from '../../../hooks/useFetch';
 import { useFileContext } from '../../../contexts/ContextProvider';
 
 export default function FileId() {
-  const { router, token, downloadFiles, setDownloadFiles } = useFileContext()
+  const { router, token, downloadFiles, setDownloadFiles, fetchApp } = useFileContext()
   const { fileId } = router.query
   const password = useRef()
   const [downPercent, setDownPercent] = useState(0)
   const [loading, setLoading] = useState(false)
-  const fetchApp = useFetch()
 
   async function downloadFile(event) {
     event.preventDefault()
     setLoading(true)
     setDownPercent(0)
-    const { link, name, createdAt, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value }, authtoken: token.value })
+    const { link, name, createdAt, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value }, authtoken: token })
     if (!error) {
       const file = File.fromURL(link)
       const stream = file.download();

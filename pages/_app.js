@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
+    const hideNavbar = ['/_error', '/account/confirm/[token]']
 
     return <ContextProvider router={router}>
         <Head>
@@ -69,7 +70,7 @@ export default function MyApp({ Component, pageProps }) {
             <link rel="apple-touch-startup-image" href="icons/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
             <link rel="apple-touch-startup-image" href="icons/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
         </Head>
-        {router.pathname !== "/_error" && <Navbar />}
+        {!hideNavbar.includes(router.pathname) && <Navbar />}
         <Component {...pageProps} />
         <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' />
     </ContextProvider>

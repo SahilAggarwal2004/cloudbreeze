@@ -5,17 +5,15 @@ import { toast } from 'react-toastify';
 import JSZip from 'jszip';
 import Loader from '../../components/Loader';
 import Qr from '../../components/Qr';
-import useFetch from '../../hooks/useFetch';
 import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function Upload(props) {
-  const { guest, token, uploadFiles, setUploadFiles } = useFileContext()
+  const { guest, token, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
   const password = useRef()
   const [files, setFiles] = useState()
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
   const [share, setShare] = useState(props.share)
-  const fetchApp = useFetch()
 
   function calcSize(files) {
     let size = 0;
@@ -55,22 +53,22 @@ export default function Upload(props) {
     const data = new FormData();
     data.append('files', content) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
     data.append('length', files.length)
+    const nameList = []
+    for (let i = 0; i < files.length; i++) { nameList.push(files[i].name); }
+    if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password.current.value)
-    if (guest.id) data.append('guest', guest.id)
+    if (guest) data.append('guest', guest)
 
-    const { fileId, createdAt, error } = await fetchApp({
-      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token.value, options: {
+    const { fileId, createdAt, success } = await fetchApp({
+      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token, options: {
         onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
       }
     })
-    if (!error) {
-      toast.success('Files uploaded successfully!')
-      setLink(`/file/download/${fileId}`)
-      const nameList = []
-      for (let i = 0; i < files.length; i++) { nameList.push(files[i].name); }
-      const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId })
-      setUploadFiles(updatedFiles)
-    } else setLink('error')
+    if (!success) return setLink('error')
+    setLink(`/file/download/${fileId}`)
+    if (token) return
+    const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId })
+    setUploadFiles(updatedFiles)
   }
 
   useEffect(() => {

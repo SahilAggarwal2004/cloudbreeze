@@ -23,14 +23,6 @@ registerRoute(({ request }) => request.destination === 'image', new CacheFirst({
     ]
 }))
 
-registerRoute(({ url }) => url.pathname.startsWith('/file'), new CacheFirst({
-    cacheName: 'files',
-    plugins: [
-        new CacheableResponsePlugin({ statuses: [200] }),
-        new ExpirationPlugin({ maxAgeSeconds: 15 * 60 })
-    ]
-}))
-
 self.addEventListener('fetch', (event) => {
     const { request } = event
     const url = new URL(request.url);

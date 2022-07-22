@@ -3,19 +3,16 @@ import React, { useEffect, useState } from 'react'
 import { useFileContext } from '../../contexts/ContextProvider'
 import { FaRegCopy, FaRegTrashAlt } from 'react-icons/fa'
 import { toast } from 'react-toastify'
-import useFetch from '../../hooks/useFetch'
 
 export default function History() {
-    const { guest, token, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles } = useFileContext()
+    const { guest, token, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp } = useFileContext()
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
     const filters = ['Uploaded', 'Downloaded']
     const [filter, setFilter] = useState('Uploaded');
     const [limit, setLimit] = useState(30);
-    const fetchApp = useFetch()
 
     useEffect(() => {
-        // to be verified via backend
-        if (!localStorage.getItem('authtoken')) setLimit(limit / 10)
+        token ? fetchApp({ url: 'file/history', method: 'GET', authtoken: token, showError: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([])) : setLimit(limit / 10)
     }, [])
 
     useEffect(() => { setHistory(filter === 'Uploaded' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])
@@ -26,19 +23,19 @@ export default function History() {
     }
 
     async function deleteFile(fileId) {
-        const { success } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: token.value, data: { guestId: guest.id } })
-        if (success) {
+        const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: token, data: { guestId: guest } })
+        if (!success) return
+        if (!token) {
             const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
             setUploadFiles(updatedFiles)
-            toast.success('File deleted successfully!')
-        }
+        } else setUploadFiles(files)
     }
 
     return <>
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-1 space-x-0.5">
             {filters.map(value => <li key={value} className={`inline-block px-4 py-3 rounded-t-lg ${filter === value ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`} onClick={() => setFilter(value)}>{value} Files</li>)}
         </ul>
-        {!history.length ? <div className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+        {!history.length ? <div className='center'>
             No files to show
         </div> : <div className="overflow-x-auto">
             <div className="pb-2 inline-block min-w-full">
@@ -52,7 +49,9 @@ export default function History() {
                         </tr>
                     </thead>
                     <tbody>
-                        {history.map(({ nameList, fileId, createdAt }, i) => {
+                        {history.map(({ nameList, name, fileId, createdAt, _id }, i) => {
+                            fileId = fileId || _id
+                            if (!nameList[0]) nameList = [name]
                             const daysLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (30 * 24 * 60 * 60 * 1000))
                             if (daysLeft < 0) {
                                 if (filter === 'Uploaded') {
