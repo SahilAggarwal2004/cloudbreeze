@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
-    const hideNavbar = ['/_error', '/account/confirm/[token]']
+    const hideNavbar = ['/_error', '/account/confirm/[token]', '/account/delete/[token]']
 
     return <ContextProvider router={router}>
         <Head>
