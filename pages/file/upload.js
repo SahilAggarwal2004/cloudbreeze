@@ -14,6 +14,7 @@ export default function Upload(props) {
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
   const [share, setShare] = useState(props.share)
+  const limit = 100;
 
   function calcSize(files) {
     let size = 0;
@@ -27,9 +28,9 @@ export default function Upload(props) {
       event.target.value = "";
       return toast.warning("Cannot select more than 10 files!");
     }
-    if (calcSize(files) > 50 * 1048576) { // 50MB
+    if (calcSize(files) > limit * 1048576) { // size limit
       event.target.value = "";
-      return toast.warning("Total file(s) size exceed 50MB!");
+      return toast.warning(`Total file(s) size exceed ${limit}MB!`);
     }
     setFiles(files)
   }
@@ -73,7 +74,7 @@ export default function Upload(props) {
 
   useEffect(() => {
     navigator.serviceWorker?.addEventListener('message', ({ data: { files } }) => {
-      if (calcSize(files) > 50 * 1048576) toast.warning("Total file(s) size exceed 50MB!")
+      if (calcSize(files) > limit * 1048576) toast.warning(`Total file(s) size exceed ${limit}MB!`)
       else {
         setFiles(files);
         setShare(true)

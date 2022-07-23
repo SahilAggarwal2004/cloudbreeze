@@ -13,3 +13,19 @@
 .button-animation {
     @apply border-black text-black bg-gray-100 hover:text-white hover:bg-black transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black
 }
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+::-webkit-scrollbar {
+    width: 2.5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(128, 128, 128, 0.75);
+}
