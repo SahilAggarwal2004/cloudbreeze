@@ -12,7 +12,7 @@ export default function History() {
     const [limit, setLimit] = useState(30);
 
     useEffect(() => {
-        token ? fetchApp({ url: 'file/history', method: 'GET', authtoken: token, showError: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([])) : setLimit(limit / 10)
+        token ? fetchApp({ url: 'file/history', method: 'GET', authtoken: token, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([])) : setLimit(limit / 10)
     }, [])
 
     useEffect(() => { setHistory(filter === 'Uploaded' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])

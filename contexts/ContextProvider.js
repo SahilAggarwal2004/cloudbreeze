@@ -56,7 +56,7 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         if (!username) {
-            fetchApp({ url: 'auth/verify', method: 'POST', authtoken: token, showError: false }).then(({ success, isGuest, name }) => {
+            fetchApp({ url: 'auth/verify', method: 'POST', authtoken: token, showToast: false }).then(({ success, isGuest, name }) => {
                 if (!success || isGuest) {
                     setToken('')
                     setGuest(Date.now())
