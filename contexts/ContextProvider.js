@@ -17,13 +17,16 @@ export default function ContextProvider({ children, router }) {
     const [guest, setGuest] = useStorage('guest', '')
     const [token, setToken] = useStorage('token', '')
     const [progress, setProgress] = useState(0)
+    const [modal, setModal] = useState({ active: false })
 
-    function logout() {
-        setToken('')
+    function logout(prelogin = false) {
         setUsername('')
         setUploadFiles([])
         setDownloadFiles([])
-        router.push('/account/login')
+        if (!prelogin) {
+            setToken('')
+            router.push('/account/signup')
+        } else router.push('/')
     }
 
     async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true }) {
@@ -49,9 +52,22 @@ export default function ContextProvider({ children, router }) {
         return json
     }
 
-    async function handleDelete(token) {
-        const { success } = await fetchApp({ url: 'auth/delete', method: 'DELETE', authtoken: token })
-        if (success) logout()
+    async function deleteUser(token) {
+        setModal({ active: false })
+        setProgress(100 / 3)
+        const { success, error } = await fetchApp({ url: 'auth/delete', method: 'DELETE', authtoken: token })
+        setProgress(100)
+        if (success || error === 'User not found!') logout()
+    }
+
+    async function deleteFile(fileId) {
+        setModal({ active: false })
+        const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: token, data: { guestId: guest } })
+        if (!success) return
+        if (!token) {
+            const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
+            setUploadFiles(updatedFiles)
+        } else setUploadFiles(files)
     }
 
     useEffect(() => {
@@ -69,7 +85,7 @@ export default function ContextProvider({ children, router }) {
         }
     }, [token])
 
-    return <Context.Provider value={{ router, username, setUsername, guest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, handleDelete }}>
+    return <Context.Provider value={{ router, username, setUsername, guest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, deleteUser, deleteFile, modal, setModal }}>
         {children}
     </Context.Provider>
 }

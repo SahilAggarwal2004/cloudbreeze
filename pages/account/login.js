@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function Login() {
-  const { router, setToken, setUsername, fetchApp } = useFileContext()
+  const { setToken, logout, fetchApp } = useFileContext()
   const email = useRef();
   const password = useRef();
   const [show, setShow] = useState(false);
@@ -15,8 +15,7 @@ export default function Login() {
     const { success, authtoken } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
     if (success) {
       setToken(authtoken)
-      setUsername('')
-      router.push('/')
+      logout(true)
     }
   }
 

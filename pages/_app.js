@@ -6,10 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import ContextProvider from '../contexts/ContextProvider';
 import Navbar from '../components/Navbar';
 import { useRouter } from 'next/router';
+import Modal from '../components/Modal';
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
     const hideNavbar = ['/_error', '/account/confirm/[token]', '/account/delete/[token]']
+    const showModal = ['/account', '/account/history']
 
     return <ContextProvider router={router}>
         <Head>
@@ -72,6 +74,7 @@ export default function MyApp({ Component, pageProps }) {
         </Head>
         {!hideNavbar.includes(router.pathname) && <Navbar />}
         <Component {...pageProps} />
+        {showModal.includes(router.pathname) && <Modal />}
         <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' />
     </ContextProvider>
 }

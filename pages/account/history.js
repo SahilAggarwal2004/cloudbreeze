@@ -1,35 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useFileContext } from '../../contexts/ContextProvider'
-import { FaRegCopy, FaRegTrashAlt } from 'react-icons/fa'
-import { toast } from 'react-toastify'
 
 export default function History() {
-    const { guest, token, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp } = useFileContext()
+    const { token, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
     const filters = ['Uploaded', 'Downloaded']
     const [filter, setFilter] = useState('Uploaded');
     const [limit, setLimit] = useState(30);
 
     useEffect(() => {
-        token ? fetchApp({ url: 'file/history', method: 'GET', authtoken: token, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([])) : setLimit(limit / 10)
+        if (token) {
+            fetchApp({ url: 'file/history', method: 'GET', authtoken: token, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
+        } else setLimit(limit / 10)
     }, [])
 
     useEffect(() => { setHistory(filter === 'Uploaded' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])
-
-    function copyUrl(url) {
-        navigator.clipboard.writeText(url)
-        toast.success('URL copied to clipboard')
-    }
-
-    async function deleteFile(fileId) {
-        const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: token, data: { guestId: guest } })
-        if (!success) return
-        if (!token) {
-            const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
-            setUploadFiles(updatedFiles)
-        } else setUploadFiles(files)
-    }
 
     return <>
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-1 space-x-0.5">
@@ -42,10 +28,9 @@ export default function History() {
                 <table className="min-w-full">
                     <thead className="border-b">
                         <tr>
-                            <th scope="col" className="text-sm hidden sm:block font-medium text-gray-900 p-4 text-left">S.No.</th>
+                            <th scope="col" className="text-sm font-medium text-gray-900 p-4 text-left">S.No.</th>
                             <th scope="col" className="text-sm font-medium text-gray-900 p-4 text-left">Name</th>
                             <th scope="col" className="text-sm font-medium text-gray-900 p-4 text-left">Time left</th>
-                            <th scope="col" className="text-sm font-medium text-gray-900 p-4 text-left">Options</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,18 +48,14 @@ export default function History() {
                                 }
                                 return;
                             }
-                            return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100">
-                                <td className="px-5 py-4 hidden sm:block text-sm font-medium text-gray-900">{i + 1}</td>
+                            return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: 'showFile', props: { fileId } })}>
+                                <td className="text-sm text-gray-900 font-medium px-5 py-4">{i + 1}</td>
                                 <td className="text-sm text-gray-900 font-light px-5 py-4">
                                     {nameList.length !== 1 ? <ul className='space-y-1'>
                                         {nameList.map(name => <li key={name}>{name}</li>)}
                                     </ul> : nameList[0]}
                                 </td>
                                 <td className="text-sm text-gray-900 font-light px-5 py-4">{daysLeft ? `${daysLeft} day(s)` : 'Less than a day'}</td>
-                                <td className="text-sm text-gray-900 font-light px-5 py-4 space-y-4 sm:space-x-5 sm:space-y-0">
-                                    <FaRegCopy className='cursor-pointer scale-110 sm:inline' onClick={() => copyUrl(`${window.location.origin}/file/download/${fileId}`)} />
-                                    {filter === 'Uploaded' && <FaRegTrashAlt className='cursor-pointer scale-110 sm:inline' onClick={() => deleteFile(fileId)} />}
-                                </td>
                             </tr>
                         })}
                     </tbody>

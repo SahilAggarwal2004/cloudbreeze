@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
 import JSZip from 'jszip';
 import Loader from '../../components/Loader';
-import Qr from '../../components/Qr';
+import FileInfo from '../../components/FileInfo';
 import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function Upload(props) {
@@ -66,7 +65,7 @@ export default function Upload(props) {
       }
     })
     if (!success) return setLink('error')
-    setLink(`/file/download/${fileId}`)
+    setLink(fileId)
     if (token) return
     const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId })
     setUploadFiles(updatedFiles)
@@ -105,10 +104,6 @@ export default function Upload(props) {
       <div>Please wait, processing the file(s)...</div>
     </div>}
 
-    {link && link != 'error' && <div className='text-center space-y-2'>
-      <Link href={link}>Click here to download the file(s)</Link>
-      <div className='font-bold'>OR</div>
-      <Qr link={`${window.location.origin}${link}`} />
-    </div>}
+    {link && link != 'error' && <FileInfo fileId={link} />}
   </div >
 }

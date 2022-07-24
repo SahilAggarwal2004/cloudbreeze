@@ -5,7 +5,7 @@ import Loader from '../../components/Loader'
 import { useFileContext } from '../../contexts/ContextProvider'
 
 export default function Account() {
-    const { token, username, uploadFiles, downloadFiles, logout, handleDelete } = useFileContext()
+    const { token, username, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
     const [name, setName] = useState()
 
     useEffect(() => { if (username) setName(`${username}${token ? '' : ' (Guest)'}`) }, [username, token])
@@ -28,7 +28,7 @@ export default function Account() {
                 <Link href='/account/login'><a className='hover:text-black'>Login to an existing account</a></Link>
             </> : <>
                 <div className='cursor-pointer hover:text-black' onClick={logout}>Logout</div>
-                <div className='cursor-pointer hover:text-black' onClick={() => handleDelete(token)}>Delete Account</div>
+                <div className='cursor-pointer hover:text-black' onClick={() => setModal({ active: true, type: 'deleteUser' })}>Delete Account</div>
             </>}
         </div>
     </div > : <div className='center flex flex-col items-center space-y-2'>
