@@ -12,15 +12,19 @@ export default function Account() {
 
     return name ? <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
         <div className='text-xl' > Hello, <span className='font-bold'>{name}</span></div>
-        <div className='flex flex-col items-center space-y-5 sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0'>
-            <div className='text-sm'>
-                <div className='text-xl font-semibold'>{uploadFiles.length}</div>
-                Files Uploaded
-            </div>
-            <div className='text-sm'>
-                <div className='text-xl font-semibold'>{downloadFiles.length}</div>
-                Files Downloaded
-            </div>
+        <div className='flex flex-col items-center space-y-5 sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0 text-sm'>
+            <Link href='/account/history?filter=upload'>
+                <a>
+                    <div className='text-xl font-semibold'>{uploadFiles.length}</div>
+                    Files Uploaded
+                </a>
+            </Link>
+            <Link href='/account/history?filter=download'>
+                <a>
+                    <div className='text-xl font-semibold'>{downloadFiles.length}</div>
+                    Files Downloaded
+                </a>
+            </Link>
         </div>
         <div className='text-sm font-medium text-gray-600 flex flex-col items-center space-y-1.5'>
             {!token ? <>

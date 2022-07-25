@@ -1,12 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { useFileContext } from '../../contexts/ContextProvider'
+import capitalize from '../../utilities/capitalize'
 
 export default function History() {
-    const { token, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
+    const { router, token, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
+    const filters = ['upload', 'download']
+    const filter = router.query.filter
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
-    const filters = ['Uploaded', 'Downloaded']
-    const [filter, setFilter] = useState('Uploaded');
     const [limit, setLimit] = useState(30);
 
     useEffect(() => {
@@ -15,11 +17,11 @@ export default function History() {
         } else setLimit(limit / 10)
     }, [])
 
-    useEffect(() => { setHistory(filter === 'Uploaded' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])
+    useEffect(() => { setHistory(filter === 'upload' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])
 
     return <>
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-1 space-x-0.5">
-            {filters.map(value => <li key={value} className={`inline-block px-4 py-3 rounded-t-lg ${filter === value ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`} onClick={() => setFilter(value)}>{value} Files</li>)}
+            {filters.map(value => <Link key={value} href={`/account/history?filter=${value}`}><a className={`inline-block px-4 py-3 rounded-t-lg ${filter === value ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`}>{capitalize(value)}ed Files</a></Link>)}
         </ul>
         {!history.length ? <div className='center'>
             No files to show
@@ -39,7 +41,7 @@ export default function History() {
                             if (!nameList[0]) nameList = [name]
                             const daysLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (30 * 24 * 60 * 60 * 1000))
                             if (daysLeft < 0) {
-                                if (filter === 'Uploaded') {
+                                if (filter === 'upload') {
                                     const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
                                     setUploadFiles(updatedFiles)
                                 } else {
