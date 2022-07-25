@@ -3,7 +3,7 @@ import QRCode from "react-qr-code";
 import Link from 'next/link'
 import { useFileContext } from '../contexts/ContextProvider';
 
-export default function FileInfo({ fileId, modal = false }) {
+export default function FileInfo({ fileId, filter, modal = false }) {
     const link = `${window.location.origin}/file/download/${fileId}`
     const { setModal } = useFileContext()
 
@@ -14,7 +14,7 @@ export default function FileInfo({ fileId, modal = false }) {
         <div>Scan the QR Code given below</div>
         <div className='scale-[0.8]'><QRCode value={link} /></div>
         {modal && <div className='space-x-4 mt-4 text-sm'>
-            <button className='py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: true, type: 'deleteFile', props: { fileId } })}>Delete File</button>
+            {filter === 'upload' && <button className='py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: true, type: 'deleteFile', props: { fileId } })}>Delete File</button>}
             <button className='py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: false })}>Close</button>
         </div>}
     </div>
