@@ -9,12 +9,11 @@ export default function History() {
     const filters = ['upload', 'download']
     const filter = router.query.filter
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
-    const [limit, setLimit] = useState(30);
 
     useEffect(() => {
         if (token) {
             fetchApp({ url: 'file/history', method: 'GET', authtoken: token, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
-        } else setLimit(limit / 10)
+        }
     }, [])
 
     useEffect(() => { setHistory(filter === 'upload' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])
@@ -36,9 +35,10 @@ export default function History() {
                         </tr>
                     </thead>
                     <tbody>
-                        {history.map(({ nameList, name, fileId, createdAt, _id }, i) => {
+                        {history.map(({ nameList, name, fileId, createdAt, user, _id }, i) => {
                             fileId = fileId || _id
                             if (!nameList[0]) nameList = [name]
+                            const limit = user ? 30 : 3
                             const daysLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (24 * 60 * 60 * 1000))
                             if (daysLeft < 0) {
                                 if (filter === 'upload') {
