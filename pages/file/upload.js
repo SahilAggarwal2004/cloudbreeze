@@ -59,7 +59,7 @@ export default function Upload(props) {
     if (password) data.append('password', password.current.value)
     if (guest) data.append('guest', guest)
 
-    const { fileId, createdAt, success } = await fetchApp({
+    const { fileId, createdAt, user, success } = await fetchApp({
       url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token, options: {
         onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
       }
@@ -67,7 +67,7 @@ export default function Upload(props) {
     if (!success) return setLink('error')
     setLink(fileId)
     if (token) return
-    const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId })
+    const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId, user })
     setUploadFiles(updatedFiles)
   }
 
