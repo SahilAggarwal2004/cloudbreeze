@@ -2,14 +2,25 @@ import React from 'react'
 import QRCode from "react-qr-code";
 import Link from 'next/link'
 import { useFileContext } from '../contexts/ContextProvider';
+import { toast } from 'react-toastify';
 
 export default function FileInfo({ fileId, filter, modal = false }) {
     const link = `${window.location.origin}/file/download/${fileId}`
     const { setModal } = useFileContext()
 
+    function share() {
+        const data = { url: link }
+        if (navigator.canShare(data)) {
+            navigator.share({ url: link })
+        } else {
+            navigator.clipboard.writeText(link)
+            toast.success('URL copied to clipboard!')
+        }
+    }
+
     return <div className='text-center space-y-2'>
         {modal && <h2 className='font-bold text-xl mb-4'>Download File</h2>}
-        <Link href={link}>Click here to download the file(s)</Link>
+        <div className='cursor-pointer' onClick={share}>Click here to share the url</div>
         <div className='font-bold'>OR</div>
         <div>Scan the QR Code given below</div>
         <div className='scale-[0.8]'><QRCode value={link} /></div>
