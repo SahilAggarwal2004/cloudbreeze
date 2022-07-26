@@ -67,7 +67,7 @@ export default function Upload(props) {
     if (!success) return setLink('error')
     setLink(fileId)
     if (token) return
-    const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId, user })
+    const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId })
     setUploadFiles(updatedFiles)
   }
 
