@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useFileContext } from '../../contexts/ContextProvider';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Logo from '../../components/Logo';
 
 export default function Signup() {
     const { router, fetchApp } = useFileContext()
@@ -20,9 +20,7 @@ export default function Signup() {
     return <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
             <div>
-                <div className="h-16 text-center">
-                    <Image src="/logo.png" alt="CloudBreeze" width={75} height={75} priority />
-                </div>
+                <Logo />
                 <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">Sign up for an account</h2>
                 <p className="mt-2 text-center text-sm text-gray-600">
                     or <Link href='/account/login'><a className="font-medium hover:text-black">Log in</a></Link>

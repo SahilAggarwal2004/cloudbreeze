@@ -10,7 +10,7 @@ export default function Navbar() {
     return <>
         <LoadingBar color='#ffffff' progress={progress} waitingTime={300} onLoaderFinished={() => setProgress(0)} />
         <nav className='sticky inset-0 z-20 flex bg-black text-white items-center justify-between py-2 px-4 sm:px-5 shadow-lg'>
-            <h2 className='text-xl'>CloudBreeze</h2>
+            <Link href="/"><h1 className='text-xl cursor-pointer select-none'>CloudBreeze</h1></Link>
             {/* adding <a> tag inside <Link> as for some reason <Link> passes a ref to its child and we can't use ref in a react component(here, FaHistory) */}
             {/* title attribute displays text on element hover */}
             <div className='flex space-x-5 sm:space-x-6'>

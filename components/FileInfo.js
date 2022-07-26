@@ -10,9 +10,8 @@ export default function FileInfo({ fileId, filter, modal = false }) {
 
     function share() {
         const data = { url: link }
-        if (navigator.canShare(data)) {
-            navigator.share(data)
-        } else {
+        if (navigator.canShare(data) && navigator.userAgentData?.mobile) navigator.share(data) // navigator.userAgentData?.mobile checks if the device is a mobile device or not
+        else {
             navigator.clipboard.writeText(link)
             toast.success('URL copied to clipboard!')
         }
@@ -20,7 +19,7 @@ export default function FileInfo({ fileId, filter, modal = false }) {
 
     return <div className='text-center space-y-2'>
         {modal && <h2 className='font-bold text-xl mb-4'>Download File</h2>}
-        <div className='cursor-pointer' onClick={share}>Click here to share the url</div>
+        <div className='cursor-pointer select-none' onClick={share}>Click here to share the url</div>
         <div className='font-bold'>OR</div>
         <div>Scan the QR Code given below</div>
         <div className='scale-[0.8]'><QRCode value={link} /></div>

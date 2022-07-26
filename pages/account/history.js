@@ -20,7 +20,7 @@ export default function History() {
     useEffect(() => { setHistory(filter === 'upload' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])
 
     return <>
-        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 px-1 space-x-0.5">
+        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-400 px-1 space-x-0.5">
             {filters.map(value => <Link key={value} href={`/account/history?filter=${value}`}><a className={`inline-block px-4 py-3 rounded-t-lg ${filter === value ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`}>{capitalize(value)}ed Files</a></Link>)}
         </ul>
         {!history.length ? <div className='center'>
