@@ -11,7 +11,7 @@ export default function FileInfo({ fileId, filter, modal = false }) {
     function share() {
         const data = { url: link }
         if (navigator.canShare(data)) {
-            navigator.share({ url: link })
+            navigator.share(data)
         } else {
             navigator.clipboard.writeText(link)
             toast.success('URL copied to clipboard!')

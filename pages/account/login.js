@@ -5,17 +5,18 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function Login() {
-  const { setToken, logout, fetchApp } = useFileContext()
+  const { setToken, setUploadFiles, logout, fetchApp } = useFileContext()
   const email = useRef();
   const password = useRef();
   const [show, setShow] = useState(false);
 
   async function submit(event) {
     event.preventDefault()
-    const { success, authtoken } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
+    const { success, authtoken, files } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
     if (success) {
       setToken(authtoken)
-      logout(true)
+      setUploadFiles(files)
+      logout('login')
     }
   }
 

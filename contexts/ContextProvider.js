@@ -19,14 +19,15 @@ export default function ContextProvider({ children, router }) {
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
 
-    function logout(prelogin = false) {
+    function logout(type) {
         setUsername('')
-        setUploadFiles([])
         setDownloadFiles([])
-        if (!prelogin) {
+        if (type === 'login') router.push('/')
+        else {
             setToken('')
-            router.push('/account/signup')
-        } else router.push('/')
+            setUploadFiles([])
+            type === 'manual' ? toast.success('Logged out successfully') : router.push('/account')
+        }
     }
 
     async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true }) {
@@ -44,7 +45,7 @@ export default function ContextProvider({ children, router }) {
             setProgress(100)
             if (!json) {
                 const error = err.response?.data?.error || "Server Down! Please try again later..."
-                if (error.includes('authenticate')) logout()
+                if (error.includes('authenticate')) logout('auto')
                 json = { success: false, error }
                 if (showToast) toast.error(error)
             }
@@ -57,7 +58,7 @@ export default function ContextProvider({ children, router }) {
         setProgress(100 / 3)
         const { success, error } = await fetchApp({ url: 'auth/delete', method: 'DELETE', authtoken: token })
         setProgress(100)
-        if (success || error === 'User not found!') logout()
+        if (success || error === 'User not found!') logout('auto')
     }
 
     async function deleteFile(fileId) {

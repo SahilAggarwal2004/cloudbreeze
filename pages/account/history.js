@@ -39,7 +39,7 @@ export default function History() {
                         {history.map(({ nameList, name, fileId, createdAt, _id }, i) => {
                             fileId = fileId || _id
                             if (!nameList[0]) nameList = [name]
-                            const daysLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (30 * 24 * 60 * 60 * 1000))
+                            const daysLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (24 * 60 * 60 * 1000))
                             if (daysLeft < 0) {
                                 if (filter === 'upload') {
                                     const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)

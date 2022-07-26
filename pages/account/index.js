@@ -31,7 +31,7 @@ export default function Account() {
                 <Link href='/account/signup'><a className='hover:text-black'>Create a new account</a></Link>
                 <Link href='/account/login'><a className='hover:text-black'>Login to an existing account</a></Link>
             </> : <>
-                <div className='cursor-pointer hover:text-black' onClick={logout}>Logout</div>
+                <div className='cursor-pointer hover:text-black' onClick={() => logout('manual')}>Logout</div>
                 <div className='cursor-pointer hover:text-black' onClick={() => setModal({ active: true, type: 'deleteUser' })}>Delete Account</div>
             </>}
         </div>
