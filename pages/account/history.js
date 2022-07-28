@@ -38,9 +38,10 @@ export default function History() {
                         {history.map(({ nameList, name, fileId, createdAt, user, _id }, i) => {
                             fileId = fileId || _id
                             if (!nameList[0]) nameList = [name]
+                            let hoursLeft, daysLeft;
                             const limit = user ? 30 : 3
-                            const daysLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (24 * 60 * 60 * 1000))
-                            if (daysLeft < 0) {
+                            const minutesLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (60 * 1000))
+                            if (minutesLeft < 0) {
                                 if (filter === 'upload') {
                                     const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
                                     setUploadFiles(updatedFiles)
@@ -49,6 +50,9 @@ export default function History() {
                                     setDownloadFiles(updatedFiles)
                                 }
                                 return;
+                            } else {
+                                hoursLeft = Math.floor(minutesLeft / 60)
+                                daysLeft = Math.floor(hoursLeft / 24)
                             }
                             return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: 'showFile', props: { fileId, filter } })}>
                                 <td className="text-sm text-gray-900 font-medium px-5 py-4">{i + 1}</td>
@@ -57,7 +61,7 @@ export default function History() {
                                         {nameList.map(name => <li key={name}>{name}</li>)}
                                     </ul> : nameList[0]}
                                 </td>
-                                <td className="text-sm text-gray-900 font-light px-5 py-4">{daysLeft ? `${daysLeft} day(s)` : 'Less than a day'}</td>
+                                <td className="text-sm text-gray-900 font-light px-5 py-4">{daysLeft ? `${daysLeft} days` : hoursLeft ? `${hoursLeft} hours` : minutesLeft ? `${minutesLeft} minutes` : 'Less than a minute'}</td>
                             </tr>
                         })}
                     </tbody>
