@@ -39,7 +39,7 @@ export default function History() {
                             fileId = fileId || _id
                             if (!nameList[0]) nameList = [name]
                             let hoursLeft, daysLeft;
-                            const limit = user ? 30 : 3
+                            const limit = user ? 43200 : 4320
                             const minutesLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (60 * 1000))
                             if (minutesLeft < 0) {
                                 if (filter === 'upload') {
