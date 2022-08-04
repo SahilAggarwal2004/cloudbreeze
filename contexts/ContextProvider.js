@@ -21,13 +21,10 @@ export default function ContextProvider({ children, router }) {
 
     function logout(type) {
         setUsername('')
+        setToken('')
+        setUploadFiles([])
         setDownloadFiles([])
-        if (type === 'login') router.push('/')
-        else {
-            setToken('')
-            setUploadFiles([])
-            type === 'manual' ? toast.success('Logged out successfully') : router.push('/account')
-        }
+        type === 'manual' ? toast.success('Logged out successfully') : router.push('/account')
     }
 
     async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true }) {
@@ -65,28 +62,29 @@ export default function ContextProvider({ children, router }) {
         setModal({ active: false })
         const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: token, data: { guestId: guest } })
         if (!success) return
-        if (!token) {
-            const updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
+        token ? setUploadFiles(files) : clearHistory(fileId, 'upload')
+    }
+
+    function clearHistory(fileId, filter) {
+        let updatedFiles;
+        if (filter === 'upload') {
+            updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
             setUploadFiles(updatedFiles)
-        } else setUploadFiles(files)
+        } else if (filter === 'download') {
+            updatedFiles = downloadFiles.filter(file => file.fileId !== fileId)
+            setDownloadFiles(updatedFiles)
+        }
     }
 
     useEffect(() => {
-        if (!username) {
-            fetchApp({ url: 'auth/verify', method: 'POST', authtoken: token, showToast: false }).then(({ success, isGuest, name }) => {
-                if (!success || isGuest) {
-                    setToken('')
-                    setGuest(Date.now())
-                    setUsername(randomName())
-                } else {
-                    setUsername(name)
-                    setGuest('')
-                }
-            })
+        if (!username && !token) {
+            setUsername(randomName())
+            setToken('')
+            setGuest(Date.now())
         }
-    }, [token])
+    }, [username, token])
 
-    return <Context.Provider value={{ router, username, setUsername, guest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, deleteUser, deleteFile, modal, setModal }}>
+    return <Context.Provider value={{ router, username, setUsername, guest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, setGuest, fetchApp, progress, setProgress, logout, deleteUser, deleteFile, clearHistory, modal, setModal }}>
         {children}
     </Context.Provider>
 }
