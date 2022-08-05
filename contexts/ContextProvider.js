@@ -42,9 +42,10 @@ export default function ContextProvider({ children, router }) {
             setProgress(100)
             if (!json) {
                 const error = err.response?.data?.error || "Server Down! Please try again later..."
-                if (error.includes('authenticate')) logout('auto')
                 json = { success: false, error }
-                if (showToast) toast.error(error)
+                const authenticationError = error.includes('authenticate')
+                if (authenticationError) logout('auto')
+                if (showToast || authenticationError) toast.error(error)
             }
         }
         return json
