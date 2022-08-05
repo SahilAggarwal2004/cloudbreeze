@@ -8,7 +8,7 @@ import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function Upload(props) {
   const { guest, token, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
-  const fileId = useRef()
+  const fileIdRef = useRef()
   const password = useRef()
   const [autoFileId, setAutoFileId] = useState(true)
   const [files, setFiles] = useState()
@@ -22,7 +22,7 @@ export default function Upload(props) {
   function toggleAutoFileId() {
     if (autoFileId) return setAutoFileId(false)
     setAutoFileId(true)
-    fileId.current.value = ''
+    fileIdRef.current.value = ''
   }
 
   function calcSize(files) {
@@ -65,7 +65,7 @@ export default function Upload(props) {
     data.append('length', files.length)
     const nameList = []
     for (let i = 0; i < files.length; i++) { nameList.push(files[i].name); }
-    if (!autoFileId) data.append('fileId', fileId.current.value)
+    if (!autoFileId) data.append('fileId', fileIdRef.current.value)
     if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password.current.value)
     if (guest) data.append('guest', guest)
@@ -107,7 +107,7 @@ export default function Upload(props) {
 
 
       <label htmlFor="fileId">File Id:</label>
-      <input type="text" id='fileId' ref={fileId} className='border rounded' onKeyDown={verifyFileId} disabled={autoFileId} required />
+      <input type="text" id='fileId' ref={fileIdRef} className='border rounded' onKeyDown={verifyFileId} disabled={autoFileId} required />
 
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={password} className='border rounded' />
