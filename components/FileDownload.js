@@ -50,11 +50,11 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5'>
         <form onSubmit={downloadFile} className="grid grid-cols-[auto_1fr] gap-3 place-content-center">
             {!fileIdFromUrl && <>
-                <label htmlFor="fileId">File Id or Link:</label>
-                <input type="text" id='fileId' ref={fileRef} className='border rounded' required />
+                <label htmlFor="fileId" className='py-0.5'>File Id or Link:</label>
+                <input type="text" id='fileId' ref={fileRef} className='border rounded px-2 py-0.5' required autoComplete='off' />
             </>}
-            <label htmlFor="password">Password (if any):</label>
-            <input type="password" id='password' ref={password} className='border rounded' autoComplete="new-password" />
+            <label htmlFor="password" className='py-0.5'>Password (if any):</label>
+            <input type="password" id='password' ref={password} className='border rounded px-2 py-0.5' autoComplete="new-password" />
             <button type="submit" disabled={downPercent && downPercent != 100} className='col-span-2 py-0.5 border border-black rounded bg-gray-100 disabled:opacity-50'>{downPercent == 100 ? 'Download Again' : 'Download'}</button>
         </form>
 

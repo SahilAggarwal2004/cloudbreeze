@@ -8,8 +8,8 @@ import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function Upload(props) {
   const { guest, token, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
-  const fileIdRef = useRef()
   const password = useRef()
+  const [fileIdRef, setFileId] = useState()
   const [autoFileId, setAutoFileId] = useState(true)
   const [files, setFiles] = useState()
   const [link, setLink] = useState()
@@ -17,12 +17,12 @@ export default function Upload(props) {
   const [share, setShare] = useState(props.share)
   const limit = 100;
 
-  const verifyFileId = event => { if (!/[0-9a-zA-Z]/i.test(event.key)) event.preventDefault() }
+  const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9]/g, ""))
 
   function toggleAutoFileId() {
     if (autoFileId) return setAutoFileId(false)
     setAutoFileId(true)
-    fileIdRef.current.value = ''
+    setFileId()
   }
 
   function calcSize(files) {
@@ -65,12 +65,12 @@ export default function Upload(props) {
     data.append('length', files.length)
     const nameList = []
     for (let i = 0; i < files.length; i++) { nameList.push(files[i].name); }
-    if (!autoFileId) data.append('fileId', fileIdRef.current.value)
+    if (!autoFileId) data.append('fileId', fileIdRef)
     if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password.current.value)
     if (guest) data.append('guest', guest)
 
-    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef.current.value }, authtoken: token })
+    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef }, authtoken: token })
     if (!verified) return
 
     const { fileId, createdAt, success } = await fetchApp({
@@ -109,27 +109,31 @@ export default function Upload(props) {
       </div>
 
 
-      <label htmlFor="fileId">File Id:</label>
-      <input type="text" id='fileId' ref={fileIdRef} className='border rounded' onKeyDown={verifyFileId} disabled={autoFileId} required />
+      <label htmlFor="fileId" className={`py-0.5 ${autoFileId && 'opacity-60'}`}>File Id:</label>
+      <input type="text" id='fileId' value={fileIdRef} className='border rounded px-2 py-0.5' onChange={verifyFileId} disabled={autoFileId} required autoComplete='off' />
 
-      <label htmlFor="password">Password:</label>
-      <input type="password" id='password' ref={password} className='border rounded' autoComplete="new-password" />
+      <label htmlFor="password" className='py-0.5'>Password:</label>
+      <input type="password" id='password' ref={password} className='border rounded px-2 py-0.5' autoComplete="new-password" />
 
       <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50' onClick={() => { if (link === 'error') reset() }}>Upload</button>
       {link && link !== 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
-    {Boolean(upPercent) && link != 'error' && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
-      <div className='bg-gray-300 rounded-full h-1 w-4/5'>
-        <div className='bg-green-500 rounded-full h-1' style={{ width: `${upPercent}%` }} />
+    {
+      Boolean(upPercent) && link != 'error' && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
+        <div className='bg-gray-300 rounded-full h-1 w-4/5'>
+          <div className='bg-green-500 rounded-full h-1' style={{ width: `${upPercent}%` }} />
+        </div>
+        {upPercent}%
       </div>
-      {upPercent}%
-    </div>}
+    }
 
-    {upPercent == 100 && !link && <div className='flex items-center space-x-2'>
-      <Loader />
-      <div>Please wait, processing the file(s)...</div>
-    </div>}
+    {
+      upPercent == 100 && !link && <div className='flex items-center space-x-2'>
+        <Loader />
+        <div>Please wait, processing the file(s)...</div>
+      </div>
+    }
 
     {link && link != 'error' && <FileInfo fileId={link} />}
   </div >
