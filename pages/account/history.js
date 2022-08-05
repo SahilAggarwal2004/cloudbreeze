@@ -34,7 +34,7 @@ export default function History() {
                             <th scope="col" className="text-sm font-medium text-gray-900 p-4 text-left">Time left</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className='cursor-pointer'>
                         {history.map(({ nameList, name, fileId, createdAt, user, _id }, i) => {
                             fileId = fileId || _id
                             if (!nameList[0]) nameList = [name]
@@ -47,7 +47,7 @@ export default function History() {
 
                             return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: 'showFile', props: { fileId, filter } })}>
                                 <td className="text-sm text-gray-900 font-medium px-5 py-4">{i + 1}</td>
-                                <td className="text-sm text-gray-900 font-light px-5 py-4">
+                                <td className="text-sm text-gray-900 font-light px-5 py-4" style={{ wordBreak: 'break-word' }}>
                                     {nameList.length !== 1 ? <ul className='space-y-1'>
                                         {nameList.map(name => <li key={name}>{name}</li>)}
                                     </ul> : nameList[0]}

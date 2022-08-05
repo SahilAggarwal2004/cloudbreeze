@@ -70,6 +70,9 @@ export default function Upload(props) {
     if (password) data.append('password', password.current.value)
     if (guest) data.append('guest', guest)
 
+    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef.current.value }, authtoken: token })
+    if (!verified) return
+
     const { fileId, createdAt, success } = await fetchApp({
       url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token, options: {
         onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
@@ -110,7 +113,7 @@ export default function Upload(props) {
       <input type="text" id='fileId' ref={fileIdRef} className='border rounded' onKeyDown={verifyFileId} disabled={autoFileId} required />
 
       <label htmlFor="password">Password:</label>
-      <input type="password" id='password' ref={password} className='border rounded' />
+      <input type="password" id='password' ref={password} className='border rounded' autoComplete="new-password" />
 
       <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50' onClick={() => { if (link === 'error') reset() }}>Upload</button>
       {link && link !== 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}

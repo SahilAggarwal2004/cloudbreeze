@@ -39,7 +39,8 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     setLoading(false)
                     const data = new Uint8Array(dataList)
                     download(data, name)
-                    const updatedFiles = downloadFiles.concat({ nameList: [name], fileId, createdAt, user })
+                    let updatedFiles = downloadFiles.filter(file => file.fileId !== fileId)
+                    updatedFiles = updatedFiles.concat({ nameList: [name], fileId, createdAt, user })
                     setDownloadFiles(updatedFiles)
                 }
             })
@@ -53,7 +54,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                 <input type="text" id='fileId' ref={fileRef} className='border rounded' required />
             </>}
             <label htmlFor="password">Password (if any):</label>
-            <input type="password" id='password' ref={password} className='border rounded' />
+            <input type="password" id='password' ref={password} className='border rounded' autoComplete="new-password" />
             <button type="submit" disabled={downPercent && downPercent != 100} className='col-span-2 py-0.5 border border-black rounded bg-gray-100 disabled:opacity-50'>{downPercent == 100 ? 'Download Again' : 'Download'}</button>
         </form>
 
