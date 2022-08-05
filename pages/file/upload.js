@@ -8,12 +8,22 @@ import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function Upload(props) {
   const { guest, token, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
+  const fileId = useRef()
   const password = useRef()
+  const [autoFileId, setAutoFileId] = useState(true)
   const [files, setFiles] = useState()
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
   const [share, setShare] = useState(props.share)
   const limit = 100;
+
+  const verifyFileId = event => { if (!/[0-9a-zA-Z]/i.test(event.key)) event.preventDefault() }
+
+  function toggleAutoFileId() {
+    if (autoFileId) return setAutoFileId(false)
+    setAutoFileId(true)
+    fileId.current.value = ''
+  }
 
   function calcSize(files) {
     let size = 0;
@@ -55,11 +65,12 @@ export default function Upload(props) {
     data.append('length', files.length)
     const nameList = []
     for (let i = 0; i < files.length; i++) { nameList.push(files[i].name); }
+    if (!autoFileId) data.append('fileId', fileId.current.value)
     if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password.current.value)
     if (guest) data.append('guest', guest)
 
-    const { fileId, createdAt, user, success } = await fetchApp({
+    const { fileId, createdAt, success } = await fetchApp({
       url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token, options: {
         onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
       }
@@ -86,8 +97,21 @@ export default function Upload(props) {
       <label htmlFor="files">File(s):</label>
       {share ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
         : <input type="file" id='files' required onChange={updateFile} multiple />}
+
+      <div className='col-span-2 flex justify-between items-center'>
+        Auto-generate File Id?
+        <div className="inline-flex relative items-center cursor-pointer">
+          <div onClick={toggleAutoFileId} className={`w-9 h-5 rounded-full peer after:content-[''] after:absolute after:top-1/2 after:left-[0.1875rem] after:-translate-y-1/2 after:bg-white after:border-gray-300 after:rounded-full after:h-3.5 after:w-3.5 after:transition-all ${autoFileId ? 'after:translate-x-4 bg-gray-700' : 'bg-gray-200'}`} />
+        </div>
+      </div>
+
+
+      <label htmlFor="fileId">File Id:</label>
+      <input type="text" id='fileId' ref={fileId} className='border rounded' onKeyDown={verifyFileId} disabled={autoFileId} required />
+
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={password} className='border rounded' />
+
       <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 border border-black rounded bg-gray-100 disabled:opacity-50' onClick={() => { if (link === 'error') reset() }}>Upload</button>
       {link && link !== 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
