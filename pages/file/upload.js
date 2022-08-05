@@ -38,6 +38,7 @@ export default function Upload(props) {
   }
 
   function reset() {
+    setFileId('');
     setLink();
     setUpPercent(0);
     setShare(false);
@@ -73,7 +74,6 @@ export default function Upload(props) {
     })
     if (!success) return setLink('error')
     setLink(fileId)
-    if (token) return
     const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId })
     setUploadFiles(updatedFiles)
   }
@@ -92,13 +92,13 @@ export default function Upload(props) {
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
       <label htmlFor="files">File(s):</label>
       {share ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
-        : <input type="file" id='files' required onChange={updateFile} multiple />}
+        : <input type="file" id='files' disabled={upPercent && link !== 'error'} required onChange={updateFile} multiple />}
 
       <label htmlFor="fileId">File Id: </label>
-      <input type="text" id='fileId' value={fileIdRef} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' />
+      <input type="text" id='fileId' value={fileIdRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' />
 
       <label htmlFor="password">Password:</label>
-      <input type="password" id='password' ref={password} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
+      <input type="password" id='password' ref={password} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
 
       <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 py-1 border border-black rounded bg-gray-100 disabled:opacity-50' onClick={() => { if (link === 'error') reset() }}>Upload</button>
       {link && link !== 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
