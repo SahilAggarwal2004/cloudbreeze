@@ -70,8 +70,8 @@ export default function Upload(props) {
     if (password) data.append('password', password.current.value)
     if (guest) data.append('guest', guest)
 
-    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef.current.value }, authtoken: token })
-    if (!verified) return
+    // const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef.current.value }, authtoken: token })
+    // if (!verified) return
 
     const { fileId, createdAt, success } = await fetchApp({
       url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token, options: {
