@@ -22,7 +22,7 @@ export default function Upload(props) {
   function toggleAutoFileId() {
     if (autoFileId) return setAutoFileId(false)
     setAutoFileId(true)
-    setFileId()
+    setFileId('')
   }
 
   function calcSize(files) {
