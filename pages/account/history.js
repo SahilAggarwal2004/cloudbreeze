@@ -35,7 +35,7 @@ export default function History() {
                         </tr>
                     </thead>
                     <tbody className='cursor-pointer'>
-                        {history.map(({ nameList, name, fileId, createdAt, user, _id }, i) => {
+                        {history.map(({ nameList, name, fileId, createdAt, user, downloadCount, _id }, i) => {
                             fileId = fileId || _id
                             if (!nameList[0]) nameList = [name]
                             let hoursLeft, daysLeft;
@@ -45,14 +45,18 @@ export default function History() {
                             hoursLeft = Math.floor(minutesLeft / 60)
                             daysLeft = Math.floor(hoursLeft / 24)
 
-                            return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: 'showFile', props: { fileId, filter } })}>
-                                <td className="text-sm text-gray-900 font-medium px-5 py-4">{i + 1}</td>
-                                <td className="text-sm text-gray-900 font-light px-5 py-4" style={{ wordBreak: 'break-word' }}>
+                            return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: 'showFile', props: { fileId, filter, downloadCount } })}>
+                                <td className="text-sm text-gray-900 font-medium px-[1.0625rem] py-4">{i + 1}</td>
+                                <td className="text-sm text-gray-900 font-light px-[1.0625rem] py-4" style={{ wordBreak: 'break-word' }}>
                                     {nameList.length !== 1 ? <ul className='space-y-1'>
                                         {nameList.map(name => <li key={name}>{name}</li>)}
                                     </ul> : nameList[0]}
                                 </td>
-                                <td className="text-sm text-gray-900 font-light px-5 py-4">{daysLeft ? `${daysLeft} day(s)` : hoursLeft ? `${hoursLeft} hour(s)` : minutesLeft ? `${minutesLeft} minute(s)` : 'Less than a minute'}</td>
+                                <td className="text-sm text-gray-900 font-light px-[1.0625rem] py-4">
+                                    {Boolean(daysLeft) && `${daysLeft} day(s)`}
+                                    {Boolean(daysLeft && hoursLeft % 24) && ', '}
+                                    {hoursLeft % 24 ? `${hoursLeft % 24} hour(s) ` : hoursLeft ? '' : minutesLeft ? `${minutesLeft % 60} minute(s)` : 'Less than a minute'}
+                                </td>
                             </tr>
                         })}
                     </tbody>

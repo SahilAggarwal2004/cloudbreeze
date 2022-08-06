@@ -27,19 +27,19 @@ export default function ContextProvider({ children, router }) {
         type === 'manual' ? toast.success('Logged out successfully') : router.push('/account')
     }
 
-    async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true }) {
+    async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true, showProgress = true }) {
         let json;
         try {
-            setProgress(100 / 3)
+            if (showProgress) setProgress(100 / 3)
             const response = await axios({
                 url, method, data, ...options,
                 headers: { authtoken, 'Content-Type': type }
             })
-            setProgress(100)
+            if (showProgress) setProgress(100)
             json = response.data;
             if (showToast) toast.success(json.msg)
         } catch (err) {
-            setProgress(100)
+            if (showProgress) setProgress(100)
             if (!json) {
                 const error = err.response?.data?.error || "Server Down! Please try again later..."
                 json = { success: false, error }

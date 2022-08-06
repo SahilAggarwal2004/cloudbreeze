@@ -4,7 +4,7 @@ import FileInfo from './FileInfo'
 
 export default function Modal() {
   const { token, modal, setModal, deleteUser, deleteFile, clearHistory } = useFileContext()
-  const { fileId, filter } = modal.props || {}
+  const { fileId, filter, downloadCount } = modal.props || {}
   const handleCancel = () => setModal({ active: false })
 
   return <>
@@ -37,7 +37,7 @@ export default function Modal() {
               }}>Yes</button>
               <button className='py-1 px-3 rounded border button-animation' onClick={handleCancel}>No</button>
             </div>
-          </div> : modal.type === 'showFile' && <FileInfo fileId={fileId} filter={filter} modal={true} />}
+          </div> : modal.type === 'showFile' && <FileInfo fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} />}
     </div>
   </>
 }

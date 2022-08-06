@@ -8,7 +8,8 @@ import { useFileContext } from '../../contexts/ContextProvider';
 
 export default function Upload(props) {
   const { guest, token, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
-  const password = useRef()
+  const passwordRef = useRef()
+  const downloadLimitRef = useRef()
   const [fileIdRef, setFileId] = useState()
   const [files, setFiles] = useState()
   const [link, setLink] = useState()
@@ -46,7 +47,7 @@ export default function Upload(props) {
 
   async function handleSubmit(event) {
     event.preventDefault()
-    let content;
+    let content, password = passwordRef.current.value, downloadLimit = downloadLimitRef.current.value;
     if (files.length === 1) content = files[0]
     else {
       const zip = new JSZip();
@@ -61,7 +62,8 @@ export default function Upload(props) {
     for (let i = 0; i < files.length; i++) { nameList.push(files[i].name); }
     if (fileIdRef) data.append('fileId', fileIdRef)
     if (files.length > 1) data.append('nameList', nameList)
-    if (password) data.append('password', password.current.value)
+    if (password) data.append('password', password)
+    if (downloadLimit) data.append('downloadLimit', downloadLimit)
     if (guest) data.append('guest', guest)
 
     const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef }, authtoken: token })
@@ -74,7 +76,7 @@ export default function Upload(props) {
     })
     if (!success) return setLink('error')
     setLink(fileId)
-    const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId })
+    const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId, downloadCount: 0 })
     setUploadFiles(updatedFiles)
   }
 
@@ -94,11 +96,14 @@ export default function Upload(props) {
       {share ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
         : <input type="file" id='files' disabled={upPercent && link !== 'error'} required onChange={updateFile} multiple />}
 
-      <label htmlFor="fileId">File Id: </label>
-      <input type="text" id='fileId' value={fileIdRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' />
+      <label htmlFor="file-id">File Id: </label>
+      <input type="text" id='file-id' value={fileIdRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' />
 
       <label htmlFor="password">Password:</label>
-      <input type="password" id='password' ref={password} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
+      <input type="password" id='password' ref={passwordRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
+
+      <label htmlFor="download-limit">Download Limit:</label>
+      <input type="number" id='download-limit' ref={downloadLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} />
 
       <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 py-1 border border-black rounded bg-gray-100 disabled:opacity-50' onClick={() => { if (link === 'error') reset() }}>Upload</button>
       {link && link !== 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}

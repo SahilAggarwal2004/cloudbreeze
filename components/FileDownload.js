@@ -36,6 +36,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
                 setDownPercent(Math.round((bytesLoaded * 100) / bytesTotal))
                 if (bytesLoaded == bytesTotal) {
+                    fetchApp({ url: `/file/downloaded/${fileId}`, authtoken: token, showProgress: false })
                     setLoading(false)
                     const data = new Uint8Array(dataList)
                     download(data, name)
