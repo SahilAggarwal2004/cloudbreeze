@@ -35,12 +35,11 @@ export default function History() {
                         </tr>
                     </thead>
                     <tbody className='cursor-pointer'>
-                        {history.map(({ nameList, name, fileId, createdAt, user, downloadCount, _id }, i) => {
+                        {history.map(({ nameList, name, fileId, createdAt, daysLimit, downloadCount, _id }, i) => {
                             fileId = fileId || _id
                             if (!nameList[0]) nameList = [name]
                             let hoursLeft, daysLeft;
-                            const limit = user ? 43200 : 4320
-                            const minutesLeft = limit - Math.ceil((Date.now() - new Date(createdAt)) / (60 * 1000))
+                            const minutesLeft = (daysLimit * 24 * 60) - Math.ceil((Date.now() - new Date(createdAt)) / (60 * 1000))
                             if (minutesLeft < 0) return clearHistory(fileId, filter)
                             hoursLeft = Math.floor(minutesLeft / 60)
                             daysLeft = Math.floor(hoursLeft / 24)

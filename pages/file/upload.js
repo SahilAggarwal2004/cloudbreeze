@@ -11,13 +11,19 @@ export default function Upload(props) {
   const passwordRef = useRef()
   const downloadLimitRef = useRef()
   const [fileIdRef, setFileId] = useState()
+  const [daysLimitRef, setDaysLimit] = useState()
   const [files, setFiles] = useState()
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
   const [share, setShare] = useState(props.share)
   const limit = 100;
+  const daysLimit = token ? 30 : 3
 
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9]/g, ""))
+  const verifyDaysLimit = event => {
+    const { value } = event.target
+    setDaysLimit(value > daysLimit ? daysLimit : value)
+  }
 
   function calcSize(files) {
     let size = 0;
@@ -63,6 +69,7 @@ export default function Upload(props) {
     if (fileIdRef) data.append('fileId', fileIdRef)
     if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password)
+    if (daysLimitRef) data.append('daysLimit', daysLimitRef)
     if (downloadLimit) data.append('downloadLimit', downloadLimit)
     if (guest) data.append('guest', guest)
 
@@ -101,6 +108,9 @@ export default function Upload(props) {
 
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={passwordRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
+
+      <label htmlFor="time-limit">Days Limit:</label>
+      <input type="number" id='download-limit' value={daysLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} onChange={verifyDaysLimit} />
 
       <label htmlFor="download-limit">Download Limit:</label>
       <input type="number" id='download-limit' ref={downloadLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} />
