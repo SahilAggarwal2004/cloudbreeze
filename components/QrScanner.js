@@ -22,7 +22,7 @@ export default function QrScanner() {
 
     useEffect(() => { setError(false) }, [modal.type])
 
-    return <div className='text-center h-[50vh] aspect-square max-w-[80vw]'>
+    return <div className='text-center h-[50vh] aspect-square max-w-[80vw] flex flex-col justify-center mt-5'>
         {error ? 'Please scan a valid QR Code' : 'Scan QR Code using camera'}
         <QrReader onResult={handleQrScan} constraints={{ facingMode: 'environment' }} />
     </div>
