@@ -5,7 +5,7 @@ import QrReader from 'react-qr-scanner'
 import { toast } from 'react-toastify'
 
 export default function Modal() {
-  const { token, modal, setModal, deleteUser, deleteFile, clearHistory, verifyUrl } = useFileContext()
+  const { router, token, modal, setModal, deleteUser, deleteFile, clearHistory, verifyUrl } = useFileContext()
   const { fileId, filter, downloadCount } = modal.props || {}
   const handleCancel = () => setModal({ active: false })
   const [error, setError] = useState(false)
@@ -51,7 +51,7 @@ export default function Modal() {
               }}>Yes</button>
               <button className='py-1 px-3 rounded border button-animation' onClick={handleCancel}>No</button>
             </div>
-          </div> : modal.type === 'showFile' ? <FileInfo fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : modal.type === 'qrReader' && <div className='text-center h-[50vh] aspect-square'>
+          </div> : modal.type === 'showFile' ? <FileInfo fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : modal.type === 'qrReader' && <div className='text-center h-[50vh] aspect-square max-w-[90vw]'>
             {error ? 'Please scan a valid QR Code' : 'Scan QR Code using camera'}
             <QrReader onError={() => toast.error('Device or browser not supported')} onScan={handleQrScan} className='mt-2 w-full h-[90%] rounded-sm' />
           </div>}
