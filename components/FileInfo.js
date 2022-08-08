@@ -2,6 +2,7 @@ import React from 'react'
 import QRCode from "react-qr-code";
 import { useFileContext } from '../contexts/ContextProvider';
 import { toast } from 'react-toastify';
+import { FaShareSquare } from 'react-icons/fa';
 
 export default function FileInfo({ fileId, filter, downloadCount, modal = false }) {
     const link = `${window.location.origin}/file/download/${fileId}`
@@ -18,7 +19,10 @@ export default function FileInfo({ fileId, filter, downloadCount, modal = false 
 
     return <div className='text-center space-y-2'>
         {modal && <h2 className='font-bold text-xl mb-4'>Download file</h2>}
-        <div className='cursor-pointer select-none' onClick={share}>Click here to share the url</div>
+        <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={share}>
+            <FaShareSquare />
+            <span>Click here to share the url</span>
+        </div>
         <div className='font-bold'>OR</div>
         <div>Scan the QR Code given below</div>
         <div className='scale-[0.8]'><QRCode value={link} /></div>

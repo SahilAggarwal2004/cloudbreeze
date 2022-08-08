@@ -77,6 +77,13 @@ export default function ContextProvider({ children, router }) {
         }
     }
 
+    function verifyUrl(value) {
+        try {
+            const url = new URL(value)
+            return (url.origin === window.location.origin && url.pathname.startsWith('/file/download/')) ? { verified: true, pathname: url.pathname } : { verified: false }
+        } catch { return { verified: false } }
+    }
+
     useEffect(() => {
         if (!username && !token) {
             setUsername(randomName())
@@ -85,7 +92,7 @@ export default function ContextProvider({ children, router }) {
         }
     }, [username, token])
 
-    return <Context.Provider value={{ router, username, setUsername, guest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, setGuest, fetchApp, progress, setProgress, logout, deleteUser, deleteFile, clearHistory, modal, setModal }}>
+    return <Context.Provider value={{ router, username, setUsername, guest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, setGuest, fetchApp, progress, setProgress, logout, deleteUser, deleteFile, clearHistory, modal, setModal, verifyUrl }}>
         {children}
     </Context.Provider>
 }

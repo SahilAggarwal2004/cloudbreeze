@@ -7,11 +7,16 @@ import ContextProvider from '../contexts/ContextProvider';
 import Navbar from '../components/Navbar';
 import { useRouter } from 'next/router';
 import Modal from '../components/Modal';
+import { useEffect, useState } from 'react';
+import Loader from '../components/Loader';
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
+    const [loading, setLoading] = useState(true)
     const hideNavbar = ['/_error', '/account/confirm/[token]', '/account/delete/[token]']
-    const showModal = ['/account', '/account/history']
+    const showModal = ['/account', '/account/history', '/file/download']
+
+    useEffect(() => { setLoading(false) }, [])
 
     return <ContextProvider router={router}>
         <Head>
@@ -73,7 +78,10 @@ export default function MyApp({ Component, pageProps }) {
             <link rel="apple-touch-startup-image" href="icons/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
         </Head>
         {!hideNavbar.includes(router.pathname) && <Navbar />}
-        <Component {...pageProps} />
+        {loading ? <div className='center flex flex-col items-center space-y-2'>
+            <Loader />
+            <div>Loading...</div>
+        </div> : <Component {...pageProps} />}
         {showModal.includes(router.pathname) && <Modal />}
         <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' closeButton={false} />
     </ContextProvider>

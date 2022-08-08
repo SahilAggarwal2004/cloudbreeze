@@ -10,15 +10,14 @@ export default function Navbar() {
     return <>
         <LoadingBar color='#ffffff' progress={progress} waitingTime={300} onLoaderFinished={() => setProgress(0)} />
         <nav className='sticky inset-0 z-20 flex bg-black text-white items-center justify-between py-2 px-4 sm:px-5 shadow-lg'>
-            <Link href="/"><h1 className='text-xl cursor-pointer select-none' title='Home'>CloudBreeze</h1></Link>
+            <Link href="/"><h1 className='text-xl cursor-pointer select-none font-medium' title='Home'>CloudBreeze</h1></Link>
             {/* adding <a> tag inside <Link> as for some reason <Link> passes a ref to its child and we can't use ref in a react component(here, FaHistory) */}
             {/* title attribute displays text on element hover */}
             <div className='flex space-x-5 sm:space-x-6'>
-                {router.pathname === '/' ?
-                    <Link href="/account/history?filter=upload"><a><FaHistory className='scale-110 sm:scale-125' title='History' /></a></Link> : <>
-                        <Link href="/"><a><FaHome className='hidden sm:block scale-125 sm:scale-150' title='Home' /></a></Link>
-                        <Link href="/account"><a><FaUserAlt className='scale-110 sm:scale-125' title='Your account' /></a></Link>
-                    </>
+                {router.pathname !== '/' && <Link href="/"><a><FaHome className='hidden sm:block scale-125 sm:scale-150' title='Home' /></a></Link>}
+                {router.pathname === '/' || router.pathname === '/account' ?
+                    <Link href="/account/history?filter=upload"><a><FaHistory className='scale-110 sm:scale-125' title='History' /></a></Link> :
+                    <Link href="/account"><a><FaUserAlt className='scale-110 sm:scale-125' title='Your account' /></a></Link>
                 }
                 <Link href="/file/upload"><a><FaUpload className='scale-110 sm:scale-125' title='Upload File' /></a></Link>
                 <Link href="/file/download"><a><FaDownload className='scale-110 sm:scale-125' title='Download File' /></a></Link>

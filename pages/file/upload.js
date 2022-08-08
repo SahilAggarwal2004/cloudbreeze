@@ -9,9 +9,9 @@ import { useFileContext } from '../../contexts/ContextProvider';
 export default function Upload(props) {
   const { guest, token, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
   const passwordRef = useRef()
-  const downloadLimitRef = useRef()
   const [fileIdRef, setFileId] = useState()
   const [daysLimitRef, setDaysLimit] = useState()
+  const [downloadLimitRef, setDownloadLimit] = useState()
   const [files, setFiles] = useState()
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(0)
@@ -20,9 +20,10 @@ export default function Upload(props) {
   const daysLimit = token ? 30 : 3
 
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9]/g, ""))
+  const verifyDownloadLimit = event => setDownloadLimit(Math.abs(event.target.value) || '')
   const verifyDaysLimit = event => {
-    const { value } = event.target
-    setDaysLimit(value > daysLimit ? daysLimit : value)
+    let value = Math.abs(event.target.value)
+    setDaysLimit(value > daysLimit ? daysLimit : value || '')
   }
 
   function calcSize(files) {
@@ -53,7 +54,7 @@ export default function Upload(props) {
 
   async function handleSubmit(event) {
     event.preventDefault()
-    let content, password = passwordRef.current.value, downloadLimit = downloadLimitRef.current.value;
+    let content, password = passwordRef.current.value;
     if (files.length === 1) content = files[0]
     else {
       const zip = new JSZip();
@@ -70,7 +71,7 @@ export default function Upload(props) {
     if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password)
     if (daysLimitRef) data.append('daysLimit', daysLimitRef)
-    if (downloadLimit) data.append('downloadLimit', downloadLimit)
+    if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
     if (guest) data.append('guest', guest)
 
     const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef }, authtoken: token })
@@ -110,31 +111,27 @@ export default function Upload(props) {
       <input type="password" id='password' ref={passwordRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
 
       <label htmlFor="time-limit">Days Limit:</label>
-      <input type="number" id='download-limit' value={daysLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} onChange={verifyDaysLimit} />
+      <input type="number" id='download-limit' value={daysLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} onChange={verifyDaysLimit} />
 
       <label htmlFor="download-limit">Download Limit:</label>
-      <input type="number" id='download-limit' ref={downloadLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} />
+      <input type="number" id='download-limit' value={downloadLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' onChange={verifyDownloadLimit} />
 
-      <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 py-1 border border-black rounded bg-gray-100 disabled:opacity-50' onClick={() => { if (link === 'error') reset() }}>Upload</button>
-      {link && link !== 'error' && <button type="reset" className='col-span-2 border border-black rounded bg-gray-100' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
+      <button type="submit" disabled={upPercent && link !== 'error'} className='col-span-2 mt-5 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800' onClick={() => { if (link === 'error') reset() }}>Upload</button>
+      {link && link !== 'error' && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
-    {
-      Boolean(upPercent) && link != 'error' && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
-        <div className='bg-gray-300 rounded-full h-1 w-4/5'>
-          <div className='bg-green-500 rounded-full h-1' style={{ width: `${upPercent}%` }} />
-        </div>
-        {upPercent}%
+    {Boolean(upPercent) && link != 'error' && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
+      <div className='bg-gray-300 rounded-full h-1 w-4/5'>
+        <div className='bg-green-500 rounded-full h-1' style={{ width: `${upPercent}%` }} />
       </div>
-    }
+      {upPercent}%
+    </div>}
 
-    {
-      upPercent == 100 && !link && <div className='flex items-center space-x-2'>
-        <Loader />
-        <div>Please wait, processing the file(s)...</div>
-      </div>
-    }
+    {upPercent == 100 && !link && <div className='flex items-center space-x-2'>
+      <Loader />
+      <div>Please wait, processing the file(s)...</div>
+    </div>}
 
-    {link && link != 'error' && <FileInfo fileId={link} />}
+    {link && link != 'error' && <div className='pb-16'><FileInfo fileId={link} /></div>}
   </div >
 }

@@ -5,9 +5,10 @@ import download from '../utilities/download';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
 import { toast } from 'react-toastify';
+import { FaQrcode } from 'react-icons/fa';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
-    const { token, downloadFiles, setDownloadFiles, fetchApp } = useFileContext()
+    const { token, downloadFiles, setDownloadFiles, fetchApp, setModal, verifyUrl } = useFileContext()
     const fileRef = useRef()
     const password = useRef()
     const [downPercent, setDownPercent] = useState(0)
@@ -15,9 +16,9 @@ export default function FileDownload({ fileIdFromUrl = false }) {
 
     function generateFileId(value) {
         try {
-            const url = new URL(value)
-            if (url.origin === window.location.origin && url.pathname.startsWith('/file/download/')) return value.split('download/')[1]
-            toast.warning('Please enter valid URL!')
+            const { verified } = verifyUrl(value)
+            if (verified) return value.split('download/')[1]
+            toast.warning('Please enter a valid URL!')
         } catch { return value }
     }
 
@@ -56,7 +57,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             </>}
             <label htmlFor="password">Password (if any):</label>
             <input type="password" id='password' ref={password} className='border rounded px-2 py-0.5' autoComplete="new-password" />
-            <button type="submit" disabled={downPercent && downPercent != 100} className='col-span-2 py-1 border border-black rounded bg-gray-100 disabled:opacity-50'>{downPercent == 100 ? 'Download Again' : 'Download'}</button>
+            <button type="submit" disabled={downPercent && downPercent != 100} className='col-span-2 mt-3 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>{downPercent == 100 ? 'Download Again' : 'Download'}</button>
         </form>
 
         {Boolean(downPercent) ? <div className='w-full flex items-center justify-evenly max-w-[400px]'>
@@ -64,9 +65,15 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                 <div className='bg-green-500 rounded-full h-1' style={{ width: `${downPercent}%` }} />
             </div>
             {downPercent}%
-        </div> : loading && <div className='flex items-center space-x-2'>
+        </div> : loading ? <div className='flex items-center space-x-2'>
             <Loader />
             <div>Please wait, accessing the file(s)...</div>
+        </div> : !fileIdFromUrl && <div className='text-center'>
+            <div className='font-bold mb-3'>OR</div>
+            <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={() => setModal({ active: true, type: 'qrReader' })}>
+                <FaQrcode />
+                <span>Scan a QR Code</span>
+            </div>
         </div>}
     </div>
 }

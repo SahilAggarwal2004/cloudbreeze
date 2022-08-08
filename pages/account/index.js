@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import Loader from '../../components/Loader'
 import { useFileContext } from '../../contexts/ContextProvider'
 
 export default function Account() {
@@ -16,7 +15,7 @@ export default function Account() {
 
     useEffect(() => { if (username) setName(`${username}${token ? '' : ' (Guest)'}`) }, [username, token])
 
-    return name ? <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
+    return <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
         <div className='text-xl' > Hello, <span className='font-bold'>{name}</span></div>
         <div className='flex flex-col items-center space-y-5 sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0 text-sm'>
             <Link href='/account/history?filter=upload'>
@@ -41,8 +40,5 @@ export default function Account() {
                 <div className='cursor-pointer hover:text-black' onClick={() => setModal({ active: true, type: 'deleteUser' })}>Delete Account</div>
             </>}
         </div>
-    </div > : <div className='center flex flex-col items-center space-y-2'>
-        <Loader />
-        <div>Fetching account details...</div>
-    </div>
+    </div >
 }

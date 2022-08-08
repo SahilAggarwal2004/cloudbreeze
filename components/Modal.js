@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFileContext } from '../contexts/ContextProvider'
 import FileInfo from './FileInfo'
+import QrReader from 'react-qr-scanner'
+import { toast } from 'react-toastify'
 
 export default function Modal() {
-  const { token, modal, setModal, deleteUser, deleteFile, clearHistory } = useFileContext()
+  const { token, modal, setModal, deleteUser, deleteFile, clearHistory, verifyUrl } = useFileContext()
   const { fileId, filter, downloadCount } = modal.props || {}
   const handleCancel = () => setModal({ active: false })
+  const [error, setError] = useState(false)
+
+  function handleQrScan(value) {
+    if (!value) return
+    const { verified, pathname } = verifyUrl(value.text)
+    if (!verified) return setError(true)
+    setModal({ active: false })
+    toast.success('Successfuly scanned the QR Code')
+    router.push(pathname)
+  }
+
+  useEffect(() => { setError(false) }, [modal.type])
 
   return <>
     <div className={`${modal.active ? 'bg-opacity-50' : 'invisible bg-opacity-0'} bg-black fixed inset-0 transition-all duration-700 z-40`} onClick={handleCancel} />
@@ -37,7 +51,10 @@ export default function Modal() {
               }}>Yes</button>
               <button className='py-1 px-3 rounded border button-animation' onClick={handleCancel}>No</button>
             </div>
-          </div> : modal.type === 'showFile' && <FileInfo fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} />}
+          </div> : modal.type === 'showFile' ? <FileInfo fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : modal.type === 'qrReader' && <div className='text-center h-[50vh] aspect-square'>
+            {error ? 'Please scan a valid QR Code' : 'Scan QR Code using camera'}
+            <QrReader onError={() => toast.error('Device or browser not supported')} onScan={handleQrScan} className='mt-2 w-full h-[90%] rounded-sm' />
+          </div>}
     </div>
   </>
 }
