@@ -23,7 +23,7 @@ export default function Upload(props) {
   const verifyDownloadLimit = event => setDownloadLimit(Math.abs(event.target.value) || '')
   const verifyDaysLimit = event => {
     let value = Math.abs(event.target.value)
-    setDaysLimit(value > daysLimit ? daysLimit : value || '')
+    if (value <= daysLimit) setDaysLimit(value || '')
   }
 
   function calcSize(files) {
