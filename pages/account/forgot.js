@@ -13,8 +13,8 @@ export default function Forgot() {
   async function submit(event) {
     event.preventDefault()
     if (!stage) {
-      const { success } = await fetchApp({ url: 'auth/otp', method: 'POST', data: { email: email.current.value } })
-      if (success) setStage(1)
+      const { success, error } = await fetchApp({ url: 'auth/otp', method: 'POST', data: { email: email.current.value } })
+      if (success || error === 'OTP already sent!') setStage(1)
     } else {
       const { success } = await fetchApp({ url: 'auth/forgot', method: 'PUT', data: { email: email.current.value, otp: otp.current.value, password: password.current.value } })
       if (success) router.push('/account/login')
