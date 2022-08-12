@@ -4,14 +4,8 @@ import React, { useEffect, useState } from 'react'
 import { useFileContext } from '../../contexts/ContextProvider'
 
 export default function Account() {
-    const { token, username, uploadFiles, setUploadFiles, downloadFiles, logout, setModal, fetchApp } = useFileContext()
+    const { token, username, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
     const [name, setName] = useState()
-
-    useEffect(() => {
-        if (token) {
-            fetchApp({ url: 'file/history', method: 'GET', authtoken: token, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
-        }
-    }, [])
 
     useEffect(() => { if (username) setName(`${username}${token ? '' : ' (Guest)'}`) }, [username, token])
 

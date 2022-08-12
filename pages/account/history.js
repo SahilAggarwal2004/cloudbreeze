@@ -5,16 +5,10 @@ import { useFileContext } from '../../contexts/ContextProvider'
 import capitalize from '../../utilities/capitalize'
 
 export default function History() {
-    const { router, token, uploadFiles, setUploadFiles, downloadFiles, clearHistory, fetchApp, setModal } = useFileContext()
+    const { router, uploadFiles, downloadFiles, clearHistory, setModal } = useFileContext()
     const filters = ['upload', 'download']
     const filter = router.query.filter
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
-
-    useEffect(() => {
-        if (token) {
-            fetchApp({ url: 'file/history', method: 'GET', authtoken: token, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
-        }
-    }, [])
 
     useEffect(() => { setHistory(filter === 'upload' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])
 

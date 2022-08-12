@@ -18,6 +18,7 @@ export default function ContextProvider({ children, router }) {
     const [token, setToken] = useStorage('token', '')
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
+    const fetchHistory = ['/account', '/account/history']
 
     function logout(type) {
         setUsername('')
@@ -83,6 +84,13 @@ export default function ContextProvider({ children, router }) {
             return (url.origin === window.location.origin && url.pathname.startsWith('/file/')) ? { verified: true, pathname: url.pathname } : { verified: false, error: 'Please enter a valid URL!' }
         } catch { return { verified: false } }
     }
+
+    useEffect(() => {
+        if (fetchHistory.includes(router.pathname)) {
+            if (token) fetchApp({ url: 'file/history', method: 'POST', authtoken: token, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
+            else fetchApp({ url: 'file/history', method: 'POST', data: { guestId: guest }, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
+        }
+    }, [])
 
     useEffect(() => {
         if (!username && !token) {
