@@ -15,11 +15,10 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     const [loading, setLoading] = useState(false)
 
     function generateFileId(value) {
-        try {
-            const { verified } = verifyUrl(value)
-            if (verified) return value.split('download/')[1]
-            toast.warning('Please enter a valid URL!')
-        } catch { return value }
+        const { verified, error } = verifyUrl(value)
+        if (verified) return value.split('file/')[1]
+        if (!error) return value
+        toast.warning(error)
     }
 
     async function downloadFile(event) {

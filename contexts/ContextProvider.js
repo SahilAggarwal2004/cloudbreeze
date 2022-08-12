@@ -80,7 +80,7 @@ export default function ContextProvider({ children, router }) {
     function verifyUrl(value) {
         try {
             const url = new URL(value)
-            return (url.origin === window.location.origin && url.pathname.startsWith('/file/')) ? { verified: true, pathname: url.pathname } : { verified: false }
+            return (url.origin === window.location.origin && url.pathname.startsWith('/file/')) ? { verified: true, pathname: url.pathname } : { verified: false, error: 'Please enter a valid URL!' }
         } catch { return { verified: false } }
     }
 

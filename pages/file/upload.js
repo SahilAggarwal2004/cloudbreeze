@@ -19,7 +19,7 @@ export default function Upload(props) {
   const limit = 100;
   const daysLimit = token ? 30 : 3
 
-  const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9]/g, ""))
+  const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
   const verifyDownloadLimit = event => setDownloadLimit(Math.abs(event.target.value) || '')
   const verifyDaysLimit = event => {
     let value = Math.abs(event.target.value)
