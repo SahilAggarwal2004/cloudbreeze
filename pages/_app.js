@@ -14,7 +14,7 @@ export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
     const [loading, setLoading] = useState(true)
     const hideNavbar = ['/_error', '/account/confirm/[token]', '/account/delete/[token]']
-    const showModal = ['/account', '/account/history', '/file/download']
+    const showModal = ['/account', '/account/history', '/file']
 
     useEffect(() => { setLoading(false) }, [])
 

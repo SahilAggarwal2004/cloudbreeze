@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { FaShareSquare } from 'react-icons/fa';
 
 export default function FileInfo({ fileId, filter, downloadCount, modal = false }) {
-    const link = `${window.location.origin}/file/download/${fileId}`
+    const link = `${window.location.origin}/file/${fileId}`
     const { setModal } = useFileContext()
 
     function share() {
