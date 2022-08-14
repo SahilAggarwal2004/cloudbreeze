@@ -40,8 +40,8 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     setLoading(false)
                     const data = new Uint8Array(dataList)
                     download(data, name)
-                    let updatedFiles = downloadFiles.filter(file => file.fileId !== fileId)
-                    updatedFiles = updatedFiles.concat({ nameList: [name], fileId, createdAt, daysLimit })
+                    const updatedFiles = downloadFiles.filter(file => file.fileId !== fileId)
+                    updatedFiles.push({ nameList: [name], fileId, createdAt, daysLimit })
                     setDownloadFiles(updatedFiles)
                 }
             })
