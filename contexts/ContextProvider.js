@@ -90,7 +90,7 @@ export default function ContextProvider({ children, router }) {
             if (token) fetchApp({ url: 'file/history', method: 'POST', authtoken: token, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
             else fetchApp({ url: 'file/history', method: 'POST', data: { guestId: guest }, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
         }
-    }, [])
+    }, [router.pathname])
 
     useEffect(() => {
         if (!username && !token) {
