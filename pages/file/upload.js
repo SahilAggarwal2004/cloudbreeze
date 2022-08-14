@@ -22,7 +22,7 @@ export default function Upload(props) {
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
   const verifyDownloadLimit = event => setDownloadLimit(Math.abs(event.target.value) || '')
   const verifyDaysLimit = event => {
-    let value = Math.abs(event.target.value)
+    const value = Math.abs(event.target.value)
     if (value <= daysLimit) setDaysLimit(value || '')
   }
 

@@ -32,11 +32,10 @@ export default function History() {
                         {history.map(({ nameList, name, fileId, createdAt, daysLimit, downloadCount, _id }, i) => {
                             fileId = fileId || _id
                             if (!nameList[0]) nameList = [name]
-                            let hoursLeft, daysLeft;
                             const minutesLeft = (daysLimit * 24 * 60) - Math.ceil((Date.now() - new Date(createdAt)) / (60 * 1000))
                             if (minutesLeft < 0) return clearHistory(fileId, filter)
-                            hoursLeft = Math.floor(minutesLeft / 60)
-                            daysLeft = Math.floor(hoursLeft / 24)
+                            const hoursLeft = Math.floor(minutesLeft / 60)
+                            const daysLeft = Math.floor(hoursLeft / 24)
 
                             return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: 'showFile', props: { fileId, filter, downloadCount } })}>
                                 <td className="text-sm text-gray-900 font-medium px-[1.0625rem] py-4">{i + 1}</td>
