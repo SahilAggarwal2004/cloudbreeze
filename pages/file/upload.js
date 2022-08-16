@@ -65,8 +65,7 @@ export default function Upload(props) {
     const data = new FormData();
     data.append('files', content) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
     data.append('length', files.length)
-    const nameList = []
-    for (let i = 0; i < files.length; i++) { nameList.push(files[i].name); }
+    const nameList = files.map(file => file.name)
     if (fileIdRef) data.append('fileId', fileIdRef)
     if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password)
