@@ -14,7 +14,14 @@ self.skipWaiting()
 const revision = nanoid()
 const urlsToCache = (self.__WB_MANIFEST || []).concat([
     { url: '/', revision },
-    { url: '/about', revision }
+    { url: '/about', revision },
+    { url: '/account', revision },
+    { url: '/account/history', revision },
+    { url: '/account/signup', revision },
+    { url: '/account/login', revision },
+    { url: '/account/forgot', revision },
+    { url: '/file/upload', revision },
+    { url: '/file/download', revision }
 ])
 precacheAndRoute(urlsToCache)
 
