@@ -65,7 +65,8 @@ export default function Upload(props) {
     const data = new FormData();
     data.append('files', content) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
     data.append('length', files.length)
-    const nameList = files.map(file => file.name)
+    const nameList = []
+    for (let i = 0; i < files.length; i++) nameList.push(files[i].name)
     if (fileIdRef) data.append('fileId', fileIdRef)
     if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password)
@@ -109,8 +110,8 @@ export default function Upload(props) {
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={passwordRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
 
-      <label htmlFor="time-limit">Days Limit:</label>
-      <input type="number" id='download-limit' value={daysLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} max={daysLimit} onChange={verifyDaysLimit} />
+      <label htmlFor="days-limit">Days Limit:</label>
+      <input type="number" id='days-limit' value={daysLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} max={daysLimit} onChange={verifyDaysLimit} />
 
       <label htmlFor="download-limit">Download Limit:</label>
       <input type="number" id='download-limit' value={downloadLimitRef} disabled={upPercent && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} onChange={verifyDownloadLimit} />
