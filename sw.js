@@ -6,16 +6,11 @@ import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { offlineFallback } from 'workbox-recipes'
-import { nanoid } from 'nanoid'
 
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
 
-const revision = nanoid()
-const urlsToCache = self.__WB_MANIFEST.concat([
-    { url: '/', revision },
-    { url: '/about', revision }
-]).filter(({ url }) => !url.includes('middleware'))
+const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware'))
 precacheAndRoute(urlsToCache)
 
 setDefaultHandler(new StaleWhileRevalidate())

@@ -12,7 +12,6 @@
     "axios": "^0.27.2",
     "jszip": "^3.10.0",
     "megajs": "^1.0.5",
-    "nanoid": "^4.0.0",
     "next": "^12.2.5",
     "next-with-workbox": "^3.0.3",
     "react": "18.2.0",
