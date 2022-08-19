@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import Modal from '../components/Modal';
 import { useEffect, useState } from 'react';
 import Loader from '../components/Loader';
+import { Workbox } from 'workbox-window';
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
@@ -16,7 +17,14 @@ export default function MyApp({ Component, pageProps }) {
     const hideNavbar = ['/_error', '/account/confirm/[token]', '/account/delete/[token]']
     const showModal = ['/account', '/account/history', '/file/download']
 
-    useEffect(() => { setLoading(false) }, [])
+    useEffect(() => {
+        setLoading(false)
+        if ("serviceWorker" in navigator && process.env.NODE_ENV === "production") {
+            const wb = new Workbox("/sw.js", { scope: "/" });
+            wb.addEventListener('installed', event => { if (event.isUpdate) window.location.reload() })
+            wb.register();
+        }
+    }, []);
 
     return <ContextProvider router={router}>
         <Head>

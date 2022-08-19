@@ -12,10 +12,10 @@ clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
 
 const revision = nanoid()
-const urlsToCache = (self.__WB_MANIFEST || []).concat([
+const urlsToCache = self.__WB_MANIFEST.concat([
     { url: '/', revision },
     { url: '/about', revision }
-])
+]).filter(({ url }) => !url.includes('middleware'))
 precacheAndRoute(urlsToCache)
 
 setDefaultHandler(new NetworkFirst())
