@@ -2,7 +2,7 @@
 import { clientsClaim } from 'workbox-core'
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute, setDefaultHandler } from 'workbox-routing'
-import { CacheFirst, NetworkFirst } from 'workbox-strategies'
+import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { ExpirationPlugin } from 'workbox-expiration'
 import { offlineFallback } from 'workbox-recipes'
@@ -18,7 +18,7 @@ const urlsToCache = self.__WB_MANIFEST.concat([
 ]).filter(({ url }) => !url.includes('middleware'))
 precacheAndRoute(urlsToCache)
 
-setDefaultHandler(new NetworkFirst())
+setDefaultHandler(new StaleWhileRevalidate())
 offlineFallback({ pageFallback: '/_offline' });
 
 registerRoute(({ request }) => request.destination === 'image', new CacheFirst({
