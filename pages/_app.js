@@ -10,12 +10,11 @@ import Modal from '../components/Modal';
 import { useEffect, useState } from 'react';
 import Loader from '../components/Loader';
 import { Workbox } from 'workbox-window';
+import { hideNavbar, showModal } from '../constants';
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
     const [loading, setLoading] = useState(true)
-    const hideNavbar = ['/_error', '/account/confirm/[token]', '/account/delete/[token]']
-    const showModal = ['/account', '/account/history', '/file/download']
 
     useEffect(() => {
         setLoading(false)

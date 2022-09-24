@@ -5,6 +5,7 @@ import JSZip from 'jszip';
 import Loader from '../../components/Loader';
 import FileInfo from '../../components/FileInfo';
 import { useFileContext } from '../../contexts/ContextProvider';
+import { options } from '../../constants';
 
 export default function Upload(props) {
   const { guest, token, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
@@ -34,10 +35,6 @@ export default function Upload(props) {
 
   function updateFile(event) {
     const { files } = event.target
-    if (files.length > 10) {
-      event.target.value = "";
-      return toast.warning("Cannot select more than 10 files!");
-    }
     if (calcSize(files) > limit * 1048576) { // size limit
       event.target.value = "";
       return toast.warning(`Total file(s) size exceed ${limit}MB!`);
@@ -67,7 +64,10 @@ export default function Upload(props) {
     data.append('length', files.length)
     const nameList = []
     for (let i = 0; i < files.length; i++) nameList.push(files[i].name)
-    if (fileIdRef) data.append('fileId', fileIdRef)
+    if (fileIdRef) {
+      if (options.includes(fileIdRef)) return toast.warning(`File Id cannot be ${fileIdRef}`);
+      data.append('fileId', fileIdRef)
+    }
     if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password)
     if (daysLimitRef) data.append('daysLimit', daysLimitRef)

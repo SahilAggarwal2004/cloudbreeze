@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
+import { randomName } from 'random-stuff-js';
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
+import { fetchHistory } from '../constants';
 import useStorage from '../hooks/useStorage';
-import randomName from '../utilities/randomName';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 
@@ -18,7 +19,6 @@ export default function ContextProvider({ children, router }) {
     const [token, setToken] = useStorage('token', '')
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
-    const fetchHistory = ['/account', '/account/history']
 
     function logout(type) {
         setUsername('')
