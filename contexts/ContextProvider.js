@@ -70,10 +70,11 @@ export default function ContextProvider({ children, router }) {
     function clearHistory(fileId, filter) {
         let updatedFiles;
         if (filter === 'upload') {
-            updatedFiles = uploadFiles.filter(file => file.fileId !== fileId)
+            updatedFiles = uploadFiles.filter(({ _id }) => _id !== fileId)
             setUploadFiles(updatedFiles)
+            console.log(updatedFiles)
         } else if (filter === 'download') {
-            updatedFiles = downloadFiles.filter(file => file.fileId !== fileId)
+            updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
             setDownloadFiles(updatedFiles)
         }
     }
@@ -87,8 +88,8 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         if (fetchHistory.includes(router.pathname)) {
-            if (token) fetchApp({ url: 'file/history', method: 'POST', authtoken: token, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
-            else fetchApp({ url: 'file/history', method: 'POST', data: { guestId: guest }, showToast: false }).then(({ success, files }) => success ? setUploadFiles(files) : setUploadFiles([]))
+            if (token) fetchApp({ url: 'file/history', method: 'POST', authtoken: token, showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+            else fetchApp({ url: 'file/history', method: 'POST', data: { guestId: guest }, showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
         }
     }, [router.pathname])
 

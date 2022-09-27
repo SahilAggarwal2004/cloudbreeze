@@ -84,7 +84,7 @@ export default function Upload(props) {
     })
     if (!success) return setLink('error')
     setLink(fileId)
-    const updatedFiles = uploadFiles.concat({ nameList, createdAt, fileId, downloadCount: 0, daysLimit: daysLimitRef || daysLimit })
+    const updatedFiles = uploadFiles.concat({ nameList, createdAt, _id: fileId, downloadCount: 0, daysLimit: daysLimitRef || daysLimit })
     setUploadFiles(updatedFiles)
   }
 
