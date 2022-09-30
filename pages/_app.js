@@ -38,6 +38,8 @@ export default function MyApp({ Component, pageProps }) {
             <meta name="description" content="CloudBreeze is an online platform to where you can share files via cloud between your friends. We respect your privacy and that's why we make sure your files are totally encrypted and password protected." />
             <link rel='manifest' href='/manifest.json' />
 
+            <meta name="google-site-verification" content="5_rdfkDpTLo7tXDzIkEfmQb1wH_0AmpbcQOAPhLNBLQ" />
+
             <link rel="apple-touch-icon" href="icons/apple-icon-180.png" />
             <meta name="apple-mobile-web-app-capable" content="yes" />
             <link rel="apple-touch-startup-image" href="icons/apple-splash-2048-2732.jpg" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
@@ -87,8 +89,8 @@ export default function MyApp({ Component, pageProps }) {
         </Head>
 
         {/* Google tag (gtag.js) */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-VDY08PZTBH" strategy='lazyOnload' />
-        <Script id='google-analytics' strategy='lazyOnload'>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-VDY08PZTBH" strategy='afterInteractive' />
+        <Script id='google-analytics' strategy='afterInteractive'>
             {`window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
