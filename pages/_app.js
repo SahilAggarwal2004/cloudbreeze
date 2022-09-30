@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import Loader from '../components/Loader';
 import { Workbox } from 'workbox-window';
 import { hideNavbar, showModal } from '../constants';
+import Script from 'next/script';
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
@@ -25,7 +26,7 @@ export default function MyApp({ Component, pageProps }) {
         }
     }, []);
 
-    return <ContextProvider router={router}>
+    return <>
         <Head>
             <meta charSet="utf-8" />
             <title>CloudBreeze - Breeze your files on the cloud!</title>
@@ -84,12 +85,25 @@ export default function MyApp({ Component, pageProps }) {
             <link rel="apple-touch-startup-image" href="icons/apple-splash-640-1136.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" />
             <link rel="apple-touch-startup-image" href="icons/apple-splash-1136-640.jpg" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)" />
         </Head>
-        {!hideNavbar.includes(router.pathname) && <Navbar />}
-        {loading ? <div className='center flex flex-col items-center space-y-2'>
-            <Loader />
-            <div>Loading...</div>
-        </div> : <Component {...pageProps} />}
-        {showModal.includes(router.pathname) && <Modal />}
-        <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' closeButton={false} />
-    </ContextProvider>
+
+        {/* Google tag (gtag.js) */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-VDY08PZTBH" strategy='lazyOnload' />
+        <Script id='google-analytics' strategy='lazyOnload'>
+            {`window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-VDY08PZTBH');`}
+        </Script>
+
+        <ContextProvider router={router}>
+            {!hideNavbar.includes(router.pathname) && <Navbar />}
+            {loading ? <div className='center flex flex-col items-center space-y-2'>
+                <Loader />
+                <div>Loading...</div>
+            </div> : <Component {...pageProps} />}
+            {showModal.includes(router.pathname) && <Modal />}
+            <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' closeButton={false} />
+        </ContextProvider>
+    </>
 }
