@@ -17,7 +17,7 @@ export default function FileInfo({ fileId, filter, downloadCount, modal = false 
         }
     }
 
-    return <div className='text-center space-y-2'>
+    return <div className='text-center space-y-2 bg-white text-black'>
         {modal && <h2 className='font-bold text-xl mb-4'>Download file</h2>}
         <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={share}>
             <FaShareSquare />
@@ -25,7 +25,7 @@ export default function FileInfo({ fileId, filter, downloadCount, modal = false 
         </div>
         <div className='font-bold'>OR</div>
         <div>Scan the QR Code given below</div>
-        <div className='scale-[0.8]'><QRCode value={link} /></div>
+        <div className='scale-[0.8]'><QRCode value={link} bgColor='#FFFFFF' fgColor='#000000' /></div>
         {modal && filter === 'upload' && <div className='text-sm pb-2'>Download Count: {downloadCount}</div>}
         {modal && <div className='space-x-4 mt-4 text-sm'>
             {filter === 'upload' ? <button className='py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: true, type: 'deleteFile', props: { fileId } })}>Delete File</button> : filter === 'download' && <button className='py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: true, type: 'clearHistory', props: { fileId } })}>Clear from History</button>}
