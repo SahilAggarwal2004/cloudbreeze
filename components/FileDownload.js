@@ -6,13 +6,15 @@ import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
 import { toast } from 'react-toastify';
 import { FaQrcode } from 'react-icons/fa';
+import axios from 'axios';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
     const { token, downloadFiles, setDownloadFiles, fetchApp, setModal, verifyUrl } = useFileContext()
     const fileRef = useRef()
     const password = useRef()
-    const [downPercent, setDownPercent] = useState(0)
     const [loading, setLoading] = useState(false)
+    const [isDownloading, setIsDownloading] = useState(false)
+    const [downPercent, setDownPercent] = useState(0)
 
     function generateFileId(value) {
         const { verified, error } = verifyUrl(value)
@@ -26,26 +28,34 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         const fileId = fileIdFromUrl || generateFileId(fileRef.current.value)
         if (!fileId) return;
         setLoading(true)
+        setIsDownloading(true)
         setDownPercent(0)
         const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value }, authtoken: token })
         if (!error) {
-            const file = File.fromURL(link)
-            const stream = file.download();
-            let dataList = [];
-            stream.on('data', data => dataList = dataList.concat(Array.from(data)))
-            stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
-                setDownPercent(Math.round((bytesLoaded * 100) / bytesTotal))
-                if (bytesLoaded == bytesTotal) {
-                    fetchApp({ url: `/file/downloaded/${fileId}`, authtoken: token, showProgress: false })
-                    setLoading(false)
-                    const data = new Uint8Array(dataList)
-                    download(data, name)
-                    const updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
-                    updatedFiles.push({ nameList: [name], _id: fileId, createdAt, daysLimit })
-                    setDownloadFiles(updatedFiles)
-                }
-            })
+            function downloadFile(dataList, source = 'mega') {
+                fetchApp({ url: `/file/downloaded/${fileId}`, authtoken: token, showProgress: false })
+                setLoading(false)
+                const data = source === 'mega' ? new Uint8Array(dataList) : dataList
+                download(data, name, source)
+                const updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
+                updatedFiles.push({ nameList: [name], _id: fileId, createdAt, daysLimit })
+                setDownloadFiles(updatedFiles)
+            }
+            try {
+                const file = File.fromURL(link)
+                const stream = file.download();
+                let dataList = [];
+                stream.on('data', data => dataList = dataList.concat(Array.from(data)))
+                stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
+                    setDownPercent(Math.round((bytesLoaded * 100) / bytesTotal))
+                    if (bytesLoaded == bytesTotal) downloadFile(dataList)
+                })
+            } catch {
+                const { data } = await axios({ url: link, method: 'GET', responseType: 'blob', onDownloadProgress: ({ loaded, total }) => setDownPercent(Math.round((loaded * 100) / total)) })
+                downloadFile(data, 'local')
+            }
         } else setLoading(false)
+        setIsDownloading(false);
     }
 
     return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
@@ -56,7 +66,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             </>}
             <label htmlFor="password">Password (if any):</label>
             <input type="password" id='password' ref={password} className='border rounded px-2 py-0.5' autoComplete="new-password" />
-            <button type="submit" disabled={downPercent && downPercent != 100} className='col-span-2 mt-3 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>{downPercent == 100 ? 'Download Again' : 'Download'}</button>
+            <button type="submit" disabled={isDownloading} className='col-span-2 mt-3 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>{downPercent == 100 ? 'Download Again' : 'Download'}</button>
         </form>
 
         {Boolean(downPercent) ? <div className='w-full flex items-center justify-evenly max-w-[400px]'>

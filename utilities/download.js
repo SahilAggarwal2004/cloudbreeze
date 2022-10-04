@@ -1,8 +1,8 @@
 import { toast } from "react-toastify";
 
-export default function download(data, name, type = 'file') {
+export default function download(data, name, source) {
     try {
-        const blob = type === 'file' ? new Blob([data]) : data
+        const blob = source === 'mega' ? new Blob([data]) : data
         const url = window.URL.createObjectURL(blob);
         toast.success('File downloaded successfully!')
         const a = document.createElement('a');
