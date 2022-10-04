@@ -20,6 +20,7 @@ export default function Upload(props) {
   const [share, setShare] = useState(props.share)
   const limit = 100;
   const daysLimit = token ? 30 : 3
+  const disabled = (isUploading || upPercent) && link !== 'error'
 
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
   const verifyDownloadLimit = event => setDownloadLimit(Math.abs(event.target.value) || '')
@@ -113,21 +114,21 @@ export default function Upload(props) {
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
       <label htmlFor="files">File(s):</label>
       {share ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
-        : <input type="file" id='files' disabled={isUploading && link !== 'error'} required onChange={updateFile} multiple />}
+        : <input type="file" id='files' disabled={disabled} required onChange={updateFile} multiple />}
 
       <label htmlFor="file-id">File Id: </label>
-      <input type="text" id='file-id' value={fileIdRef} disabled={isUploading && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' />
+      <input type="text" id='file-id' value={fileIdRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' />
 
       <label htmlFor="password">Password:</label>
-      <input type="password" id='password' ref={passwordRef} disabled={isUploading && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
+      <input type="password" id='password' ref={passwordRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
 
       <label htmlFor="days-limit">Days Limit:</label>
-      <input type="number" id='days-limit' value={daysLimitRef} disabled={isUploading && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} max={daysLimit} onChange={verifyDaysLimit} />
+      <input type="number" id='days-limit' value={daysLimitRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} max={daysLimit} onChange={verifyDaysLimit} />
 
       <label htmlFor="download-limit">Download Limit:</label>
-      <input type="number" id='download-limit' value={downloadLimitRef} disabled={isUploading && link !== 'error'} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} onChange={verifyDownloadLimit} />
+      <input type="number" id='download-limit' value={downloadLimitRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} onChange={verifyDownloadLimit} />
 
-      <button type="submit" disabled={isUploading && link !== 'error'} className='col-span-2 mt-5 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800' onClick={() => { if (link === 'error') reset() }}>Upload</button>
+      <button type="submit" disabled={disabled} className='col-span-2 mt-5 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800' onClick={() => { if (link === 'error') reset() }}>Upload</button>
       {link && link !== 'error' && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
