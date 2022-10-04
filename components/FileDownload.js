@@ -32,11 +32,10 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         setDownPercent(0)
         const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value }, authtoken: token })
         if (!error) {
-            function downloadFile(dataList, source = 'mega') {
+            function downloadFile(data, source, length = 0) {
                 fetchApp({ url: `/file/downloaded/${fileId}`, authtoken: token, showProgress: false })
                 setLoading(false)
-                const data = source === 'mega' ? new Uint8Array(dataList) : dataList
-                download(data, name, source)
+                download(data, name, source, length)
                 const updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
                 updatedFiles.push({ nameList: [name], _id: fileId, createdAt, daysLimit })
                 setDownloadFiles(updatedFiles)
@@ -44,11 +43,14 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             try {
                 const file = File.fromURL(link)
                 const stream = file.download();
-                let dataList = [];
-                stream.on('data', data => dataList = dataList.concat(Array.from(data)))
+                let dataList = [], length = 0;
+                stream.on('data', data => {
+                    dataList.push(data)
+                    length += data.length
+                })
                 stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
                     setDownPercent(Math.round((bytesLoaded * 100) / bytesTotal))
-                    if (bytesLoaded == bytesTotal) downloadFile(dataList)
+                    if (bytesLoaded == bytesTotal) downloadFile(dataList, 'mega', length)
                 })
             } catch {
                 const { data } = await axios({ url: link, method: 'GET', responseType: 'blob', onDownloadProgress: ({ loaded, total }) => setDownPercent(Math.round((loaded * 100) / total)) })
