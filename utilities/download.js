@@ -17,5 +17,5 @@ export default function download(data, name, source, totalLength) {
         a.href = url;
         a.download = name; // giving default name to download prompt
         a.click();
-    } catch (error) { console.log(error); return toast.error("Couldn't download file") }
+    } catch { return toast.error("Couldn't download file") }
 }

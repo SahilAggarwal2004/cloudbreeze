@@ -72,7 +72,6 @@ export default function ContextProvider({ children, router }) {
         if (filter === 'upload') {
             updatedFiles = uploadFiles.filter(({ _id }) => _id !== fileId)
             setUploadFiles(updatedFiles)
-            console.log(updatedFiles)
         } else if (filter === 'download') {
             updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
             setDownloadFiles(updatedFiles)
