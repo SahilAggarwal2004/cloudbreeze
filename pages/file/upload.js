@@ -59,7 +59,7 @@ export default function Upload(props) {
     else {
       const zip = new JSZip();
       for (let i = 0; i < files.length; i++) zip.file(files[i].name, files[i])
-      content = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' })
+      content = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
     }
 
     const data = new FormData();
