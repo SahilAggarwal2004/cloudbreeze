@@ -53,6 +53,10 @@
     {
       "name": "Upload a file",
       "url": "/file/upload"
+    },
+    {
+      "name": "Download a file",
+      "url": "/file/download"
     }
   ],
   "display": "standalone",
