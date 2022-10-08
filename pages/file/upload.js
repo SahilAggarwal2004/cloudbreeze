@@ -117,7 +117,7 @@ export default function Upload(props) {
         : <input type="file" id='files' disabled={disabled} required onChange={updateFile} multiple />}
 
       <label htmlFor="file-id">File Id: </label>
-      <input type="text" id='file-id' value={fileIdRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' />
+      <input type="text" id='file-id' value={fileIdRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' maxLength={30} />
 
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={passwordRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
