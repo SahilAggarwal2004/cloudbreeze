@@ -16,7 +16,7 @@ export default function Navbar() {
             <div className='flex space-x-5 sm:space-x-6'>
                 {router.pathname !== '/' && <Link href="/"><a><FaHome className='hidden sm:block scale-125 sm:scale-150' title='Home' /></a></Link>}
                 {router.pathname === '/' || router.pathname === '/account' ?
-                    <Link href="/account/history?filter=upload"><a><FaHistory className='scale-110 sm:scale-125' title='History' /></a></Link> :
+                    <Link href="/account/history"><a><FaHistory className='scale-110 sm:scale-125' title='History' /></a></Link> :
                     <Link href="/account"><a><FaUserAlt className='scale-110 sm:scale-125' title='Your account' /></a></Link>
                 }
                 <Link href="/file/upload"><a><FaUpload className='scale-110 sm:scale-125' title='Upload File' /></a></Link>
