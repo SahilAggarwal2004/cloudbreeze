@@ -7,10 +7,10 @@ import capitalize from '../../utilities/capitalize'
 
 export default function History() {
     const { router, uploadFiles, downloadFiles, clearHistory, setModal } = useFileContext()
-    const filter = router.query.filter
+    const filter = router.query.filter || "upload"
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
 
-    useEffect(() => { setHistory(filter === 'upload' ? uploadFiles : downloadFiles) }, [filter, uploadFiles, downloadFiles])
+    useEffect(() => { setHistory(filter === 'upload' ? uploadFiles : filter === 'download' ? downloadFiles : []) }, [filter, uploadFiles, downloadFiles])
 
     return <>
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-400 px-1 space-x-0.5">
