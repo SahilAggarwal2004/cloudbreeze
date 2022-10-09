@@ -17,9 +17,9 @@ export default function FileInfo({ fileId, filter, downloadCount, modal = false 
         }
     }
 
-    return <div className='text-center space-y-2 bg-white text-black max-w-[95vw]'>
+    return <div className='text-center text-sm sm:text-base space-y-2 bg-white text-black max-w-[95vw]'>
         {modal && <h2 className='font-bold text-xl mb-4'>Download file</h2>}
-        <div className='cursor-pointer px-1 break-all text-sm' onClick={() => share('File Id')}>
+        <div className='cursor-pointer px-1 break-all mb-4' onClick={() => share('File Id')}>
             File Id: <span className='font-medium'>{fileId}</span>
         </div>
         <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={() => share()}>
