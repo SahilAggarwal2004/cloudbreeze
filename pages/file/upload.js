@@ -122,7 +122,7 @@ export default function Upload(props) {
       <label htmlFor="download-limit">Download Limit:</label>
       <input type="number" id='download-limit' value={downloadLimitRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} onChange={verifyDownloadLimit} />
 
-      <button type="submit" disabled={disabled} className='col-span-2 mt-5 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800' onClick={() => { if (link === 'error') reset() }}>Upload</button>
+      <button type="submit" disabled={disabled} className='col-span-2 mt-5 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>Upload</button>
       {link && link !== 'error' && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
