@@ -10,7 +10,7 @@ import { options } from '../../constants';
 export default function Upload(props) {
   const { guest, token, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
   const passwordRef = useRef()
-  const [fileid, setFileid] = useState()
+  const [fileIdRef, setFileId] = useState()
   const [daysLimitRef, setDaysLimit] = useState()
   const [downloadLimitRef, setDownloadLimit] = useState()
   const [files, setFiles] = useState()
@@ -22,7 +22,7 @@ export default function Upload(props) {
   const daysLimit = token ? 30 : 3
   const disabled = (isUploading || upPercent) && link !== 'error'
 
-  const verifyFileId = event => setFileid(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
+  const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
   const verifyDownloadLimit = event => setDownloadLimit(Math.abs(event.target.value) || '')
   const verifyDaysLimit = event => {
     const value = Math.abs(event.target.value)
@@ -45,7 +45,7 @@ export default function Upload(props) {
   }
 
   function reset() {
-    setFileid('');
+    setFileId('');
     setLink();
     setUpPercent(0);
     setShare(false);
@@ -67,10 +67,13 @@ export default function Upload(props) {
     data.append('length', files.length)
     const nameList = []
     for (let i = 0; i < files.length; i++) nameList.push(files[i].name)
-    if (fileid && options.includes(fileid)) {
-      toast.warning(`File Id cannot be ${fileid}`);
-      setIsUploading(false)
-      return
+    if (fileIdRef) {
+      if (options.includes(fileIdRef)) {
+        toast.warning(`File Id cannot be ${fileIdRef}`);
+        setIsUploading(false)
+        return
+      }
+      data.append('fileId', fileIdRef)
     }
     if (files.length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password)
@@ -78,8 +81,11 @@ export default function Upload(props) {
     if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
     if (guest) data.append('guest', guest)
 
+    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef }, authtoken: token })
+    if (!verified) return setIsUploading(false)
+
     const { fileId, createdAt, success } = await fetchApp({
-      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token, headers: { fileid }, options: {
+      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token, options: {
         onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
       }
     })
@@ -111,7 +117,7 @@ export default function Upload(props) {
         : <input type="file" id='files' disabled={disabled} required onChange={updateFile} multiple />}
 
       <label htmlFor="file-id">File Id: </label>
-      <input type="text" id='file-id' value={fileid} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' maxLength={30} />
+      <input type="text" id='file-id' value={fileIdRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' maxLength={30} />
 
       <label htmlFor="password">Password:</label>
       <input type="password" id='password' ref={passwordRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />

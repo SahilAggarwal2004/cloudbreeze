@@ -28,13 +28,13 @@ export default function ContextProvider({ children, router }) {
         type === 'manual' ? toast.success('Logged out successfully') : router.push('/account')
     }
 
-    async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = {}, headers = {}, options = {}, showToast = true, showProgress = true }) {
+    async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true, showProgress = true }) {
         let json;
         try {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
                 url, method, data, ...options,
-                headers: { authtoken, 'Content-Type': type, ...headers }
+                headers: { authtoken, 'Content-Type': type }
             })
             if (showProgress) setProgress(100)
             json = response.data;
