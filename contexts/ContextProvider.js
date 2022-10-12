@@ -60,13 +60,6 @@ export default function ContextProvider({ children, router }) {
         if (success || error === 'User not found!') logout('auto')
     }
 
-    async function deleteFile(fileId) {
-        setModal({ active: false })
-        const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: token, data: { guestId: guest } })
-        if (!success) return
-        token ? setUploadFiles(files) : clearHistory(fileId, 'upload')
-    }
-
     function clearHistory(fileId, filter) {
         let updatedFiles;
         if (filter === 'upload') {
@@ -100,7 +93,7 @@ export default function ContextProvider({ children, router }) {
         }
     }, [username, token])
 
-    return <Context.Provider value={{ router, username, setUsername, guest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, setGuest, fetchApp, progress, setProgress, logout, deleteUser, deleteFile, clearHistory, modal, setModal, verifyUrl }}>
+    return <Context.Provider value={{ router, username, setUsername, guest, setGuest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, deleteUser, clearHistory, modal, setModal, verifyUrl }}>
         {children}
     </Context.Provider>
 }
