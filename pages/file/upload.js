@@ -37,7 +37,12 @@ export default function Upload(props) {
 
   function updateFile(event) {
     const { files } = event.target
-    if (calcSize(files) > limit * 1048576) { // size limit
+    const size = calcSize(files)
+    if (!size) {
+      event.target.value = "";
+      return toast.warning('Empty file(s)');
+    }
+    if (size > limit * 1048576) { // size limit
       event.target.value = "";
       return toast.warning(`Total file(s) size exceed ${limit}MB!`);
     }
