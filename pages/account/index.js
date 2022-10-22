@@ -1,13 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 import { useFileContext } from '../../contexts/ContextProvider'
 
 export default function Account() {
     const { token, username, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
     const [name, setName] = useState()
 
-    useEffect(() => { if (username) setName(`${username}${token ? '' : ' (Guest)'}`) }, [username, token])
+    useEffect(() => {
+        if (username) setName(`${username}${token ? '' : ' (Guest)'}`)
+        if (!token) toast(<span className='text-gray-700 text-sm sm:text-base'>
+            Create a permanent account to keep your files <strong>synced</strong> across all your devices and increase time limit of cloud uploads to upto <strong>30 days (10x)</strong>!
+        </span>, { autoClose: 5000 })
+    }, [username, token])
 
     return <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
         <div className='text-xl' > Hello, <span className='font-bold'>{name}</span></div>

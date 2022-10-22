@@ -17,7 +17,8 @@ initializeApp({ apiKey, authDomain, projectId, storageBucket, messagingSenderId,
 const db = getFirestore();
 
 export default function FirebaseProvider({ children }) {
-    const pc = new RTCPeerConnection()
+    const pc = new RTCPeerConnection(servers)
+
 
     return <Context.Provider value={{}}>
         {children}
