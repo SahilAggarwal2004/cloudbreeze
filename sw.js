@@ -10,7 +10,7 @@ import { offlineFallback } from 'workbox-recipes'
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
 
-const urlsToCache = self.__WB_MANIFEST.concat({ url: '/manifest.json', revision: `${Date.now()}` }).filter(({ url }) => !url.includes('middleware'))
+const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware'))
 precacheAndRoute(urlsToCache)
 
 setDefaultHandler(new StaleWhileRevalidate())
