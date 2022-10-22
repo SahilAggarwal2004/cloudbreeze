@@ -3,18 +3,26 @@ import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useFileContext } from '../../contexts/ContextProvider'
+import useStorage from '../../hooks/useStorage'
 
 export default function Account() {
     const { token, username, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
     const [name, setName] = useState()
+    const [showTip, setShowTip] = useStorage('tip', true, { local: false, session: true })
     const toastId = useRef();
 
     useEffect(() => {
+        if (!token && showTip) {
+            setShowTip(false)
+            toastId.current = toast(<span className='text-gray-700 text-sm sm:text-base'>
+                Create a permanent account to keep your files <strong>synced</strong> across all your devices and increase time limit of cloud uploads to upto <strong>30 days (10x)</strong>!
+            </span>, { autoClose: 5000, pauseOnFocusLoss: true, pauseOnHover: true })
+            return () => { toast.dismiss(toastId.current) }
+        }
+    }, [])
+
+    useEffect(() => {
         if (username) setName(`${username}${token ? '' : ' (Guest)'}`)
-        if (!token) toastId.current = toast(<span className='text-gray-700 text-sm sm:text-base'>
-            Create a permanent account to keep your files <strong>synced</strong> across all your devices and increase time limit of cloud uploads to upto <strong>30 days (10x)</strong>!
-        </span>, { autoClose: 5000 })
-        return () => { toast.dismiss(toastId.current) }
     }, [username, token])
 
     return <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
