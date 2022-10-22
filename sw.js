@@ -11,7 +11,7 @@ self.skipWaiting()
 
 const filePaths = ['/file/upload', '/file/download']
 
-const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware') && !url.includes('manifest.json'))
+const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware'))
 precacheAndRoute(urlsToCache)
 
 setDefaultHandler(new StaleWhileRevalidate())
