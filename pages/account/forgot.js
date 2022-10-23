@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react'
 import Link from 'next/link'
 import { useFileContext } from '../../contexts/ContextProvider';
 import Logo from '../../components/Logo';
+import Password from '../../components/Password';
 
 export default function Forgot() {
   const { router, fetchApp } = useFileContext()
@@ -35,7 +36,7 @@ export default function Forgot() {
           <input ref={email} type="email" autoComplete="email" required className={`appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md ${stage ? 'rounded-b-none' : ''} focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm`} placeholder="Email address" />
           {Boolean(stage) && <>
             <input ref={otp} type="text" autoComplete="new-password" minLength={6} maxLength={6} required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Enter OTP" />
-            <input ref={password} type="password" autoComplete="new-password" minLength={8} required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Enter new password" />
+            <Password password={password} />
           </>}
         </div>
         <button type="submit" className="relative w-full flex justify-center py-2 px-4 text-sm font-medium rounded-md border button-animation">{stage ? 'Reset password' : 'Send OTP'}</button>

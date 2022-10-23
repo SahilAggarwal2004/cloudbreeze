@@ -1,14 +1,13 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import Link from 'next/link'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useFileContext } from '../../contexts/ContextProvider';
 import Logo from '../../components/Logo';
+import Password from '../../components/Password';
 
 export default function Login() {
   const { router, setUsername, setToken, setUploadFiles, setDownloadFiles, setGuest, fetchApp } = useFileContext()
   const email = useRef();
   const password = useRef();
-  const [show, setShow] = useState(false);
 
   async function submit(event) {
     event.preventDefault()
@@ -35,12 +34,7 @@ export default function Login() {
       <form className="mt-8 space-y-6" onSubmit={submit}>
         <div className="rounded-md shadow-sm -space-y-px">
           <input ref={email} type="email" autoComplete="email" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm" placeholder="Email address" />
-          <div className='relative p-0 m-0'>
-            <input ref={password} type={show ? "text" : "password"} autoComplete="new-password" minLength={8} required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-black focus:border-black sm:text-sm" placeholder="Password" />
-            <div onClick={() => setShow(!show)}>
-              {!show ? <FaEye className='password-icon' /> : <FaEyeSlash className='password-icon' />}
-            </div>
-          </div>
+          <Password password={password} />
         </div>
 
         <Link passHref href='/account/forgot'><div className="cursor-pointer font-medium text-sm text-gray-600 hover:text-black">Forgot your password?</div></Link>
