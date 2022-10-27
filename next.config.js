@@ -2,7 +2,7 @@
 
 const withWorkbox = require('next-with-workbox')
 
-const nextConfig = {}
+const nextConfig = { experimental: { nextScriptWorkers: true } }
 
 module.exports = withWorkbox({
   workbox: {
