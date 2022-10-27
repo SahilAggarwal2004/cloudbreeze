@@ -1,5 +1,6 @@
 export const fetchHistory = ['/account', '/account/history']
 export const hideNavbar = ['/_error', '/account/confirm/[token]', '/account/delete/[token]']
+export const dummyNavbar = ['/account/confirm/[token]', '/account/delete/[token]']
 export const showModal = ['/account', '/account/history', '/file/download']
 export const options = ['upload', 'download']
 

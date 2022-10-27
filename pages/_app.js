@@ -10,7 +10,7 @@ import Modal from '../components/Modal';
 import { useEffect, useState } from 'react';
 import Loader from '../components/Loader';
 import { Workbox } from 'workbox-window';
-import { hideNavbar, showModal } from '../constants';
+import { dummyNavbar, hideNavbar, showModal } from '../constants';
 import Script from 'next/script';
 
 export default function MyApp({ Component, pageProps }) {
@@ -100,6 +100,7 @@ export default function MyApp({ Component, pageProps }) {
 
         <ContextProvider router={router}>
             {!hideNavbar.includes(router.pathname) && <Navbar />}
+            {dummyNavbar.includes(router.pathname) && <h1 className='sticky inset-0 z-30 bg-black text-white py-2 px-5 shadow-lg text-xl font-medium text-center sm:text-left'>CloudBreeze</h1>}
             {loading ? <div className='center flex flex-col items-center space-y-2'>
                 <Loader />
                 <div>Loading...</div>
