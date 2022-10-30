@@ -21,7 +21,7 @@ export default function MyApp({ Component, pageProps }) {
         setLoading(false)
         if ("serviceWorker" in navigator && process.env.NODE_ENV === "production") {
             const wb = new Workbox("/sw.js", { scope: "/" });
-            wb.addEventListener('installed', event => { if (event.isUpdate) window.location.reload() })
+            wb.addEventListener('installed', event => { if (event.isUpdate && confirm('New update available, Click OK to refresh!')) window.location.reload() })
             wb.register();
         }
     }, []);
