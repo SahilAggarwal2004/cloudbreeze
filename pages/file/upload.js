@@ -86,11 +86,11 @@ export default function Upload(props) {
     if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
     if (guest) data.append('guest', guest)
 
-    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef }, authtoken: token })
+    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef }, authtoken: 'local' })
     if (!verified) return setIsUploading(false)
 
     const { fileId, createdAt, success } = await fetchApp({
-      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: token, options: {
+      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: 'local', options: {
         onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
       }
     })

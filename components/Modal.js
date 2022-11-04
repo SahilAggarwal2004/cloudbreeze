@@ -4,13 +4,13 @@ import FileInfo from './FileInfo'
 import QrScanner from './QrScanner'
 
 export default function Modal() {
-  const { token, guest, modal, setModal, deleteUser, fetchApp, setUploadFiles } = useFileContext()
+  const { guest, modal, setModal, deleteUser, fetchApp, setUploadFiles } = useFileContext()
   const { fileId, filter, downloadCount } = modal.props || {}
   const handleCancel = () => setModal({ active: false })
 
   async function deleteFile(fileId) {
     setModal({ active: false })
-    const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: token, data: { guestId: guest } })
+    const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: 'local', data: { guestId: guest } })
     if (!success) return
     setUploadFiles(files)
   }
@@ -23,7 +23,7 @@ export default function Modal() {
           <h3 className='font-bold'>Delete account?</h3>
           <p className='text-red-600 text-sm'>This action is irreversible</p>
           <div className='space-x-4 mt-6 text-sm'>
-            <button className='py-1 px-3 rounded border button-animation' onClick={() => deleteUser(token)}>Yes</button>
+            <button className='py-1 px-3 rounded border button-animation' onClick={deleteUser}>Yes</button>
             <button className='py-1 px-3 rounded border button-animation' onClick={handleCancel}>No</button>
           </div>
         </div> :

@@ -34,7 +34,7 @@ export default function ContextProvider({ children, router }) {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
                 url, method, data, ...options,
-                headers: { authtoken, 'Content-Type': type }
+                headers: { authtoken: authtoken === 'local' ? token : authtoken, 'Content-Type': type }
             })
             if (showProgress) setProgress(100)
             json = response.data;
@@ -52,10 +52,10 @@ export default function ContextProvider({ children, router }) {
         return json
     }
 
-    async function deleteUser(token) {
+    async function deleteUser() {
         setModal({ active: false })
         setProgress(100 / 3)
-        const { success, error } = await fetchApp({ url: 'auth/delete', method: 'DELETE', authtoken: token })
+        const { success, error } = await fetchApp({ url: 'auth/delete', method: 'DELETE', authtoken: 'local' })
         setProgress(100)
         if (success || error === 'User not found!') logout('auto')
     }
@@ -80,7 +80,7 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         if (fetchHistory.includes(router.pathname)) {
-            if (token) fetchApp({ url: 'file/history', method: 'POST', authtoken: token, showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+            if (token) fetchApp({ url: 'file/history', method: 'POST', authtoken: 'local', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
             else fetchApp({ url: 'file/history', method: 'POST', data: { guestId: guest }, showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
         }
     }, [router.pathname])

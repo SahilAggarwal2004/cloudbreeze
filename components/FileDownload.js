@@ -9,7 +9,7 @@ import { FaQrcode } from 'react-icons/fa';
 import axios from 'axios';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
-    const { token, downloadFiles, setDownloadFiles, fetchApp, setModal, verifyUrl } = useFileContext()
+    const { downloadFiles, setDownloadFiles, fetchApp, setModal, verifyUrl } = useFileContext()
     const fileRef = useRef()
     const password = useRef()
     const [loading, setLoading] = useState(false)
@@ -30,7 +30,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         setLoading(true)
         setIsDownloading(true)
         setDownPercent(0)
-        const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value }, authtoken: token })
+        const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value }, authtoken: 'local' })
         if (!error) {
             function downloadFile(data, source) {
                 setLoading(false)
@@ -38,7 +38,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                 const updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
                 updatedFiles.push({ nameList: [name], _id: fileId, createdAt, daysLimit })
                 setDownloadFiles(updatedFiles)
-                fetchApp({ url: `/file/downloaded/${fileId}`, authtoken: token, showProgress: false })
+                fetchApp({ url: `/file/downloaded/${fileId}`, authtoken: 'local', showProgress: false })
             }
             try {
                 const file = File.fromURL(link)

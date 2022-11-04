@@ -3,10 +3,9 @@ import { useFileContext } from '../../../contexts/ContextProvider'
 
 export default function Confirm() {
   const { router, fetchApp } = useFileContext()
-  const { token } = router.query
 
   async function verify() {
-    const { success } = await fetchApp({ url: 'auth/confirm', method: 'PUT', authtoken: token })
+    const { success } = await fetchApp({ url: 'auth/confirm', method: 'PUT', authtoken: router.query.token })
     if (success) router.push('/account/login')
   }
 
