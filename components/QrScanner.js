@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { QrReader } from 'react-qr-reader'
 import { toast } from 'react-toastify'
 import { useFileContext } from '../contexts/ContextProvider'
+import { verifyUrl } from '../modules'
 
-export default function QrScanner() {
-    const { router, verifyUrl, modal, setModal } = useFileContext()
+export default function QrScanner({ redirect }) {
+    const { modal, setModal } = useFileContext()
     const [error, setError] = useState(false)
 
     function handleQrScan(result, error) {
@@ -17,7 +18,7 @@ export default function QrScanner() {
         if (!verified) return setError(true)
         setModal({ active: false })
         toast.success('Successfuly scanned the QR Code')
-        router.push(pathname)
+        redirect(pathname)
     }
 
     useEffect(() => { setError(false) }, [modal.type])

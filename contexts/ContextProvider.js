@@ -42,7 +42,7 @@ export default function ContextProvider({ children, router }) {
         } catch (err) {
             if (showProgress) setProgress(100)
             if (!json) {
-                const error = err.response?.data?.error || "Server Down! Please try again later..."
+                const error = err.response?.data?.error || "Please check your internet connectivity"
                 json = { success: false, error }
                 const authenticationError = error.includes('authenticate')
                 if (authenticationError) logout('auto')
@@ -50,14 +50,6 @@ export default function ContextProvider({ children, router }) {
             }
         }
         return json
-    }
-
-    async function deleteUser() {
-        setModal({ active: false })
-        setProgress(100 / 3)
-        const { success, error } = await fetchApp({ url: 'auth/delete', method: 'DELETE', authtoken: 'local' })
-        setProgress(100)
-        if (success || error === 'User not found!') logout('auto')
     }
 
     function clearHistory(fileId, filter) {
@@ -69,13 +61,6 @@ export default function ContextProvider({ children, router }) {
             updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
             setDownloadFiles(updatedFiles)
         }
-    }
-
-    function verifyUrl(value) {
-        try {
-            const url = new URL(value)
-            return (url.origin === window.location.origin && url.pathname.startsWith('/file/')) ? { verified: true, pathname: url.pathname } : { verified: false, error: 'Please enter a valid URL!' }
-        } catch { return { verified: false } }
     }
 
     useEffect(() => {
@@ -93,7 +78,7 @@ export default function ContextProvider({ children, router }) {
         }
     }, [username, token])
 
-    return <Context.Provider value={{ router, username, setUsername, guest, setGuest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, deleteUser, clearHistory, modal, setModal, verifyUrl }}>
+    return <Context.Provider value={{ username, setUsername, guest, setGuest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal }}>
         {children}
     </Context.Provider>
 }

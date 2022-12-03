@@ -16,6 +16,7 @@ import Script from 'next/script';
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
     const [loading, setLoading] = useState(true)
+    pageProps.router = router;
 
     useEffect(() => {
         setLoading(false)
@@ -99,13 +100,13 @@ export default function MyApp({ Component, pageProps }) {
         </Script>
 
         <ContextProvider router={router}>
-            {!hideNavbar.includes(router.pathname) && <Navbar />}
+            {!hideNavbar.includes(router.pathname) && <Navbar path={router.pathname} />}
             {router.pathname === '/account/confirm/[token]' && <h1 className='sticky inset-0 z-30 bg-black text-white py-2 px-5 shadow-lg text-xl font-medium text-center sm:text-left'>CloudBreeze</h1>}
             {loading ? <div className='center flex flex-col items-center space-y-2'>
                 <Loader />
                 <div>Loading...</div>
             </div> : <Component {...pageProps} />}
-            {showModal.includes(router.pathname) && <Modal />}
+            {showModal.includes(router.pathname) && <Modal redirect={router.push} />}
             <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' closeButton={false} />
         </ContextProvider>
     </>

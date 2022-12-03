@@ -3,8 +3,8 @@ import { useFileContext } from '../contexts/ContextProvider'
 import FileInfo from './FileInfo'
 import QrScanner from './QrScanner'
 
-export default function Modal() {
-  const { guest, modal, setModal, deleteUser, fetchApp, setUploadFiles } = useFileContext()
+export default function Modal({ redirect }) {
+  const { guest, modal, setModal, setProgress, fetchApp, logout, setUploadFiles } = useFileContext()
   const { fileId, filter, downloadCount } = modal.props || {}
   const handleCancel = () => setModal({ active: false })
 
@@ -13,6 +13,14 @@ export default function Modal() {
     const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: 'local', data: { guestId: guest } })
     if (!success) return
     setUploadFiles(files)
+  }
+
+  async function deleteUser() {
+    setModal({ active: false })
+    setProgress(100 / 3)
+    const { success, error } = await fetchApp({ url: 'auth/delete', method: 'DELETE', authtoken: 'local' })
+    setProgress(100)
+    if (success || error === 'User not found!') logout('auto')
   }
 
   return <>
@@ -34,7 +42,7 @@ export default function Modal() {
             <button className='py-1 px-3 rounded border button-animation' onClick={() => deleteFile(fileId)}>Yes</button>
             <button className='py-1 px-3 rounded border button-animation' onClick={handleCancel}>No</button>
           </div>
-        </div> : modal.type === 'showFile' ? <FileInfo fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : modal.type === 'qrReader' && <QrScanner />}
+        </div> : modal.type === 'showFile' ? <FileInfo fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : modal.type === 'qrReader' && <QrScanner redirect={redirect} />}
     </div>
   </>
 }

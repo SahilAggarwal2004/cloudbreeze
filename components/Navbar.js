@@ -4,8 +4,8 @@ import { FaHome, FaUpload, FaDownload, FaHistory, FaUserAlt } from 'react-icons/
 import LoadingBar from 'react-top-loading-bar'
 import { useFileContext } from '../contexts/ContextProvider'
 
-export default function Navbar() {
-    const { router, progress, setProgress } = useFileContext()
+export default function Navbar({ path }) {
+    const { progress, setProgress } = useFileContext()
 
     return <>
         <LoadingBar color='#ffffff' progress={progress} waitingTime={300} onLoaderFinished={() => setProgress(0)} />
@@ -14,8 +14,8 @@ export default function Navbar() {
             {/* adding <a> tag inside <Link> as for some reason <Link> passes a ref to its child and we can't use ref in a react component(here, FaHistory) */}
             {/* title attribute displays text on element hover */}
             <div className='flex space-x-5 sm:space-x-6'>
-                {router.pathname !== '/' && <Link href="/"><a><FaHome className='hidden sm:block scale-125 sm:scale-150' title='Home' /></a></Link>}
-                {router.pathname === '/' || router.pathname === '/account' ?
+                {path !== '/' && <Link href="/"><a><FaHome className='hidden sm:block scale-125 sm:scale-150' title='Home' /></a></Link>}
+                {path === '/' || path === '/account' ?
                     <Link href="/account/history"><a><FaHistory className='scale-110 sm:scale-125' title='History' /></a></Link> :
                     <Link href="/account"><a><FaUserAlt className='scale-110 sm:scale-125' title='Your account' /></a></Link>
                 }

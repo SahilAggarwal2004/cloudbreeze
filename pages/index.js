@@ -3,8 +3,8 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { useFileContext } from '../contexts/ContextProvider'
 
-export default function Home() {
-    const { router, setProgress } = useFileContext()
+export default function Home({ router }) {
+    const { setProgress } = useFileContext()
     const [hover, setHover] = useState(false)
     const redirect = url => {
         setProgress(100 / 3)

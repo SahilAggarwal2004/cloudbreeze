@@ -4,8 +4,8 @@ import { useFileContext } from '../../contexts/ContextProvider';
 import Logo from '../../components/Logo';
 import Password from '../../components/Password';
 
-export default function Forgot() {
-  const { router, fetchApp } = useFileContext()
+export default function Forgot({ router }) {
+  const { fetchApp } = useFileContext()
   const email = useRef();
   const otp = useRef();
   const password = useRef();

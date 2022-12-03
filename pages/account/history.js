@@ -3,10 +3,9 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { options } from '../../constants'
 import { useFileContext } from '../../contexts/ContextProvider'
-import capitalize from '../../utilities/capitalize'
 
-export default function History() {
-    const { router, uploadFiles, downloadFiles, clearHistory, setModal } = useFileContext()
+export default function History({ router }) {
+    const { uploadFiles, downloadFiles, clearHistory, setModal } = useFileContext()
     const filter = router.query.filter || "upload"
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
 
@@ -14,7 +13,7 @@ export default function History() {
 
     return <>
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-400 px-1 space-x-0.5">
-            {options.map(option => <Link key={option} href={`/account/history?filter=${option}`}><a className={`inline-block px-4 py-3 rounded-t-lg ${filter === option ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`}>{capitalize(option)}ed Files</a></Link>)}
+            {options.map(option => <Link key={option} href={`/account/history?filter=${option}`}><a className={`inline-block px-4 py-3 rounded-t-lg capitalize ${filter === option ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`}>{option}ed Files</a></Link>)}
         </ul>
         {!history.length ? <div className='center'>
             No files to show

@@ -4,8 +4,8 @@ import { useFileContext } from '../../contexts/ContextProvider';
 import Logo from '../../components/Logo';
 import Password from '../../components/Password';
 
-export default function Signup() {
-    const { router, fetchApp } = useFileContext()
+export default function Signup({ router }) {
+    const { fetchApp } = useFileContext()
     const name = useRef();
     const email = useRef();
     const password = useRef();

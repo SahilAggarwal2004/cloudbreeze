@@ -1,8 +1,8 @@
 import React from 'react'
 import { useFileContext } from '../../../contexts/ContextProvider'
 
-export default function Confirm() {
-  const { router, fetchApp } = useFileContext()
+export default function Confirm({ router }) {
+  const { fetchApp } = useFileContext()
 
   async function verify() {
     const { success } = await fetchApp({ url: 'auth/confirm', method: 'PUT', authtoken: router.query.token })

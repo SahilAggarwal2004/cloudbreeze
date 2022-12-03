@@ -1,15 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState } from 'react';
 import { File } from 'megajs';
-import download from '../utilities/download';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
 import { toast } from 'react-toastify';
 import { FaQrcode } from 'react-icons/fa';
 import axios from 'axios';
+import { download, verifyUrl } from '../modules';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
-    const { downloadFiles, setDownloadFiles, fetchApp, setModal, verifyUrl } = useFileContext()
+    const { downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
     const fileRef = useRef()
     const password = useRef()
     const [loading, setLoading] = useState(false)
