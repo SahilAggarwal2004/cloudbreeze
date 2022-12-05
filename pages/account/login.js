@@ -5,16 +5,15 @@ import Logo from '../../components/Logo';
 import Password from '../../components/Password';
 
 export default function Login({ router }) {
-  const { setUsername, setToken, setUploadFiles, setDownloadFiles, setGuest, fetchApp } = useFileContext()
+  const { setUsername, setUploadFiles, setDownloadFiles, setGuest, fetchApp } = useFileContext()
   const email = useRef();
   const password = useRef();
 
   async function submit(event) {
     event.preventDefault()
-    const { success, name, authtoken, files } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
+    const { success, name, files } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
     if (success) {
       setUsername(name)
-      setToken(authtoken)
       setUploadFiles(files)
       setDownloadFiles([])
       setGuest('')

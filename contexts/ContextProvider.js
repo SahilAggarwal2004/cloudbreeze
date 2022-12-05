@@ -16,25 +16,27 @@ export default function ContextProvider({ children, router }) {
     const [downloadFiles, setDownloadFiles] = useStorage('download-files', [])
     const [username, setUsername] = useStorage('username', '')
     const [guest, setGuest] = useStorage('guest', '')
-    const [token, setToken] = useStorage('token', '')
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
 
-    function logout(type) {
+    async function logout(type) {
+        if (type === 'manual') {
+            const { success } = await fetchApp({ url: 'auth/logout' })
+            if (!success) return;
+            toast.success('Logged out successfully')
+        } else router.push('/account')
         setUsername('')
-        setToken('')
         setUploadFiles([])
         setDownloadFiles([])
-        type === 'manual' ? toast.success('Logged out successfully') : router.push('/account')
     }
 
-    async function fetchApp({ url, authtoken = '', method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true, showProgress = true }) {
+    async function fetchApp({ url, authtoken, method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true, showProgress = true }) {
         let json;
         try {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
-                url, method, data, ...options,
-                headers: { authtoken: authtoken === 'local' ? token : authtoken, 'Content-Type': type }
+                url, method, withCredentials: true, data, ...options,
+                headers: { authtoken, 'Content-Type': type }
             })
             if (showProgress) setProgress(100)
             json = response.data;
@@ -65,20 +67,19 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         if (fetchHistory.includes(router.pathname)) {
-            if (token) fetchApp({ url: 'file/history', method: 'POST', authtoken: 'local', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
-            else fetchApp({ url: 'file/history', method: 'POST', data: { guestId: guest }, showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+            if (guest) fetchApp({ url: 'file/history', method: 'POST', data: { guestId: guest }, showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+            else fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
         }
     }, [router.pathname])
 
     useEffect(() => {
-        if (!username && !token) {
+        if (!username) {
             setUsername(randomName())
-            setToken('')
             setGuest(Date.now())
         }
-    }, [username, token])
+    }, [username])
 
-    return <Context.Provider value={{ username, setUsername, guest, setGuest, token, setToken, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal }}>
+    return <Context.Provider value={{ username, setUsername, guest, setGuest, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal }}>
         {children}
     </Context.Provider>
 }

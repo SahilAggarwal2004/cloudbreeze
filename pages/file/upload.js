@@ -8,7 +8,7 @@ import { useFileContext } from '../../contexts/ContextProvider';
 import { options } from '../../constants';
 
 export default function Upload(props) {
-  const { guest, token, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
+  const { guest, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
   const passwordRef = useRef()
   const [fileIdRef, setFileId] = useState()
   const [daysLimitRef, setDaysLimit] = useState()
@@ -19,7 +19,7 @@ export default function Upload(props) {
   const [upPercent, setUpPercent] = useState(0)
   const [share, setShare] = useState(props.share)
   const limit = 100;
-  const daysLimit = token ? 30 : 3
+  const daysLimit = guest ? 3 : 30
   const disabled = (isUploading || upPercent) && link !== 'error'
 
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
@@ -86,11 +86,11 @@ export default function Upload(props) {
     if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
     if (guest) data.append('guest', guest)
 
-    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef }, authtoken: 'local' })
+    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
     if (!verified) return setIsUploading(false)
 
     const { fileId, createdAt, success } = await fetchApp({
-      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', authtoken: 'local', options: {
+      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', options: {
         onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
       }
     })

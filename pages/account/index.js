@@ -6,13 +6,13 @@ import { useFileContext } from '../../contexts/ContextProvider'
 import useStorage from '../../hooks/useStorage'
 
 export default function Account() {
-    const { token, username, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
+    const { guest, username, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
     const [name, setName] = useState()
     const [showTip, setShowTip] = useStorage('tip', true, { local: false, session: true })
     const toastId = useRef();
 
     useEffect(() => {
-        if (!token && showTip) {
+        if (guest && showTip) {
             setShowTip(false)
             toastId.current = toast(<span className='text-gray-700 text-sm sm:text-base'>
                 Create a permanent account to keep your files <strong>synced</strong> across all your devices and increase time limit of cloud uploads to upto <strong>30 days (10x)</strong>!
@@ -22,8 +22,8 @@ export default function Account() {
     }, [])
 
     useEffect(() => {
-        if (username) setName(`${username}${token ? '' : ' (Guest)'}`)
-    }, [username, token])
+        if (username) setName(`${username}${guest ? ' (Guest)' : ''}`)
+    }, [username, guest])
 
     return <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
         <div className='text-xl' > Hello, <span className='font-bold'>{name}</span></div>
@@ -42,7 +42,7 @@ export default function Account() {
             </Link>
         </div>
         <div className='text-sm font-medium text-gray-600 flex flex-col items-center space-y-1.5'>
-            {!token ? <>
+            {guest ? <>
                 <Link href='/account/signup'><a className='hover:text-black'>Create a new account</a></Link>
                 <Link href='/account/login'><a className='hover:text-black'>Login to an existing account</a></Link>
             </> : <>

@@ -10,7 +10,7 @@ export default function Modal({ redirect }) {
 
   async function deleteFile(fileId) {
     setModal({ active: false })
-    const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', authtoken: 'local', data: { guestId: guest } })
+    const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', data: { guestId: guest } })
     if (!success) return
     setUploadFiles(files)
   }
@@ -18,7 +18,7 @@ export default function Modal({ redirect }) {
   async function deleteUser() {
     setModal({ active: false })
     setProgress(100 / 3)
-    const { success, error } = await fetchApp({ url: 'auth/delete', method: 'DELETE', authtoken: 'local' })
+    const { success, error } = await fetchApp({ url: 'auth/delete', method: 'DELETE' })
     setProgress(100)
     if (success || error === 'User not found!') logout('auto')
   }
