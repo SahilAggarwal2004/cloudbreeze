@@ -10,7 +10,7 @@ export default function Modal({ redirect }) {
 
   async function deleteFile(fileId) {
     setModal({ active: false })
-    const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE', data: { guestId: guest } })
+    const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE' })
     if (!success) return
     setUploadFiles(files)
   }

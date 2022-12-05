@@ -35,7 +35,7 @@ export default function ContextProvider({ children, router }) {
         try {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
-                url, method, withCredentials: true, data, ...options,
+                url, method, withCredentials: true, data: { ...data, guestId: guest }, ...options,
                 headers: { authtoken, 'Content-Type': type }
             })
             if (showProgress) setProgress(100)
@@ -67,7 +67,7 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         if (fetchHistory.includes(router.pathname)) {
-            if (guest) fetchApp({ url: 'file/history', method: 'POST', data: { guestId: guest }, showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+            if (guest) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
             else fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
         }
     }, [router.pathname])
