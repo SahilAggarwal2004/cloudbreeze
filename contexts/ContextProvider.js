@@ -35,7 +35,8 @@ export default function ContextProvider({ children, router }) {
         try {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
-                url, method, withCredentials: true, data: { ...data, guestId: guest }, ...options,
+                url, method, withCredentials: true, ...options,
+                data: url === 'file/upload' ? data : { ...data, guestId: guest },
                 headers: { authtoken, 'Content-Type': type }
             })
             if (showProgress) setProgress(100)
