@@ -14,7 +14,7 @@ const filePaths = ['/file/upload', '/file/download']
 const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
 precacheAndRoute(urlsToCache)
 
-setDefaultHandler(new StaleWhileRevalidate())
+setDefaultHandler(new CacheFirst())
 offlineFallback({ pageFallback: '/_offline' });
 
 registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
@@ -29,7 +29,7 @@ registerRoute(({ request }) => request.destination === 'image', new CacheFirst({
     plugins: [new CacheableResponsePlugin({ statuses: [200] })]
 }))
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
     const { request } = event
     const url = new URL(request.url);
     if (request.method === 'POST' && url.pathname === '/file/upload' && url.searchParams.has('share')) {
@@ -40,6 +40,5 @@ self.addEventListener('fetch', (event) => {
             const files = data.getAll('files');
             if (files.length) setTimeout(() => client.postMessage({ files }), 1000);
         }());
-        return;
     }
 });
