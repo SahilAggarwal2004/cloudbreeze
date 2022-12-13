@@ -16,6 +16,7 @@ export default function ContextProvider({ children, router }) {
     const [downloadFiles, setDownloadFiles] = useStorage('download-files', [])
     const [username, setUsername] = useStorage('username', '')
     const [guest, setGuest] = useStorage('guest', '')
+    const [type, setType] = useStorage('type', '')
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
 
@@ -80,7 +81,7 @@ export default function ContextProvider({ children, router }) {
         }
     }, [username])
 
-    return <Context.Provider value={{ username, setUsername, guest, setGuest, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal }}>
+    return <Context.Provider value={{ username, setUsername, guest, setGuest, type, setType, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal }}>
         {children}
     </Context.Provider>
 }
