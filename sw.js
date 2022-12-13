@@ -2,7 +2,7 @@
 import { clientsClaim } from 'workbox-core'
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute, setDefaultHandler } from 'workbox-routing'
-import { CacheFirst, NetworkFirst, NetworkOnly } from 'workbox-strategies'
+import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { offlineFallback } from 'workbox-recipes'
 
@@ -12,7 +12,7 @@ self.skipWaiting()
 const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
 precacheAndRoute(urlsToCache)
 
-setDefaultHandler(new CacheFirst())
+setDefaultHandler(new StaleWhileRevalidate())
 offlineFallback({ pageFallback: '/_offline' });
 
 registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
