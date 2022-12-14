@@ -2,7 +2,7 @@
 import { clientsClaim } from 'workbox-core'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { registerRoute, setDefaultHandler } from 'workbox-routing'
-import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
+import { CacheFirst, NetworkFirst, NetworkOnly } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { offlineFallback } from 'workbox-recipes'
 import { nanoid } from 'nanoid'
@@ -25,7 +25,7 @@ const urlsToCache = self.__WB_MANIFEST.concat([
 precacheAndRoute(urlsToCache)
 cleanupOutdatedCaches()
 
-setDefaultHandler(new StaleWhileRevalidate())
+setDefaultHandler(new CacheFirst())
 offlineFallback({ pageFallback: '/_offline' });
 
 registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
