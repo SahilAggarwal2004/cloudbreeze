@@ -18,6 +18,8 @@ const urlsToCache = self.__WB_MANIFEST.concat([
     { url: '/account/login', revision },
     { url: '/account/forgot', revision },
     { url: '/account/history', revision },
+    { url: '/account/history?filter=upload', revision },
+    { url: '/account/history?filter=download', revision },
     { url: '/file/upload', revision },
     { url: '/file/download', revision },
     { url: '/about', revision }
