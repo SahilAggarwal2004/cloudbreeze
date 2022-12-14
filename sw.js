@@ -1,16 +1,29 @@
 /* eslint-disable no-restricted-globals */
 import { clientsClaim } from 'workbox-core'
-import { precacheAndRoute } from 'workbox-precaching'
+import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { registerRoute, setDefaultHandler } from 'workbox-routing'
 import { CacheFirst, NetworkFirst, NetworkOnly } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { offlineFallback } from 'workbox-recipes'
+import { nanoid } from 'nanoid'
 
+skipWaiting() // breaking the order, following next-pwa's order
 clientsClaim() // This should be at the top of the service worker
-self.skipWaiting()
 
-const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
+const revision = nanoid();
+const urlsToCache = self.__WB_MANIFEST.concat([
+    { url: '/', revision },
+    { url: '/account', revision },
+    { url: '/account/signup', revision },
+    { url: '/account/login', revision },
+    { url: '/account/forgot', revision },
+    { url: '/account/history', revision },
+    { url: '/file/upload', revision },
+    { url: '/file/download', revision },
+    { url: '/about', revision }
+]).filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
 precacheAndRoute(urlsToCache)
+cleanupOutdatedCaches()
 
 setDefaultHandler(new CacheFirst())
 offlineFallback({ pageFallback: '/_offline' });
