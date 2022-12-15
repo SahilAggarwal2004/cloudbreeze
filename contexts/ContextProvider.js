@@ -26,7 +26,9 @@ export default function ContextProvider({ children, router }) {
             if (!success) return;
             toast.success('Logged out successfully')
         } else router.push('/account')
-        setUsername('')
+        setUsername(randomName())
+        setGuest(Date.now())
+        setType('')
         setUploadFiles([])
         setDownloadFiles([])
     }
@@ -68,15 +70,16 @@ export default function ContextProvider({ children, router }) {
     }
 
     useEffect(() => {
-        if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
-    }, [router.pathname])
-
-    useEffect(() => {
         if (!username) {
             setUsername(randomName())
             setGuest(Date.now())
         }
-    }, [username])
+    }, [])
+
+    useEffect(() => {
+        if ((guest || type) && fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+    }, [router.pathname])
+
 
     return <Context.Provider value={{ username, setUsername, guest, setGuest, type, setType, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal }}>
         {children}

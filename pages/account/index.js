@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useFileContext } from '../../contexts/ContextProvider'
 import { getStorage, setStorage } from '../../modules/storage'
@@ -8,7 +8,6 @@ import { BsPatchCheckFill } from 'react-icons/bs'
 
 export default function Account() {
     const { guest, username, type, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
-    const [name, setName] = useState()
 
     useEffect(() => {
         if (guest && getStorage('account-tip', true)) {
@@ -20,11 +19,9 @@ export default function Account() {
         }
     }, [])
 
-    useEffect(() => { if (username) setName(`${username}${guest ? ' (Guest)' : ''}`) }, [username, guest])
-
     return <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
         <div className='text-xl flex items-center justify-center'>
-            Hello,&nbsp;<strong>{name}</strong>&nbsp;
+            Hello,&nbsp;<strong>{`${username}${guest && ' (Guest)'}`}</strong>&nbsp;
             {type === 'premium' && <BsPatchCheckFill className='inline scale-90' title='Premium User' />}
         </div>
         <div className='flex flex-col items-center space-y-5 sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0 text-sm'>
