@@ -68,10 +68,7 @@ export default function ContextProvider({ children, router }) {
     }
 
     useEffect(() => {
-        if (fetchHistory.includes(router.pathname)) {
-            if (guest) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
-            else fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
-        }
+        if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
     }, [router.pathname])
 
     useEffect(() => {
