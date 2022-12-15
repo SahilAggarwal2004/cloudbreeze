@@ -23,7 +23,7 @@ const urlsToCache = self.__WB_MANIFEST.concat([
     { url: '/file/upload', revision },
     { url: '/file/download', revision },
     { url: '/about', revision }
-]).filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
+]).filter(({ url }) => url !== '/manifest.json')
 precacheAndRoute(urlsToCache)
 cleanupOutdatedCaches()
 
