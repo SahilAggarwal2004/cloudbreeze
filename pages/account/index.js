@@ -1,32 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Link from 'next/link'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useFileContext } from '../../contexts/ContextProvider'
-import useStorage from '../../hooks/useStorage'
+import { getStorage, setStorage } from '../../modules/storage'
+import { BsPatchCheckFill } from 'react-icons/bs'
 
 export default function Account() {
-    const { guest, username, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
+    const { guest, username, type, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
     const [name, setName] = useState()
-    const [showTip, setShowTip] = useStorage('tip', true, { local: false, session: true })
-    const toastId = useRef();
 
     useEffect(() => {
-        if (guest && showTip) {
-            setShowTip(false)
-            toastId.current = toast(<span className='text-gray-700 text-sm sm:text-base'>
+        if (guest && getStorage('account-tip', true)) {
+            setStorage('account-tip', false)
+            const toastId = toast(<span className='text-gray-700 text-sm sm:text-base'>
                 Create a permanent account to keep your files <strong>synced</strong> across all your devices and increase time limit of cloud uploads to upto <strong>30 days (10x)</strong>!
             </span>, { autoClose: 5000, pauseOnFocusLoss: true, pauseOnHover: true })
-            return () => { toast.dismiss(toastId.current) }
+            return () => { toast.dismiss(toastId) }
         }
     }, [])
 
-    useEffect(() => {
-        if (username) setName(`${username}${guest ? ' (Guest)' : ''}`)
-    }, [username, guest])
+    useEffect(() => { if (username) setName(`${username}${guest ? ' (Guest)' : ''}`) }, [username, guest])
 
     return <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
-        <div className='text-xl' > Hello, <span className='font-bold'>{name}</span></div>
+        <div className='text-xl flex items-center justify-center'>
+            Hello,&nbsp;<strong>{name}</strong>&nbsp;
+            {type === 'premium' && <BsPatchCheckFill className='inline scale-90' title='Premium User' />}
+        </div>
         <div className='flex flex-col items-center space-y-5 sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0 text-sm'>
             <Link href='/account/history?filter=upload'>
                 <a>

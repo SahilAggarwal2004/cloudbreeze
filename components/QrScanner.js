@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { QrReader } from 'react-qr-reader'
 import { toast } from 'react-toastify'
 import { useFileContext } from '../contexts/ContextProvider'
-import { verifyUrl } from '../modules'
+import { verifyUrl } from '../modules/functions'
 
 export default function QrScanner({ redirect }) {
     const { modal, setModal } = useFileContext()

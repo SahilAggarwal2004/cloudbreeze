@@ -4,7 +4,7 @@ import FileInfo from './FileInfo'
 import QrScanner from './QrScanner'
 
 export default function Modal({ redirect }) {
-  const { guest, modal, setModal, setProgress, fetchApp, logout, setUploadFiles } = useFileContext()
+  const { modal, setModal, setProgress, fetchApp, logout, setUploadFiles } = useFileContext()
   const { fileId, filter, downloadCount } = modal.props || {}
   const handleCancel = () => setModal({ active: false })
 
