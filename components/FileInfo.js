@@ -40,7 +40,7 @@ export default function FileInfo({ fileId, filter, downloadCount, modal = false 
             </> : filter === 'download' && <button className='py-1 px-3 rounded border button-animation' onClick={() => {
                 setModal({ active: false })
                 clearHistory(fileId, 'download')
-            }}>Clear from History</button>}
+            }}>Clear History</button>}
             <button className='py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: false })}>Close</button>
         </div>}
     </div>
