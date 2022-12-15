@@ -32,12 +32,12 @@ export default function FileInfo({ fileId, filter, downloadCount, modal = false 
         <div className='scale-[0.8] flex justify-center'><QRCode value={link} bgColor='#FFFFFF' fgColor='#000000' /></div>
         {modal && filter === 'upload' && <div className='text-sm pb-2'>Download Count: {downloadCount}</div>}
         {modal && <div className='grid grid-cols-2 gap-3 mt-4 mx-4 text-sm'>
-            {filter !== 'upload' ? <>
+            {filter === 'upload' ? <>
                 <Link href={link}>
                     <button className='col-span-2 py-1 px-3 rounded border button-animation'>Download</button>
                 </Link>
                 <button className='py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: true, type: 'deleteFile', props: { fileId } })}>Delete</button>
-            </> : filter !== 'download' && <button className='py-1 px-3 rounded border button-animation' onClick={() => {
+            </> : filter === 'download' && <button className='py-1 px-3 rounded border button-animation' onClick={() => {
                 setModal({ active: false })
                 clearHistory(fileId, 'download')
             }}>Clear from History</button>}
