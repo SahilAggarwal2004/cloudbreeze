@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { File } from 'megajs';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { FaQrcode } from 'react-icons/fa';
 import axios from 'axios';
 import { download, verifyUrl } from '../modules/functions';
-import { getStorage, setStorage } from '../modules/storage';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
     const { downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
@@ -58,16 +57,6 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         setIsDownloading(false);
     }
 
-    useEffect(() => {
-        if (getStorage('file-tip', true)) {
-            setStorage('file-tip', false)
-            const toastId = toast(<span className='text-gray-700 text-sm sm:text-base'>
-                <strong>Tip:</strong> No need of password if you are the author of the file!
-            </span>, { autoClose: 3000, pauseOnFocusLoss: true, pauseOnHover: true })
-            return () => { toast.dismiss(toastId) }
-        }
-    })
-
     return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
         <form onSubmit={downloadFile} className="grid grid-cols-[auto_1fr] gap-3 items-center">
             {!fileIdFromUrl && <>
@@ -76,6 +65,9 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             </>}
             <label htmlFor="password">Password (if any):</label>
             <input type="password" id='password' ref={password} className='border rounded px-2 py-0.5' autoComplete="new-password" />
+            <div className='col-span-2 text-center text-sm'>
+                <span className='font-semibold text-gray-800'>Tip:</span> No need of password if you are the author of the file!
+            </div>
             <button type="submit" disabled={isDownloading} className='col-span-2 mt-3 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>{downPercent == 100 ? 'Download Again' : 'Download'}</button>
         </form>
 
