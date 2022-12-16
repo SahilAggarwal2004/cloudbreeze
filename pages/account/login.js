@@ -5,7 +5,7 @@ import Logo from '../../components/Logo';
 import Password from '../../components/Password';
 
 export default function Login({ router }) {
-  const { setUsername, setUploadFiles, setDownloadFiles, setGuest, setType, fetchApp } = useFileContext()
+  const { setUsername, setUploadFiles, setDownloadFiles, setType, fetchApp } = useFileContext()
   const email = useRef();
   const password = useRef();
 
@@ -17,7 +17,6 @@ export default function Login({ router }) {
       setUploadFiles(files)
       setType(type)
       setDownloadFiles([])
-      setGuest('')
       router.push('/')
     }
   }

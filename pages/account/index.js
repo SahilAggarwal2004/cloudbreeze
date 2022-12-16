@@ -7,11 +7,12 @@ import { getStorage, setStorage } from '../../modules/storage'
 import { BsPatchCheckFill } from 'react-icons/bs'
 
 export default function Account() {
-    const { guest, username, type, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
+    const { username, type, uploadFiles, downloadFiles, logout, setModal } = useFileContext()
+    const guest = type === 'guest'
 
     useEffect(() => {
-        if (guest && getStorage('account-tip', true)) {
-            setStorage('account-tip', false)
+        if (guest && getStorage('tip', true)) {
+            setStorage('tip', false)
             const toastId = toast(<span className='text-gray-700 text-sm sm:text-base'>
                 Create a permanent account to keep your files <strong>synced</strong> across all your devices and increase time limit of cloud uploads to upto <strong>30 days (10x)</strong>!
             </span>, { autoClose: 5000, pauseOnFocusLoss: true, pauseOnHover: true })
@@ -21,7 +22,7 @@ export default function Account() {
 
     return <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
         <div className='text-xl flex items-center justify-center'>
-            Hello,&nbsp;<strong>{`${username}${guest && ' (Guest)'}`}</strong>&nbsp;
+            Hello,&nbsp;<strong>{`${username}${guest ? ' (Guest)' : ''}`}</strong>&nbsp;
             {type === 'premium' && <BsPatchCheckFill className='inline scale-90' title='Premium User' />}
         </div>
         <div className='flex flex-col items-center space-y-5 sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0 text-sm'>

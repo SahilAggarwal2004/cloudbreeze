@@ -8,7 +8,7 @@ import { useFileContext } from '../../contexts/ContextProvider';
 import { options } from '../../constants';
 
 export default function Upload(props) {
-  const { guest, type, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
+  const { type, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
   const passwordRef = useRef()
   const [fileIdRef, setFileId] = useState()
   const [daysLimitRef, setDaysLimit] = useState()
@@ -19,7 +19,7 @@ export default function Upload(props) {
   const [upPercent, setUpPercent] = useState(0)
   const [share, setShare] = useState(props.share)
   const limit = 100;
-  const daysLimit = guest ? 3 : type === 'premium' ? 365 : 30
+  const daysLimit = type === 'premium' ? 365 : type === 'normal' ? 30 : 3
   const disabled = (isUploading || upPercent) && link !== 'error'
 
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
@@ -84,7 +84,6 @@ export default function Upload(props) {
     if (password) data.append('password', password)
     if (daysLimitRef) data.append('daysLimit', daysLimitRef)
     if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
-    if (guest) data.append('guest', guest)
 
     const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
     if (!verified) return setIsUploading(false)

@@ -25,7 +25,7 @@ export default function Modal({ redirect }) {
 
   return <>
     <div className={`${modal.active ? 'bg-opacity-50' : 'invisible bg-opacity-0'} bg-black fixed inset-0 transition-all duration-700 z-40`} onClick={handleCancel} />
-    <div className={`z-50 center text-center bg-white rounded-md w-max py-5 ${modal.type === 'showFile' ? 'px-1' : 'px-5'} ${modal.active ? 'opacity-100' : 'hidden'}`}>
+    <div className={`z-50 max-h-[90vh] overflow-y-auto center text-center bg-white rounded-md w-max py-5 ${modal.type === 'showFile' ? 'px-1' : 'px-5'} ${modal.active ? 'opacity-100' : 'hidden'}`}>
       {modal.type === 'deleteUser' ?
         <div>
           <h3 className='font-bold'>Delete account?</h3>
