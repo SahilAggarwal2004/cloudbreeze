@@ -31,7 +31,7 @@ export default function FileInfo({ fileId, filter, downloadCount, modal = false 
         <div>Scan the QR Code given below</div>
         <div className='scale-[0.8] flex justify-center'><QRCode value={link} bgColor='#FFFFFF' fgColor='#000000' /></div>
         {modal && filter === 'upload' && <div className='text-sm pb-2'>Download Count: {downloadCount}</div>}
-        {modal && <div className='grid grid-cols-2 gap-3 mt-4 mx-4 text-sm'>
+        {modal && <div className='grid grid-cols-2 gap-2 mt-2 mx-4 text-sm'>
             {filter === 'upload' ? <>
                 <Link href={link}>
                     <button className='col-span-2 py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: false })}>Download</button>
