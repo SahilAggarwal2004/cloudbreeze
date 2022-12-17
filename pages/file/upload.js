@@ -102,6 +102,7 @@ export default function Upload(props) {
     setIsUploading(false)
     const updatedFiles = uploadFiles.concat({ nameList, createdAt, _id: fileId, downloadCount: 0, daysLimit: daysLimitRef || daysLimit })
     setUploadFiles(updatedFiles)
+    window.scrollTo(0, document.body.scrollHeight);
   }
 
   useEffect(() => {
