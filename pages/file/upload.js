@@ -102,7 +102,6 @@ export default function Upload(props) {
     setIsUploading(false)
     const updatedFiles = uploadFiles.concat({ nameList, createdAt, _id: fileId, downloadCount: 0, daysLimit: daysLimitRef || daysLimit })
     setUploadFiles(updatedFiles)
-    window.scrollTo(0, document.body.scrollHeight);
   }
 
   useEffect(() => {
@@ -114,6 +113,8 @@ export default function Upload(props) {
       }
     })
   }, [])
+
+  useEffect(() => { link && link !== 'error' && window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }, [link])
 
   return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
@@ -149,6 +150,6 @@ export default function Upload(props) {
       <div>Please wait, processing the file(s)...</div>
     </div>}
 
-    {link && link != 'error' && <div className='pb-16'><FileInfo fileId={link} /></div>}
+    {link && link !== 'error' && <div className='pb-16'><FileInfo fileId={link} /></div>}
   </div >
 }
