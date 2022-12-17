@@ -65,7 +65,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             </>}
             <label htmlFor="password">Password (if any):</label>
             <input type="password" id='password' ref={password} className='border rounded px-2 py-0.5' autoComplete="new-password" />
-            <div className='col-span-2 text-center text-sm'>
+            <div className='col-span-2 text-center text-xs sm:text-sm'>
                 <span className='font-semibold text-gray-800'>Tip:</span> No need of password if you are the author of the file!
             </div>
             <button type="submit" disabled={isDownloading} className='col-span-2 mt-3 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>{downPercent == 100 ? 'Download Again' : 'Download'}</button>
