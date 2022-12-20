@@ -12,7 +12,7 @@ export default function Id({ router }) {
     useEffect(() => {
         if (!navigator) return
         const Peer = require("peerjs").default
-        const peer = new Peer(username, { host: process.env.NEXT_PUBLIC_PEER, port: 10000, path: '/' })
+        const peer = new Peer(username, { host: process.env.NEXT_PUBLIC_PEER, port: 10000, path: '/peerjs' })
         const connection = peer.connect(roomId)
         setTimeout(() => { if (!connection._open) console.log("Connection couldn't be established") }, 5000);
         connection.on('close', () => console.log("Connection interrupted"))
