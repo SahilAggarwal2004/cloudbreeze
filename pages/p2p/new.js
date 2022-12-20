@@ -27,7 +27,7 @@ export default function New() {
       file = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
     }
     const Peer = require("peerjs").default
-    const peer = new Peer('a', { host: process.env.NEXT_PUBLIC_PEER, port: 10000, path: '/peer' })
+    const peer = new Peer('a', { host: process.env.NEXT_PUBLIC_PEER, port: 10000 })
     peer.on('connection', conn => {
       console.log('connected')
       conn.on('open', () => {
