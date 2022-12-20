@@ -3,8 +3,7 @@
 const withWorkbox = require('next-with-workbox')
 
 const nextConfig = {
-  experimental: { nextScriptWorkers: true },
-  reactStrictMode: true
+  experimental: { nextScriptWorkers: true }
 }
 
 module.exports = withWorkbox({

@@ -14,7 +14,7 @@ export default function Home({ router }) {
         }, 300)
     }
 
-    return <div className='flex flex-col mb-12 space-y-12 md:flex-row md:space-y-0 items-center justify-evenly text-center md:h-[calc(100vh-8rem)]'>
+    return <div className='flex flex-col mx-[5vw] mb-12 space-y-12 md:flex-row md:space-x-6 md:space-y-0 items-center md:justify-center lg:justify-evenly text-center md:h-[calc(100vh-8rem)]'>
         <div className='shadow-md rounded-lg w-80 h-80 max-w-[90vw] cursor-pointer select-none hover:shadow-2xl transition-all duration-300 relative' onClick={() => redirect('/account')} onContextMenu={event => event.preventDefault()}>
             <Image src='/images/account.png' alt='' width={250} height={250} objectFit='scale-down' quality={100} />
             <div className='absolute bottom-4 left-1/2 -translate-x-1/2'>Your account</div>
@@ -26,9 +26,9 @@ export default function Home({ router }) {
             </div>
             <div className='absolute bottom-4 left-1/2 -translate-x-1/2'>Upload a file</div>
         </div>
-        <div className='shadow-md rounded-lg w-80 h-80 max-w-[90vw] cursor-pointer select-none hover:shadow-2xl transition-all duration-300 relative' onClick={() => redirect('/about')} onContextMenu={event => event.preventDefault()}>
-            <Image src='/images/about.png' alt='' width={250} height={250} objectFit='scale-down' quality={100} />
-            <div className='absolute bottom-4 left-1/2 -translate-x-1/2'>About us</div>
+        <div className='shadow-md rounded-lg w-80 h-80 max-w-[90vw] cursor-pointer select-none hover:shadow-2xl transition-all duration-300 relative' onClick={() => redirect('/p2p/new')} onContextMenu={event => event.preventDefault()}>
+            <Image src='/images/p2p.png' alt='' width={250} height={250} objectFit='scale-down' quality={100} />
+            <div className='absolute bottom-4 left-1/2 -translate-x-1/2'>Peer to peer transfer</div>
         </div>
     </div >
 }

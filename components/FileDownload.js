@@ -76,10 +76,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                 <div className='bg-green-500 rounded-full h-1' style={{ width: `${downPercent}%` }} />
             </div>
             {downPercent}%
-        </div> : loading ? <div className='flex items-center space-x-2'>
-            <Loader />
-            <div>Please wait, accessing the file(s)...</div>
-        </div> : !fileIdFromUrl && <div className='text-center'>
+        </div> : loading ? <Loader style='flex items-center space-x-2' text='Please wait, accessing the file(s)...' /> : !fileIdFromUrl && <div className='text-center'>
             <div className='font-bold mb-3'>OR</div>
             <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={() => setModal({ active: true, type: 'qrReader' })}>
                 <FaQrcode />

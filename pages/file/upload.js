@@ -145,10 +145,7 @@ export default function Upload(props) {
       {upPercent}%
     </div>}
 
-    {upPercent == 100 && !link && <div className='flex items-center space-x-2'>
-      <Loader />
-      <div>Please wait, processing the file(s)...</div>
-    </div>}
+    {upPercent == 100 && !link && <Loader style='flex items-center space-x-2' text='Please wait, processing the file(s)...' />}
 
     {link && link !== 'error' && <div className='pb-16'><FileInfo fileId={link} /></div>}
   </div >

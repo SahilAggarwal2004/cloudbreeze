@@ -9,7 +9,7 @@ export function verifyUrl(value) {
 
 export function download(data, name, source) {
     try {
-        const blob = source === 'mega' ? new Blob(data) : data
+        const blob = source === 'p2p' ? new Blob([data]) : source === 'mega' ? new Blob(data) : data
         const url = window.URL.createObjectURL(blob);
         toast.success('File downloaded successfully!')
         const a = document.createElement('a');
