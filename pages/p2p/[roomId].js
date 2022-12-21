@@ -8,17 +8,16 @@ export default function Id({ router }) {
     const { roomId } = router.query
     const { username } = useFileContext();
 
+    function connect() {
+
+    }
+
     useEffect(() => {
         const Peer = require("peerjs").default
-        const peer = new Peer()
-        const connection = peer.connect(roomId + '-cloudbreeze')
-        console.log(peer)
-        setTimeout(() => {
-            if (!connection.open) {
-                console.log(connection)
-                console.log("Connection couldn't be established")
-            }
-        }, 5000);
+        // const peer = new Peer(`${Date.now()}`, { host: 'localhost', port: 10000 })
+        const peer = new Peer(`${Date.now()}`, { host: 'cloudbreeze-peer.onrender.com', port: 10000 })
+        const connection = peer.connect(roomId)
+        setTimeout(() => { if (!connection.open) console.log("Connection couldn't be established") }, 5000);
         connection.on('open', () => console.log('Miracle'))
         connection.on('close', () => console.log("Connection interrupted"))
         connection.on('data', ({ file, name, size, type }) => {
@@ -32,5 +31,6 @@ export default function Id({ router }) {
 
     return <>
         {roomId}
+        <button onClick={connect}>connect</button>
     </>
 }

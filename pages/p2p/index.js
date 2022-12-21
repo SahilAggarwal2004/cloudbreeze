@@ -23,15 +23,12 @@ export default function New() {
       file = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
     }
     const Peer = require("peerjs").default
-    const peer = new Peer(`${roomId || 'a'}-cloudbreeze`)
+    // const peer = new Peer(roomId || 'a', { host: 'localhost', port: 10000 })
+    const peer = new Peer(roomId || 'a', { host: 'cloudbreeze-peer.onrender.com', port: 10000 })
     peer.on('open', id => console.log(id))
     peer.on('connection', conn => {
       console.log('connected')
-      conn.on('open', () => {
-        console.log('Miracle?')
-        // conn.send({ file, name: file.name, size: file.size, type: 'details' })
-      })
-      conn.on('error', e => console.log(e))
+      conn.on('open', () => conn.send({ name: file.name, size: file.size, type: 'details' }))
       conn.on('close', () => console.log('closed'))
       conn.on('data', data => {
         console.log(data)
