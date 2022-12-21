@@ -3,19 +3,15 @@
 import JSZip from 'jszip';
 import React, { useEffect, useState } from 'react'
 
-let Peer;
-
 export default function New() {
-  const updateFile = () => { }
   const reset = () => { }
   const [files, setFiles] = useState()
-  const [tempId, setTempId] = useState('')
-  const [roomId, setRoomId] = useState()
+  const [roomId, setRoomId] = useState('')
   const [connections, setConnections] = useState([])
   const share = false;
   const disabled = false
 
-  const verifyRoomId = event => setTempId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
+  const verifyRoomId = event => setRoomId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -27,23 +23,28 @@ export default function New() {
       file = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
     }
     const Peer = require("peerjs").default
-    const peer = new Peer('a', { host: process.env.NEXT_PUBLIC_PEER, port: 10000, path: '/peerjs' })
+    const peer = new Peer(`${roomId || 'a'}-cloudbreeze`)
+    peer.on('open', id => console.log(id))
     peer.on('connection', conn => {
       console.log('connected')
       conn.on('open', () => {
-        conn.send({ file, name: file.name, size: file.size, type: 'details' })
+        console.log('Miracle?')
+        // conn.send({ file, name: file.name, size: file.size, type: 'details' })
       })
-      // conn.on('data', data => {
-      //   if (data.type !== 'request') return
-      //   conn.send({ file, name: file.name, size: file.size, type: 'file' })
-      //   setConnections(old => ([...old, conn.peer]))
-      // })
+      conn.on('error', e => console.log(e))
+      conn.on('close', () => console.log('closed'))
+      conn.on('data', data => {
+        console.log(data)
+        if (data.type !== 'request') return
+        conn.send({ file, name: file.name, size: file.size, type: 'file' })
+        // setConnections(old => ([...old, conn.peer]))
+      })
     })
   }
 
   useEffect(() => { }, [])
 
-  useEffect(() => console.log(connections), [connections])
+  // useEffect(() => console.log(connections), [connections])
 
   return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
@@ -52,7 +53,7 @@ export default function New() {
         : <input type="file" id='files' disabled={disabled} required onChange={event => setFiles(event.target.files)} multiple />}
 
       <label htmlFor="room-id">Room Id: </label>
-      <input type="text" id='room-id' value={tempId} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
+      <input type="text" id='room-id' value={roomId} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
 
       <button type="submit" disabled={disabled} className='col-span-2 mt-5 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>Share</button>
       {/* {link && link !== 'error' && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>} */}

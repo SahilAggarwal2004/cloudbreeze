@@ -26,7 +26,7 @@ export default function Home({ router }) {
             </div>
             <div className='absolute bottom-4 left-1/2 -translate-x-1/2'>Upload a file</div>
         </div>
-        <div className='shadow-md rounded-lg w-80 h-80 max-w-[90vw] cursor-pointer select-none hover:shadow-2xl transition-all duration-300 relative' onClick={() => redirect('/p2p/new')} onContextMenu={event => event.preventDefault()}>
+        <div className='shadow-md rounded-lg w-80 h-80 max-w-[90vw] cursor-pointer select-none hover:shadow-2xl transition-all duration-300 relative' onClick={() => redirect('/p2p')} onContextMenu={event => event.preventDefault()}>
             <Image src='/images/p2p.png' alt='' width={250} height={250} objectFit='scale-down' quality={100} />
             <div className='absolute bottom-4 left-1/2 -translate-x-1/2'>Peer to peer transfer</div>
         </div>
