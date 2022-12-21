@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals */
 import { clientsClaim } from 'workbox-core'
-import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
+import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute, setDefaultHandler } from 'workbox-routing'
 import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
@@ -13,7 +13,6 @@ const filePaths = ['/file/upload', '/file/download']
 const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
 
 precacheAndRoute(urlsToCache)
-cleanupOutdatedCaches()
 setDefaultHandler(new StaleWhileRevalidate())
 offlineFallback({ pageFallback: '/_offline' });
 
