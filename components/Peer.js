@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { chunkSize } from '../constants'
+import { truncate } from '../modules/functions'
 
 export default function Peer({ peer, data }) {
     const { file, name, size, conn } = data
@@ -20,7 +21,7 @@ export default function Peer({ peer, data }) {
 
     return <div className='inline-block'>
         <h4>{peer}</h4>
-        <div>{bytesReceived / 1024 / 1024} MB transferred</div>
+        <div>{truncate(bytesReceived / 1024 / 1024)} MB transferred</div>
         <div>{Math.round(bytesReceived * 100 / size)}%</div>
     </div>
 }
