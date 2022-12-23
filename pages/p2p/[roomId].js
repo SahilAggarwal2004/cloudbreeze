@@ -22,12 +22,12 @@ export default function Id({ router }) {
     useEffect(() => {
         const Peer = require("peerjs").default
         const peer = new Peer({ host: 'cloudbreeze-peer.onrender.com', secure: true })
-        peer.once('open', () => {
+        peer.on('open', () => {
             const dataList = []
             let bytes = 0
             const conn = peer.connect(roomId, { metadata: username })
             setTimeout(() => { if (!conn.open) setError("Connection couldn't be established. Try reloading the page!") }, 5000);
-            conn.once('open', () => {
+            conn.on('open', () => {
                 setConnection(conn)
                 toast.success('Connection established')
             })
@@ -37,6 +37,7 @@ export default function Id({ router }) {
                     setSize(size)
                 } else if (type === 'file') {
                     bytes += file.byteLength;
+                    conn.send({ type: 'proceed', bytesReceived: bytes })
                     dataList.push(file)
                     setDownPercent(Math.round(bytes * 100 / size))
                     if (bytes >= size) download(dataList, name, 'p2p')

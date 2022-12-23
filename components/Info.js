@@ -10,10 +10,11 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
     const { setModal, clearHistory } = useFileContext()
 
     function share(type = 'URL') {
-        const data = type === 'URL' ? { url: link } : { text: fileId }
+        const id = fileId || roomId
+        const data = type === 'URL' ? { url: link } : { text: id }
         if (navigator.canShare(data) && navigator.userAgentData?.mobile) navigator.share(data) // navigator.userAgentData?.mobile checks if the device is a mobile device or not
         else {
-            navigator.clipboard.writeText(type === 'URL' ? link : fileId)
+            navigator.clipboard.writeText(type === 'URL' ? link : id)
             toast.success(`${type} copied to clipboard!`)
         }
     }
