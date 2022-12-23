@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
 import JSZip from 'jszip';
 import Loader from '../../components/Loader';
-import FileInfo from '../../components/FileInfo';
+import Info from '../../components/Info';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { limit, options } from '../../constants';
 
@@ -135,13 +135,13 @@ export default function Upload(props) {
       {isUploaded && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
-    {!link && upPercent === 100 ? <Loader style='flex items-center space-x-2' text='Please wait, processing the file(s)...' /> : upPercent > 0 && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
+    {!link && (upPercent === 100 ? <Loader style='flex items-center space-x-2' text='Please wait, processing the file(s)...' /> : upPercent > 0 && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
       <div className='bg-gray-300 rounded-full h-1 w-4/5'>
         <div className='bg-green-500 rounded-full h-1' style={{ width: `${upPercent}%` }} />
       </div>
       {upPercent}%
-    </div>}
+    </div>)}
 
-    {isUploaded && <div className='pb-16'><FileInfo fileId={link} /></div>}
+    {isUploaded && <div className='pb-16'><Info fileId={link} /></div>}
   </div >
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useFileContext } from '../contexts/ContextProvider'
-import FileInfo from './FileInfo'
+import Info from './Info'
 import QrScanner from './QrScanner'
 
 export default function Modal({ redirect }) {
@@ -42,7 +42,7 @@ export default function Modal({ redirect }) {
             <button className='py-1 px-3 rounded border button-animation' onClick={() => deleteFile(fileId)}>Yes</button>
             <button className='py-1 px-3 rounded border button-animation' onClick={handleCancel}>No</button>
           </div>
-        </div> : modal.type === 'showFile' ? <FileInfo fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : modal.type === 'qrReader' && <QrScanner redirect={redirect} />}
+        </div> : modal.type === 'showFile' ? <Info fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : modal.type === 'qrReader' && <QrScanner redirect={redirect} />}
     </div>
   </>
 }

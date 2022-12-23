@@ -3,10 +3,9 @@ import React, { useRef, useState } from 'react';
 import { File } from 'megajs';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
-import { toast } from 'react-toastify';
 import { FaQrcode } from 'react-icons/fa';
 import axios from 'axios';
-import { download, verifyUrl } from '../modules/functions';
+import { download, generateId } from '../modules/functions';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
     const { downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
@@ -16,16 +15,9 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     const [isDownloading, setIsDownloading] = useState(false)
     const [downPercent, setDownPercent] = useState(0)
 
-    function generateFileId(value) {
-        const { verified, error } = verifyUrl(value)
-        if (verified) return value.split('file/')[1]
-        if (!error) return value
-        toast.warning(error)
-    }
-
     async function downloadFile(event) {
         event.preventDefault()
-        const fileId = fileIdFromUrl || generateFileId(fileRef.current.value)
+        const fileId = fileIdFromUrl || generateId(fileRef.current.value)
         if (!fileId) return;
         setLoading(true)
         setIsDownloading(true)
