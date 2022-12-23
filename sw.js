@@ -9,7 +9,7 @@ import { offlineFallback } from 'workbox-recipes'
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
 
-const filePaths = ['/file/upload', '/file/download']
+const filePaths = ['/file/upload', '/file/download', '/p2p']
 const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
 
 precacheAndRoute(urlsToCache)
@@ -21,7 +21,7 @@ registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
     plugins: [new CacheableResponsePlugin({ statuses: [200] })]
 }))
 
-registerRoute(({ url }) => url.pathname.startsWith('/file') && !filePaths.includes(url.pathname), new NetworkOnly())
+registerRoute(({ url: { pathname } }) => (pathname.startsWith('/file') || pathname.startsWith('/p2p')) && !filePaths.includes(pathname), new NetworkOnly())
 
 registerRoute(({ request }) => request.destination === 'image', new CacheFirst({
     cacheName: 'images',
