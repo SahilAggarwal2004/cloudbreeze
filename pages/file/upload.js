@@ -5,7 +5,7 @@ import JSZip from 'jszip';
 import Loader from '../../components/Loader';
 import FileInfo from '../../components/FileInfo';
 import { useFileContext } from '../../contexts/ContextProvider';
-import { options } from '../../constants';
+import { limit, options } from '../../constants';
 
 export default function Upload(props) {
   const { type, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
@@ -15,12 +15,10 @@ export default function Upload(props) {
   const [downloadLimitRef, setDownloadLimit] = useState()
   const [files, setFiles] = useState()
   const [link, setLink] = useState()
-  const [isUploading, setIsUploading] = useState(false)
-  const [upPercent, setUpPercent] = useState(0)
+  const [upPercent, setUpPercent] = useState(-1)
+  const isUploaded = link && link !== 'error' && upPercent >= 0
   const [share, setShare] = useState(props.share)
-  const limit = 100;
   const daysLimit = type === 'premium' ? 365 : type === 'normal' ? 30 : 3
-  const disabled = (isUploading || upPercent) && link !== 'error'
 
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
   const verifyDownloadLimit = event => setDownloadLimit(Math.abs(event.target.value) || '')
@@ -52,13 +50,13 @@ export default function Upload(props) {
   function reset() {
     setFileId('');
     setLink();
-    setUpPercent(0);
+    setUpPercent(-1);
     setShare(false);
   }
 
   async function handleSubmit(event) {
     event.preventDefault()
-    setIsUploading(true)
+    setUpPercent(0)
     let content, password = passwordRef.current.value;
     if (files.length === 1) content = files[0]
     else {
@@ -75,7 +73,7 @@ export default function Upload(props) {
     if (fileIdRef) {
       if (options.includes(fileIdRef)) {
         toast.warning(`File Id cannot be ${fileIdRef}`);
-        setIsUploading(false)
+        setUpPercent(-1)
         return
       }
       data.append('fileId', fileIdRef)
@@ -86,7 +84,7 @@ export default function Upload(props) {
     if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
 
     const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
-    if (!verified) return setIsUploading(false)
+    if (!verified) return setUpPercent(-1)
 
     const { fileId, createdAt, success } = await fetchApp({
       url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', options: {
@@ -95,11 +93,10 @@ export default function Upload(props) {
     })
     if (!success) {
       setLink('error')
-      setIsUploading(false)
+      setUpPercent(-1)
       return
     }
     setLink(fileId)
-    setIsUploading(false)
     const updatedFiles = uploadFiles.concat({ nameList, createdAt, _id: fileId, downloadCount: 0, daysLimit: daysLimitRef || daysLimit })
     setUploadFiles(updatedFiles)
   }
@@ -114,39 +111,37 @@ export default function Upload(props) {
     })
   }, [])
 
-  useEffect(() => { link && link !== 'error' && window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }, [link])
+  useEffect(() => { isUploaded && window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }, [link])
 
   return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
       <label htmlFor="files">File(s):</label>
       {share ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
-        : <input type="file" id='files' disabled={disabled} required onChange={updateFile} multiple />}
+        : <input type="file" id='files' disabled={isUploaded} required onChange={updateFile} multiple />}
 
       <label htmlFor="file-id">File Id: </label>
-      <input type="text" id='file-id' value={fileIdRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' maxLength={30} />
+      <input type="text" id='file-id' value={fileIdRef} disabled={isUploaded} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' maxLength={30} />
 
       <label htmlFor="password">Password:</label>
-      <input type="password" id='password' ref={passwordRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
+      <input type="password" id='password' ref={passwordRef} disabled={isUploaded} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
 
       <label htmlFor="days-limit">Days Limit:</label>
-      <input type="number" id='days-limit' value={daysLimitRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} max={daysLimit} onChange={verifyDaysLimit} />
+      <input type="number" id='days-limit' value={daysLimitRef} disabled={isUploaded} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} max={daysLimit} onChange={verifyDaysLimit} />
 
       <label htmlFor="download-limit">Download Limit:</label>
-      <input type="number" id='download-limit' value={downloadLimitRef} disabled={disabled} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} onChange={verifyDownloadLimit} />
+      <input type="number" id='download-limit' value={downloadLimitRef} disabled={isUploaded} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} onChange={verifyDownloadLimit} />
 
-      <button type="submit" disabled={disabled} className='col-span-2 mt-5 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>Upload</button>
-      {link && link !== 'error' && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
+      <button type="submit" disabled={isUploaded} className='col-span-2 mt-5 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>Upload</button>
+      {isUploaded && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
-    {Boolean(upPercent) && link != 'error' && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
+    {!link && upPercent === 100 ? <Loader style='flex items-center space-x-2' text='Please wait, processing the file(s)...' /> : upPercent > 0 && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
       <div className='bg-gray-300 rounded-full h-1 w-4/5'>
         <div className='bg-green-500 rounded-full h-1' style={{ width: `${upPercent}%` }} />
       </div>
       {upPercent}%
     </div>}
 
-    {upPercent == 100 && !link && <Loader style='flex items-center space-x-2' text='Please wait, processing the file(s)...' />}
-
-    {link && link !== 'error' && <div className='pb-16'><FileInfo fileId={link} /></div>}
+    {isUploaded && <div className='pb-16'><FileInfo fileId={link} /></div>}
   </div >
 }
