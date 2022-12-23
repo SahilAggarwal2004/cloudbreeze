@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-export const truncate = (number, digits = 2) => Math.trunc(number * Math.pow(10, digits)) / Math.pow(10, digits)
+export const round = (number, digits = 2) => Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits)
 
 export function verifyUrl(value) {
     try {
