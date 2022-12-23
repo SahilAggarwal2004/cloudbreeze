@@ -21,13 +21,13 @@ export default function Id({ router }) {
 
     useEffect(() => {
         const Peer = require("peerjs").default
-        const peer = new Peer(`${username}-${Date.now()}`, { host: 'cloudbreeze-peer.onrender.com', secure: true })
-        peer.on('open', () => {
+        const peer = new Peer({ host: 'cloudbreeze-peer.onrender.com', secure: true })
+        peer.once('open', () => {
             const dataList = []
             let bytes = 0
-            const conn = peer.connect(roomId)
+            const conn = peer.connect(roomId, { metadata: username })
             setTimeout(() => { if (!conn.open) setError("Connection couldn't be established. Try reloading the page!") }, 5000);
-            conn.on('open', () => {
+            conn.once('open', () => {
                 setConnection(conn)
                 toast.success('Connection established')
             })

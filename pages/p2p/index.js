@@ -40,8 +40,8 @@ export default function P2p({ router, share }) {
 		const peer = new Peer(peerId, { host: 'cloudbreeze-peer.onrender.com', secure: true })
 		peer.on('open', id => setLink(id))
 		peer.on('connection', conn => {
-			const peerName = conn.peer.split('-')[0]
-			conn.on('open', () => {
+			const peerName = conn.metadata || 'Anonymous user'
+			conn.once('open', () => {
 				conn.send({ name, size, type: 'details' })
 				toast.success(`${peerName} connected`)
 			})
