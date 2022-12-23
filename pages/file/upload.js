@@ -88,7 +88,7 @@ export default function Upload(props) {
 
     const { fileId, createdAt, success } = await fetchApp({
       url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', options: {
-        onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round((loaded * 100) / total))
+        onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round(loaded * 100 / total))
       }
     })
     if (!success) {
