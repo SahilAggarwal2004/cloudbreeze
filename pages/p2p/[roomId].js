@@ -63,7 +63,7 @@ export default function Id({ router }) {
             <button className='primary-button' disabled={isDownloading} onClick={request}>Download File</button>
             {isDownloading && <>
                 <BarProgress percent={downPercent} className='col-span-2' />
-                <div className='text-center w-full col-span-2'>Speed: {speed(bytes, size, time)} MB/s</div>
+                <div className='text-center w-full col-span-2'>Speed: {speed(bytes, size, time)}/s</div>
             </>}
         </div> : <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' />}
     </>
