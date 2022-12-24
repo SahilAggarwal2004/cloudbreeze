@@ -8,7 +8,7 @@ import { useFileContext } from '../../contexts/ContextProvider';
 import { limit, options } from '../../constants';
 import BarProgress from '../../components/BarProgress';
 
-export default function Upload(props) {
+export default function Upload() {
   const { type, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
   const passwordRef = useRef()
   const [fileIdRef, setFileId] = useState()
@@ -18,7 +18,7 @@ export default function Upload(props) {
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(-1)
   const isUploaded = link && link !== 'error' && upPercent >= 0
-  const [share, setShare] = useState(props.share)
+  const [share, setShare] = useState()
   const daysLimit = type === 'premium' ? 365 : type === 'normal' ? 30 : 3
 
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
@@ -106,7 +106,7 @@ export default function Upload(props) {
     navigator.serviceWorker?.addEventListener('message', ({ data: { files } }) => {
       if (calcSize(files) > limit * 1048576) toast.warning(`Total file(s) size exceed ${limit}MB!`)
       else {
-        setFiles(files);
+        setFiles(files)
         setShare(true)
       }
     })

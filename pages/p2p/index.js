@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import JSZip from 'jszip';
-import React, { useReducer, useRef, useState } from 'react'
+import React, { useEffect, useReducer, useRef, useState } from 'react'
 import { FaQrcode } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Info from '../../components/Info';
@@ -21,12 +21,13 @@ function reducer(state, { type = 'add', peer, data }) {
 	}
 }
 
-export default function P2p({ router, share }) {
+export default function P2p({ router }) {
 	const { setModal, setProgress } = useFileContext()
 	const room = useRef();
 	const [files, setFiles] = useState()
 	const [roomId, setRoomId] = useState('')
 	const [link, setLink] = useState('')
+	const [share, setShare] = useState()
 	const [connections, dispatchConnections] = useReducer(reducer, {})
 	const connArr = Object.entries(connections)
 	const isReady = link && link !== 'error'
@@ -77,6 +78,13 @@ export default function P2p({ router, share }) {
 		peer.on('error', () => setProgress(100))
 		peer.on('close', reset)
 	}
+
+	useEffect(() => {
+		navigator.serviceWorker?.addEventListener('message', ({ data: { files } }) => {
+			setFiles(files)
+			setShare(true)
+		})
+	}, [])
 
 	return <div className='space-y-12'>
 		<div className='grid grid-cols-1 md:grid-cols-[50fr_0fr_50fr] items-center my-10 gap-x-4 gap-y-8 px-4 pb-5 text-sm sm:text-base'>

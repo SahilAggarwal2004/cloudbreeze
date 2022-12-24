@@ -9,7 +9,8 @@ import { offlineFallback } from 'workbox-recipes'
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
 
-const filePaths = ['/file/upload', '/file/download', '/p2p']
+const uploadPaths = ['/file/upload', '/p2p']
+const filePaths = [...uploadPaths, '/file/download']
 const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
 
 precacheAndRoute(urlsToCache)
@@ -30,9 +31,9 @@ registerRoute(({ request }) => request.destination === 'image', new CacheFirst({
 
 self.addEventListener('fetch', event => {
     const { request } = event
-    const url = new URL(request.url);
-    if (request.method === 'POST' && url.pathname === '/file/upload' && url.searchParams.has('share')) {
-        event.respondWith(Response.redirect('/file/upload')); // important to tackle cannot post '/file/upload' error
+    const { pathname, searchParams } = new URL(request.url);
+    if (request.method === 'POST' && uploadPaths.includes(pathname) && searchParams.has('share')) {
+        event.respondWith(Response.redirect(pathname)); // important to tackle cannot post '/file/upload' error
         event.waitUntil(async function () {
             const client = await self.clients.get(event.resultingClientId);
             const data = await event.request.formData();
