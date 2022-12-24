@@ -22,7 +22,7 @@ function reducer(state, { type = 'add', peer, data }) {
 }
 
 export default function P2p({ router }) {
-	const { setModal, setProgress } = useFileContext()
+	const { setModal, progress, setProgress } = useFileContext()
 	const room = useRef();
 	const [files, setFiles] = useState()
 	const [roomId, setRoomId] = useState('')
@@ -46,6 +46,7 @@ export default function P2p({ router }) {
 	async function handleSubmit(event) {
 		event.preventDefault()
 		let file;
+		setProgress(100 / 8)
 		if (files.length === 1) file = files[0]
 		else {
 			const zip = new JSZip();
@@ -94,7 +95,7 @@ export default function P2p({ router }) {
 					: <input type="file" id='files' disabled={isReady} required onChange={event => setFiles(event.target.files)} multiple />}
 				<label htmlFor="room-id">Room Id: </label>
 				<input type="text" id='room-id' value={roomId} disabled={isReady} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
-				<button type="submit" disabled={isReady} className='primary-button'>Share</button>
+				<button type="submit" disabled={progress > 0 || isReady} className='primary-button'>Share</button>
 				{isReady && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={reset}>Reset</button>}
 			</form>
 			<div className='md:h-[calc(100%+2.5rem)] p-0 m-0 border-[0.5px] border-black col-span-1' />
