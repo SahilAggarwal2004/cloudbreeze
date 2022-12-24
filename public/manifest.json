@@ -30,44 +30,24 @@
     }
   ],
   "start_url": "/",
-  "share_target": [
-    {
-      "action": "/file/upload?share=1",
-      "method": "POST",
-      "enctype": "multipart/form-data",
-      "params": {
-        "title": "title",
-        "text": "text",
-        "url": "url",
-        "files": [
-          {
-            "name": "files",
-            "accept": [
-              "*/*"
-            ]
-          }
-        ]
-      }
-    },
-    {
-      "action": "/p2p?share=1",
-      "method": "POST",
-      "enctype": "multipart/form-data",
-      "params": {
-        "title": "title",
-        "text": "text",
-        "url": "url",
-        "files": [
-          {
-            "name": "files",
-            "accept": [
-              "*/*"
-            ]
-          }
-        ]
-      }
+  "share_target": {
+    "action": "/file/upload?share=1",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": [
+            "*/*"
+          ]
+        }
+      ]
     }
-  ],
+  },
   "shortcuts": [
     {
       "name": "Upload a file",
@@ -79,7 +59,7 @@
     },
     {
       "name": "Peer-to-peer transfer",
-      "url": "/file/download"
+      "url": "/p2p"
     }
   ],
   "display": "standalone",
