@@ -20,14 +20,33 @@ export function generateId(value) {
 
 export function download(data, name, source) {
     try {
+        const streamSaver = require('streamsaver')
         const blob = source === 'local' ? data : new Blob(data)
-        const url = window.URL.createObjectURL(blob);
-        toast.success('File downloaded successfully!')
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = name; // giving default name to download prompt
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    } catch { return toast.error("Couldn't download file") }
+        const fileStream = streamSaver.createWriteStream(name, { size: blob.size })
+        const readableStream = blob.stream()
+        if (window.WritableStream && readableStream.pipeTo) return readableStream.pipeTo(fileStream).then(() => toast.success('File downloaded successfully!'))
+
+        // Write (pipe) manually
+        window.writer = fileStream.getWriter()
+
+        const reader = readableStream.getReader()
+        const pump = () => reader.read().then(res => {
+            if (res.done) {
+                writer.close()
+                toast.success('File downloaded successfully!')
+            } else writer.write(res.value).then(pump)
+        })
+        pump()
+    } catch (e) { console.log(e); return toast.error("Couldn't download file") }
 }
+// export function download(data, name, source) {
+//     try {
+//         const blob = source === 'local' ? data : new Blob(data)
+//         const url = window.URL.createObjectURL(blob);
+//         toast.success('File downloaded successfully!')
+//         const a = document.createElement('a');
+//         a.href = url;
+//         a.download = name; // giving default name to download prompt
+//         a.click();
+//     } catch { return toast.error("Couldn't download file") }
+// }

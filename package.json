@@ -25,6 +25,7 @@
     "react-toastify": "^9.0.5",
     "react-top-loading-bar": "^2.1.0",
     "sharp": "^0.30.7",
+    "streamsaver": "^2.0.6",
     "workbox-cacheable-response": "^6.5.4",
     "workbox-core": "^6.5.4",
     "workbox-precaching": "^6.5.4",

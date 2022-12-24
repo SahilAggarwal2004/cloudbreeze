@@ -44,7 +44,7 @@ export default function Id({ router }) {
                     conn.send({ type: 'proceed', bytesReceived: bytes })
                     dataList.push(file)
                     setBytes(bytes)
-                    if (bytes >= size) download(dataList, name, 'p2p')
+                    if (bytes === size) download(dataList, name, 'p2p')
                 }
             })
             conn.on('close', () => toast.error("Peer disconnected"))
