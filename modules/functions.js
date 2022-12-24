@@ -26,6 +26,8 @@ export function download(data, name, source) {
         const a = document.createElement('a');
         a.href = url;
         a.download = name; // giving default name to download prompt
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
     } catch { return toast.error("Couldn't download file") }
 }
