@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 
-export const round = (number, digits = 2) => Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits)
+const round = (number, digits = 2) => Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits)
+export const bytesToMb = bytes => round(bytes / 1048576)
+export const speed = (bytes, total, startTime = 0) => round(+(bytes !== total) && (bytesToMb(bytes) / (Date.now() - startTime) * 1000))
 
 export function verifyUrl(value) {
     try {

@@ -6,6 +6,7 @@ import { useFileContext } from '../contexts/ContextProvider';
 import { FaQrcode } from 'react-icons/fa';
 import axios from 'axios';
 import { download, generateId } from '../modules/functions';
+import BarProgress from './BarProgress';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
     const { downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
@@ -57,15 +58,10 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             <div className='col-span-2 text-center text-xs sm:text-sm'>
                 <span className='font-semibold text-gray-800'>Tip:</span> No need of password if you are the author of the file!
             </div>
-            <button type="submit" disabled={isDownloading} className='col-span-2 mt-3 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>{isDownloaded ? 'Download Again' : 'Download'}</button>
+            <button type="submit" disabled={isDownloading} className='primary-button'>{isDownloaded ? 'Download Again' : 'Download'}</button>
         </form>
 
-        {isDownloading ? <div className='w-full flex items-center justify-evenly max-w-[400px]'>
-            <div className='bg-gray-300 rounded-full h-1 w-4/5'>
-                <div className='bg-green-500 rounded-full h-1' style={{ width: `${downPercent}%` }} />
-            </div>
-            {downPercent}%
-        </div> : downPercent === 0 ? <Loader style='flex items-center space-x-2' text='Please wait, accessing the file(s)...' /> : !fileIdFromUrl && <div className='text-center'>
+        {isDownloading ? <BarProgress percent={downPercent} /> : downPercent === 0 ? <Loader className='flex items-center space-x-2' text='Please wait, accessing the file(s)...' /> : !fileIdFromUrl && <div className='text-center'>
             <div className='font-bold mb-3'>OR</div>
             <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={() => setModal({ active: true, type: 'qrReader' })}>
                 <FaQrcode />

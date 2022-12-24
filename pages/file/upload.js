@@ -6,6 +6,7 @@ import Loader from '../../components/Loader';
 import Info from '../../components/Info';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { limit, options } from '../../constants';
+import BarProgress from '../../components/BarProgress';
 
 export default function Upload(props) {
   const { type, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
@@ -131,16 +132,11 @@ export default function Upload(props) {
       <label htmlFor="download-limit">Download Limit:</label>
       <input type="number" id='download-limit' value={downloadLimitRef} disabled={isUploaded} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} onChange={verifyDownloadLimit} />
 
-      <button type="submit" disabled={isUploaded} className='col-span-2 mt-5 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800'>Upload</button>
+      <button type="submit" disabled={isUploaded} className='primary-button'>Upload</button>
       {isUploaded && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
     </form>
 
-    {!link && (upPercent === 100 ? <Loader style='flex items-center space-x-2' text='Please wait, processing the file(s)...' /> : upPercent > 0 && <div className='w-full flex items-center justify-evenly max-w-[400px]'>
-      <div className='bg-gray-300 rounded-full h-1 w-4/5'>
-        <div className='bg-green-500 rounded-full h-1' style={{ width: `${upPercent}%` }} />
-      </div>
-      {upPercent}%
-    </div>)}
+    {!link && (upPercent === 100 ? <Loader className='flex items-center space-x-2' text='Please wait, processing the file(s)...' /> : <BarProgress percent={upPercent} />)}
 
     {isUploaded && <div className='pb-16'><Info fileId={link} /></div>}
   </div >
