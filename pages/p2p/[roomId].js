@@ -4,8 +4,7 @@ import { toast } from 'react-toastify';
 import BarProgress from '../../components/BarProgress';
 import Loader from '../../components/Loader';
 import { useFileContext } from '../../contexts/ContextProvider';
-import { bytesToMb, download, speed } from '../../modules/functions';
-// import Peer from 'peerjs';
+import { bytesToSize, download, speed } from '../../modules/functions';
 
 export default function Id({ router }) {
     const { roomId } = router.query
@@ -56,11 +55,11 @@ export default function Id({ router }) {
         {error ? <div className='center space-y-5 text-center'>
             <h3 className='text-lg'>{error}</h3>
             <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={() => window.location.reload()}>Retry</button>
-        </div> : name ? <div className='w-max x-center grid grid-cols-[auto_1fr] gap-2 px-2'>
+        </div> : name ? <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] x-center grid grid-cols-[auto_1fr] gap-2 px-2'>
             <span>Name:</span>
-            <span>{name}</span>
+            <span className='text-right'>{name}</span>
             <span>Size:</span>
-            <span>{bytesToMb(size)} MB</span>
+            <span className='text-right'>{bytesToSize(size, true)}</span>
             <button className='primary-button' disabled={isDownloading} onClick={request}>Download File</button>
             {isDownloading && <>
                 <BarProgress percent={downPercent} className='col-span-2' />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { GoX } from 'react-icons/go'
 import { chunkSize } from '../constants'
-import { bytesToMb, speed } from '../modules/functions'
+import { bytesToSize, speed } from '../modules/functions'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
@@ -30,7 +30,7 @@ export default function Peer({ peer, data }) {
         <h4 className='font-medium'>{peer}</h4>
         <CircularProgressbarWithChildren value={bytesReceived} maxValue={size} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
-                <div>{bytesToMb(bytesReceived)} / {bytesToMb(size)} MB transferred</div>
+                <div>{bytesToSize(bytesReceived)} / {bytesToSize(size)} MB transferred</div>
                 <div>Speed: {speed(bytesReceived, size, time)} MB/s</div>
             </div>
         </CircularProgressbarWithChildren>
