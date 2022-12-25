@@ -99,8 +99,11 @@ export default function Upload({ router }) {
 
   useEffect(() => {
     navigator.serviceWorker?.addEventListener('message', ({ data: { files } }) => {
-      setFiles(files)
-      setShare(true)
+      if (fileDetails(files).totalSize > limit * 1048576) router.push('/p2p')
+      else {
+        setFiles(files)
+        setShare(true)
+      }
     })
   }, [])
 
