@@ -37,7 +37,7 @@ self.addEventListener('fetch', event => {
             const client = await self.clients.get(event.resultingClientId);
             const data = await event.request.formData();
             const files = data.getAll('files');
-            if (files.length) setTimeout(() => client.postMessage({ files }), 1000);
+            if (files.length) setTimeout(() => client.postMessage({ files }), 500);
         }());
     }
 });
