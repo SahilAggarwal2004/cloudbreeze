@@ -29,6 +29,7 @@ export default function Id({ router }) {
         peer.on('open', () => {
             let blob = new Blob([])
             let bytes = 0
+            let totalBytes = 0
             const conn = peer.connect(roomId, { metadata: username })
             setTimeout(() => { if (!conn.open) setError("Connection couldn't be established. Retry again!") }, 5000);
             conn.on('open', () => {
@@ -42,6 +43,7 @@ export default function Id({ router }) {
                     setSize(totalSize)
                 } else if (type === 'file') {
                     const { byteLength } = file;
+                    totalBytes += byteLength
                     if (initial) {
                         blob = new Blob([file])
                         bytes = byteLength
@@ -49,7 +51,7 @@ export default function Id({ router }) {
                         blob = new Blob([blob, file])
                         bytes += byteLength
                     }
-                    conn.send({ type: 'proceed', bytesReceived: bytes })
+                    conn.send({ type: 'proceed', bytesReceived: bytes, totalBytesReceived: totalBytes })
                     setBytes(old => old + byteLength)
                     if (bytes === size) download(blob, name)
                 }

@@ -14,19 +14,17 @@ export default function Peer({ peer, data }) {
     const [bytes, setBytes] = useState(0)
     const [time, setTime] = useState(0)
 
-    async function acceptData({ type, bytesReceived = 0 }) {
+    async function acceptData({ type, bytesReceived = 0, totalBytesReceived = 0 }) {
         if (type === 'request') {
             toast.success(`Transferring file(s) to ${peer}`)
             setTime(Date.now())
             conn.send({ file: files[getCount()].slice(0, chunkSize), name: names[getCount()], size: sizes[getCount()], type: 'file', initial: true })
         } else if (type === 'proceed') {
-            setBytes(bytesReceived)
+            setBytes(totalBytesReceived)
             if (bytesReceived < sizes[getCount()]) conn.send({ file: files[getCount()].slice(bytesReceived, bytesReceived + chunkSize), name: names[getCount()], size: sizes[getCount()], type: 'file' })
             else {
                 setCount(getCount() + 1)
                 if (getCount() === names.length) return
-                setBytes(0)
-                setTime(Date.now())
                 conn.send({ file: files[getCount()].slice(0, chunkSize), name: names[getCount()], size: sizes[getCount()], type: 'file', initial: true })
             }
         }
@@ -44,7 +42,7 @@ export default function Peer({ peer, data }) {
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
                 <div>{bytesToSize(bytes)} / {bytesToSize(totalSize, true)}</div>
                 <div>{getCount()} / {names.length} files</div>
-                <div>Speed: {speed(bytes, sizes[getCount()], time)}/s</div>
+                <div>Speed: {speed(bytes, totalSize, time)}/s</div>
             </div>
         </CircularProgressbarWithChildren>
     </div >
