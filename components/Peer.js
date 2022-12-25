@@ -42,7 +42,7 @@ export default function Peer({ peer, data }) {
         <h4 className='font-medium'>{peer}</h4>
         <CircularProgressbarWithChildren value={bytes} maxValue={sizes[getCount()]} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
-                <div>{bytesToSize(bytes)} / {bytesToSize(totalSize, true)}</div>
+                <div>{bytesToSize(totalBytes)} / {bytesToSize(totalSize, true)}</div>
                 <div>{getCount()} / {names.length} files transferred</div>
                 <div>Speed: {speed(totalBytes, totalSize, time)}/s</div>
             </div>
