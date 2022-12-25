@@ -43,7 +43,7 @@ export default function Peer({ peer, data }) {
         <CircularProgressbarWithChildren value={bytes} maxValue={sizes[getCount()]} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
                 <div>{bytesToSize(bytes)} / {bytesToSize(totalSize, true)}</div>
-                <div>{getCount() + 1} / {names.length} files</div>
+                <div>{getCount()} / {names.length} files</div>
                 <div>Speed: {speed(bytes, sizes[getCount()], time)}/s</div>
             </div>
         </CircularProgressbarWithChildren>
