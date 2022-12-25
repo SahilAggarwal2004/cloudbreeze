@@ -37,7 +37,7 @@ export default function Peer({ peer, data }) {
         conn.on('data', acceptData)
     }, [])
 
-    return <div className='relative flex flex-col justify-center p-4 pb-0 border rounded text-center bg-gray-50 hover:bg-transparent hover:shadow-lg transition-all duration-300'>
+    return <div className='relative flex flex-col justify-center p-4 pb-0 border rounded text-center bg-gray-50 hover:bg-transparent hover:shadow-lg transition-all duration-300 min-w-[270px]'>
         <GoX className='absolute top-2 right-2 scale-110' onClick={() => conn.close()} />
         <h4 className='font-medium'>{peer}</h4>
         <CircularProgressbarWithChildren value={bytes} maxValue={sizes[getCount()]} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
