@@ -77,7 +77,7 @@ export default function P2p({ router }) {
 		<div className='grid grid-cols-1 md:grid-cols-[50fr_0fr_50fr] items-center my-10 gap-x-4 gap-y-8 px-4 pb-5 text-sm sm:text-base'>
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">
 				<label htmlFor="files">File(s):</label>
-				{share ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
+				{share && files ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
 					: <input type="file" id='files' disabled={isReady} required onChange={event => setFiles(event.target.files)} multiple />}
 				<label htmlFor="room-id">Room Id: </label>
 				<input type="text" id='room-id' value={roomId} disabled={isReady} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
