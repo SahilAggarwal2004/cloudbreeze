@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import Info from '../../components/Info';
 import Peer from '../../components/Peer';
 import { useFileContext } from '../../contexts/ContextProvider';
-import { generateId } from '../../modules/functions';
+import { fileDetails, generateId } from '../../modules/functions';
 
 function reducer(state, { type = 'add', peer, data }) {
 	switch (type) {
@@ -45,18 +45,10 @@ export default function P2p({ router }) {
 
 	async function handleSubmit(event) {
 		event.preventDefault()
-		let file;
+		const { names, sizes, totalSize } = fileDetails(files);
 		setProgress(100 / 8)
-		if (files.length === 1) file = files[0]
-		else {
-			const zip = new JSZip();
-			for (let i = 0; i < files.length; i++) zip.file(files[i].name, files[i])
-			file = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
-		}
 		const Peer = require("peerjs").default
 		const peerId = roomId || Date.now()
-		const name = file.name || `cloudbreeze_${peerId}.zip`
-		const size = file.size
 		setProgress(100 / 3)
 		const peer = new Peer(peerId, { host: 'cloudbreeze-peer.onrender.com', secure: true })
 		peer.on('open', id => {
@@ -67,8 +59,8 @@ export default function P2p({ router }) {
 			const peerName = conn.metadata || 'Anonymous User'
 			conn.on('open', () => {
 				if (connections[peerName]) return
-				conn.send({ name, size, type: 'details' })
-				dispatchConnections({ peer: peerName, data: { file, name, size, conn } })
+				conn.send({ names, totalSize, type: 'details' })
+				dispatchConnections({ peer: peerName, data: { files, names, sizes, conn } })
 				toast.success(`${peerName} connected`)
 			})
 			conn.on('close', () => {
@@ -92,7 +84,7 @@ export default function P2p({ router }) {
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">
 				<label htmlFor="files">File(s):</label>
 				{share ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
-					: <input type="file" id='files' disabled={isReady} required onChange={event => setFiles(event.target.files)} />}
+					: <input type="file" id='files' disabled={isReady} required onChange={event => setFiles(event.target.files)} multiple />}
 				<label htmlFor="room-id">Room Id: </label>
 				<input type="text" id='room-id' value={roomId} disabled={isReady} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
 				<button type="submit" disabled={progress > 0 || isReady} className='primary-button'>Share</button>

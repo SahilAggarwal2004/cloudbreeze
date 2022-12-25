@@ -7,6 +7,7 @@ import Info from '../../components/Info';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { limit, options } from '../../constants';
 import BarProgress from '../../components/BarProgress';
+import { fileDetails } from '../../modules/functions';
 
 export default function Upload() {
   const { type, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
@@ -28,15 +29,9 @@ export default function Upload() {
     if (value <= daysLimit) setDaysLimit(value || '')
   }
 
-  function calcSize(files) {
-    let size = 0;
-    for (let i = 0; i < files.length; i++) size += files[i].size
-    return size
-  }
-
   function updateFile(event) {
     const { files } = event.target
-    const size = calcSize(files)
+    const size = fileDetails(files).totalSize
     if (!size) {
       event.target.value = "";
       return toast.warning('Empty file(s)');
@@ -104,7 +99,7 @@ export default function Upload() {
 
   useEffect(() => {
     navigator.serviceWorker?.addEventListener('message', ({ data: { files } }) => {
-      if (calcSize(files) > limit * 1048576) toast.warning(`Total file(s) size exceed ${limit}MB!`)
+      if (fileDetails(files).totalSize > limit * 1048576) toast.warning(`Total file(s) size exceed ${limit}MB!`)
       else {
         setFiles(files)
         setShare(true)

@@ -10,7 +10,7 @@ export default function Id({ router }) {
     const { roomId } = router.query
     const { username } = useFileContext();
     const [connection, setConnection] = useState()
-    const [name, setName] = useState()
+    const [file, setFile] = useState()
     const [size, setSize] = useState()
     const [bytes, setBytes] = useState(0)
     const [time, setTime] = useState(0)
@@ -35,15 +35,22 @@ export default function Id({ router }) {
                 setConnection(conn)
                 toast.success('Connection established')
             })
-            conn.on('data', ({ file, name, size, type }) => {
+            conn.on('data', ({ type, names, totalSize, file, name, size, initial = false }) => {
                 if (type === 'details') {
-                    setName(name)
-                    setSize(size)
+                    const len = names.length
+                    setFile(len === 1 ? names[0] : `${len} files`)
+                    setSize(totalSize)
                 } else if (type === 'file') {
-                    bytes += file.byteLength;
+                    const { byteLength } = file;
+                    if (initial) {
+                        blob = new Blob([file])
+                        bytes = byteLength
+                    } else {
+                        blob = new Blob([blob, file])
+                        bytes += byteLength
+                    }
                     conn.send({ type: 'proceed', bytesReceived: bytes })
-                    blob = new Blob([blob, file])
-                    setBytes(bytes)
+                    setBytes(old => old + byteLength)
                     if (bytes === size) download(blob, name)
                 }
             })
@@ -55,14 +62,14 @@ export default function Id({ router }) {
         {error ? <div className='center space-y-5 text-center'>
             <h3 className='text-lg'>{error}</h3>
             <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={() => window.location.reload()}>Retry</button>
-        </div> : name ? <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] x-center grid grid-cols-[auto_1fr] gap-2 px-2'>
-            <span>Name:</span>
-            <span className='text-right'>{name}</span>
+        </div> : file ? <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] x-center grid grid-cols-[auto_1fr] gap-2 px-2'>
+            <span>File:</span>
+            <span className='text-right'>{file}</span>
             <span>Size:</span>
             <span className='text-right'>{bytesToSize(size, true)}</span>
             <button className='primary-button' disabled={isDownloading} onClick={request}>Download File</button>
             {isDownloading && <>
-                <BarProgress percent={downPercent} className='col-span-2' />
+                <BarProgress percent={downPercent} className='col-span-2 max-w-[100%]' />
                 <div className='text-center w-full col-span-2'>Speed: {speed(bytes, size, time)}/s</div>
             </>}
         </div> : <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' />}

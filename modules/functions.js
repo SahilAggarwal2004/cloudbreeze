@@ -18,6 +18,19 @@ export function generateId(value) {
     toast.warning(error)
 }
 
+export function fileDetails(files) {
+    const names = [], sizes = []
+    let totalSize = 0;
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const { name, size } = file
+        names.push(name)
+        sizes.push(size)
+        totalSize += size
+    }
+    return { names, sizes, totalSize }
+}
+
 export function download(blob, name) {
     try {
         const url = window.URL.createObjectURL(blob);
