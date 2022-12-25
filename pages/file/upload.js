@@ -9,7 +9,7 @@ import { limit, options } from '../../constants';
 import BarProgress from '../../components/BarProgress';
 import { fileDetails } from '../../modules/functions';
 
-export default function Upload() {
+export default function Upload({ router }) {
   const { type, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
   const passwordRef = useRef()
   const [fileIdRef, setFileId] = useState()
@@ -37,8 +37,8 @@ export default function Upload() {
       return toast.warning('Empty file(s)');
     }
     if (size > limit * 1048576) { // size limit
-      event.target.value = "";
-      return toast.warning(`Total file(s) size exceed ${limit}MB!`);
+      toast('Try Peer-to-peer transfer for big files')
+      return router.push('/p2p')
     }
     setFiles(files)
   }
@@ -99,11 +99,8 @@ export default function Upload() {
 
   useEffect(() => {
     navigator.serviceWorker?.addEventListener('message', ({ data: { files } }) => {
-      if (fileDetails(files).totalSize > limit * 1048576) toast.warning(`Total file(s) size exceed ${limit}MB!`)
-      else {
-        setFiles(files)
-        setShare(true)
-      }
+      setFiles(files)
+      setShare(true)
     })
   }, [])
 

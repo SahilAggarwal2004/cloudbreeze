@@ -31,7 +31,7 @@
   ],
   "start_url": "/",
   "share_target": {
-    "action": "/file/upload?share=1",
+    "action": "/file?share=1",
     "method": "POST",
     "enctype": "multipart/form-data",
     "params": {
