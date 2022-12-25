@@ -8,7 +8,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { getStorage, setStorage } from '../modules/storage'
 
 export default function Peer({ peer, data }) {
-    const { files, names, sizes, conn } = data
+    const { files, names, sizes, totalSize, conn } = data
     const getCount = () => getStorage(`${peer}-count`, 0)
     const setCount = value => setStorage(`${peer}-count`, value)
     const [bytes, setBytes] = useState(0)
@@ -22,8 +22,9 @@ export default function Peer({ peer, data }) {
         } else if (type === 'proceed') {
             setBytes(bytesReceived)
             if (bytesReceived < sizes[getCount()]) conn.send({ file: files[getCount()].slice(bytesReceived, bytesReceived + chunkSize), name: names[getCount()], size: sizes[getCount()], type: 'file' })
-            else if (getCount() < names.length - 1) {
+            else {
                 setCount(getCount() + 1)
+                if (getCount() === names.length) return
                 setBytes(0)
                 setTime(Date.now())
                 conn.send({ file: files[getCount()].slice(0, chunkSize), name: names[getCount()], size: sizes[getCount()], type: 'file', initial: true })
@@ -41,7 +42,7 @@ export default function Peer({ peer, data }) {
         <h4 className='font-medium'>{peer}</h4>
         <CircularProgressbarWithChildren value={bytes} maxValue={sizes[getCount()]} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
-                <div>{bytesToSize(bytes)} / {bytesToSize(sizes[getCount()], true)}</div>
+                <div>{bytesToSize(bytes)} / {bytesToSize(totalSize, true)}</div>
                 <div>{getCount() + 1} / {names.length} files</div>
                 <div>Speed: {speed(bytes, sizes[getCount()], time)}/s</div>
             </div>

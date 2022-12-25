@@ -60,7 +60,7 @@ export default function P2p({ router }) {
 			conn.on('open', () => {
 				if (connections[peerName]) return
 				conn.send({ names, totalSize, type: 'details' })
-				dispatchConnections({ peer: peerName, data: { files, names, sizes, conn } })
+				dispatchConnections({ peer: peerName, data: { files, names, sizes, totalSize, conn } })
 				toast.success(`${peerName} connected`)
 			})
 			conn.on('close', () => {
