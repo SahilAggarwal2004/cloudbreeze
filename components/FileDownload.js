@@ -24,8 +24,8 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value } })
         if (error) setDownPercent(-1)
         else {
-            function downloadFile(data, source) {
-                download(data, name, source)
+            function downloadFile(blob) {
+                download(blob, name)
                 const updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
                 updatedFiles.push({ nameList: [name], _id: fileId, createdAt, daysLimit })
                 setDownloadFiles(updatedFiles)
@@ -34,15 +34,15 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             try {
                 const file = File.fromURL(link)
                 const stream = file.download();
-                let dataList = [];
-                stream.on('data', data => dataList.push(data))
+                let blob = new Blob([])
+                stream.on('data', data => blob = new Blob([blob, data]))
                 stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
                     setDownPercent(Math.round(bytesLoaded * 100 / bytesTotal))
-                    if (bytesLoaded == bytesTotal) downloadFile(dataList, 'mega')
+                    if (bytesLoaded == bytesTotal) downloadFile(blob)
                 })
             } catch {
                 const { data } = await axios({ url: link, method: 'GET', responseType: 'blob', onDownloadProgress: ({ loaded, total }) => setDownPercent(Math.round((loaded * 100) / total)) })
-                downloadFile(data, 'local')
+                downloadFile(data)
             }
         }
     }

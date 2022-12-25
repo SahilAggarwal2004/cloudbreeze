@@ -27,7 +27,7 @@ export default function Id({ router }) {
         const Peer = require("peerjs").default
         const peer = new Peer({ host: 'cloudbreeze-peer.onrender.com', secure: true })
         peer.on('open', () => {
-            const dataList = []
+            let blob = new Blob([])
             let bytes = 0
             const conn = peer.connect(roomId, { metadata: username })
             setTimeout(() => { if (!conn.open) setError("Connection couldn't be established. Retry again!") }, 5000);
@@ -42,9 +42,9 @@ export default function Id({ router }) {
                 } else if (type === 'file') {
                     bytes += file.byteLength;
                     conn.send({ type: 'proceed', bytesReceived: bytes })
-                    dataList.push(file)
+                    blob = new Blob([blob, file])
                     setBytes(bytes)
-                    if (bytes === size) download(dataList, name, 'p2p')
+                    if (bytes === size) download(blob, name)
                 }
             })
             conn.on('close', () => toast.error("Peer disconnected"))

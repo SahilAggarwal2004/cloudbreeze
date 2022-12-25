@@ -18,13 +18,8 @@ export function generateId(value) {
     toast.warning(error)
 }
 
-export function download(data, name, source) {
+export function download(blob, name) {
     try {
-        if (source === 'local') var blob = data
-        else {
-            blob = new Blob([])
-            data.forEach(chunk => { blob = new Blob([blob, chunk]) });
-        }
         const url = window.URL.createObjectURL(blob);
         toast.success('File downloaded successfully!')
         const a = document.createElement('a');
