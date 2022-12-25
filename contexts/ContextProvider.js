@@ -18,6 +18,7 @@ export default function ContextProvider({ children, router }) {
     const [type, setType] = useStorage('type', '')
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
+    const [files, setFiles] = useState()
 
     async function logout(type) {
         if (type === 'manual') {
@@ -74,7 +75,7 @@ export default function ContextProvider({ children, router }) {
     }, [router.pathname])
 
 
-    return <Context.Provider value={{ username, setUsername, type, setType, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal }}>
+    return <Context.Provider value={{ username, setUsername, type, setType, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles }}>
         {children}
     </Context.Provider>
 }

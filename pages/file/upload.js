@@ -8,18 +8,18 @@ import { useFileContext } from '../../contexts/ContextProvider';
 import { limit, options } from '../../constants';
 import BarProgress from '../../components/BarProgress';
 import { fileDetails } from '../../modules/functions';
+import { useRouter } from 'next/router';
 
 export default function Upload({ router }) {
-  const { type, uploadFiles, setUploadFiles, fetchApp } = useFileContext()
+  const { type, uploadFiles, setUploadFiles, fetchApp, files, setFiles } = useFileContext()
+  const { share } = router.query
   const passwordRef = useRef()
   const [fileIdRef, setFileId] = useState()
   const [daysLimitRef, setDaysLimit] = useState()
   const [downloadLimitRef, setDownloadLimit] = useState()
-  const [files, setFiles] = useState()
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(-1)
   const isUploaded = link && link !== 'error' && upPercent >= 0
-  const [share, setShare] = useState()
   const daysLimit = type === 'premium' ? 365 : type === 'normal' ? 30 : 3
 
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
@@ -38,7 +38,8 @@ export default function Upload({ router }) {
     }
     if (size > limit * 1048576) { // size limit
       toast('Try Peer-to-peer transfer for big files')
-      return router.push('/p2p')
+      setFiles(files)
+      return router.push('/p2p?share=true')
     }
     setFiles(files)
   }
@@ -98,12 +99,10 @@ export default function Upload({ router }) {
   }
 
   useEffect(() => {
+    if (!share) setFiles()
     navigator.serviceWorker?.addEventListener('message', ({ data: { files } }) => {
-      if (fileDetails(files).totalSize > limit * 1048576) router.push('/p2p')
-      else {
-        setFiles(files)
-        setShare(true)
-      }
+      setFiles(files)
+      if (fileDetails(files).totalSize > limit * 1048576) router.push('/p2p?share=true')
     })
   }, [])
 

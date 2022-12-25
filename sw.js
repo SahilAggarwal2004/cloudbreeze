@@ -5,8 +5,6 @@ import { registerRoute, setDefaultHandler } from 'workbox-routing'
 import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { offlineFallback } from 'workbox-recipes'
-import { limit } from './constants'
-import { fileDetails } from './modules/functions'
 
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
@@ -34,7 +32,7 @@ self.addEventListener('fetch', event => {
     const { request } = event
     const { pathname, searchParams } = new URL(request.url);
     if (request.method === 'POST' && pathname === '/file' && searchParams.has('share')) {
-        event.respondWith(Response.redirect('/file/upload'))  // important to tackle cannot post url error
+        event.respondWith(Response.redirect('/file/upload?share=true'))  // important to tackle cannot post url error
         event.waitUntil(async function () {
             const client = await self.clients.get(event.resultingClientId);
             const data = await event.request.formData();
