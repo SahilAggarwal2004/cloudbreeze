@@ -4,4 +4,4 @@ export const showModal = ['/account', '/account/history', '/file/download', '/p2
 export const options = ['upload', 'download']
 export const types = ['normal', 'premium']
 export const limit = 100 // In MB
-export const chunkSize = 2097152 // In bytes (2 MB)
+export const chunkSize = 1048576 // In bytes (1 MB)
