@@ -12,14 +12,15 @@ export default function Id({ router }) {
     const [connection, setConnection] = useState()
     const [file, setFile] = useState()
     const [size, setSize] = useState()
-    const [bytes, setBytes] = useState(0)
+    const [bytes, setBytes] = useState(-1)
     const [time, setTime] = useState(0)
     const [error, setError] = useState()
-    const downPercent = Math.round(bytes * 100 / size);
-    const isDownloading = downPercent > 0
+    const downPercent = Math.round(bytes * 100 / size) - +(bytes < 0);
+    const isDownloading = downPercent >= 0
 
     const request = () => {
         connection?.send({ type: 'request' })
+        setBytes(0)
         setTime(Date.now())
     }
 
@@ -58,6 +59,10 @@ export default function Id({ router }) {
             })
             conn.on('close', () => toast.error("Peer disconnected"))
         })
+        return () => {
+            peer.removeAllListeners()
+            peer.destroy()
+        }
     }, [])
 
     return <>

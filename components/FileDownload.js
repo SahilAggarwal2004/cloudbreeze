@@ -14,7 +14,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     const password = useRef()
     const [downPercent, setDownPercent] = useState(-1)
     const isDownloaded = downPercent === 100
-    const isDownloading = downPercent > 0 && !isDownloaded
+    const isDownloading = downPercent >= 0 && !isDownloaded
 
     async function downloadFile(event) {
         event.preventDefault()
@@ -38,7 +38,10 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                 stream.on('data', data => blob = new Blob([blob, data]))
                 stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
                     setDownPercent(Math.round(bytesLoaded * 100 / bytesTotal))
-                    if (bytesLoaded == bytesTotal) downloadFile(blob)
+                    if (bytesLoaded == bytesTotal) {
+                        stream.removeAllListeners();
+                        downloadFile(blob)
+                    }
                 })
             } catch {
                 const { data } = await axios({ url: link, method: 'GET', responseType: 'blob', onDownloadProgress: ({ loaded, total }) => setDownPercent(Math.round((loaded * 100) / total)) })
@@ -61,7 +64,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             <button type="submit" disabled={isDownloading} className='primary-button'>{isDownloaded ? 'Download Again' : 'Download'}</button>
         </form>
 
-        {isDownloading ? <BarProgress percent={downPercent} /> : downPercent === 0 ? <Loader className='flex items-center space-x-2' text='Please wait, accessing the file(s)...' /> : !fileIdFromUrl && <div className='text-center'>
+        {downPercent > 0 ? <BarProgress percent={downPercent} /> : downPercent === 0 ? <Loader className='flex items-center space-x-2' text='Please wait, accessing the file(s)...' /> : !fileIdFromUrl && <div className='text-center'>
             <div className='font-bold mb-3'>OR</div>
             <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={() => setModal({ active: true, type: 'qrReader' })}>
                 <FaQrcode />

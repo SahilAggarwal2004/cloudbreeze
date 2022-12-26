@@ -29,7 +29,7 @@ export default function P2p({ router }) {
 	const [link, setLink] = useState('')
 	const [connections, dispatchConnections] = useReducer(reducer, {})
 	const connArr = Object.entries(connections)
-	const isReady = link && link !== 'error'
+	const disable = progress > 0 || link
 
 	const verifyRoomId = event => setRoomId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
 	const reset = event => {
@@ -78,14 +78,14 @@ export default function P2p({ router }) {
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">
 				<label htmlFor="files">File(s):</label>
 				{share && files ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
-					: <input type="file" id='files' disabled={isReady} required onChange={event => setFiles(event.target.files)} multiple />}
+					: <input type="file" id='files' disabled={disable} required onChange={event => setFiles(event.target.files)} multiple />}
 				<label htmlFor="room-id">Room Id: </label>
-				<input type="text" id='room-id' value={roomId} disabled={isReady} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
-				<button type="submit" disabled={progress > 0 || isReady} className='primary-button'>Share</button>
-				{isReady && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={reset}>Reset</button>}
+				<input type="text" id='room-id' value={roomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
+				<button type="submit" disabled={disable} className='primary-button'>Share</button>
+				{link && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={reset}>Reset</button>}
 			</form>
 			<div className='md:h-[calc(100%+2.5rem)] p-0 m-0 border-[0.5px] border-black col-span-1' />
-			{isReady ? <Info roomId={link} /> : <div className='flex flex-col items-center space-y-5'>
+			{link ? <Info roomId={link} /> : <div className='flex flex-col items-center space-y-5'>
 				<form onSubmit={enterRoom} className="grid grid-cols-[auto_1fr] gap-3 items-center">
 					<label htmlFor="fileId">Room Id or Link:</label>
 					<input type="text" id='fileId' ref={room} className='border rounded px-2 py-0.5' required autoComplete='off' />
