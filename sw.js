@@ -5,11 +5,11 @@ import { registerRoute, setDefaultHandler } from 'workbox-routing'
 import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { offlineFallback } from 'workbox-recipes'
+import { filePaths } from './constants'
 
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
 
-const filePaths = ['/file/upload', '/file/download', '/p2p']
 const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
 
 precacheAndRoute(urlsToCache)
