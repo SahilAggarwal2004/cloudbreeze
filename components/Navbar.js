@@ -14,8 +14,8 @@ export default function Navbar({ path }) {
             {/* adding <a> tag inside <Link> as for some reason <Link> passes a ref to its child and we can't use ref in a react component(here, FaUserAlt) */}
             {/* title attribute displays text on element hover */}
             <div className='flex space-x-2 sm:space-x-3 items-center justify-center'>
-                <Link href="/account"><a><FaUserAlt className='xs:scale-110 sm:scale-[1.2]' title='Your Account' /></a></Link>
-                <Link href="/"><h1 className='text-lg xs:text-xl cursor-pointer select-none font-medium' title='Home'>CloudBreeze</h1></Link>
+                <Link href="/account"><a><FaUserAlt className='sm:scale-110' title='Your Account' /></a></Link>
+                <Link href="/"><h1 className='text-lg sm:text-xl cursor-pointer select-none font-medium' title='Home'>CloudBreeze</h1></Link>
             </div>
             <div className='flex space-x-4 xs:space-x-5 sm:space-x-6'>
                 <Link href="/account/history"><a><FaHistory className='hidden sm:block scale-110 sm:scale-125' title='History' /></a></Link>
