@@ -5,7 +5,7 @@ import { GrSend } from 'react-icons/gr'
 import LoadingBar from 'react-top-loading-bar'
 import { useFileContext } from '../contexts/ContextProvider'
 
-export default function Navbar({ path }) {
+export default function Navbar() {
     const { progress, setProgress } = useFileContext()
 
     return <>

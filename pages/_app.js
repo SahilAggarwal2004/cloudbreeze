@@ -100,7 +100,7 @@ export default function MyApp({ Component, pageProps }) {
         </Script>
 
         <ContextProvider router={router}>
-            {!hideNavbar.includes(router.pathname) && <Navbar path={router.pathname} />}
+            {!hideNavbar.includes(router.pathname) && <Navbar />}
             {router.pathname === '/account/confirm/[token]' && <h1 className='sticky inset-0 z-30 bg-black text-white py-2 px-5 shadow-lg text-xl font-medium text-center sm:text-left'>CloudBreeze</h1>}
             {loading || !router.isReady ? <Loader className='center flex flex-col items-center space-y-2' text='Loading...' /> : <Component {...pageProps} />}
             {showModal.includes(router.pathname) && <Modal redirect={router.push} />}
