@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import JSZip from 'jszip';
 import React, { useEffect, useReducer, useRef, useState } from 'react'
 import { FaQrcode } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Info from '../../components/Info';
 import Peer from '../../components/Peer';
+import { peerOptions } from '../../constants';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { fileDetails, generateId } from '../../modules/functions';
 
@@ -49,7 +49,7 @@ export default function P2p({ router }) {
 		const Peer = require("peerjs").default
 		const peerId = roomId || Date.now()
 		setProgress(100 / 3)
-		const peer = new Peer(peerId, { host: 'cloudbreeze-peer.onrender.com', secure: true })
+		const peer = new Peer(peerId, peerOptions)
 		peer.on('open', id => {
 			setLink(id)
 			setProgress(100)

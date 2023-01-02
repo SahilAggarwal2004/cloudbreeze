@@ -13,7 +13,7 @@ export default function Navbar() {
         <nav className='sticky inset-0 z-30 flex bg-black text-white items-center justify-between p-2 xs:px-4 sm:px-5 shadow-lg'>
             {/* adding <a> tag inside <Link> as for some reason <Link> passes a ref to its child and we can't use ref in a react component(here, FaUserAlt) */}
             {/* title attribute displays text on element hover */}
-            <div className='flex space-x-2 sm:space-x-3 items-center justify-center'>
+            <div className='flex space-x-3 sm:space-x-4 items-center justify-center'>
                 <Link href="/account"><a><FaUserAlt className='xs:scale-110' title='Your Account' /></a></Link>
                 <Link href="/"><h1 className='text-lg xs:text-xl cursor-pointer select-none font-medium' title='Home'>CloudBreeze</h1></Link>
             </div>

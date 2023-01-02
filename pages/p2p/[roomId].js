@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import BarProgress from '../../components/BarProgress';
 import Loader from '../../components/Loader';
+import { peerOptions } from '../../constants';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { bytesToSize, download, speed } from '../../modules/functions';
 
@@ -26,7 +27,7 @@ export default function Id({ router }) {
 
     useEffect(() => {
         const Peer = require("peerjs").default
-        const peer = new Peer({ host: 'cloudbreeze-peer.onrender.com', secure: true })
+        const peer = new Peer(peerOptions)
         peer.on('open', () => {
             let blob = new Blob([])
             let bytes = 0
