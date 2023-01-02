@@ -12,24 +12,20 @@ export default function Peer({ peer, data }) {
     const [bytes, setBytes] = useState(0)
     const [totalBytes, setTotalBytes] = useState(0)
     const [time, setTime] = useState(0)
+    const file = files[count]
+    const name = names[count]
     const size = sizes[count]
 
     function acceptData({ type, bytesReceived = 0, totalBytesReceived = 0 }) {
         if (type === 'request') {
             toast.success(`Transferring file(s) to ${peer}`)
             setTime(Date.now())
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i]
-                const name = names[i]
-                const size = sizes[i]
-                conn.send({ file: file.slice(0, chunkSize), name, size, type: 'file', initial: true })
-                let bytesSent = chunkSize;
-                while (bytesSent < size) conn.send({ file: file.slice(bytesSent, bytesSent += chunkSize), name, size, type: 'file' })
-            }
+            conn.send({ file: file.slice(0, chunkSize), name, size, type: 'file', initial: true })
         } else if (type === 'proceed') {
             setBytes(bytesReceived)
             setTotalBytes(totalBytesReceived)
-            if (bytesReceived >= size) setCount(count + 1)
+            if (bytesReceived < size) conn.send({ file: file.slice(bytesReceived, bytesReceived + chunkSize), name, size, type: 'file' })
+            else setCount(count + 1)
         }
     }
 
@@ -44,7 +40,9 @@ export default function Peer({ peer, data }) {
     useEffect(() => {
         if (!count) return
         conn.removeAllListeners('data')
-        if (totalBytes < totalSize) conn.on('data', acceptData)
+        if (totalBytes >= totalSize) return
+        conn.on('data', acceptData)
+        conn.send({ file: file.slice(0, chunkSize), name, size, type: 'file', initial: true })
     }, [count])
 
     return <div className='relative flex flex-col justify-center p-4 pb-0 border rounded text-center bg-gray-50 hover:bg-transparent hover:shadow-lg transition-all duration-300 min-w-[270px]'>
