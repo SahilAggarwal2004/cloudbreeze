@@ -18,7 +18,7 @@ export default function ContextProvider({ children, router }) {
     const [type, setType] = useStorage('type', '')
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
-    const [files, setFiles] = useState()
+    const [files, setFiles] = useState([])
 
     async function logout(type) {
         if (type === 'manual') {

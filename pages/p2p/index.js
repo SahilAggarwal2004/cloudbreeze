@@ -8,10 +8,10 @@ import { peerOptions } from '../../constants';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { fileDetails, generateId } from '../../modules/functions';
 
-function reducer(state, { type = 'add', peer, data }) {
+function reducer(state, { type = 'add', peer, conn }) {
 	switch (type) {
 		case 'add':
-			return { ...state, [peer]: data }
+			return { ...state, [peer]: conn }
 		case 'remove':
 			const newState = {}
 			Object.entries(state).filter(conn => conn[0] !== peer).forEach(conn => newState[conn[0]] = conn[1])
@@ -30,6 +30,8 @@ export default function P2p({ router }) {
 	const [connections, dispatchConnections] = useReducer(reducer, {})
 	const connArr = Object.entries(connections)
 	const disable = progress > 0 || link
+	const { names, sizes, totalSize } = fileDetails(files);
+	const length = files.length
 
 	const verifyRoomId = event => setRoomId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
 	const reset = event => {
@@ -44,7 +46,6 @@ export default function P2p({ router }) {
 
 	async function handleSubmit(event) {
 		event.preventDefault()
-		const { names, sizes, totalSize } = fileDetails(files);
 		setProgress(100 / 8)
 		const Peer = require("peerjs").default
 		const peerId = roomId || Date.now()
@@ -58,8 +59,8 @@ export default function P2p({ router }) {
 			const peerName = conn.metadata || 'Anonymous User'
 			conn.on('open', () => {
 				if (connections[peerName]) return
-				conn.send({ names, totalSize, type: 'details' })
-				dispatchConnections({ peer: peerName, data: { files, names, sizes, totalSize, conn } })
+				conn.send({ name: names[0], length: names.length, totalSize, type: 'details' })
+				dispatchConnections({ peer: peerName, conn })
 				toast.success(`${peerName} connected`)
 			})
 			conn.on('close', () => {
@@ -71,13 +72,13 @@ export default function P2p({ router }) {
 		peer.on('close', reset)
 	}
 
-	useEffect(() => { if (!share) setFiles() }, [])
+	useEffect(() => { if (!share) setFiles([]) }, [])
 
 	return <div className='space-y-12'>
 		<div className='grid grid-cols-1 md:grid-cols-[50fr_0fr_50fr] items-center my-10 gap-x-4 gap-y-8 px-4 pb-5 text-sm sm:text-base'>
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">
 				<label htmlFor="files">File(s):</label>
-				{share && files ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
+				{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
 					: <input type="file" id='files' disabled={disable} required onChange={event => setFiles(event.target.files)} multiple />}
 				<label htmlFor="room-id">Room Id: </label>
 				<input type="text" id='room-id' value={roomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
@@ -103,7 +104,7 @@ export default function P2p({ router }) {
 		{Boolean(connArr.length) && <div className='space-y-8'>
 			<h2 className='text-lg md:text-xl font-medium text-center'>Active Users</h2>
 			<div className='flex items-center justify-center gap-5 pb-10 mx-5 flex-wrap'>
-				{connArr.map(conn => <Peer key={conn[0]} peer={conn[0]} data={conn[1]} />)}
+				{connArr.map(data => <Peer key={data[0]} peer={data[0]} conn={data[1]} names={names} sizes={sizes} totalSize={totalSize} />)}
 			</div>
 		</div>}
 	</div>

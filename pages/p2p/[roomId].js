@@ -38,10 +38,9 @@ export default function Id({ router }) {
                 setConnection(conn)
                 toast.success('Connection established')
             })
-            conn.on('data', ({ type, names, totalSize, file, name, size, initial = false }) => {
+            conn.on('data', ({ type, name, length, totalSize, file, size, initial = false }) => {
                 if (type === 'details') {
-                    const len = names.length
-                    setFile(len === 1 ? names[0] : `${len} files`)
+                    setFile(length === 1 ? name : `${length} files`)
                     setSize(totalSize)
                 } else if (type === 'file') {
                     const { byteLength } = file;

@@ -5,9 +5,10 @@ import { chunkSize } from '../constants'
 import { bytesToSize, speed } from '../modules/functions'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { useFileContext } from '../contexts/ContextProvider'
 
-export default function Peer({ peer, data }) {
-    const { files, names, sizes, totalSize, conn } = data
+export default function Peer({ peer, names, sizes, totalSize, conn }) {
+    const { files } = useFileContext();
     const [count, setCount] = useState(0)
     const [bytes, setBytes] = useState(0)
     const [totalBytes, setTotalBytes] = useState(0)

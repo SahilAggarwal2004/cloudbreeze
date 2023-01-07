@@ -21,6 +21,7 @@ export default function Upload({ router }) {
   const isUploading = upPercent >= 0
   const isUploaded = link && link !== 'error'
   const daysLimit = type === 'premium' ? 365 : type === 'normal' ? 30 : 3
+  const length = files.length
 
   const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
   const verifyDownloadLimit = event => setDownloadLimit(Math.abs(event.target.value) || '')
@@ -55,18 +56,18 @@ export default function Upload({ router }) {
     event.preventDefault()
     setUpPercent(0)
     let content, password = passwordRef.current.value;
-    if (files.length === 1) content = files[0]
+    if (length === 1) content = files[0]
     else {
       const zip = new JSZip();
-      for (let i = 0; i < files.length; i++) zip.file(files[i].name, files[i])
+      for (let i = 0; i < length; i++) zip.file(files[i].name, files[i])
       content = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
     }
 
     const data = new FormData();
     data.append('files', content) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
-    data.append('length', files.length)
+    data.append('length', length)
     const nameList = []
-    for (let i = 0; i < files.length; i++) nameList.push(files[i].name)
+    for (let i = 0; i < length; i++) nameList.push(files[i].name)
     if (fileIdRef) {
       if (options.includes(fileIdRef)) {
         toast.warning(`File Id cannot be ${fileIdRef}`);
@@ -75,7 +76,7 @@ export default function Upload({ router }) {
       }
       data.append('fileId', fileIdRef)
     }
-    if (files.length > 1) data.append('nameList', nameList)
+    if (length > 1) data.append('nameList', nameList)
     if (password) data.append('password', password)
     if (daysLimitRef) data.append('daysLimit', daysLimitRef)
     if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
@@ -99,7 +100,7 @@ export default function Upload({ router }) {
   }
 
   useEffect(() => {
-    if (!share) setFiles()
+    if (!share) setFiles([])
     navigator.serviceWorker?.addEventListener('message', ({ data: { files } }) => {
       setFiles(files)
       if (fileDetails(files).totalSize > limit * 1048576) router.push('/p2p?share=true')
@@ -111,7 +112,7 @@ export default function Upload({ router }) {
   return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
     <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
       <label htmlFor="files">File(s):</label>
-      {share && files ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div>
+      {share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
         : <input type="file" id='files' disabled={isUploading} required onChange={updateFile} multiple />}
 
       <label htmlFor="file-id">File Id: </label>
