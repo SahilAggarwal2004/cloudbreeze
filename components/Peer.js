@@ -25,7 +25,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
                 clearInterval(proceed)
                 if (i < files.length - 1) sendFile(i + 1)
             } else conn.send({ file: file.slice(bytesSent, bytesSent += chunkSize), type: 'file' })
-        }, 50 + +(navigator.userAgentData.mobile && 250));
+        }, 75 + +(navigator.userAgentData.mobile && 425));
     }
 
     function acceptData({ type, bytesReceived = 0, totalBytesReceived = 0 }) {
