@@ -25,7 +25,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
                 clearInterval(proceed)
                 if (i < files.length - 1) sendFile(i + 1)
             } else if (bytesSent - getStorage('bytes') < 20971520) conn.send({ file: file.slice(bytesSent, bytesSent += chunkSize), type: 'file' })
-        }, 15);
+        }, 20);
     }
 
     function acceptData({ type, bytesReceived = 0, totalBytesReceived = 0 }) {
