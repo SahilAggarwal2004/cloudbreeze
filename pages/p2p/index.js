@@ -41,7 +41,7 @@ export default function P2p({ router }) {
 
 	function enterRoom(event) {
 		event?.preventDefault()
-		router.push(generateId(`/p2p/${room.current.value}`))
+		router.push(`/p2p/${generateId(room.current.value, 'p2p')}`)
 	}
 
 	async function handleSubmit(event) {

@@ -29,9 +29,7 @@ export default function Id({ router }) {
         const Peer = require("peerjs").default
         const peer = new Peer(peerOptions)
         peer.on('open', () => {
-            let blob = new Blob([])
-            let bytes = 0
-            let totalBytes = 0
+            let fileName, fileSize, bytes, totalBytes = 0, blob = new Blob([]);
             const conn = peer.connect(roomId, { metadata: username })
             setTimeout(() => { if (!conn.open) setError("Connection couldn't be established. Retry again!") }, 5000);
             conn.on('open', () => {
@@ -46,6 +44,8 @@ export default function Id({ router }) {
                     const { byteLength } = file;
                     totalBytes += byteLength
                     if (initial) {
+                        fileName = name
+                        fileSize = size
                         blob = new Blob([file])
                         bytes = byteLength
                     } else {
@@ -54,7 +54,7 @@ export default function Id({ router }) {
                     }
                     conn.send({ type: 'proceed', bytesReceived: bytes, totalBytesReceived: totalBytes })
                     setBytes(old => old + byteLength)
-                    if (bytes === size) download(blob, name)
+                    if (bytes === fileSize) download(blob, fileName)
                 }
             })
             conn.on('close', () => toast.error("Peer disconnected"))

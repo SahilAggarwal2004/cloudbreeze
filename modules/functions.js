@@ -11,9 +11,9 @@ export function verifyUrl(value) {
     } catch { return { verified: false } }
 }
 
-export function generateId(value) {
+export function generateId(value, type) {
     const { verified, error } = verifyUrl(value)
-    if (verified) return value.split('file/')[1]
+    if (verified) return value.split(`${type}/`)[1]
     if (!error) return value
     toast.warning(error)
 }

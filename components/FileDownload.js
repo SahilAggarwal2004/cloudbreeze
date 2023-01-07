@@ -18,7 +18,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
 
     async function downloadFile(event) {
         event.preventDefault()
-        const fileId = fileIdFromUrl || generateId(fileRef.current.value)
+        const fileId = fileIdFromUrl || generateId(fileRef.current.value, 'file')
         if (!fileId) return;
         setDownPercent(0)
         const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value } })
