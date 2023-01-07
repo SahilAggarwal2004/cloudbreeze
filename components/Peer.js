@@ -16,6 +16,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
     const size = sizes[count]
 
     function sendFile(i = 0) {
+        const mobileDelay = +(navigator.userAgentData.mobile && 200);
         const file = files[i]
         const size = sizes[i]
         conn.send({ file: file.slice(0, chunkSize), name: names[i], size, type: 'file', initial: true })
@@ -31,7 +32,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
                 setBytes(bytesSent)
                 setTotalBytes(old => old + chunkSize)
             }
-        }, 50);
+        }, 50 + mobileDelay);
     }
 
     useEffect(() => {
