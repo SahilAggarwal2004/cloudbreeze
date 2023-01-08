@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { GoX } from 'react-icons/go'
-import { chunkSize } from '../constants'
 import { bytesToSize, speed } from '../modules/functions'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -16,7 +15,10 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
     const size = sizes[count]
 
     function sendFile(i = 0) {
-        const mobileDelay = +(navigator.userAgentData.mobile && 450);
+        const isMobile = navigator.userAgentData?.mobile || false
+        const mobileDelay = +(isMobile && 200)
+        const chunkSize = isMobile ? 524288 : 1048576
+        const minBuffer = 2 * chunkSize;
         const file = files[i]
         const size = sizes[i]
         conn.send({ file: file.slice(0, chunkSize), name: names[i], size, type: 'file', initial: true })
@@ -27,7 +29,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
                 clearInterval(proceed)
                 setBytes(size)
                 setCount(count => count + 1)
-            } else if (bufferedAmount < 2097152 && totalBytes < totalSize) {
+            } else if (bufferedAmount < minBuffer && totalBytes < totalSize) {
                 conn.send({ file: file.slice(bytesSent, bytesSent += chunkSize), type: 'file' })
                 setBytes(bytesSent)
                 setTotalBytes(old => old + chunkSize)

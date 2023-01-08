@@ -6,4 +6,3 @@ export const options = ['upload', 'download']
 export const types = ['normal', 'premium']
 export const limit = 100 // In MB
 export const peerOptions = { host: 'cloudbreeze-peer.onrender.com', secure: true }
-export const chunkSize = 1048576 // In bytes (1 MB)
