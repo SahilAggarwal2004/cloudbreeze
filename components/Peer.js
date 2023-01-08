@@ -14,53 +14,41 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
     const [totalBytes, setTotalBytes] = useState(0)
     const [time, setTime] = useState(0)
     const size = sizes[count]
-    const isMobile = () => navigator.userAgentData?.mobile
 
     function sendFile(i = 0) {
-        const mobile = isMobile();
-        const duration = mobile ? 500 : 55
+        const isMobile = navigator.userAgentData?.mobile
+        const duration = isMobile ? 500 : 50
         const minBuffer = 2 * chunkSize;
         const file = files[i]
         const size = sizes[i]
-        conn.send({ file: file.slice(0, chunkSize), name: names[i], size, type: 'file', initial: true, progress: mobile })
+        conn.send({ file: file.slice(0, chunkSize), name: names[i], size, type: 'file', initial: true })
         let bytesSent = chunkSize
         const proceed = setInterval(() => {
             const bufferedAmount = conn.dataChannel?.bufferedAmount
             if (bufferedAmount === undefined || bytesSent >= size) {
                 clearInterval(proceed)
-                if (mobile) return
                 setBytes(size)
                 setCount(count => count + 1)
             } else if (bufferedAmount < minBuffer && totalBytes < totalSize) {
                 conn.send({ file: file.slice(bytesSent, bytesSent += chunkSize), type: 'file' })
-                if (mobile) return
                 setBytes(bytesSent)
                 setTotalBytes(old => old + chunkSize)
             }
         }, duration);
     }
 
-    function acceptData({ type, bytes, totalBytes }) {
-        if (type === 'request') {
+    useEffect(() => {
+        conn.on('data', ({ type }) => {
+            if (type !== 'request') return
             toast.success(`Transferring file(s) to ${peer}`)
             setTime(Date.now())
             sendFile()
-        } else if (type === 'progress') {
-            setBytes(bytes)
-            setTotalBytes(totalBytes)
-            if (bytes >= size) setCount(count => count + 1)
-        }
-    }
-
-    useEffect(() => { conn.on('data', acceptData) }, [])
+        })
+    }, [])
 
     useEffect(() => {
         if (!count) return
         if (count >= names.length) return setTotalBytes(totalSize)
-        if (isMobile()) {
-            conn.removeAllListeners('data')
-            conn.on('data', acceptData)
-        }
         sendFile(count)
     }, [count])
 
