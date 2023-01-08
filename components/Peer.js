@@ -18,8 +18,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
 
     function sendFile(i = 0) {
         const mobile = isMobile();
-        const duration = mobile ? 500 : 50
-        const minBuffer = 2 * chunkSize;
+        const duration = mobile ? 400 : 50
         const file = files[i]
         const size = sizes[i]
         conn.send({ file: file.slice(0, chunkSize), name: names[i], size, type: 'file', initial: true, progress: mobile })
@@ -31,7 +30,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
                 if (mobile) return
                 setBytes(size)
                 setCount(count => count + 1)
-            } else if (bufferedAmount < minBuffer && totalBytes < totalSize) {
+            } else if (bufferedAmount < chunkSize && totalBytes < totalSize) {
                 conn.send({ file: file.slice(bytesSent, bytesSent += chunkSize), type: 'file' })
                 if (mobile) return
                 setBytes(bytesSent)
