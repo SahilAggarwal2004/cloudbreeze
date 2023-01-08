@@ -14,7 +14,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
     const [totalBytes, setTotalBytes] = useState(0)
     const [time, setTime] = useState(0)
     const size = sizes[count]
-    const isMobile = () => true || navigator.userAgentData?.mobile
+    const isMobile = () => navigator.userAgentData?.mobile
 
     function sendFile(i = 0) {
         const mobile = isMobile();
