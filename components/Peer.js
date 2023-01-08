@@ -5,7 +5,6 @@ import { bytesToSize, speed } from '../modules/functions'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useFileContext } from '../contexts/ContextProvider'
-import { chunkSize } from '../constants';
 
 export default function Peer({ peer, names, sizes, totalSize, conn }) {
     const { files } = useFileContext()
@@ -18,6 +17,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
     function sendFile(i = 0) {
         const isMobile = navigator.userAgentData?.mobile
         const duration = isMobile ? 500 : 50
+        const chunkSize = isMobile ? 262144 : 1048576
         const minBuffer = 2 * chunkSize;
         const file = files[i]
         const size = sizes[i]
