@@ -29,7 +29,7 @@ export default function Id({ router }) {
         const Peer = require("peerjs").default
         const peer = new Peer(peerOptions)
         peer.on('open', () => {
-            let fileName, fileSize, bytes, blob = new Blob([]);
+            let fileName, fileSize, bytes, totalBytes = 0, blob = new Blob([]);
             const conn = peer.connect(roomId, { metadata: username })
             setTimeout(() => { if (!conn.open) setError("Connection couldn't be established. Retry again!") }, 5000);
             conn.on('open', () => {
@@ -42,6 +42,7 @@ export default function Id({ router }) {
                     setSize(totalSize)
                 } else if (type === 'file') {
                     const { byteLength } = file;
+                    totalBytes += byteLength
                     if (initial) {
                         fileName = name
                         fileSize = size
@@ -51,12 +52,17 @@ export default function Id({ router }) {
                         blob = new Blob([blob, file])
                         bytes += byteLength
                     }
+                    conn.send({ type: 'proceed', bytesReceived: bytes, totalBytesReceived: totalBytes })
                     setBytes(old => old + byteLength)
                     if (bytes === fileSize) download(blob, fileName)
                 }
             })
             conn.on('close', () => toast.error("Peer disconnected"))
         })
+        return () => {
+            peer.removeAllListeners()
+            peer.destroy()
+        }
     }, [])
 
     return <>
@@ -67,7 +73,7 @@ export default function Id({ router }) {
             <span>File:</span>
             <span className='text-right'>{file}</span>
             <span>Size:</span>
-            <span className='text-right'>{bytesToSize(size, size, true)}</span>
+            <span className='text-right'>{bytesToSize(size, true)}</span>
             <button className='primary-button' disabled={isDownloading} onClick={request}>Download File</button>
             {isDownloading && <>
                 <BarProgress percent={downPercent} className='col-span-2 max-w-[100%]' />
