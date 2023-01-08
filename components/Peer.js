@@ -16,8 +16,8 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
 
     function sendFile(i = 0) {
         const isMobile = navigator.userAgentData?.mobile
-        const duration = isMobile ? 300 : 50
-        const chunkSize = isMobile ? 262144 : 1048576
+        const duration = isMobile ? 120 : 50
+        const chunkSize = isMobile ? 131072 : 1048576
         const minBuffer = 2 * chunkSize;
         const file = files[i]
         const size = sizes[i]
@@ -57,7 +57,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
         <h4 className='font-medium'>{peer}</h4>
         <CircularProgressbarWithChildren value={bytes} maxValue={size} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
-                <div>{bytesToSize(totalBytes)} / {bytesToSize(totalSize, true)}</div>
+                <div>{bytesToSize(totalBytes, totalSize)} / {bytesToSize(totalSize, totalSize, true)}</div>
                 <div>{count} / {names.length} files transferred</div>
                 <div>Speed: {speed(totalBytes, totalSize, time)}/s</div>
             </div>
