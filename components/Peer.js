@@ -16,7 +16,7 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
 
     function sendFile(i = 0) {
         const isMobile = navigator.userAgentData?.mobile
-        const duration = isMobile ? 120 : 50
+        const duration = isMobile ? 200 : 50
         const chunkSize = isMobile ? 131072 : 1048576
         const minBuffer = 2 * chunkSize;
         const file = files[i]
