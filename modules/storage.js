@@ -15,7 +15,7 @@ export const getStorage = (key, fallbackValue, local = true) => {
 const removeStorage = (key, local = true) => (local ? localStorage : sessionStorage).removeItem(key)
 
 export const resetStorage = (local = true) => {
-    setStorage('name', randomName(), local)
+    setStorage('username', randomName(), local)
     setStorage('type', 'guest', local)
     removeStorage('csrftoken', local)
 }
