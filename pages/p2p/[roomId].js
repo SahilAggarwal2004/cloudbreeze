@@ -4,12 +4,11 @@ import { toast } from 'react-toastify';
 import BarProgress from '../../components/BarProgress';
 import Loader from '../../components/Loader';
 import { peerOptions } from '../../constants';
-import { useFileContext } from '../../contexts/ContextProvider';
 import { bytesToSize, download, speed } from '../../modules/functions';
+import { getStorage } from '../../modules/storage';
 
 export default function Id({ router }) {
     const { roomId } = router.query
-    const { username } = useFileContext();
     const [connection, setConnection] = useState()
     const [file, setFile] = useState()
     const [size, setSize] = useState()
@@ -30,7 +29,7 @@ export default function Id({ router }) {
         const peer = new Peer(peerOptions)
         peer.on('open', () => {
             let fileName, fileSize, bytes, totalBytes = 0, blob = new Blob([]);
-            const conn = peer.connect(roomId, { metadata: username })
+            const conn = peer.connect(roomId, { metadata: getStorage('username') })
             setTimeout(() => { if (!conn.open) setError("Connection couldn't be established. Retry again!") }, 5000);
             conn.on('open', () => {
                 setConnection(conn)

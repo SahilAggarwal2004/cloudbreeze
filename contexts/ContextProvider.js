@@ -5,6 +5,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { fetchHistory } from '../constants';
 import useStorage from '../hooks/useStorage';
+import { getStorage, resetStorage, setStorage } from '../modules/storage';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 
@@ -14,8 +15,6 @@ export const useFileContext = () => useContext(Context)
 export default function ContextProvider({ children, router }) {
     const [uploadFiles, setUploadFiles] = useStorage('upload-files', [])
     const [downloadFiles, setDownloadFiles] = useStorage('download-files', [])
-    const [username, setUsername] = useStorage('username', '')
-    const [type, setType] = useStorage('type', '')
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
     const [files, setFiles] = useState([])
@@ -26,8 +25,7 @@ export default function ContextProvider({ children, router }) {
             if (!success) return;
             toast.success('Logged out successfully')
         } else router.push('/account')
-        setUsername(randomName())
-        setType('guest')
+        resetStorage()
         setUploadFiles([])
         setDownloadFiles([])
     }
@@ -38,7 +36,7 @@ export default function ContextProvider({ children, router }) {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
                 url, method, withCredentials: true, data, ...options,
-                headers: { authtoken, 'Content-Type': type }
+                headers: { authtoken, csrftoken: getStorage('csrftoken'), 'Content-Type': type }
             })
             if (showProgress) setProgress(100)
             json = response.data;
@@ -67,15 +65,15 @@ export default function ContextProvider({ children, router }) {
         }
     }
 
-    useEffect(() => { if (!username) setUsername(randomName()) }, [])
+    useEffect(() => { getStorage('username', randomName()) }, [])
 
     useEffect(() => {
-        if (!type) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false }).then(({ success }) => success && setType('guest'))
+        if (!getStorage('type', '')) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false }).then(({ success }) => success && setStorage('type', 'guest'))
         else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
     }, [router.pathname])
 
 
-    return <Context.Provider value={{ username, setUsername, type, setType, uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles }}>
+    return <Context.Provider value={{ uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles }}>
         {children}
     </Context.Provider>
 }

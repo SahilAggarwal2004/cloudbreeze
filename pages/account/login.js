@@ -3,20 +3,22 @@ import Link from 'next/link'
 import { useFileContext } from '../../contexts/ContextProvider';
 import Logo from '../../components/Logo';
 import Password from '../../components/Password';
+import { setStorage } from '../../modules/storage';
 
 export default function Login({ router }) {
-  const { setUsername, setUploadFiles, setDownloadFiles, setType, fetchApp } = useFileContext()
+  const { setUploadFiles, setDownloadFiles, fetchApp } = useFileContext()
   const email = useRef();
   const password = useRef();
 
   async function submit(event) {
     event.preventDefault()
-    const { success, name, type, files } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
+    const { success, name, type, csrftoken, files } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
     if (success) {
-      setUsername(name)
       setUploadFiles(files)
-      setType(type)
       setDownloadFiles([])
+      setStorage('username', name)
+      setStorage('type', type)
+      setStorage('csrftoken', csrftoken)
       router.push('/')
     }
   }

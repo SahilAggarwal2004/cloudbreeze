@@ -14,8 +14,8 @@ export default function Peer({ peer, names, sizes, totalSize, conn }) {
     const [totalBytes, setTotalBytes] = useState(0)
     const [time, setTime] = useState(0)
     const size = sizes[count]
-    const getBytes = () => getStorage(`bytes-${peer}`, 0)
-    const setBytes = value => setStorage(`bytes-${peer}`, value)
+    const getBytes = () => getStorage(`bytes-${peer}`, 0, false)
+    const setBytes = value => setStorage(`bytes-${peer}`, value, false)
 
     function sendFile(i = 0) {
         const file = files[i]

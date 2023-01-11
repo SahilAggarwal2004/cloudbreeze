@@ -8,10 +8,12 @@ import { useFileContext } from '../../contexts/ContextProvider';
 import { limit, options } from '../../constants';
 import BarProgress from '../../components/BarProgress';
 import { fileDetails } from '../../modules/functions';
+import { getStorage } from '../../modules/storage';
 
 export default function Upload({ router }) {
-  const { type, uploadFiles, setUploadFiles, fetchApp, files, setFiles } = useFileContext()
+  const { uploadFiles, setUploadFiles, fetchApp, files, setFiles } = useFileContext()
   const { share } = router.query
+  const type = getStorage('type')
   const passwordRef = useRef()
   const [fileIdRef, setFileId] = useState()
   const [daysLimitRef, setDaysLimit] = useState()
