@@ -8,10 +8,10 @@ import { peerOptions } from '../../constants';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { fileDetails, generateId } from '../../modules/functions';
 
-function reducer(state, { type = 'add', peer, conn }) {
+function reducer(state, { type = 'add', peer, name, conn }) {
 	switch (type) {
 		case 'add':
-			return { ...state, [peer]: conn }
+			return { ...state, [peer]: { name, conn } }
 		case 'remove':
 			const newState = {}
 			Object.entries(state).filter(conn => conn[0] !== peer).forEach(conn => newState[conn[0]] = conn[1])
@@ -56,15 +56,16 @@ export default function P2p({ router }) {
 			setProgress(100)
 		})
 		peer.on('connection', conn => {
+			const peer = conn.peer
 			const peerName = conn.metadata || 'Anonymous User'
 			conn.on('open', () => {
 				if (connections[peerName]) return
 				conn.send({ name: names[0], length: names.length, totalSize, type: 'details' })
-				dispatchConnections({ peer: peerName, conn })
+				dispatchConnections({ peer, name: peerName, conn })
 				toast.success(`${peerName} connected`)
 			})
 			conn.on('close', () => {
-				dispatchConnections({ type: 'remove', peer: peerName })
+				dispatchConnections({ type: 'remove', peer })
 				toast.error(`${peerName} disconnected`)
 			})
 		})
@@ -104,7 +105,7 @@ export default function P2p({ router }) {
 		{Boolean(connArr.length) && <div className='space-y-8'>
 			<h2 className='text-lg md:text-xl font-medium text-center'>Active Users</h2>
 			<div className='flex items-center justify-center gap-5 pb-10 mx-5 flex-wrap'>
-				{connArr.map(data => <Peer key={data[0]} peer={data[0]} conn={data[1]} names={names} sizes={sizes} totalSize={totalSize} />)}
+				{connArr.map(conn => <Peer key={conn[0]} peer={conn[0]} data={conn[1]} names={names} sizes={sizes} totalSize={totalSize} />)}
 			</div>
 		</div>}
 	</div>
