@@ -19,30 +19,28 @@ export default function Peer({ names, sizes, totalSize, data }) {
     const size = sizes[count]
 
     function sendFile() {
-        const delay = navigator.userAgentData?.mobile ? 1000 : 75
+        let bytesSent = chunkSize
         const chunk = file.slice(0, chunkSize)
-        conn.send({ file: chunk, name: names[count], size, type: 'file', initial: true })
-        let bytesSent = chunk.size
-        setBytes(bytesSent)
-        setTotalBytes(old => old + bytesSent)
+        conn.send({ chunk, name: names[count], size, type: 'file', initial: true })
         const proceed = setInterval(() => {
-            if (bytesSent >= size || !channel) {
-                clearInterval(proceed)
-                setCount(old => old + 1)
-            } else if (channel.bufferedAmount < minBuffer) {
+            if (bytesSent >= size || !channel) clearInterval(proceed)
+            else if (channel.bufferedAmount < minBuffer) {
                 const chunk = file.slice(bytesSent, bytesSent += chunkSize)
-                conn.send({ file: chunk, type: 'file' })
-                setBytes(bytesSent)
-                setTotalBytes(old => old + chunk.size)
+                conn.send({ chunk, type: 'file' })
             }
-        }, delay);
+        }, 75);
     }
 
-    function acceptData({ type }) {
-        if (type !== 'request') return
-        toast.success(`Transferring file(s) to ${name}`)
-        setTime(Date.now())
-        sendFile()
+    function acceptData({ type, bytes, totalBytes }) {
+        if (type === 'request') {
+            toast.success(`Transferring file(s) to ${name}`)
+            setTime(Date.now())
+            sendFile()
+        } else if (type === 'progress') {
+            setBytes(bytes)
+            setTotalBytes(totalBytes)
+            if (bytes >= size) setCount(old => old + 1)
+        }
     }
 
     useEffect(() => {

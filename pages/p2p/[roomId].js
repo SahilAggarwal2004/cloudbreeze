@@ -28,28 +28,30 @@ export default function Id({ router }) {
         const Peer = require("peerjs").default
         const peer = new Peer(peerOptions)
         peer.on('open', () => {
-            let fileName, fileSize, bytes, blob = new Blob([]);
+            let fileName, fileSize, bytes, totalBytes = 0, blob = new Blob([]);
             const conn = peer.connect(roomId, { metadata: getStorage('username') })
             setTimeout(() => { if (!conn.open) setError("Connection couldn't be established. Retry again!") }, 5000);
             conn.on('open', () => {
                 setConnection(conn)
                 toast.success('Connection established')
             })
-            conn.on('data', ({ type, name, length, totalSize, file, size, initial = false }) => {
+            conn.on('data', ({ type, name, length, totalSize, chunk, size, initial = false }) => {
                 if (type === 'details') {
                     setFile(length === 1 ? name : `${length} files`)
                     setSize(totalSize)
                 } else if (type === 'file') {
-                    const { byteLength } = file;
+                    const { byteLength } = chunk;
+                    totalBytes += byteLength
                     if (initial) {
                         fileName = name
                         fileSize = size
-                        blob = new Blob([file])
+                        blob = new Blob([chunk])
                         bytes = byteLength
                     } else {
-                        blob = new Blob([blob, file])
+                        blob = new Blob([blob, chunk])
                         bytes += byteLength
                     }
+                    conn.send({ type: 'progress', bytes, totalBytes })
                     setBytes(old => old + byteLength)
                     if (bytes === fileSize) download(blob, fileName)
                 }
