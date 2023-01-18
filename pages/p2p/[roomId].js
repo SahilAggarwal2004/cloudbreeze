@@ -68,7 +68,7 @@ export default function Id({ router }) {
         {error ? <div className='center space-y-5 text-center'>
             <h3 className='text-lg'>{error}</h3>
             <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={() => window.location.reload()}>Retry</button>
-        </div> : file ? <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] x-center grid grid-cols-[auto_1fr] gap-2 px-2'>
+        </div> : file ? <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full x-center grid grid-cols-[auto_1fr] gap-2 px-2'>
             <span>File:</span>
             <span className='text-right'>{file}</span>
             <span>Size:</span>
