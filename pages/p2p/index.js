@@ -105,7 +105,7 @@ export default function P2p({ router }) {
 		{Boolean(connArr.length) && <div className='space-y-8'>
 			<h2 className='text-lg md:text-xl font-medium text-center'>Active Users</h2>
 			<div className='flex items-center justify-center gap-5 pb-10 mx-5 flex-wrap'>
-				{connArr.map(conn => <Peer key={conn[0]} peer={conn[0]} data={conn[1]} names={names} sizes={sizes} totalSize={totalSize} />)}
+				{connArr.map(conn => <Peer key={conn[0]} data={conn[1]} names={names} sizes={sizes} totalSize={totalSize} />)}
 			</div>
 		</div>}
 	</div>

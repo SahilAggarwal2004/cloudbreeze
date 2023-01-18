@@ -1,45 +1,47 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { GoX } from 'react-icons/go'
-import { chunkSize } from '../constants'
+import { chunkSize, minBuffer } from '../constants'
 import { bytesToSize, speed } from '../modules/functions'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useFileContext } from '../contexts/ContextProvider'
-import { getStorage, setStorage } from '../modules/storage'
 
-export default function Peer({ peer, names, sizes, totalSize, data }) {
+export default function Peer({ names, sizes, totalSize, data }) {
     const { name, conn } = data
+    const channel = conn.dataChannel
     const { files } = useFileContext()
     const [count, setCount] = useState(0)
+    const [bytes, setBytes] = useState(0)
     const [totalBytes, setTotalBytes] = useState(0)
     const [time, setTime] = useState(0)
+    const file = files[count]
     const size = sizes[count]
-    const getBytes = () => getStorage(`bytes-${peer}`, 0, false)
-    const setBytes = value => setStorage(`bytes-${peer}`, value, false)
 
-    function sendFile(i = 0) {
-        const file = files[i]
-        const size = sizes[i]
-        setBytes(0)
-        conn.send({ file: file.slice(0, chunkSize), name: names[i], size, type: 'file', initial: true })
-        let bytesSent = chunkSize
+    function sendFile() {
+        const chunk = file.slice(0, chunkSize)
+        conn.send({ file: chunk, name: names[count], size, type: 'file', initial: true })
+        let bytesSent = chunk.size
+        setBytes(bytesSent)
+        setTotalBytes(old => old + bytesSent)
         const proceed = setInterval(() => {
-            if (bytesSent >= size) clearInterval(proceed)
-            else if (bytesSent - getBytes() < 20971520) conn.send({ file: file.slice(bytesSent, bytesSent += chunkSize), type: 'file' })
-        }, 25);
+            if (bytesSent >= size || !channel) {
+                clearInterval(proceed)
+                setCount(old => old + 1)
+            } else if (channel.bufferedAmount < minBuffer) {
+                const chunk = file.slice(bytesSent, bytesSent += chunkSize)
+                conn.send({ file: chunk, type: 'file' })
+                setBytes(bytesSent)
+                setTotalBytes(old => old + chunk.size)
+            }
+        }, 75);
     }
 
-    function acceptData({ type, bytesReceived = 0, totalBytesReceived = 0 }) {
-        if (type === 'request') {
-            toast.success(`Transferring file(s) to ${name}`)
-            setTime(Date.now())
-            sendFile()
-        } else if (type === 'proceed') {
-            setBytes(bytesReceived)
-            setTotalBytes(totalBytesReceived)
-            if (bytesReceived >= size) setCount(count + 1)
-        }
+    function acceptData({ type }) {
+        if (type !== 'request') return
+        toast.success(`Transferring file(s) to ${name}`)
+        setTime(Date.now())
+        sendFile()
     }
 
     useEffect(() => {
@@ -51,18 +53,12 @@ export default function Peer({ peer, names, sizes, totalSize, data }) {
         }
     }, [])
 
-    useEffect(() => {
-        if (!count) return
-        conn.removeAllListeners('data')
-        if (totalBytes >= totalSize) return
-        conn.on('data', acceptData)
-        sendFile(count)
-    }, [count])
+    useEffect(() => { if (count && totalBytes < totalSize) sendFile() }, [count])
 
     return <div className='relative flex flex-col justify-center p-4 pb-0 border rounded text-center bg-gray-50 hover:bg-transparent hover:shadow-lg transition-all duration-300 min-w-[270px]'>
         <GoX className='absolute top-2 right-2 scale-110' onClick={() => conn.close()} />
         <h4 className='font-medium'>{name}</h4>
-        <CircularProgressbarWithChildren value={getBytes()} maxValue={size} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
+        <CircularProgressbarWithChildren value={bytes} maxValue={size} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
                 <div>{bytesToSize(totalBytes, totalSize)} / {bytesToSize(totalSize, totalSize, true)}</div>
                 <div>{count} / {names.length} files transferred</div>
