@@ -18,7 +18,7 @@ export default function Navbar() {
                 <Link href="/"><h1 className='text-lg xs:text-xl cursor-pointer select-none font-medium' title='Home'>CloudBreeze</h1></Link>
             </div>
             <div className='flex space-x-4 xs:space-x-5 sm:space-x-6'>
-                <Link href="/account/history"><a><FaHistory className='hidden sm:block scale-110 sm:scale-125' title='History' /></a></Link>
+                <Link href="/account/history?filter=upload"><a><FaHistory className='hidden sm:block scale-110 sm:scale-125' title='History' /></a></Link>
                 <Link href="/file/upload"><a><FaUpload className='scale-110 sm:scale-125' title='Upload File' /></a></Link>
                 <Link href="/file/download"><a><FaDownload className='scale-110 sm:scale-125' title='Download File' /></a></Link>
                 <Link href="/p2p"><a><GrSend className='invert scale-110 sm:scale-125' title='Peer-to-peer Transfer' /></a></Link>
