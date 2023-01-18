@@ -34,7 +34,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
                 setBytes(bytesSent)
                 setTotalBytes(old => old + chunk.size)
             }
-        }, 75);
+        }, 125);
     }
 
     function acceptData({ type }) {
