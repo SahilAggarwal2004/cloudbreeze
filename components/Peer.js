@@ -19,7 +19,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
     const size = sizes[count]
 
     function sendFile() {
-        const delay = navigator.userAgentData?.mobile ? 500 : 75
+        const delay = navigator.userAgentData?.mobile ? 1000 : 75
         const chunk = file.slice(0, chunkSize)
         conn.send({ file: chunk, name: names[count], size, type: 'file', initial: true })
         let bytesSent = chunk.size
