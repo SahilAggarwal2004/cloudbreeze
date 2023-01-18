@@ -2,10 +2,9 @@
 import { clientsClaim } from 'workbox-core'
 import { precacheAndRoute } from 'workbox-precaching'
 import { registerRoute, setDefaultHandler } from 'workbox-routing'
-import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
+import { CacheFirst, NetworkFirst, NetworkOnly } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { offlineFallback } from 'workbox-recipes'
-import { filePaths } from './constants'
 
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
@@ -26,15 +25,13 @@ const urlsToCache = self.__WB_MANIFEST.concat([
 ]).filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
 
 precacheAndRoute(urlsToCache)
-setDefaultHandler(new StaleWhileRevalidate())
+setDefaultHandler(new NetworkOnly())
 offlineFallback({ pageFallback: '/_offline' });
 
 registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
     cacheName: 'manifest',
     plugins: [new CacheableResponsePlugin({ statuses: [200] })]
 }))
-
-registerRoute(({ url: { pathname } }) => (pathname.startsWith('/file') || pathname.startsWith('/p2p')) && !filePaths.includes(pathname), new NetworkOnly())
 
 registerRoute(({ request }) => request.destination === 'image', new CacheFirst({
     cacheName: 'images',
