@@ -10,7 +10,20 @@ import { filePaths } from './constants'
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
 
-const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
+const revision = crypto.randomUUID()
+const urlsToCache = self.__WB_MANIFEST.concat([
+    { url: '/', revision },
+    { url: '/account', revision },
+    { url: '/file/upload', revision },
+    { url: '/file/download', revision },
+    { url: '/p2p', revision },
+    { url: '/account/history', revision },
+    { url: '/account/history?filter=upload', revision },
+    { url: '/account/history?filter=download', revision },
+    { url: '/account/signup', revision },
+    { url: '/account/login', revision },
+    { url: '/account/forgot', revision }
+]).filter(({ url }) => !url.includes('middleware') && url !== '/manifest.json')
 
 precacheAndRoute(urlsToCache)
 setDefaultHandler(new StaleWhileRevalidate())
