@@ -19,7 +19,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
     const size = sizes[count]
 
     function sendFile() {
-        const delay = navigator.userAgentData?.mobile ? 400 : 75
+        const delay = navigator.userAgentData?.mobile ? 500 : 75
         let bytesSent = chunkSize
         const chunk = file.slice(0, chunkSize)
         conn.send({ chunk, name: names[count], size, type: 'file', initial: true })
@@ -53,7 +53,13 @@ export default function Peer({ names, sizes, totalSize, data }) {
         }
     }, [])
 
-    useEffect(() => { if (count && totalBytes < totalSize) sendFile() }, [count])
+    useEffect(() => {
+        if (!count) return
+        conn.removeAllListeners('data')
+        if (totalBytes >=totalSize) return
+        conn.on('data', acceptData)
+        sendFile()
+    }, [count])
 
     return <div className='relative flex flex-col justify-center p-4 pb-0 border rounded text-center bg-gray-50 hover:bg-transparent hover:shadow-lg transition-all duration-300 min-w-[270px]'>
         <GoX className='absolute top-2 right-2 scale-110' onClick={() => conn.close()} />
