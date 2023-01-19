@@ -9,7 +9,7 @@ const nextConfig = {
 module.exports = withWorkbox({
   workbox: {
     dest: 'public',
-    swSrc: './sw.js'
+    swSrc: './workers/sw.js'
   },
   ...nextConfig
 })

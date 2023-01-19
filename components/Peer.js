@@ -32,20 +32,19 @@ export default function Peer({ names, sizes, totalSize, data }) {
         }, delay);
     }
 
-    function acceptData({ type, bytes, totalBytes }) {
+    function acceptData({ type, bytes }) {
         if (type === 'request') {
             toast.success(`Transferring file(s) to ${name}`)
             setTime(Date.now())
             sendFile()
         } else if (type === 'progress') {
             setBytes(bytes)
-            setTotalBytes(totalBytes)
+            setTotalBytes(totalBytes + bytes)
             if (bytes >= size) setCount(old => old + 1)
         }
     }
 
     useEffect(() => {
-        setBytes(0)
         conn.on('data', acceptData)
         return () => {
             conn.removeAllListeners()
@@ -56,7 +55,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
     useEffect(() => {
         if (!count) return
         conn.removeAllListeners('data')
-        if (totalBytes >=totalSize) return
+        if (totalBytes >= totalSize) return
         conn.on('data', acceptData)
         sendFile()
     }, [count])
