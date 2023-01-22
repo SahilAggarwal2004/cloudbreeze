@@ -5,27 +5,21 @@ import { registerRoute, setDefaultHandler } from 'workbox-routing'
 import { CacheFirst, NetworkFirst, NetworkOnly } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { offlineFallback } from 'workbox-recipes'
+import { pagesToCache } from '../constants'
 
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
 
 const revision = crypto.randomUUID()
-const urlsToCache = self.__WB_MANIFEST.concat([
-    { url: '/', revision },
-    { url: '/account', revision },
-    { url: '/file/upload', revision },
-    { url: '/file/download', revision },
-    { url: '/p2p', revision },
-    { url: '/account/history?filter=upload', revision },
-    { url: '/account/history?filter=download', revision },
-    { url: '/account/signup', revision },
-    { url: '/account/login', revision },
-    { url: '/account/forgot', revision }
-]).filter(({ url }) => !url.includes('middleware') && !url.startsWith('/icons') && url !== '/manifest.json')
+const urlsToCache = self.__WB_MANIFEST
+    .concat(pagesToCache.map(page => ({ url: page, revision })))
+    .filter(({ url }) => !(url.startsWith('/_next/server') || url.startsWith('/icons') || url === '/manifest.json'))
 
 precacheAndRoute(urlsToCache)
 setDefaultHandler(new NetworkOnly())
 offlineFallback({ pageFallback: '/_offline' });
+
+registerRoute(({ url }) => pagesToCache.includes(url.pathname), new CacheFirst())
 
 registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
     cacheName: 'manifest',
