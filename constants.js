@@ -1,4 +1,4 @@
-export const pagesToCache = ['/', '/account', '/file/upload', '/file/download', '/p2p', '/account/history?filter=upload', '/account/history?filter=download', '/account/signup', '/account/login', '/account/forgot']
+export const pages = ['/', '/account', '/file/upload', '/file/download', '/p2p', '/account/history?filter=upload', '/account/history?filter=download', '/account/signup', '/account/login', '/account/forgot']
 export const fetchHistory = ['/account', '/account/history']
 export const hideNavbar = ['/_error', '/account/confirm/[token]']
 export const showModal = ['/account', '/account/history', '/file/download', '/p2p']
