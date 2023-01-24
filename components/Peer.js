@@ -39,7 +39,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
             sendFile()
         } else if (type === 'progress') {
             setBytes(bytes)
-            setTotalBytes(totalBytes + bytes)
+            setTotalBytes(old => old + bytes)
             if (bytes >= size) setCount(old => old + 1)
         }
     }
