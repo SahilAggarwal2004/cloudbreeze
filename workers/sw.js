@@ -13,10 +13,13 @@ self.skipWaiting()
 const urlsToCache = self.__WB_MANIFEST.filter(({ url }) => !(url.startsWith('/_next/server') || url.startsWith('/icons') || url === '/manifest.json'))
 
 precacheAndRoute(urlsToCache)
-setDefaultHandler(new StaleWhileRevalidate())
+setDefaultHandler(new NetworkOnly())
 offlineFallback({ pageFallback: '/_offline' });
 
-registerRoute(({ url: { pathname } }) => (pathname.startsWith('/file') || pathname.startsWith('/p2p')) && !pages.includes(pathname), new NetworkOnly())
+registerRoute(({ url }) => pages.includes(url.pathname), new StaleWhileRevalidate({
+    cacheName: 'pages',
+    plugins: [new CacheableResponsePlugin({ statuses: [200] })]
+}))
 
 registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
     cacheName: 'manifest',
