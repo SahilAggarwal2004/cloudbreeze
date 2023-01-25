@@ -1,8 +1,9 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import Link from 'next/link'
 import { useFileContext } from '../../contexts/ContextProvider';
 import Logo from '../../components/Logo';
 import Password from '../../components/Password';
+import Head from 'next/head';
 
 export default function Signup({ router }) {
     const { fetchApp } = useFileContext()

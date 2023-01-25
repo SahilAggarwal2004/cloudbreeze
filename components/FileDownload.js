@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { File } from 'megajs';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';

@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import Head from 'next/head'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { options } from '../../constants'
 import { useFileContext } from '../../contexts/ContextProvider'
 

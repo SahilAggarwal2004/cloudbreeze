@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { useFileContext } from '../../contexts/ContextProvider'
 import { getStorage, setStorage } from '../../modules/storage'
 import { BsPatchCheckFill } from 'react-icons/bs'
 import { types } from '../../constants'
+import Head from 'next/head'
 
 export default function Account() {
     const { uploadFiles, downloadFiles, logout, setModal } = useFileContext()

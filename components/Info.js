@@ -1,4 +1,3 @@
-import React from 'react'
 import QRCode from "react-qr-code";
 import { useFileContext } from '../contexts/ContextProvider';
 import { toast } from 'react-toastify';

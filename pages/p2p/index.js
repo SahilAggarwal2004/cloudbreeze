@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useReducer, useRef, useState } from 'react'
+import Head from 'next/head';
+import { useEffect, useReducer, useRef, useState } from 'react'
 import { FaQrcode } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Info from '../../components/Info';

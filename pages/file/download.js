@@ -1,4 +1,4 @@
-import React from 'react'
+import Head from 'next/head'
 import FileDownload from '../../components/FileDownload'
 
 export default function Download() {

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useFileContext } from '../contexts/ContextProvider'
 import Info from './Info'
 import QrScanner from './QrScanner'

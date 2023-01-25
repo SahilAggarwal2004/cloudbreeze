@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { QrReader } from 'react-qr-reader'
 import { toast } from 'react-toastify'
 import { useFileContext } from '../contexts/ContextProvider'

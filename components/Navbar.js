@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import React from 'react'
 import { FaUpload, FaDownload, FaUserAlt, FaHistory } from 'react-icons/fa'
 import { GrSend } from 'react-icons/gr'
 import LoadingBar from 'react-top-loading-bar'

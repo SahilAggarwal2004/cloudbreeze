@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
 import { randomName } from 'random-stuff-js';
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { fetchHistory } from '../constants';
 import useStorage from '../hooks/useStorage';

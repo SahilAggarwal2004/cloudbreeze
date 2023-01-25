@@ -9,6 +9,7 @@ import { limit, options } from '../../constants';
 import BarProgress from '../../components/BarProgress';
 import { fileDetails } from '../../modules/functions';
 import { getStorage } from '../../modules/storage';
+import Head from 'next/head';
 
 export default function Upload({ router }) {
   const { uploadFiles, setUploadFiles, fetchApp, files, setFiles } = useFileContext()

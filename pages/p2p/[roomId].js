@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import BarProgress from '../../components/BarProgress';
 import Loader from '../../components/Loader';
