@@ -2,5 +2,9 @@
 import React from 'react';
 import FileDownload from '../../components/FileDownload';
 
-const FileId = ({ router }) => <FileDownload fileIdFromUrl={router.query.fileId} />
-export default FileId
+export default function FileId({ router }) {
+    return <>
+        <Head><title>Download file</title></Head>
+        <FileDownload fileIdFromUrl={router.query.fileId} />
+    </>
+}

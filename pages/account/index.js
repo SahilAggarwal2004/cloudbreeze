@@ -22,33 +22,36 @@ export default function Account() {
         }
     }, [])
 
-    return <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
-        <div className='text-lg sm:text-xl flex items-center justify-center mx-2'>
-            <div>Hello,&nbsp;<strong>{`${getStorage('username')}${guest ? ' (Guest)' : ''}`}</strong>&nbsp;</div>
-            {type === 'premium' && <BsPatchCheckFill className='inline scale-90' title='Premium User' />}
-        </div>
-        <div className='flex flex-col items-center space-y-5 sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0 text-sm'>
-            <Link href='/account/history?filter=upload'>
-                <a>
-                    <div className='text-lg sm:text-xl font-semibold'>{uploadFiles.length}</div>
-                    Files Uploaded
-                </a>
-            </Link>
-            <Link href='/account/history?filter=download'>
-                <a>
-                    <div className='text-lg sm:text-xl font-semibold'>{downloadFiles.length}</div>
-                    Files Downloaded
-                </a>
-            </Link>
-        </div>
-        <div className='text-sm font-medium text-gray-600 flex flex-col items-center space-y-1.5'>
-            {guest ? <>
-                <Link href='/account/signup'><a className='hover:text-black'>Create a new account</a></Link>
-                <Link href='/account/login'><a className='hover:text-black'>Login to an existing account</a></Link>
-            </> : <>
-                <div className='cursor-pointer hover:text-black' onClick={() => logout('manual')}>Logout</div>
-                <div className='cursor-pointer hover:text-black' onClick={() => setModal({ active: true, type: 'deleteUser' })}>Delete Account</div>
-            </>}
-        </div>
-    </div >
+    return <>
+        <Head><title>Your account</title></Head>
+        <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
+            <div className='text-lg sm:text-xl flex items-center justify-center mx-2'>
+                <div>Hello,&nbsp;<strong>{`${getStorage('username')}${guest ? ' (Guest)' : ''}`}</strong>&nbsp;</div>
+                {type === 'premium' && <BsPatchCheckFill className='inline scale-90' title='Premium User' />}
+            </div>
+            <div className='flex flex-col items-center space-y-5 sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0 text-sm'>
+                <Link href='/account/history?filter=upload'>
+                    <a>
+                        <div className='text-lg sm:text-xl font-semibold'>{uploadFiles.length}</div>
+                        Files Uploaded
+                    </a>
+                </Link>
+                <Link href='/account/history?filter=download'>
+                    <a>
+                        <div className='text-lg sm:text-xl font-semibold'>{downloadFiles.length}</div>
+                        Files Downloaded
+                    </a>
+                </Link>
+            </div>
+            <div className='text-sm font-medium text-gray-600 flex flex-col items-center space-y-1.5'>
+                {guest ? <>
+                    <Link href='/account/signup'><a className='hover:text-black'>Create a new account</a></Link>
+                    <Link href='/account/login'><a className='hover:text-black'>Login to an existing account</a></Link>
+                </> : <>
+                    <div className='cursor-pointer hover:text-black' onClick={() => logout('manual')}>Logout</div>
+                    <div className='cursor-pointer hover:text-black' onClick={() => setModal({ active: true, type: 'deleteUser' })}>Delete Account</div>
+                </>}
+            </div>
+        </div >
+    </>
 }
