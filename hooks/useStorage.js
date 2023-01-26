@@ -1,23 +1,18 @@
 import { useState } from "react";
+import { getStorage, setStorage } from "../modules/storage";
 
-export default function useStorage(key, initialValue, options = { local: true, session: false }) {
-    const { local, session } = options
-
+export default function useStorage(key, initialValue, local = true) {
     // Pass initial state function to useState so logic is only executed once
     const [storedValue, setStoredValue] = useState(() => {
         if (typeof window === "undefined") return initialValue
-        const item = session ? window.sessionStorage.getItem(key) : local && window.localStorage.getItem(key);
-        return item ? JSON.parse(item) : initialValue
+        return getStorage(key, initialValue, local)
     });
 
     // Return a wrapped version of useState's setter function that ...
     // ... persists the new value to localStorage.
     const setValue = value => {
         setStoredValue(value);
-        if (typeof window !== "undefined") {
-            if (local) window.localStorage.setItem(key, JSON.stringify(value))
-            if (session) window.sessionStorage.setItem(key, JSON.stringify(value))
-        }
+        if (typeof window !== "undefined") setStorage(key, value, local)
     };
     return [storedValue, setValue];
 }
