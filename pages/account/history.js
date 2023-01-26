@@ -13,7 +13,7 @@ export default function History({ router }) {
     useEffect(() => { setHistory((filter === 'upload' ? uploadFiles : filter === 'download' ? downloadFiles : []) || []) }, [filter, uploadFiles, downloadFiles])
 
     return <>
-        <Head><title>File history</title></Head>
+        <Head><title>File history | CloudBreeze</title></Head>
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-400 px-1 space-x-0.5">
             {options.map(option => <Link key={option} href={`/account/history?filter=${option}`}><a className={`inline-block px-4 py-3 rounded-t-lg capitalize ${filter === option ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`}>{option}ed Files</a></Link>)}
         </ul>

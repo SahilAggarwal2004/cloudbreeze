@@ -77,7 +77,7 @@ export default function P2p({ router }) {
 	useEffect(() => { if (!share) setFiles([]) }, [])
 
 	return <>
-		<Head><title>Peer-to-peer transfer</title></Head>
+		<Head><title>Peer-to-peer transfer | CloudBreeze</title></Head>
 		<div className='space-y-12'>
 			<div className='grid grid-cols-1 md:grid-cols-[50fr_0fr_50fr] items-center my-10 gap-x-4 gap-y-8 px-4 pb-5 text-sm sm:text-base'>
 				<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">

@@ -113,7 +113,7 @@ export default function Upload({ router }) {
   useEffect(() => { isUploaded && window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }, [link])
 
   return <>
-    <Head><title>Upload a file</title></Head>
+    <Head><title>Upload a file | CloudBreeze</title></Head>
     <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
       <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
         <label htmlFor="files">File(s):</label>

@@ -4,7 +4,7 @@ import FileDownload from '../../components/FileDownload';
 
 export default function FileId({ router }) {
     return <>
-        <Head><title>Download file</title></Head>
+        <Head><title>Download file | CloudBreeze</title></Head>
         <FileDownload fileIdFromUrl={router.query.fileId} />
     </>
 }

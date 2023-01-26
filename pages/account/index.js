@@ -24,7 +24,7 @@ export default function Account() {
     }, [])
 
     return <>
-        <Head><title>Your account</title></Head>
+        <Head><title>Your account | CloudBreeze</title></Head>
         <div className='bg-gray-100 py-8 border-y border-black text-center space-y-12'>
             <div className='text-lg sm:text-xl flex items-center justify-center mx-2'>
                 <div>Hello,&nbsp;<strong>{`${getStorage('username')}${guest ? ' (Guest)' : ''}`}</strong>&nbsp;</div>
