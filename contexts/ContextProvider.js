@@ -3,7 +3,7 @@ import axios from 'axios';
 import { randomName } from 'random-stuff-js';
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
-import { fetchHistory } from '../constants';
+import { fetchHistory, onlyGuest, types } from '../constants';
 import useStorage from '../hooks/useStorage';
 import { getStorage, resetStorage, setStorage } from '../modules/storage';
 
@@ -68,7 +68,9 @@ export default function ContextProvider({ children, router }) {
     useEffect(() => { getStorage('username', randomName()) }, [])
 
     useEffect(() => {
-        if (!getStorage('type', '')) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false }).then(({ success }) => success && setStorage('type', 'guest'))
+        const type = getStorage('type', '')
+        if (!type) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false }).then(({ success }) => success && setStorage('type', 'guest'))
+        else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.push('/account')
         else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
     }, [router.pathname])
 

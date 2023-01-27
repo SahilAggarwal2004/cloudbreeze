@@ -2,6 +2,7 @@ export const pages = ['/', '/account', '/file/upload', '/file/download', '/p2p',
 export const fetchHistory = ['/account', '/account/history']
 export const hideNavbar = ['/_error', '/account/confirm/[token]']
 export const showModal = ['/account', '/account/history', '/file/download', '/p2p']
+export const onlyGuest = ['/account/signup', '/account/login', '/account/forgot']
 export const options = ['upload', 'download']
 export const types = ['normal', 'premium']
 export const limit = 100 // In MB
