@@ -16,7 +16,7 @@ export default function Upload({ router }) {
   const { share } = router.query
   const type = getStorage('type')
   const passwordRef = useRef()
-  const [fileIdRef, setFileId] = useState()
+  const [fileIdRef, setFileId] = useState('')
   const [daysLimitRef, setDaysLimit] = useState()
   const [downloadLimitRef, setDownloadLimit] = useState()
   const [link, setLink] = useState()
@@ -52,7 +52,6 @@ export default function Upload({ router }) {
     setFileId('');
     setLink();
     setUpPercent(-1);
-    setShare(false);
   }
 
   async function handleSubmit(event) {
@@ -84,11 +83,11 @@ export default function Upload({ router }) {
     if (daysLimitRef) data.append('daysLimit', daysLimitRef)
     if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
 
-    const { success: verified } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
+    const { success: verified, server, accesstoken } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
     if (!verified) return setUpPercent(-1)
 
     const { fileId, createdAt, success } = await fetchApp({
-      url: 'file/upload', method: 'POST', data, type: 'multipart/form-data', options: {
+      url: server + '/file/upload', method: 'POST', data, type: 'multipart/form-data', accesstoken, options: {
         onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round(loaded * 100 / total))
       }
     })

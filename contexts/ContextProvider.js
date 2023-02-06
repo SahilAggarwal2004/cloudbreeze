@@ -30,13 +30,13 @@ export default function ContextProvider({ children, router }) {
         setDownloadFiles([])
     }
 
-    async function fetchApp({ url, authtoken, method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true, showProgress = true }) {
+    async function fetchApp({ url, authtoken, accesstoken, method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true, showProgress = true }) {
         let json;
         try {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
                 url, method, withCredentials: true, data, ...options,
-                headers: { authtoken, csrftoken: getStorage('csrftoken'), 'Content-Type': type }
+                headers: { authtoken, accesstoken, csrftoken: getStorage('csrftoken'), 'Content-Type': type }
             })
             if (showProgress) setProgress(100)
             json = response.data;
