@@ -1,11 +1,19 @@
 import { toast } from "react-toastify";
+import { maxServers } from "../constants";
 
 const round = (number, digits = 2) => Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits)
-export const bytesToSize = (bytes, max = 0, string = false) => {
+
+export const speed = (bytes, total, startTime = 0) => round(+(bytes !== total) && (bytesToSize(bytes, total) / (Date.now() - startTime) * 1000) || 0) + ' ' + (total >= 1048576 ? 'MB' : total >= 1024 ? 'KB' : 'B')
+
+export function bytesToSize(bytes, max = 0, string = false) {
     const digits = bytes === max ? 2 : 0;
     return Math.max(bytes, max) >= 1048576 ? round(bytes / 1048576, digits) + (+string && ' MB') : Math.max(bytes, max) >= 1024 ? round(bytes / 1024, digits) + (+string && ' KB') : bytes + (+string && ' B')
 }
-export const speed = (bytes, total, startTime = 0) => round(+(bytes !== total) && (bytesToSize(bytes, total) / (Date.now() - startTime) * 1000) || 0) + ' ' + (total >= 1048576 ? 'MB' : total >= 1024 ? 'KB' : 'B')
+
+export function getUploadUrl(server) {
+    if (server < 0) server = maxServers - server
+    return `https://cloudbreeze-upload-${server}.onrender.com/file/upload`
+}
 
 export function verifyUrl(value) {
     try {

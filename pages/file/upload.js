@@ -5,9 +5,9 @@ import JSZip from 'jszip';
 import Loader from '../../components/Loader';
 import Info from '../../components/Info';
 import { useFileContext } from '../../contexts/ContextProvider';
-import { limit, options } from '../../constants';
+import { limit, maxServers, options } from '../../constants';
 import BarProgress from '../../components/BarProgress';
-import { fileDetails } from '../../modules/functions';
+import { fileDetails, getUploadUrl } from '../../modules/functions';
 import { getStorage } from '../../modules/storage';
 import Head from 'next/head';
 
@@ -86,15 +86,17 @@ export default function Upload({ router }) {
     const { success: verified, server, accesstoken } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
     if (!verified) return setUpPercent(-1)
 
-    const { fileId, createdAt, success } = await fetchApp({
-      url: server + '/file/upload', method: 'POST', data, type: 'multipart/form-data', accesstoken, options: {
-        onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round(loaded * 100 / total))
+    for (let i = 0; !success; i++) {
+      if (i === maxServers) {
+        setLink('error')
+        setUpPercent(-1)
+        return
       }
-    })
-    if (!success) {
-      setLink('error')
-      setUpPercent(-1)
-      return
+      var { fileId, createdAt, success } = await fetchApp({
+        url: getUploadUrl(server - i), method: 'POST', data, type: 'multipart/form-data', accesstoken, options: {
+          onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round(loaded * 100 / total))
+        }
+      })
     }
     setLink(fileId)
     const updatedFiles = uploadFiles.concat({ nameList, createdAt, _id: fileId, downloadCount: 0, daysLimit: daysLimitRef || daysLimit })
