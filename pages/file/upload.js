@@ -86,14 +86,15 @@ export default function Upload({ router }) {
     const { success: verified, server, accesstoken } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
     if (!verified) return setUpPercent(-1)
 
-    for (let i = 0; !success; i++) {
+    for (let i = 0; !success && !authenticationError; i++) {
       if (i === maxServers) {
         setLink('error')
         setUpPercent(-1)
         return
       }
-      var { fileId, createdAt, success } = await fetchApp({
-        url: getUploadUrl(server - i), method: 'POST', data, type: 'multipart/form-data', accesstoken, options: {
+      var { fileId, createdAt, success, authenticationError } = await fetchApp({
+        url: getUploadUrl(server - i), method: 'POST', data, type: 'multipart/form-data', accesstoken,
+        showToast: i === maxServers - 1 || 'success', options: {
           onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round(loaded * 100 / total))
         }
       })

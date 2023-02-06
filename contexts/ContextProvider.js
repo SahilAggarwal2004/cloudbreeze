@@ -45,10 +45,10 @@ export default function ContextProvider({ children, router }) {
             if (showProgress) setProgress(100)
             if (!json) {
                 const error = err.response?.data?.error || "Please check your internet connectivity"
-                json = { success: false, error }
                 const authenticationError = error.includes('authenticate')
+                json = { success: false, error, authenticationError }
                 if (authenticationError) logout('auto')
-                if (showToast || authenticationError) toast.error(error)
+                if (authenticationError || showToast === true) toast.error(error)
             }
         }
         return json

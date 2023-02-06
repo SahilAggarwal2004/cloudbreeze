@@ -11,7 +11,7 @@ export function bytesToSize(bytes, max = 0, string = false) {
 }
 
 export function getUploadUrl(server) {
-    if (server < 0) server = maxServers - server
+    if (server < 0) server += maxServers
     return `https://cloudbreeze-upload-${server}.onrender.com/file/upload`
 }
 
