@@ -5,11 +5,12 @@ import JSZip from 'jszip';
 import Loader from '../../components/Loader';
 import Info from '../../components/Info';
 import { useFileContext } from '../../contexts/ContextProvider';
-import { limit, maxServers, options } from '../../constants';
+import { limit, options } from '../../constants';
 import BarProgress from '../../components/BarProgress';
-import { fileDetails, getUploadUrl } from '../../modules/functions';
+import { fileDetails, getUploadUrl, remove } from '../../modules/functions';
 import { getStorage } from '../../modules/storage';
 import Head from 'next/head';
+import { randomElement } from 'random-stuff-js';
 
 export default function Upload({ router }) {
   const { uploadFiles, setUploadFiles, fetchApp, files, setFiles } = useFileContext()
@@ -83,21 +84,23 @@ export default function Upload({ router }) {
     if (daysLimitRef) data.append('daysLimit', daysLimitRef)
     if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
 
-    const { success: verified, server, accesstoken } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
+    let { success: verified, accesstoken, server, servers } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
     if (!verified) return setUpPercent(-1)
 
-    for (let i = 0; !success && !authenticationError; i++) {
-      if (i === maxServers) {
+    while (!success) {
+      if (!servers.length) {
         setLink('error')
         setUpPercent(-1)
         return
       }
-      var { fileId, createdAt, success, authenticationError } = await fetchApp({
-        url: getUploadUrl(server - i), method: 'POST', data, type: 'multipart/form-data', accesstoken,
-        showToast: i === maxServers - 1 || 'success', options: {
+      var { fileId, createdAt, success } = await fetchApp({
+        url: getUploadUrl(server), method: 'POST', data, type: 'multipart/form-data', accesstoken,
+        showToast: servers.length === 1 || 'success', options: {
           onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round(loaded * 100 / total))
         }
       })
+      remove(servers, server)
+      server = randomElement(servers)
     }
     setLink(fileId)
     const updatedFiles = uploadFiles.concat({ nameList, createdAt, _id: fileId, downloadCount: 0, daysLimit: daysLimitRef || daysLimit })
