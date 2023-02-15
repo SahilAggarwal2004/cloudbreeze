@@ -53,6 +53,7 @@ export default function Upload({ router }) {
     setFileId('');
     setLink();
     setUpPercent(-1);
+    router.push('/file/upload')
   }
 
   async function handleSubmit(event) {
