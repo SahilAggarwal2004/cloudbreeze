@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
+import { sign } from 'mini-jwt';
 import { randomName } from 'random-stuff-js';
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
@@ -36,7 +37,10 @@ export default function ContextProvider({ children, router }) {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
                 url, method, withCredentials: true, data, ...options,
-                headers: { authtoken, accesstoken, csrftoken: getStorage('csrftoken'), 'Content-Type': type }
+                headers: {
+                    authtoken, accesstoken, 'Content-Type': type,
+                    csrftoken: sign(undefined, process.env.NEXT_PUBLIC_SECRET, 30000)
+                }
             })
             if (showProgress) setProgress(100)
             json = response.data;
