@@ -5,7 +5,7 @@ export default function Confirm({ router }) {
   const { fetchApp } = useFileContext()
 
   async function verify() {
-    const { success } = await fetchApp({ url: 'auth/confirm', method: 'PUT', authtoken: router.query.token })
+    const { success } = await fetchApp({ url: 'auth/confirm', method: 'PUT', token: router.query.token })
     if (success) router.push('/account/login')
   }
 

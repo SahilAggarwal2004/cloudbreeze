@@ -85,7 +85,7 @@ export default function Upload({ router }) {
     if (daysLimitRef) data.append('daysLimit', daysLimitRef)
     if (downloadLimitRef) data.append('downloadLimit', downloadLimitRef)
 
-    let { success: verified, accesstoken, server, servers } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
+    let { success: verified, token, server, servers } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId: fileIdRef } })
     if (!verified) return setUpPercent(-1)
 
     while (!success) {
@@ -95,7 +95,7 @@ export default function Upload({ router }) {
         return
       }
       var { fileId, createdAt, success } = await fetchApp({
-        url: getUploadUrl(server), method: 'POST', data, type: 'multipart/form-data', accesstoken,
+        url: getUploadUrl(server), method: 'POST', data, type: 'multipart/form-data', token,
         showToast: servers.length === 1 || 'success', options: {
           onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round(loaded * 100 / total))
         }
