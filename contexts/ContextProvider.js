@@ -37,7 +37,10 @@ export default function ContextProvider({ children, router }) {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
                 url, method, withCredentials: true, data, ...options,
-                headers: { token, csrftoken: sign(undefined, process.env.NEXT_PUBLIC_SECRET, 30000), 'Content-Type': type }
+                headers: {
+                    token, 'Content-Type': type,
+                    csrftoken: sign(process.env.NEXT_PUBLIC_SECRET, undefined, { expiresIn: 30000 })
+                }
             })
             if (showProgress) setProgress(100)
             json = response.data;

@@ -2959,10 +2959,10 @@ mimic-response@^3.1.0:
   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-3.1.0.tgz#2d1d59af9c1b129815accc2c46a022a5ce1fa3c9"
   integrity sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==
 
-mini-jwt@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/mini-jwt/-/mini-jwt-0.1.3.tgz#b6e3a7f2d039b980bc9839e89d2f343ebb9aaa92"
-  integrity sha512-TBuFPUFNPxMQ1JOT5+38RXgGhyxFCMUUhGoqMD93NbGikyk62a64MuW0lWR7+x0n++SOhACaApg232mcd1GcOA==
+mini-jwt@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/mini-jwt/-/mini-jwt-0.2.0.tgz#13163301370c03122ea5d05da63a84c3d535581c"
+  integrity sha512-D97iHiPcYQc528Nu/9jlFSppV0yhZAV74SIiW4+TsKqzDVBrdB89yKljllX1YhEfN4M/WzoVhX9kbB4qHBq7cw==
   dependencies:
     sjcl "^1.0.8"
 
