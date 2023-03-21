@@ -143,6 +143,6 @@ export default function Upload({ router }) {
       {!link && (upPercent === 100 ? <Loader className='flex items-center space-x-2' text='Please wait, processing the file(s)...' /> : <BarProgress percent={upPercent} />)}
 
       {isUploaded && <div className='pb-16'><Info fileId={link} /></div>}
-    </div >
+    </div>
   </>
 }

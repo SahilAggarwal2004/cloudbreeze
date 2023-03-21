@@ -70,5 +70,5 @@ export default function Peer({ names, sizes, totalSize, data }) {
                 <div>Speed: {speed(totalBytes, totalSize, time)}/s</div>
             </div>
         </CircularProgressbarWithChildren>
-    </div >
+    </div>
 }

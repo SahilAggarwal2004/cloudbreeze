@@ -53,6 +53,6 @@ export default function Account() {
                     <div className='cursor-pointer hover:text-black' onClick={() => setModal({ active: true, type: 'deleteUser' })}>Delete Account</div>
                 </>}
             </div>
-        </div >
+        </div>
     </>
 }

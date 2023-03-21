@@ -30,5 +30,5 @@ export default function Home({ router }) {
             <Image src='/images/p2p.png' alt='' width={250} height={250} objectFit='scale-down' quality={100} />
             <div className='x-center bottom-4'>Peer-to-peer transfer</div>
         </div>
-    </div >
+    </div>
 }

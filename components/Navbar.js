@@ -22,7 +22,7 @@ export default function Navbar() {
                 <Link href="/file/download"><a><FaDownload className='scale-110 sm:scale-125' title='Download File' /></a></Link>
                 <Link href="/p2p"><a><GrSend className='invert scale-110 sm:scale-125' title='Peer-to-peer Transfer' /></a></Link>
             </div>
-        </nav >
+        </nav>
         <div className='h-10' />
     </>
 }
