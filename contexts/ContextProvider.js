@@ -39,7 +39,7 @@ export default function ContextProvider({ children, router }) {
                 url, method, withCredentials: true, data, ...options,
                 headers: {
                     token, 'Content-Type': type,
-                    csrftoken: sign(process.env.NEXT_PUBLIC_SECRET, undefined, { expiresIn: 30000 })
+                    csrftoken: sign(process.env.NEXT_PUBLIC_SECRET, undefined, { expiresIn: 300000 })
                 }
             })
             if (showProgress) setProgress(100)
