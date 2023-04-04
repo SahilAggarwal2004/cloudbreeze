@@ -13,7 +13,7 @@ import Head from 'next/head';
 import { randomElement } from 'random-stuff-js';
 
 export default function Upload({ router }) {
-  const { fetchApp, files, setFiles } = useFileContext()
+  const { fetchApp, files, setFiles, uploadFiles, setUploadFiles } = useFileContext()
   const { share } = router.query
   const type = getStorage('type')
   const passwordRef = useRef()
@@ -94,7 +94,7 @@ export default function Upload({ router }) {
         setUpPercent(-1)
         return
       }
-      var { fileId, success } = await fetchApp({
+      var { fileId, name, success } = await fetchApp({
         url: getUploadUrl(server), method: 'POST', data, type: 'multipart/form-data', token,
         showToast: servers.length === 1 || 'success', options: {
           onUploadProgress: ({ loaded, total }) => setUpPercent(Math.round(loaded * 100 / total))
@@ -104,6 +104,7 @@ export default function Upload({ router }) {
       server = randomElement(servers)
     }
     setLink(fileId)
+    setUploadFiles(uploadFiles.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimitRef || daysLimit }))
   }
 
   useEffect(() => {
