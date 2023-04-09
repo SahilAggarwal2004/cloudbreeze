@@ -72,7 +72,7 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         getStorage('username', randomName())
-        cookieCheck().then(({ supported }) => { if (!supported || !getStorage('cookies')) setModal({ active: true, type: 'cookies' }) });
+        // cookieCheck().then(({ supported }) => { if (!supported || !getStorage('cookies')) setModal({ active: true, type: 'cookies' }) });
     }, [])
 
     useEffect(() => {
