@@ -20,8 +20,3 @@ export const getStorage = (key, fallbackValue, local = true) => {
     }
     return value
 }
-
-export const resetStorage = (local = true) => {
-    setStorage('username', randomName(), local)
-    setStorage('type', 'guest', local)
-}

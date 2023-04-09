@@ -6,7 +6,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { fetchHistory, onlyGuest, types } from '../constants';
 import useStorage from '../hooks/useStorage';
-import { getStorage, resetStorage, setStorage } from '../modules/storage';
+import { getStorage, setStorage } from '../modules/storage';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 
@@ -27,7 +27,8 @@ export default function ContextProvider({ children, router }) {
             if (!success) return;
             toast.success('Logged out successfully')
         } else router.push('/account')
-        resetStorage()
+        setStorage('username', randomName())
+        setType('guest')
         setUploadFiles([])
         setDownloadFiles([])
     }
