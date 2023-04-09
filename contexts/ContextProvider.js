@@ -4,6 +4,7 @@ import { sign } from 'mini-jwt';
 import { randomName } from 'random-stuff-js';
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
+import cookieCheck from 'third-party-cookie-check';
 import { fetchHistory, onlyGuest, types } from '../constants';
 import useStorage from '../hooks/useStorage';
 import { getStorage, resetStorage, setStorage } from '../modules/storage';
@@ -69,7 +70,10 @@ export default function ContextProvider({ children, router }) {
         }
     }
 
-    useEffect(() => { getStorage('username', randomName()) }, [])
+    useEffect(() => {
+        getStorage('username', randomName())
+        cookieCheck().then(({ supported }) => { if (!supported || !getStorage('cookies')) setModal({ active: true, type: 'cookies' }) });
+    }, [])
 
     useEffect(() => {
         const type = getStorage('type', '')
