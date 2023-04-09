@@ -32,7 +32,7 @@ export default function Modal({ pathname, redirect }) {
 
 	return (showModal.includes(pathname) || type === 'cookies') && <>
 		<div className={`${active ? 'bg-opacity-50' : 'invisible bg-opacity-0'} bg-black fixed inset-0 transition-all duration-700 z-40`} onClick={handleCancel} />
-		<div className={`z-50 max-h-[98vh] overflow-y-auto center text-center bg-white rounded-md max-w-max py-4 ${type === 'showFile' ? 'px-1' : 'px-5'} ${active ? 'opacity-100' : 'hidden'}`}>
+		<div className={`z-50 w-max max-w-[90vw] max-h-[98vh] overflow-y-auto center text-center bg-white rounded-md py-4 ${type === 'showFile' ? 'px-1' : 'px-3'} ${active ? 'opacity-100' : 'hidden'}`}>
 			{type === 'deleteUser' ? <div>
 				<h3 className='font-bold'>Delete account?</h3>
 				<p className='text-red-600 text-sm'>This action is irreversible</p>
@@ -49,7 +49,7 @@ export default function Modal({ pathname, redirect }) {
 				</div>
 			</div> : type === 'cookies' ? <div className='space-y-2'>
 				<h3 className='font-bold'>Cookie Policy</h3>
-				<div className='text-sm pb-3'>
+				<div className='text-sm pb-3 space-y-1'>
 					<p>We use cookies just for authentication purposes with no intension of personalized ads.</p>
 					<p>Please {allowed ? 'accept' : 'allow'} cookies for the website to work seamlessly.</p>
 				</div>
