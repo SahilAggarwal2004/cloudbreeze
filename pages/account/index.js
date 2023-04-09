@@ -9,8 +9,7 @@ import { types } from '../../constants'
 import Head from 'next/head'
 
 export default function Account() {
-    const { uploadFiles, downloadFiles, logout, setModal } = useFileContext()
-    const type = getStorage('type')
+    const { uploadFiles, downloadFiles, logout, setModal, type } = useFileContext()
     const guest = !types.includes(type)
 
     useEffect(() => {

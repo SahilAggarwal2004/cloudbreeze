@@ -4,7 +4,6 @@ import { sign } from 'mini-jwt';
 import { randomName } from 'random-stuff-js';
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
-import cookieCheck from 'third-party-cookie-check';
 import { fetchHistory, onlyGuest, types } from '../constants';
 import useStorage from '../hooks/useStorage';
 import { getStorage, resetStorage, setStorage } from '../modules/storage';
@@ -20,6 +19,7 @@ export default function ContextProvider({ children, router }) {
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
     const [files, setFiles] = useState([])
+    const [type, setType] = useState('')
 
     async function logout(type) {
         if (type === 'manual') {
@@ -70,20 +70,25 @@ export default function ContextProvider({ children, router }) {
         }
     }
 
-    useEffect(() => {
-        getStorage('username', randomName())
-        // cookieCheck().then(({ supported }) => { if (!supported || !getStorage('cookies')) setModal({ active: true, type: 'cookies' }) });
-    }, [])
+    useEffect(() => { getStorage('username', randomName()) }, [])
 
     useEffect(() => {
-        const type = getStorage('type', '')
-        if (!type) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false }).then(({ success }) => success && setStorage('type', 'guest'))
+        if (type) fetchApp({ url: 'auth/check', showProgress: false, showToast: false }).then(({ success }) => {
+            if (!success || success && getStorage('cookies') !== 'accepted') {
+                setStorage('cookies', 'requested')
+                setModal({ active: true, type: 'cookies', allowed: success })
+            }
+        })
+    }, [type])
+
+    useEffect(() => {
+        if (!type) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false }).then(({ success }) => success && setType('guest'))
         else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.push('/account')
         else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
     }, [router.pathname])
 
 
-    return <Context.Provider value={{ uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles }}>
+    return <Context.Provider value={{ uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType }}>
         {children}
     </Context.Provider>
 }

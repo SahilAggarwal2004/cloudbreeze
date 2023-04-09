@@ -7,7 +7,7 @@ import { setStorage } from '../../modules/storage';
 import Head from 'next/head';
 
 export default function Login({ router }) {
-  const { setUploadFiles, setDownloadFiles, fetchApp } = useFileContext()
+  const { setUploadFiles, setDownloadFiles, fetchApp, setType } = useFileContext()
   const email = useRef();
   const password = useRef();
 
@@ -18,7 +18,7 @@ export default function Login({ router }) {
       setUploadFiles(files)
       setDownloadFiles([])
       setStorage('username', name)
-      setStorage('type', type)
+      setType(type)
       router.push('/')
     }
   }

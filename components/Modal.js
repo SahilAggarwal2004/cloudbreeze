@@ -5,13 +5,12 @@ import Info from './Info'
 import QrScanner from './QrScanner'
 
 export default function Modal({ pathname, redirect }) {
-	const { modal: { active, type, props }, setModal, setProgress, fetchApp, logout, setUploadFiles } = useFileContext()
+	const { modal: { active, type, allowed, props }, setModal, setProgress, fetchApp, logout, setUploadFiles } = useFileContext()
 	const { fileId, filter, downloadCount } = props || {}
 	const handleCancel = accept => {
-		console.log(type, accept)
 		if (type !== 'cookies') setModal({ active: false })
 		else if (accept === true) {
-			setStorage('cookies', true)
+			setStorage('cookies', 'accepted')
 			setModal({ active: false })
 		}
 	}
@@ -52,9 +51,9 @@ export default function Modal({ pathname, redirect }) {
 				<h3 className='font-bold'>Cookie Policy</h3>
 				<div className='text-sm pb-3'>
 					<p>We use cookies just for authentication purposes with no intension of personalized ads.</p>
-					<p>Please accept cookies for the website to work seamlessly.</p>
+					<p>Please {allowed ? 'accept' : 'allow'} cookies for the website to work seamlessly.</p>
 				</div>
-				<button className='py-1 px-3 rounded border button-animation text-sm' onClick={() => handleCancel(true)}>Accept</button>
+				{allowed && <button className='py-1 px-3 rounded border button-animation text-sm' onClick={() => handleCancel(true)}>Accept</button>}
 			</div> : type === 'showFile' ? <Info fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : type === 'qrReader' && <QrScanner redirect={redirect} />}
 		</div>
 	</>

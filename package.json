@@ -26,7 +26,6 @@
     "react-toastify": "^9.0.5",
     "react-top-loading-bar": "^2.1.0",
     "sharp": "^0.30.7",
-    "third-party-cookie-check": "^2.0.0",
     "workbox-cacheable-response": "^6.5.4",
     "workbox-core": "^6.5.4",
     "workbox-precaching": "^6.5.4",
