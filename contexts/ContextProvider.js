@@ -33,7 +33,6 @@ export default function ContextProvider({ children, router }) {
     }
 
     async function fetchApp({ url, token, method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true, showProgress = true }) {
-        let json;
         try {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
@@ -44,7 +43,7 @@ export default function ContextProvider({ children, router }) {
                 }
             })
             if (showProgress) setProgress(100)
-            json = response.data;
+            var json = response.data;
             if (showToast) toast.success(json.msg)
         } catch (err) {
             if (showProgress) setProgress(100)

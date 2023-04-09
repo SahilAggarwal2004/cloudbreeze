@@ -32,7 +32,7 @@ export default function Modal({ pathname, redirect }) {
 
 	return (showModal.includes(pathname) || type === 'cookies') && <>
 		<div className={`${active ? 'bg-opacity-50' : 'invisible bg-opacity-0'} bg-black fixed inset-0 transition-all duration-700 z-40`} onClick={handleCancel} />
-		<div className={`z-50 max-h-[98vh] overflow-y-auto center text-center bg-white rounded-md w-max py-4 ${type === 'showFile' ? 'px-1' : 'px-5'} ${active ? 'opacity-100' : 'hidden'}`}>
+		<div className={`z-50 max-h-[98vh] overflow-y-auto center text-center bg-white rounded-md max-w-max py-4 ${type === 'showFile' ? 'px-1' : 'px-5'} ${active ? 'opacity-100' : 'hidden'}`}>
 			{type === 'deleteUser' ? <div>
 				<h3 className='font-bold'>Delete account?</h3>
 				<p className='text-red-600 text-sm'>This action is irreversible</p>
