@@ -51,7 +51,7 @@ export default function Modal({ pathname, redirect }) {
 				<h3 className='font-bold'>Cookie Policy</h3>
 				<div className='text-sm pb-3 space-y-1'>
 					<p>We use cookies just for authentication purposes with no intension of personalized ads.</p>
-					<p>Please {allowed ? 'accept' : 'allow'} cookies for the website to work seamlessly.</p>
+					<p>Please {allowed ? 'accept' : 'enable'} cookies for the website to work seamlessly.</p>
 				</div>
 				{allowed && <button className='py-1 px-3 rounded border button-animation text-sm' onClick={() => handleCancel(true)}>Accept</button>}
 			</div> : type === 'showFile' ? <Info fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : type === 'qrReader' && <QrScanner redirect={redirect} />}
