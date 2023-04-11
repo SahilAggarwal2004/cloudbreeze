@@ -1,15 +1,16 @@
 import { showModal } from '../constants'
 import { useFileContext } from '../contexts/ContextProvider'
+import { setStorage } from '../modules/storage'
 import Info from './Info'
 import QrScanner from './QrScanner'
 
 export default function Modal({ pathname, redirect }) {
-	const { modal: { active, type, allowed, props }, setModal, setProgress, fetchApp, logout, setUploadFiles, setCookies } = useFileContext()
+	const { modal: { active, type, allowed, props }, setModal, setProgress, fetchApp, logout, setUploadFiles } = useFileContext()
 	const { fileId, filter, downloadCount } = props || {}
 	const handleCancel = accept => {
 		if (type !== 'cookies') setModal({ active: false })
 		else if (accept === true) {
-			setCookies('accepted')
+			setStorage('cookies', 'accepted')
 			setModal({ active: false })
 		}
 	}
