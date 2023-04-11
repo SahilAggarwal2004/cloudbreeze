@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { fetchHistory, onlyGuest, types } from '../constants';
 import useStorage from '../hooks/useStorage';
 import { getStorage, setStorage } from '../modules/storage';
+import { cookieTest } from '../modules/cookie';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 
@@ -17,9 +18,11 @@ export default function ContextProvider({ children, router }) {
     const [uploadFiles, setUploadFiles] = useStorage('upload-files', [])
     const [downloadFiles, setDownloadFiles] = useStorage('download-files', [])
     const [type, setType] = useStorage('type', '')
+    const [cookies, setCookies] = useStorage('cookies')
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
     const [files, setFiles] = useState([])
+    const cookiesAccepted = cookies === 'accepted'
 
     async function logout(type) {
         if (type === 'manual') {
@@ -34,6 +37,7 @@ export default function ContextProvider({ children, router }) {
     }
 
     async function fetchApp({ url, token, method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true, showProgress = true }) {
+        if (!cookiesAccepted) return { success: false }
         try {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
@@ -70,26 +74,24 @@ export default function ContextProvider({ children, router }) {
         }
     }
 
-    useEffect(() => { getStorage('username', randomName()) }, [])
-
     useEffect(() => {
-        if (type) fetchApp({ url: 'auth/check', showProgress: false, showToast: false }).then(({ success }) => {
-            if (!success || success && getStorage('cookies') !== 'accepted') {
-                if (!success) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false })
-                setStorage('cookies', 'requested')
+        getStorage('username', randomName())
+        cookieTest('https://3rd-party-cookie-check.vercel.app/', success => {
+            if (!success || success && !cookiesAccepted) {
+                setCookies('requested')
                 setModal({ active: true, type: 'cookies', allowed: success })
             }
         })
-    }, [type])
+    }, [])
 
     useEffect(() => {
         if (!type) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false }).then(({ success }) => success && setType('guest'))
         else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.push('/account')
         else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
-    }, [router.pathname])
+    }, [router.pathname, cookiesAccepted])
 
 
-    return <Context.Provider value={{ uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType }}>
+    return <Context.Provider value={{ uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType, setCookies }}>
         {children}
     </Context.Provider>
 }
