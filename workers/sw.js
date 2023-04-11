@@ -5,7 +5,7 @@ import { registerRoute, setDefaultHandler } from 'workbox-routing'
 import { CacheFirst, NetworkFirst, NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { offlineFallback } from 'workbox-recipes'
-import { pages } from '../constants'
+import { cookieTestUri, pages } from '../constants'
 
 clientsClaim() // This should be at the top of the service worker
 self.skipWaiting()
@@ -16,7 +16,7 @@ precacheAndRoute(urlsToCache)
 setDefaultHandler(new StaleWhileRevalidate())
 offlineFallback({ pageFallback: '/_offline' });
 
-registerRoute(({ url: { pathname } }) => (pathname.startsWith('/file') || pathname.startsWith('/p2p')) && !pages.includes(pathname), new NetworkOnly())
+registerRoute(({ url: { origin, pathname } }) => origin === cookieTestUri || ((pathname.startsWith('/file') || pathname.startsWith('/p2p')) && !pages.includes(pathname)), new NetworkOnly())
 
 registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
     cacheName: 'manifest',

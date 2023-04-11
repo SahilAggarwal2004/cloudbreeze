@@ -4,7 +4,7 @@ import { sign } from 'mini-jwt';
 import { randomName } from 'random-stuff-js';
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
-import { fetchHistory, onlyGuest, types } from '../constants';
+import { cookieTestUri, fetchHistory, onlyGuest, types } from '../constants';
 import useStorage from '../hooks/useStorage';
 import { getStorage, setStorage } from '../modules/storage';
 import { cookieTest } from '../modules/cookie';
@@ -76,7 +76,7 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         getStorage('username', randomName())
-        cookieTest('https://3rd-party-cookie-check.vercel.app/', success => {
+        cookieTest(cookieTestUri, success => {
             if (!success || success && !cookiesAccepted) {
                 setCookies('requested')
                 setModal({ active: true, type: 'cookies', allowed: success })
