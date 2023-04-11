@@ -5,8 +5,7 @@ export const cookieTest = (iFrameUri, callBack) => {
         catch { data = { result: true } }
         callBack(data['result'])
         window.removeEventListener('message', messageHandler);
-        document.body.removeChild(frame)
-
+        // document.body.removeChild(frame)
     }
     window.addEventListener('message', messageHandler);
     const frame = document.createElement('iframe')
