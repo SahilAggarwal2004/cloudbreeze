@@ -76,7 +76,7 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         getStorage('username', randomName())
-        cookieTest(cookieTestUri, success => {
+        cookieTest().then(success => {
             if (success === false || success && !cookiesAccepted) {
                 if (!cookiesAccepted) setCookies('requested')
                 setModal({ active: true, type: 'cookies', allowed: success })
