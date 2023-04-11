@@ -13,6 +13,7 @@ export const cookieTest = (iFrameUri, callBack) => {
     frame.src = iFrameUri
     frame.sandbox = "allow-scripts allow-same-origin"
     frame.style = `display:none`
-    frame.onload = () => { frame.contentWindow.postMessage(JSON.stringify({ 'test': 'cookie' }), '*') }
+    frame.onload = () => frame.contentWindow.postMessage(JSON.stringify({ 'test': 'cookie' }), '*')
+    frame.oncancel = () => callBack(true)
     document.body.appendChild(frame)
 }
