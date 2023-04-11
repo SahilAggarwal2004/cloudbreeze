@@ -2,7 +2,7 @@ export const cookieTest = (iFrameUri, callBack) => {
     let messageHandler = (event) => {
         // check for trusted origins here  
         try { var data = JSON.parse(event.data) }
-        catch { data = {} }
+        catch { data = { result: true } }
         callBack(data['result'])
         window.removeEventListener('message', messageHandler);
         document.body.removeChild(frame)
@@ -14,6 +14,5 @@ export const cookieTest = (iFrameUri, callBack) => {
     frame.sandbox = "allow-scripts allow-same-origin"
     frame.style = `display:none`
     frame.onload = () => frame.contentWindow.postMessage(JSON.stringify({ 'test': 'cookie' }), '*')
-    frame.oncancel = () => callBack(true)
     document.body.appendChild(frame)
 }
