@@ -75,6 +75,7 @@ export default function ContextProvider({ children, router }) {
     useEffect(() => {
         if (type) fetchApp({ url: 'auth/check', showProgress: false, showToast: false }).then(({ success }) => {
             if (!success || success && getStorage('cookies') !== 'accepted') {
+                if (!success) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false })
                 setStorage('cookies', 'requested')
                 setModal({ active: true, type: 'cookies', allowed: success })
             }
