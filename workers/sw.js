@@ -16,7 +16,7 @@ precacheAndRoute(urlsToCache)
 setDefaultHandler(new StaleWhileRevalidate())
 offlineFallback({ pageFallback: '/_offline' });
 
-registerRoute(({ url: { pathname } }) => (pathname.startsWith('/file') || pathname.startsWith('/p2p')) && !pages.includes(pathname), new NetworkOnly())
+registerRoute(({ url: { origin, pathname } }) => origin !== location.origin || ((pathname.startsWith('/file') || pathname.startsWith('/p2p')) && !pages.includes(pathname)), new NetworkOnly())
 
 registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
     cacheName: 'manifest',
