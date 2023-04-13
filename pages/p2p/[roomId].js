@@ -77,7 +77,7 @@ export default function Id({ router }) {
         {error ? <div className='center space-y-5 text-center'>
             <h3 className='text-lg'>{error}</h3>
             <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={() => window.location.reload()}>Retry</button>
-        </div> : !file && !text ? <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' /> : <>
+        </div> : !file && !text ? <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' /> : <div className='mb-[4.5rem]'>
             {text && <div className='flex flex-col items-center px-2 text-center mb-5 space-y-1'>
                 <div className='flex items-center space-x-2'>
                     <span className='text-lg font-medium'>Text</span>
@@ -86,7 +86,7 @@ export default function Id({ router }) {
                 <div className='break-all'>{text}</div>
             </div>}
             {file && <div className='flex justify-center'>
-                <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full grid grid-cols-[auto_1fr] gap-2 px-2 mb-[4.5rem]'>
+                <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full grid grid-cols-[auto_1fr] gap-2 px-2'>
                     <span className='text-lg font-medium col-span-2 text-center'>Files</span>
                     <span>File:</span>
                     <span className='text-right'>{file}</span>
@@ -99,6 +99,6 @@ export default function Id({ router }) {
                     </>}
                 </div>
             </div>}
-        </>}
+        </div>}
     </>
 }
