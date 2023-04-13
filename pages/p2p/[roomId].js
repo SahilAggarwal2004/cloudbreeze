@@ -86,7 +86,7 @@ export default function Id({ router }) {
                 <div className='break-all'>{text}</div>
             </div>}
             {file && <div className='flex justify-center'>
-                <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full grid grid-cols-[auto_1fr] gap-2 px-2'>
+                <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full grid grid-cols-[auto_1fr] gap-2 px-2 mb-10'>
                     <span className='text-lg font-medium col-span-2 text-center'>Files</span>
                     <span>File:</span>
                     <span className='text-right'>{file}</span>
