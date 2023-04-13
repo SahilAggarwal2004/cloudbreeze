@@ -7,22 +7,29 @@ import Loader from '../../components/Loader';
 import { peerOptions } from '../../constants';
 import { bytesToSize, download, speed } from '../../modules/functions';
 import { getStorage } from '../../modules/storage';
+import { FaCopy } from 'react-icons/fa';
 
 export default function Id({ router }) {
     const { roomId } = router.query
     const [connection, setConnection] = useState()
     const [file, setFile] = useState()
     const [size, setSize] = useState()
+    const [text, setText] = useState()
     const [bytes, setBytes] = useState(-1)
     const [time, setTime] = useState(0)
     const [error, setError] = useState()
     const downPercent = Math.round(bytes * 100 / size) - +(bytes < 0);
     const isDownloading = downPercent >= 0
 
-    const request = () => {
+    function request() {
         connection?.send({ type: 'request' })
         setBytes(0)
         setTime(Date.now())
+    }
+
+    function copy() {
+        navigator.clipboard.writeText(text)
+        toast.success('Text copied to clipboard!')
     }
 
     useEffect(() => {
@@ -36,10 +43,11 @@ export default function Id({ router }) {
                 setConnection(conn)
                 toast.success('Connection established')
             })
-            conn.on('data', ({ type, name, length, totalSize, chunk, size, initial = false }) => {
+            conn.on('data', ({ type, name, length, totalSize, text, chunk, size, initial = false }) => {
                 if (type === 'details') {
-                    setFile(length === 1 ? name : `${length} files`)
+                    setFile(length <= 1 ? name : `${length} files`)
                     setSize(totalSize)
+                    setText(text)
                 } else if (type === 'file') {
                     const { byteLength } = chunk;
                     if (initial) {
@@ -69,16 +77,28 @@ export default function Id({ router }) {
         {error ? <div className='center space-y-5 text-center'>
             <h3 className='text-lg'>{error}</h3>
             <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={() => window.location.reload()}>Retry</button>
-        </div> : file ? <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full x-center grid grid-cols-[auto_1fr] gap-2 px-2'>
-            <span>File:</span>
-            <span className='text-right'>{file}</span>
-            <span>Size:</span>
-            <span className='text-right'>{bytesToSize(size, size, true)}</span>
-            <button className='primary-button' disabled={isDownloading} onClick={request}>Download File</button>
-            {isDownloading && <>
-                <BarProgress percent={downPercent} className='col-span-2 max-w-[100%]' />
-                <div className='text-center w-full col-span-2'>Speed: {speed(bytes, size, time)}/s</div>
-            </>}
-        </div> : <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' />}
+        </div> : !file && !text ? <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' /> : <>
+            {text && <div className='flex flex-col items-center px-2 text-center mb-5 space-y-1'>
+                <div className='flex items-center space-x-2'>
+                    <span className='text-lg font-medium'>Text</span>
+                    <FaCopy onClick={copy} />
+                </div>
+                <div className='break-all'>{text}</div>
+            </div>}
+            {file && <div className='flex justify-center'>
+                <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full grid grid-cols-[auto_1fr] gap-2 px-2'>
+                    <span className='text-lg font-medium col-span-2 text-center'>Files</span>
+                    <span>File:</span>
+                    <span className='text-right'>{file}</span>
+                    <span>Size:</span>
+                    <span className='text-right'>{bytesToSize(size, size, true)}</span>
+                    <button className='primary-button' disabled={isDownloading} onClick={request}>Download File</button>
+                    {isDownloading && <>
+                        <BarProgress percent={downPercent} className='col-span-2 max-w-[100%]' />
+                        <div className='text-center w-full col-span-2'>Speed: {speed(bytes, size, time)}/s</div>
+                    </>}
+                </div>
+            </div>}
+        </>}
     </>
 }

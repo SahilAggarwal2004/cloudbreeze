@@ -24,8 +24,9 @@ function reducer(state, { type = 'add', peer, name, conn }) {
 
 export default function P2p({ router }) {
 	const { setModal, progress, setProgress, files, setFiles } = useFileContext()
-	const { share } = router.query
+	const { share, text } = router.query
 	const room = useRef();
+	const textRef = useRef();
 	const [roomId, setRoomId] = useState('')
 	const [link, setLink] = useState('')
 	const [connections, dispatchConnections] = useReducer(reducer, {})
@@ -47,6 +48,8 @@ export default function P2p({ router }) {
 
 	async function handleSubmit(event) {
 		event.preventDefault()
+		const text = textRef.current.value
+		if (!length && !text) return toast.error('Please provide files or text to share!')
 		setProgress(100 / 8)
 		const Peer = require("peerjs").default
 		const peerId = roomId || Date.now()
@@ -61,7 +64,7 @@ export default function P2p({ router }) {
 			const peerName = conn.metadata || 'Anonymous User'
 			conn.on('open', () => {
 				if (connections[peerName]) return
-				conn.send({ name: names[0], length: names.length, totalSize, type: 'details' })
+				conn.send({ name: names[0], length: names.length, totalSize, text, type: 'details' })
 				dispatchConnections({ peer, name: peerName, conn })
 				toast.success(`${peerName} connected`)
 			})
@@ -83,7 +86,9 @@ export default function P2p({ router }) {
 				<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">
 					<label htmlFor="files">File(s):</label>
 					{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
-						: <input type="file" id='files' disabled={disable} required onChange={event => setFiles(event.target.files)} multiple />}
+						: <input type="file" id='files' disabled={disable} onChange={event => setFiles(event.target.files)} multiple />}
+					<label htmlFor="text">Text: </label>
+					<input type="text" id='text' ref={textRef} defaultValue={text} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='(Optional)' />
 					<label htmlFor="room-id">Room Id: </label>
 					<input type="text" id='room-id' value={roomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
 					<button type="submit" disabled={disable} className='primary-button'>Share</button>
@@ -105,7 +110,7 @@ export default function P2p({ router }) {
 					</div>
 				</div>}
 			</div>
-			{Boolean(connArr.length) && <div className='space-y-8'>
+			{Boolean(files.length && connArr.length) && <div className='space-y-8'>
 				<h2 className='text-lg md:text-xl font-medium text-center'>Active Users</h2>
 				<div className='flex items-center justify-center gap-5 pb-10 mx-5 flex-wrap'>
 					{connArr.map(conn => <Peer key={conn[0]} data={conn[1]} names={names} sizes={sizes} totalSize={totalSize} />)}

@@ -73,7 +73,7 @@ export default function ContextProvider({ children, router }) {
     useEffect(() => { getStorage('username', randomName()) }, [])
 
     useEffect(() => {
-        if (type) fetchApp({ url: 'auth/check', showProgress: false, showToast: false }).then(({ success }) => {
+        if (type && process.env.NODE_ENV === "production") fetchApp({ url: 'auth/check', showProgress: false, showToast: false }).then(({ success }) => {
             const cookiesAccepted = getStorage('cookies') === 'accepted'
             if (!success || success && !cookiesAccepted) {
                 if (!cookiesAccepted) setStorage('cookies', 'requested')
