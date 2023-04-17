@@ -24,7 +24,7 @@ function reducer(state, { type = 'add', peer, name, conn }) {
 
 export default function P2p({ router }) {
 	const { setModal, progress, setProgress, files, setFiles } = useFileContext()
-	const { share, text } = router.query
+	const { share } = router.query
 	const room = useRef();
 	const textRef = useRef();
 	const [roomId, setRoomId] = useState('')
@@ -88,7 +88,7 @@ export default function P2p({ router }) {
 					{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
 						: <input type="file" id='files' disabled={disable} onChange={event => setFiles(event.target.files)} multiple />}
 					<label htmlFor="text">Text: </label>
-					<input type="text" id='text' ref={textRef} defaultValue={text} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='(Optional)' />
+					<input type="text" id='text' ref={textRef} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='(Optional)' />
 					<label htmlFor="room-id">Room Id: </label>
 					<input type="text" id='room-id' value={roomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
 					<button type="submit" disabled={disable} className='primary-button'>Share</button>
