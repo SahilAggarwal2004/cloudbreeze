@@ -23,6 +23,11 @@ registerRoute(({ url }) => url.pathname === '/manifest.json', new NetworkFirst({
     plugins: [new CacheableResponsePlugin({ statuses: [200] })]
 }))
 
+registerRoute(({ url }) => url.pathname.startsWith('/api'), new NetworkFirst({
+    cacheName: 'api',
+    plugins: [new CacheableResponsePlugin({ statuses: [200] })]
+}))
+
 registerRoute(({ request }) => request.destination === 'image', new CacheFirst({
     cacheName: 'images',
     plugins: [new CacheableResponsePlugin({ statuses: [200] })]
