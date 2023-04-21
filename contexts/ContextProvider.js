@@ -36,12 +36,10 @@ export default function ContextProvider({ children, router }) {
     async function fetchApp({ url, token, method = 'GET', type = 'application/json', data = {}, options = {}, showToast = true, showProgress = true }) {
         try {
             if (showProgress) setProgress(100 / 3)
+            const csrftoken = getStorage('csrftoken', undefined, false) || setStorage('csrftoken', (await axios({ url: `${window.location.origin}/api/token` })).data.token, false)
             const response = await axios({
                 url, method, withCredentials: true, data, ...options,
-                headers: {
-                    token, 'Content-Type': type,
-                    csrftoken: sign(process.env.NEXT_PUBLIC_SECRET, undefined, { expiresIn: 300000 })
-                }
+                headers: { 'Content-Type': type, token, csrftoken }
             })
             if (showProgress) setProgress(100)
             var json = response.data;
