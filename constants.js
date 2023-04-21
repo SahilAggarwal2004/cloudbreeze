@@ -9,4 +9,3 @@ export const limit = 100 // In MB
 export const peerOptions = { host: 'cloudbreeze-peer.onrender.com', secure: true }
 export const chunkSize = 1048576 // In bytes (1 MB)
 export const minBuffer = chunkSize / 16
-export const tokenExpiry = 1800000 // 30 minutes
