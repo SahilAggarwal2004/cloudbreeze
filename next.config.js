@@ -5,17 +5,16 @@ const revision = `${Date.now()}`
 const withPWA = require('next-pwa')({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
-  fallbacks: { document: '/_offline' },
   additionalManifestEntries: [
     { url: '/account', revision },
-    { url: '/file/upload', revision },
-    { url: '/file/download', revision },
-    { url: '/p2p', revision },
+    { url: '/account/forgot', revision },
     { url: '/account/history?filter=upload', revision },
     { url: '/account/history?filter=download', revision },
-    { url: '/account/signup', revision },
     { url: '/account/login', revision },
-    { url: '/account/forgot', revision }
+    { url: '/account/signup', revision },
+    { url: '/file/upload', revision },
+    { url: '/file/download', revision },
+    { url: '/p2p', revision }
   ],
   runtimeCaching: [
     {
