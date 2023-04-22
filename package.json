@@ -14,7 +14,7 @@
     "megajs": "^1.0.5",
     "mini-jwt": "^0.2.0",
     "next": "^12.2.5",
-    "next-with-workbox": "^3.0.3",
+    "next-pwa": "^5.6.0",
     "peerjs": "^1.4.7",
     "random-stuff-js": "^0.3.1",
     "react": "18.2.0",
@@ -25,14 +25,7 @@
     "react-qr-reader": "^3.0.0-beta-1",
     "react-toastify": "^9.0.5",
     "react-top-loading-bar": "^2.1.0",
-    "sharp": "^0.30.7",
-    "workbox-cacheable-response": "^6.5.4",
-    "workbox-core": "^6.5.4",
-    "workbox-precaching": "^6.5.4",
-    "workbox-recipes": "^6.5.4",
-    "workbox-routing": "^6.5.4",
-    "workbox-strategies": "^6.5.4",
-    "workbox-window": "^6.5.4"
+    "sharp": "^0.30.7"
   },
   "devDependencies": {
     "@builder.io/partytown": "^0.7.1",

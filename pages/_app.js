@@ -9,7 +9,6 @@ import { useRouter } from 'next/router';
 import Modal from '../components/Modal';
 import { useEffect, useState } from 'react';
 import Loader from '../components/Loader';
-import { Workbox } from 'workbox-window';
 import { hideNavbar } from '../constants';
 import Script from 'next/script';
 
@@ -20,11 +19,7 @@ export default function MyApp({ Component, pageProps }) {
 
     useEffect(() => {
         setLoading(false)
-        if ("serviceWorker" in navigator && process.env.NODE_ENV === "production") {
-            const wb = new Workbox("/sw.js", { scope: "/" });
-            wb.addEventListener('installed', event => { if (event.isUpdate && window.confirm('New update available, Click OK to refresh!')) window.location.reload() })
-            wb.register();
-        }
+        if (process.env.NODE_ENV === "production") navigator.serviceWorker?.register('/sw.js')
     }, []);
 
     return <>
