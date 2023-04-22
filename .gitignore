@@ -32,5 +32,6 @@ yarn-error.log*
 .vercel
 
 #sw
+/public/sw.js
 /public/workbox-*.js
 /public/fallback-*.js

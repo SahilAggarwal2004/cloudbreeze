@@ -74,7 +74,8 @@ const withPWA = require('next-pwa')({
     },
     {
       urlPattern: () => true,
-      handler: 'NetworkOnly'
+      handler: 'NetworkOnly',
+      options: { cacheName: 'others' }
     }
   ]
 })
