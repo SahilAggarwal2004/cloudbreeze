@@ -14,12 +14,7 @@ const withPWA = require('next-pwa')({
     { url: '/account/history?filter=download', revision },
     { url: '/account/signup', revision },
     { url: '/account/login', revision },
-    { url: '/account/forgot', revision },
-    { url: '/_next/image?url=%2Flogo.png&w=96&q=75', revision },
-    { url: '/_next/image?url=%2Fimages%2Faccount.webp&w=256&q=100', revision },
-    { url: '/_next/image?url=%2Fimages%2Farrow.png&w=64&q=100', revision },
-    { url: '/_next/image?url=%2Fimages%2Fcloud.webp&w=256&q=100', revision },
-    { url: '/_next/image?url=%2Fimages%2Fp2p.webp&w=256&q=100', revision }
+    { url: '/account/forgot', revision }
   ],
   runtimeCaching: [
     {
