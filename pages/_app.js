@@ -19,7 +19,7 @@ export default function MyApp({ Component, pageProps }) {
 
     useEffect(() => {
         setLoading(false)
-        if (process.env.NODE_ENV === "production") navigator.serviceWorker?.register('/share-sw.js')
+        if (process.env.NODE_ENV === "production") navigator.serviceWorker?.register('/share-sw.js', { scope: '/file/upload' })
     }, []);
 
     return <>
