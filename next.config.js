@@ -5,6 +5,7 @@ const revision = `${Date.now()}`
 const withPWA = require('next-pwa')({
   dest: 'public',
   disable: process.env.NODE_ENV === 'development',
+  fallbacks: { document: '/_offline' },
   additionalManifestEntries: [
     { url: '/account', revision },
     { url: '/file/upload', revision },
