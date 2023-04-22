@@ -17,7 +17,7 @@ const withPWA = require('next-pwa')({
     { url: '/account/forgot', revision },
     { url: '/images/account.png', revision },
     { url: '/images/arrow.png', revision },
-    { url: '/images/cloud.png', revision },
+    { url: '/images/cloud.jpg', revision },
     { url: '/images/p2p.png', revision }
   ],
   runtimeCaching: [
