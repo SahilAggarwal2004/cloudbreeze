@@ -48,10 +48,11 @@ export default function Upload({ router }) {
   }
 
   function reset() {
-    setFileId('');
-    setLink();
-    setUpPercent(-1);
-    router.push('/file/upload')
+    setFileId('')
+    setLink()
+    setDaysLimit()
+    setDownloadLimit()
+    setUpPercent(-1)
   }
 
   async function handleSubmit(event) {
