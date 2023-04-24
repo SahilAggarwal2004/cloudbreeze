@@ -9,6 +9,7 @@ import useStorage from '../hooks/useStorage';
 import { getStorage, setStorage } from '../modules/storage';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
+axios.defaults.withCredentials = true
 
 const Context = createContext();
 export const useFileContext = () => useContext(Context)
@@ -37,7 +38,7 @@ export default function ContextProvider({ children, router }) {
         try {
             if (showProgress) setProgress(100 / 3)
             const response = await axios({
-                url, method, withCredentials: true, data, ...options,
+                url, method, data, ...options,
                 headers: {
                     token, 'Content-Type': type,
                     csrftoken: sign(process.env.NEXT_PUBLIC_SECRET, undefined, { expiresIn: 300000 })
@@ -73,7 +74,7 @@ export default function ContextProvider({ children, router }) {
     useEffect(() => { getStorage('username', randomName()) }, [])
 
     useEffect(() => {
-        if (type && process.env.NODE_ENV === "production") fetchApp({ url: 'auth/check', showProgress: false, showToast: false }).then(({ error }) => {
+        if (type) fetchApp({ url: 'auth/check', showProgress: false, showToast: false }).then(({ error }) => {
             const success = error !== 'Cookies not allowed'
             const cookiesAccepted = getStorage('cookies') === 'accepted'
             if (!success || success && !cookiesAccepted) {

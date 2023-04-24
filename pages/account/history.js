@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { options } from '../../constants'
 import { useFileContext } from '../../contexts/ContextProvider'
+import { relativeTime } from '../../modules/functions'
 
 export default function History({ router }) {
     const { uploadFiles, downloadFiles, clearHistory, setModal } = useFileContext()
@@ -34,21 +35,15 @@ export default function History({ router }) {
                             if (!nameList[0]) nameList = [name]
                             const minutesLeft = (daysLimit * 24 * 60) - Math.ceil((Date.now() - new Date(createdAt)) / (60 * 1000))
                             if (minutesLeft < 0) return clearHistory(fileId, filter)
-                            const hoursLeft = Math.floor(minutesLeft / 60)
-                            const daysLeft = Math.floor(hoursLeft / 24)
 
                             return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: 'showFile', props: { fileId, filter, downloadCount } })}>
                                 <td className="text-sm text-gray-900 font-medium px-[1.0625rem] py-4">{i + 1}</td>
                                 <td className="text-sm text-gray-900 font-light px-[1.0625rem] py-4" style={{ wordBreak: 'break-word' }}>
-                                    {nameList.length !== 1 ? <ul className='space-y-1'>
+                                    <ul className='space-y-1'>
                                         {nameList.map(name => <li key={name}>{name}</li>)}
-                                    </ul> : nameList[0]}
+                                    </ul>
                                 </td>
-                                <td className="text-sm text-gray-900 font-light px-[1.0625rem] py-4">
-                                    {Boolean(daysLeft) && `${daysLeft} day(s)`}
-                                    {Boolean(daysLeft && hoursLeft % 24) && ', '}
-                                    {hoursLeft % 24 ? `${hoursLeft % 24} hour(s) ` : hoursLeft ? '' : minutesLeft ? `${minutesLeft % 60} minute(s)` : 'Less than a minute'}
-                                </td>
+                                <td className="text-sm text-gray-900 font-light px-[1.0625rem] py-4">{relativeTime(minutesLeft)}</td>
                             </tr>
                         })}
                     </tbody>

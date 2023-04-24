@@ -11,6 +11,18 @@ export function bytesToSize(bytes, max = 0, string = false) {
     return Math.max(bytes, max) >= 1048576 ? round(bytes / 1048576, digits) + (+string && ' MB') : Math.max(bytes, max) >= 1024 ? round(bytes / 1024, digits) + (+string && ' KB') : bytes + (+string && ' B')
 }
 
+export function relativeTime(minutes) {
+    let result = '';
+    const hours = Math.floor(minutes / 60)
+    const days = Math.floor(hours / 24)
+    const displayHours = hours % 24
+    const displayMinutes = minutes % 60
+    if (days) result += days + ' day(s)'
+    if (days && displayHours) result += ', '
+    if (displayHours) result += displayHours + ' hours(s)'
+    return hours ? result : displayMinutes ? displayMinutes + ' minute(s)' : 'Less than a minute'
+}
+
 export function remove(arr, value) {
     const index = arr.indexOf(value);
     if (index > -1) arr.splice(index, 1);
