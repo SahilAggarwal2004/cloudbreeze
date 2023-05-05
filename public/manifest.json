@@ -29,7 +29,7 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "/",
+  "start_url": "/?v=2",
   "share_target": {
     "action": "/share",
     "method": "POST",
