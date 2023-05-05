@@ -61,7 +61,11 @@ export default function Id({ router }) {
                     }
                     conn.send({ type: 'progress', bytes })
                     setBytes(old => old + byteLength)
-                    if (bytes === fileSize) download(blob, fileName)
+                    if (bytes !== fileSize) return
+                    try {
+                        download(blob, fileName)
+                        toast.success('File downloaded successfully!')
+                    } catch { toast.error("Couldn't download file") }
                 }
             })
             conn.on('close', () => toast.error("Peer disconnected"))
