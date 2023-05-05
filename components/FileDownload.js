@@ -1,11 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRef, useState } from 'react';
 import { File } from 'megajs';
+import axios from 'axios';
+import { FaQrcode } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import { unzip } from 'unzipit';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
-import { FaQrcode } from 'react-icons/fa';
-import axios from 'axios';
-import { download, generateId } from '../modules/functions';
+import { download, generateId, resolvePromises } from '../modules/functions';
 import BarProgress from './BarProgress';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
@@ -16,7 +18,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     const isDownloaded = downPercent === 100
     const isDownloading = downPercent >= 0 && !isDownloaded
 
-    async function downloadFile(event) {
+    async function submit(event) {
         event.preventDefault()
         const fileId = fileIdFromUrl || generateId(fileRef.current.value, 'file')
         if (!fileId) return;
@@ -24,10 +26,18 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value } })
         if (error) setDownPercent(-1)
         else {
-            function downloadFile(blob) {
-                download(blob, name)
+            async function downloadFile(blob) {
+                try {
+                    const { entries } = await unzip(blob);
+                    var nameList = Object.keys(entries);
+                    const blobs = await resolvePromises(Object.values(entries).map(e => e.blob()));
+                    for (let i = 0; i < nameList.length; i++) download(blobs[i], nameList[i])
+                } catch {
+                    nameList = [name]
+                    download(blob, name)
+                }
                 const updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
-                updatedFiles.push({ nameList: [name], _id: fileId, createdAt, daysLimit })
+                updatedFiles.push({ nameList, _id: fileId, createdAt, daysLimit })
                 setDownloadFiles(updatedFiles)
                 fetchApp({ url: `/file/downloaded/${fileId}`, showProgress: false })
             }
@@ -40,7 +50,10 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     setDownPercent(Math.round(bytesLoaded * 100 / bytesTotal))
                     if (bytesLoaded == bytesTotal) {
                         stream.removeAllListeners();
-                        downloadFile(blob)
+                        try {
+                            downloadFile(blob)
+                            toast.success('File(s) downloaded successfully!')
+                        } catch { toast.error("Couldn't download file") }
                     }
                 })
             } catch {
@@ -51,7 +64,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     }
 
     return <div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
-        <form onSubmit={downloadFile} className="grid grid-cols-[auto_1fr] gap-3 items-center">
+        <form onSubmit={submit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
             {!fileIdFromUrl && <>
                 <label htmlFor="fileId">File Id or Link:</label>
                 <input type="text" id='fileId' ref={fileRef} className='border rounded px-2 py-0.5' required autoComplete='off' />

@@ -55,13 +55,17 @@ export function fileDetails(files) {
     return { names, sizes, totalSize }
 }
 
-export function download(blob, name) {
+export async function resolvePromises(promises) {
     try {
-        const url = window.URL.createObjectURL(blob);
-        toast.success('File downloaded successfully!')
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = name; // giving default name to download prompt
-        a.click();
-    } catch { return toast.error("Couldn't download file") }
+        const data = await Promise.allSettled(promises)
+        return data.map(({ value }) => value)
+    } catch { }
+}
+
+export function download(blob, name) {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name; // giving default name to download prompt
+    a.click();
 }
