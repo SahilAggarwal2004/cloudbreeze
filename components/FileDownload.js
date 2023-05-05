@@ -9,11 +9,13 @@ import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
 import { download, generateId, resolvePromises } from '../modules/functions';
 import BarProgress from './BarProgress';
+import useStorage from '../hooks/useStorage';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
     const { downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
     const fileRef = useRef()
     const password = useRef()
+    const [unzipFile, setUnzip] = useStorage('unzip', true)
     const [downPercent, setDownPercent] = useState(-1)
     const isDownloaded = downPercent === 100
     const isDownloading = downPercent >= 0 && !isDownloaded
@@ -28,6 +30,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         else {
             async function downloadFile(blob) {
                 try {
+                    if (!unzipFile) throw new Error();
                     const { entries } = await unzip(blob);
                     var nameList = Object.keys(entries);
                     const blobs = await resolvePromises(Object.values(entries).map(e => e.blob()));
@@ -71,6 +74,11 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             </>}
             <label htmlFor="password">Password (if any):</label>
             <input type="password" id='password' ref={password} className='border rounded px-2 py-0.5' autoComplete="new-password" />
+            <label className="col-span-2 relative inline-flex items-center cursor-pointer place-self-center">
+                <input type="checkbox" checked={unzipFile} className="sr-only peer" onClick={() => setUnzip(!unzipFile)} />
+                <div className="w-9 h-[21px] bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-gray-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-black"></div>
+                <span className="ml-3 text-sm">Unzip zipped files</span>
+            </label>
             <div className='col-span-2 text-center text-xs sm:text-sm'>
                 <span className='font-semibold text-gray-800'>Tip:</span> No need of password if you are the author of the file!
             </div>
