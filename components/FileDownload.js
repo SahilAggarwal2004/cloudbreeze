@@ -15,7 +15,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     const { downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
     const fileRef = useRef()
     const password = useRef()
-    const [unzipFile, setUnzip] = useStorage('unzip', true)
+    const [unzipFile, setUnzip] = useStorage('unzip', false)
     const [downPercent, setDownPercent] = useState(-1)
     const isDownloaded = downPercent === 100
     const isDownloading = downPercent >= 0 && !isDownloaded
