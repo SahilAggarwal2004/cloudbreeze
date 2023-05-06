@@ -48,7 +48,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             try {
                 const file = File.fromURL(link)
                 const stream = file.download();
-                let blob = new Blob([])
+                let blob = new Blob()
                 stream.on('data', data => blob = new Blob([blob, data]))
                 stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
                     setDownPercent(Math.round(bytesLoaded * 100 / bytesTotal))
