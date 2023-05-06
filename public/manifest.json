@@ -52,11 +52,11 @@
   },
   "shortcuts": [
     {
-      "name": "Experiment",
+      "name": "Upload files",
       "url": "/file/upload"
     },
     {
-      "name": "Download a file",
+      "name": "Download files",
       "url": "/file/download"
     },
     {
