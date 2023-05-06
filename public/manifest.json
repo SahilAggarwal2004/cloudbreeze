@@ -1,7 +1,9 @@
 {
   "short_name": "CloudBreeze",
   "name": "CloudBreeze - Breeze your files on the cloud!",
-  "description": "CloudBreeze is an online platform to where you can share files via cloud between your friends. We respect your privacy and that's why we make sure your files are totally encrypted and password protected.",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "description": "CloudBreeze is an online platform to where you can share files via cloud or p2p between your friends for free.",
   "author": "Sahil Aggarwal",
   "icons": [
     {
@@ -29,7 +31,7 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "/?v=2",
+  "start_url": "/",
   "share_target": {
     "action": "/share",
     "method": "POST",
