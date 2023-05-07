@@ -5,6 +5,7 @@ import axios from 'axios';
 import { FaQrcode } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { unzip } from 'unzipit';
+import { wait } from 'random-stuff-js';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
 import { download, generateId, resolvePromises } from '../modules/functions';
@@ -35,7 +36,10 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     const { entries } = await unzip(blob);
                     var nameList = Object.keys(entries);
                     const blobs = await resolvePromises(Object.values(entries).map(e => e.blob()));
-                    for (let i = 0; i < nameList.length; i++) download(blobs[i], nameList[i])
+                    for (let i = 0; i < nameList.length;) {
+                        download(blobs[i], nameList[i])
+                        if (!(++i % 10)) await wait(1000)
+                    }
                 } catch {
                     nameList = [name]
                     download(blob, name)
