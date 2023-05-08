@@ -45,6 +45,7 @@ export default function Upload({ router }) {
 	}
 
 	function reset() {
+		setFiles([])
 		setLink()
 		setUpPercent(-1)
 	}
