@@ -45,6 +45,7 @@ export default function Upload({ router }) {
 	}
 
 	function reset() {
+		// Don't remove the setTimeout as file reset doesn't work without it
 		setTimeout(() => {
 			setFiles([])
 			setLink()
