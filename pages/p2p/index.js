@@ -42,8 +42,8 @@ export default function P2p({ router }) {
 		router.push(`/p2p/${generateId(receiveRoom.current.value, 'p2p')}`)
 	}
 
-	async function handleSubmit(event) {
-		event.preventDefault()
+	async function handleSubmit(e) {
+		e.preventDefault()
 		const text = textRef.current.value
 		if (!length && !text) return toast.error('Please provide files or text to share!')
 		setProgress(100 / 8)
@@ -82,7 +82,7 @@ export default function P2p({ router }) {
 				<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">
 					<label htmlFor="files">File(s):</label>
 					{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
-						: <input type="file" id='files' disabled={disable} onChange={event => setFiles(event.target.files)} multiple />}
+						: <input type="file" id='files' value={files} onChange={e => setFiles(e.target.files)} disabled={disable} multiple />}
 					<label htmlFor="text">Text: </label>
 					<input type="text" id='text' ref={textRef} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='(Optional)' />
 					<label htmlFor="room-id">Room Id: </label>

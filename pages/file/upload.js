@@ -29,11 +29,11 @@ export default function Upload({ router }) {
 	const verifyDownloadLimit = e => e.target.value = Math.abs(e.target.value) || ''
 	const verifyDaysLimit = e => e.target.value = Math.min(Math.abs(e.target.value), maxDaysLimit) || ''
 
-	function updateFile(event) {
-		const { files } = event.target
+	function updateFile(e) {
+		const { files } = e.target
 		const size = fileDetails(files).totalSize
 		if (!size) {
-			event.target.value = "";
+			e.target.value = "";
 			return toast.warning('Empty file(s)');
 		}
 		if (size > limit * 1048576) { // size limit
@@ -50,8 +50,8 @@ export default function Upload({ router }) {
 		setUpPercent(-1)
 	}
 
-	async function handleSubmit(event) {
-		event.preventDefault()
+	async function handleSubmit(e) {
+		e.preventDefault()
 		setUpPercent(0)
 		if (length === 1) var content = files[0]
 		else {
@@ -116,7 +116,7 @@ export default function Upload({ router }) {
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
 				<label htmlFor="files">File(s):</label>
 				{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
-					: <input type="file" id='files' disabled={isUploading} required onChange={updateFile} multiple />}
+					: <input type="file" id='files' value={files} onChange={updateFile} disabled={isUploading} required multiple />}
 
 				<label htmlFor="file-id">File Id: </label>
 				<input type="text" id='file-id' ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />

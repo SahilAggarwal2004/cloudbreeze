@@ -22,8 +22,8 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     const isDownloaded = downPercent === 100
     const isDownloading = downPercent >= 0 && !isDownloaded
 
-    async function submit(event) {
-        event.preventDefault()
+    async function submit(e) {
+        e.preventDefault()
         const fileId = fileIdFromUrl || generateId(fileRef.current.value, 'file')
         if (!fileId) return;
         setDownPercent(0)

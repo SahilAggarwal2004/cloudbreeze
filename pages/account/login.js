@@ -11,8 +11,8 @@ export default function Login({ router }) {
   const email = useRef();
   const password = useRef();
 
-  async function submit(event) {
-    event.preventDefault()
+  async function submit(e) {
+    e.preventDefault()
     const { success, name, type, files } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
     if (success) {
       setUploadFiles(files)

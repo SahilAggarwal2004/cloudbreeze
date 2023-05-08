@@ -12,8 +12,8 @@ export default function Forgot({ router }) {
   const password = useRef();
   const [stage, setStage] = useState(0)
 
-  async function submit(event) {
-    event.preventDefault()
+  async function submit(e) {
+    e.preventDefault()
     if (!stage) {
       const { success, error } = await fetchApp({ url: 'auth/otp', method: 'POST', data: { email: email.current.value } })
       if (success || error === 'OTP already sent!') setStage(1)
