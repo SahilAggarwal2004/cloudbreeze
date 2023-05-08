@@ -15,9 +15,9 @@ export default function Upload({ router }) {
   const { fetchApp, files, setFiles, uploadFiles, setUploadFiles, type } = useFileContext()
   const { share } = router.query
   const passwordRef = useRef()
-  const [fileIdRef, setFileId] = useState('')
-  const [daysLimitRef, setDaysLimit] = useState()
-  const [downloadLimitRef, setDownloadLimit] = useState()
+  const fileIdRef = useRef()
+  const daysLimitRef = useRef()
+  const downloadLimitRef = useRef()
   const [link, setLink] = useState()
   const [upPercent, setUpPercent] = useState(-1)
   const isUploading = upPercent >= 0
@@ -25,12 +25,9 @@ export default function Upload({ router }) {
   const daysLimit = type === 'premium' ? 365 : type === 'normal' ? 30 : 3
   const length = files.length
 
-  const verifyFileId = event => setFileId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
-  const verifyDownloadLimit = event => setDownloadLimit(Math.abs(event.target.value) || '')
-  const verifyDaysLimit = event => {
-    const value = Math.abs(event.target.value)
-    if (value <= daysLimit) setDaysLimit(value || '')
-  }
+  const verifyFileId = e => e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "")
+  const verifyDownloadLimit = e => e.target.value = Math.abs(e.target.value) || ''
+  const verifyDaysLimit = e => e.target.value = Math.min(Math.abs(e.target.value), daysLimit) || ''
 
   function updateFile(event) {
     const { files } = event.target
@@ -45,14 +42,6 @@ export default function Upload({ router }) {
       return router.push('/p2p?share=true')
     }
     setFiles(files)
-  }
-
-  function reset() {
-    setFileId('')
-    setLink()
-    setDaysLimit()
-    setDownloadLimit()
-    setUpPercent(-1)
   }
 
   async function handleSubmit(event) {
@@ -125,19 +114,19 @@ export default function Upload({ router }) {
           : <input type="file" id='files' disabled={isUploading} required onChange={updateFile} multiple />}
 
         <label htmlFor="file-id">File Id: </label>
-        <input type="text" id='file-id' value={fileIdRef} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyFileId} autoComplete='off' placeholder='Auto' maxLength={30} />
+        <input type="text" id='file-id' ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />
 
         <label htmlFor="password">Password:</label>
         <input type="password" id='password' ref={passwordRef} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
 
         <label htmlFor="days-limit">Days Limit:</label>
-        <input type="number" id='days-limit' value={daysLimitRef} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} max={daysLimit} onChange={verifyDaysLimit} />
+        <input type="number" id='days-limit' ref={daysLimitRef} onInput={verifyDaysLimit} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${daysLimit} (max)`} min={1} max={daysLimit} />
 
         <label htmlFor="download-limit">Download Limit:</label>
-        <input type="number" id='download-limit' value={downloadLimitRef} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} onChange={verifyDownloadLimit} />
+        <input type="number" id='download-limit' ref={downloadLimitRef} onInput={verifyDownloadLimit} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} />
 
         <button type="submit" disabled={isUploading} className='primary-button'>Upload</button>
-        {isUploaded && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => reset(), 0)}>Reset</button>}
+        {isUploaded && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => setUpPercent(-1), 0)}>Reset</button>}
       </form>
 
       {!link && (upPercent === 100 ? <Loader className='flex items-center space-x-2' text='Please wait, processing the file(s)...' /> : <BarProgress percent={upPercent} />)}

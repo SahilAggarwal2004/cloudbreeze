@@ -25,9 +25,9 @@ function reducer(state, { type = 'add', peer, name, conn }) {
 export default function P2p({ router }) {
 	const { setModal, progress, setProgress, files, setFiles } = useFileContext()
 	const { share } = router.query
-	const room = useRef();
+	const shareRoom = useRef();
+	const receiveRoom = useRef();
 	const textRef = useRef();
-	const [roomId, setRoomId] = useState('')
 	const [link, setLink] = useState('')
 	const [connections, dispatchConnections] = useReducer(reducer, {})
 	const connArr = Object.entries(connections)
@@ -35,15 +35,11 @@ export default function P2p({ router }) {
 	const { names, sizes, totalSize } = fileDetails(files);
 	const length = files.length
 
-	const verifyRoomId = event => setRoomId(event.target.value.replace(/[^a-zA-Z0-9_-]/g, ""))
-	const reset = event => {
-		event.preventDefault()
-		window.location.reload()
-	}
+	const verifyRoomId = e => e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "")
 
 	function enterRoom(event) {
 		event?.preventDefault()
-		router.push(`/p2p/${generateId(room.current.value, 'p2p')}`)
+		router.push(`/p2p/${generateId(receiveRoom.current.value, 'p2p')}`)
 	}
 
 	async function handleSubmit(event) {
@@ -52,7 +48,7 @@ export default function P2p({ router }) {
 		if (!length && !text) return toast.error('Please provide files or text to share!')
 		setProgress(100 / 8)
 		const Peer = require("peerjs").default
-		const peerId = roomId || Date.now()
+		const peerId = shareRoom.current.value || Date.now()
 		setProgress(100 / 3)
 		const peer = new Peer(peerId, peerOptions)
 		peer.on('open', id => {
@@ -74,7 +70,7 @@ export default function P2p({ router }) {
 			})
 		})
 		peer.on('error', () => setProgress(100))
-		peer.on('close', reset)
+		peer.on('close', window.location.reload)
 	}
 
 	useEffect(() => { if (!share) setFiles([]) }, [])
@@ -90,15 +86,15 @@ export default function P2p({ router }) {
 					<label htmlFor="text">Text: </label>
 					<input type="text" id='text' ref={textRef} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='(Optional)' />
 					<label htmlFor="room-id">Room Id: </label>
-					<input type="text" id='room-id' value={roomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' onChange={verifyRoomId} autoComplete='off' placeholder='Auto' maxLength={30} />
+					<input type="text" id='room-id' ref={shareRoom} onInput={verifyRoomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />
 					<button type="submit" disabled={disable} className='primary-button'>Share</button>
-					{link && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={reset}>Reset</button>}
+					{link && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setLink('')}>Reset</button>}
 				</form>
 				<div className='md:h-[calc(100%+2.5rem)] p-0 m-0 border-[0.5px] border-black col-span-1' />
 				{link ? <Info roomId={link} /> : <div className='flex flex-col items-center space-y-5'>
 					<form onSubmit={enterRoom} className="grid grid-cols-[auto_1fr] gap-3 items-center">
 						<label htmlFor="fileId">Room Id or Link:</label>
-						<input type="text" id='fileId' ref={room} className='border rounded px-2 py-0.5' required autoComplete='off' />
+						<input type="text" id='fileId' ref={receiveRoom} onInput={verifyRoomId} className='border rounded px-2 py-0.5' required autoComplete='off' />
 						<button type="submit" className='primary-button'>Receive</button>
 					</form>
 					<div className='text-center'>
