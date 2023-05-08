@@ -45,9 +45,11 @@ export default function Upload({ router }) {
 	}
 
 	function reset() {
-		setFiles([])
-		setLink()
-		setUpPercent(-1)
+		setTimeout(() => {
+			setFiles([])
+			setLink()
+			setUpPercent(-1)
+		}, 0);
 	}
 
 	async function handleSubmit(e) {
@@ -116,7 +118,7 @@ export default function Upload({ router }) {
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
 				<label htmlFor="files">File(s):</label>
 				{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
-					: <input type="file" id='files' value={files} onChange={updateFile} disabled={isUploading} required multiple />}
+					: <input type="file" id='files' onChange={updateFile} disabled={isUploading} required multiple />}
 
 				<label htmlFor="file-id">File Id: </label>
 				<input type="text" id='file-id' ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />

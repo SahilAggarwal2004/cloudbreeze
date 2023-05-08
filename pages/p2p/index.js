@@ -82,13 +82,13 @@ export default function P2p({ router }) {
 				<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">
 					<label htmlFor="files">File(s):</label>
 					{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
-						: <input type="file" id='files' value={files} onChange={e => setFiles(e.target.files)} disabled={disable} multiple />}
+						: <input type="file" id='files' onChange={e => setFiles(e.target.files)} disabled={disable} multiple />}
 					<label htmlFor="text">Text: </label>
 					<input type="text" id='text' ref={textRef} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='(Optional)' />
 					<label htmlFor="room-id">Room Id: </label>
 					<input type="text" id='room-id' ref={shareRoom} onInput={verifyRoomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />
 					<button type="submit" disabled={disable} className='primary-button'>Share</button>
-					{link && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setLink('')}>Reset</button>}
+					{link && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => setLink(''), 0)}>Reset</button>}
 				</form>
 				<div className='md:h-[calc(100%+2.5rem)] p-0 m-0 border-[0.5px] border-black col-span-1' />
 				{link ? <Info roomId={link} /> : <div className='flex flex-col items-center space-y-5'>
