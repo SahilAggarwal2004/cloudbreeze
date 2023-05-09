@@ -31,22 +31,18 @@ export default function Account() {
             </div>
             <div className='flex flex-col items-center space-y-5 sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0 text-sm'>
                 <Link href='/account/history?filter=upload'>
-                    <a>
-                        <div className='text-lg sm:text-xl font-semibold'>{uploadFiles.length}</div>
-                        Files Uploaded
-                    </a>
+                    <div className='text-lg sm:text-xl font-semibold'>{uploadFiles.length}</div>
+                    Files Uploaded
                 </Link>
                 <Link href='/account/history?filter=download'>
-                    <a>
-                        <div className='text-lg sm:text-xl font-semibold'>{downloadFiles.length}</div>
-                        Files Downloaded
-                    </a>
+                    <div className='text-lg sm:text-xl font-semibold'>{downloadFiles.length}</div>
+                    Files Downloaded
                 </Link>
             </div>
             <div className='text-sm font-medium text-gray-600 flex flex-col items-center space-y-1.5'>
                 {guest ? <>
-                    <Link href='/account/signup'><a className='hover:text-black'>Create a new account</a></Link>
-                    <Link href='/account/login'><a className='hover:text-black'>Login to an existing account</a></Link>
+                    <Link href='/account/signup' className='hover:text-black'>Create a new account</Link>
+                    <Link href='/account/login' className='hover:text-black'>Login to an existing account</Link>
                 </> : <>
                     <div className='cursor-pointer hover:text-black' onClick={() => logout('manual')}>Logout</div>
                     <div className='cursor-pointer hover:text-black' onClick={() => setModal({ active: true, type: 'deleteUser' })}>Delete Account</div>

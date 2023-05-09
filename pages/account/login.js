@@ -31,7 +31,7 @@ export default function Login({ router }) {
           <Logo />
           <h2 className="mt-6 text-center text-2xl font-bold text-gray-900">Log in to your account</h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            or <Link href='/account/signup'><a className="font-medium hover:text-black">Sign Up</a></Link>
+            or <Link href='/account/signup' className="font-medium hover:text-black">Sign Up</Link>
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={submit}>

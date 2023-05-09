@@ -31,7 +31,7 @@ export default function Forgot({ router }) {
           <Logo />
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">Forgot Password</h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            or <Link href='/account/login'><a className="font-medium hover:text-black">Login</a></Link>
+            or <Link href='/account/login' className="font-medium hover:text-black">Login</Link>
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={submit}>

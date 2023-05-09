@@ -26,6 +26,10 @@
     @apply border-black text-black bg-gray-100 hover:text-white hover:bg-black transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black
 }
 
+.image-container {
+    @apply shadow-md rounded-lg w-80 h-80 max-w-[90vw] cursor-pointer select-none hover:shadow-2xl transition-all duration-300 relative flex justify-center
+}
+
 * {
     -webkit-tap-highlight-color: transparent;
 }
