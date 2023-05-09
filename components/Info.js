@@ -37,9 +37,7 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
         {modal && filter === 'upload' && <div className='text-sm pb-2'>Download Count: {downloadCount}</div>}
         {modal && <div className='grid grid-cols-2 gap-2 mt-2 mx-4 text-sm'>
             {filter === 'upload' ? <>
-                <Link href={link}>
-                    <button className='col-span-2 py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: false })}>Download</button>
-                </Link>
+                <Link href={link} className='col-span-2 py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: false })}>Download</Link>
                 <button className='py-1 px-3 rounded border button-animation' onClick={() => setModal({ active: true, type: 'deleteFile', props: { fileId } })}>Delete</button>
             </> : filter === 'download' && <button className='py-1 px-3 rounded border button-animation' onClick={() => {
                 setModal({ active: false })

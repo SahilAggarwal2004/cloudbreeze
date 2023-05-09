@@ -10,7 +10,6 @@ export default function Navbar() {
     return <>
         <LoadingBar color='#ffffff' progress={progress} waitingTime={300} onLoaderFinished={() => setProgress(0)} />
         <nav className='sticky inset-0 z-30 flex bg-black text-white items-center justify-between p-2 xs:px-4 sm:px-5 shadow-lg'>
-            {/* adding <a>  tag inside <Link> as for some reason <Link> passes a ref to its child and we can't use ref in a react component(here, FaUserAlt) */}
             {/* title attribute displays text on element hover */}
             <div className='flex space-x-3 sm:space-x-4 items-center justify-center'>
                 <Link href="/account"><FaUserAlt className='xs:scale-110' title='Your Account' /></Link>
