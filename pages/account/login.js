@@ -40,7 +40,7 @@ export default function Login({ router }) {
             <Password password={password} />
           </div>
 
-          <Link passHref href='/account/forgot'><div className="cursor-pointer font-medium text-sm text-gray-600 hover:text-black">Forgot your password?</div></Link>
+          <Link passHref href='/account/forgot'><div className="cursor-pointer mt-2 font-medium text-sm text-gray-600 hover:text-black">Forgot your password?</div></Link>
 
           <button type="submit" className="relative w-full flex justify-center py-2 px-4 text-sm font-medium rounded-md border button-animation">Log in</button>
         </form>
