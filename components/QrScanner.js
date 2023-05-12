@@ -11,6 +11,7 @@ export default function QrScanner({ redirect }) {
 
     function handleQrScan(result, error) {
         if (uselessErrors.includes(error?.name)) {
+            console.dir(error)
             setModal({ active: false })
             return toast.error('Permission denied or browser not supported')
         }
