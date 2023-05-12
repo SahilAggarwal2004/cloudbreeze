@@ -23,9 +23,9 @@ export default function Home({ router }) {
             setHover(true);
             redirect('/file/upload')
         }} onContextMenu={e => e.preventDefault()}>
-            <Image src='/images/cloud.webp' alt='' width={250} height={250} quality={100} />
+            <Image src='/images/cloud.webp' alt='' width={250} height={250} quality={100} priority={true} />
             <div className={`x-center top-[55%] md:top-44 transition-all duration-300 ${hover ? '-translate-y-[5.5rem] opacity-100' : 'opacity-0'}`}>
-                <Image src='/images/arrow.png' alt='' width={50} height={50} objectFit='scale-down' quality={100} />
+                <Image src='/images/arrow.png' alt='' width={50} height={50} quality={100} />
             </div>
             <div className='x-center bottom-4'>Upload a file</div>
         </div>
