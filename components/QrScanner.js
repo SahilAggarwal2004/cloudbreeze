@@ -3,14 +3,14 @@ import { QrReader } from 'react-qr-reader'
 import { toast } from 'react-toastify'
 import { useFileContext } from '../contexts/ContextProvider'
 import { verifyUrl } from '../modules/functions'
+import { uselessErrors } from '../constants'
 
 export default function QrScanner({ redirect }) {
     const { modal, setModal } = useFileContext()
     const [error, setError] = useState(false)
 
     function handleQrScan(result, error) {
-        console.dir(error)
-        if (error && error.name !== 'e') {
+        if (uselessErrors.includes(error?.name)) {
             setModal({ active: false })
             return toast.error('Permission denied or browser not supported')
         }
