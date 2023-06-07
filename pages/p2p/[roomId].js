@@ -99,7 +99,7 @@ export default function Id({ router }) {
             {text && <div className='flex flex-col items-center px-3 text-justify space-y-1'>
                 <div className='flex items-center space-x-2'>
                     <span className='text-lg font-medium'>Text</span>
-                    <FaCopy onClick={copy} />
+                    <FaCopy className='cursor-pointer' onClick={copy} />
                 </div>
                 <div className='whitespace-pre-line' style={{ wordBreak: 'break-word' }}>{text}</div>
             </div>}
