@@ -28,6 +28,7 @@ export default function P2p({ router }) {
 	const shareRoom = useRef();
 	const receiveRoom = useRef();
 	const textRef = useRef();
+	const peerRef = useRef();
 	const [link, setLink] = useState('')
 	const [connections, dispatchConnections] = useReducer(reducer, {})
 	const connArr = Object.entries(connections)
@@ -36,6 +37,11 @@ export default function P2p({ router }) {
 	const length = files.length
 
 	const verifyRoomId = e => e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "")
+
+	function reset() {
+		peerRef.current?.destroy()
+		setTimeout(() => setLink(''), 0)
+	}
 
 	function enterRoom(event) {
 		event?.preventDefault()
@@ -51,6 +57,7 @@ export default function P2p({ router }) {
 		const peerId = shareRoom.current.value || Date.now()
 		setProgress(100 / 3)
 		const peer = new Peer(peerId, peerOptions)
+		peerRef.current = peer;
 		peer.on('open', id => {
 			setLink(id)
 			setProgress(100)
@@ -69,8 +76,11 @@ export default function P2p({ router }) {
 				toast.error(`${peerName} disconnected`)
 			})
 		})
-		peer.on('error', () => setProgress(100))
-		peer.on('close', window.location.reload)
+		peer.on('error', ({ type }) => {
+			toast.error(type === 'network' ? 'Reconnecting...' : 'Room busy. Try another!')
+			setProgress(100)
+		})
+		peer.on('disconnected', () => setTimeout(() => !peer.destroyed && peer.reconnect(), 1000))
 	}
 
 	useEffect(() => { if (!share) setFiles([]) }, [])
@@ -88,7 +98,7 @@ export default function P2p({ router }) {
 					<label htmlFor="room-id">Room Id: </label>
 					<input type="text" id='room-id' ref={shareRoom} onInput={verifyRoomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />
 					<button type="submit" disabled={disable} className='primary-button'>Share</button>
-					{link && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={() => setTimeout(() => setLink(''), 0)}>Reset</button>}
+					{link && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={reset}>Reset</button>}
 				</form>
 				<div className='md:h-[calc(100%+2.5rem)] p-0 m-0 border-[0.5px] border-black col-span-1' />
 				{link ? <Info roomId={link} /> : <div className='flex flex-col items-center space-y-5'>
