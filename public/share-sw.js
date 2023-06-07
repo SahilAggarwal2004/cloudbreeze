@@ -9,7 +9,7 @@ self.addEventListener('fetch', e => {
             const client = await self.clients.get(e.resultingClientId);
             const data = await e.request.formData();
             const files = data.getAll('files');
-            if (files.length) setTimeout(() => client.postMessage({ files }), 500);
+            if (files.length) setTimeout(() => client.postMessage({ files }), 1000);
         }());
     }
 });
