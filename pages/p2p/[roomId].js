@@ -101,7 +101,7 @@ export default function Id({ router }) {
                     <span className='text-lg font-medium'>Text</span>
                     <FaCopy onClick={copy} />
                 </div>
-                <div style={{ wordBreak: 'break-word' }}>{text}</div>
+                <div className='whitespace-pre-line' style={{ wordBreak: 'break-word' }}>{text}</div>
             </div>}
         </div>}
     </>

@@ -84,7 +84,7 @@ export default function P2p({ router }) {
 					{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
 						: <input type="file" id='files' onChange={e => setFiles(e.target.files)} disabled={disable} multiple />}
 					<label htmlFor="text">Text: </label>
-					<input type="text" id='text' ref={textRef} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='(Optional)' />
+					<textarea id='text' ref={textRef} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' placeholder='Text / Description (Optional)' rows='2' />
 					<label htmlFor="room-id">Room Id: </label>
 					<input type="text" id='room-id' ref={shareRoom} onInput={verifyRoomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />
 					<button type="submit" disabled={disable} className='primary-button'>Share</button>
