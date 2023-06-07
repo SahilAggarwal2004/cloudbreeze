@@ -83,7 +83,10 @@ export default function P2p({ router }) {
 		peer.on('disconnected', () => setTimeout(() => !peer.destroyed && peer.reconnect(), 1000))
 	}
 
-	useEffect(() => { if (!share) setFiles([]) }, [])
+	useEffect(() => {
+		if (!share) setFiles([])
+		return reset
+	}, [])
 
 	return <>
 		<Head><title>Peer-to-peer transfer | CloudBreeze</title></Head>
