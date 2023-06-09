@@ -38,7 +38,6 @@ export default function Id({ router }) {
         peer.on('open', () => {
             let fileName, fileSize, bytes, blob = new Blob([]);
             const conn = peer.connect(roomId, { metadata: getStorage('username') })
-            setTimeout(() => { if (!conn.open) setError("Connection couldn't be established. Retry again!") }, 5000);
             conn.on('open', () => {
                 setConnection(conn)
                 toast.success('Connection established')
@@ -70,6 +69,7 @@ export default function Id({ router }) {
             })
             conn.on('close', () => toast.error("Peer disconnected"))
         })
+        peer.on('error', () => setError("Connection couldn't be established. Retry again!"))
         return () => {
             peer.removeAllListeners()
             peer.destroy()
