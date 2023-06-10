@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { GoX } from 'react-icons/go'
-import { chunkSize, maxBuffer, minBuffer } from '../constants'
+import { chunkSize, minBuffer } from '../constants'
 import { bytesToSize, speed } from '../modules/functions'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -20,22 +20,16 @@ export default function Peer({ names, sizes, totalSize, data }) {
     const size = sizes[count]
 
     function sendFile() {
-        let bytesSent = 0
-        channel.bufferedAmountLowThreshold = minBuffer;
-        function send() {
-            const proceed = setInterval(() => {
-                if (channel.bufferedAmount >= maxBuffer || bytesSent >= size) return clearInterval(proceed)
-                if (bytesSent) {
-                    const chunk = file.slice(bytesSent, bytesSent += chunkSize)
-                    conn.send({ chunk, type: 'file' })
-                } else {
-                    const chunk = file.slice(0, bytesSent += chunkSize)
-                    conn.send({ chunk, name: names[count], size, type: 'file', initial: true })
-                }
-            }, 25);
-        }
-        channel.onbufferedamountlow = send;
-        send()
+        let bytesSent = chunkSize
+        const chunk = file.slice(0, chunkSize)
+        conn.send({ chunk, name: names[count], size, type: 'file', initial: true })
+        const proceed = setInterval(() => {
+            if (bytesSent >= size || !channel) clearInterval(proceed)
+            else if (channel.bufferedAmount < minBuffer) {
+                const chunk = file.slice(bytesSent, bytesSent += chunkSize)
+                conn.send({ chunk, type: 'file' })
+            }
+        }, 22);
     }
 
     function acceptData({ type, bytes }) {
