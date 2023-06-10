@@ -29,7 +29,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
                 const chunk = file.slice(bytesSent, bytesSent += chunkSize)
                 conn.send({ chunk, type: 'file' })
             }
-        }, 22);
+        }, 40);
     }
 
     function acceptData({ type, bytes }) {
