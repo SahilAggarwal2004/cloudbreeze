@@ -20,16 +20,20 @@ export default function Peer({ names, sizes, totalSize, data }) {
     const size = sizes[count]
 
     function sendFile() {
-        let bytesSent = chunkSize
-        const chunk = file.slice(0, chunkSize)
-        conn.send({ chunk, name: names[count], size, type: 'file', initial: true })
-        const proceed = setInterval(() => {
-            if (bytesSent >= size || !channel) clearInterval(proceed)
-            else if (channel.bufferedAmount <= minBuffer) {
-                const chunk = file.slice(bytesSent, bytesSent += chunkSize)
-                conn.send({ chunk, type: 'file' })
-            }
-        }, 40);
+        conn.send({ name: names[count], size, type: 'initial' })
+        let bytesSent = 0
+        const reader = new FileReader();
+        const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent += chunkSize))
+        reader.onload = ({ target: { result: chunk, error } }) => {
+            if (error) return readChunk();
+            const proceed = setInterval(() => {
+                if (channel.bufferedAmount > minBuffer) return;
+                conn.send({ chunk, type: 'file' });
+                clearInterval(proceed)
+                if (bytesSent < size) readChunk();
+            }, 20);
+        };
+        readChunk()
     }
 
     function acceptData({ type, bytes }) {

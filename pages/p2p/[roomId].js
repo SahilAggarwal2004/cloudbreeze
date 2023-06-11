@@ -23,28 +23,17 @@ export default function Id({ router }) {
     const isDownloading = downPercent >= 0
 
     function connect() {
-        let fileName, fileSize, bytes, blob = new Blob([]);
+        let fileName, fileSize, bytes = 0, blob = new Blob([]);
         const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
         conn.on('open', () => {
             setConnection(conn)
             toast.success('Connection established')
         })
-        conn.on('data', ({ type, name, length, totalSize, text, chunk, size, initial = false }) => {
-            if (type === 'details') {
-                setFile(length <= 1 ? name : `${length} files`)
-                setSize(totalSize)
-                setText(text)
-            } else if (type === 'file') {
+        conn.on('data', ({ type, name, length, totalSize, text, chunk, size }) => {
+            if (type === 'file') {
                 const { byteLength } = chunk;
-                if (initial) {
-                    fileName = name
-                    fileSize = size
-                    blob = new Blob([chunk])
-                    bytes = byteLength
-                } else {
-                    blob = new Blob([blob, chunk])
-                    bytes += byteLength
-                }
+                blob = new Blob([blob, chunk])
+                bytes += byteLength
                 conn.send({ type: 'progress', bytes })
                 setBytes(old => old + byteLength)
                 if (bytes !== fileSize) return
@@ -52,6 +41,13 @@ export default function Id({ router }) {
                     download(blob, fileName)
                     toast.success('File downloaded successfully!')
                 } catch { toast.error("Couldn't download file") }
+            } else if (type === 'initial') {
+                fileName = name
+                fileSize = size
+            } else if (type === 'details') {
+                setFile(length <= 1 ? name : `${length} files`)
+                setSize(totalSize)
+                setText(text)
             }
         })
         conn.on('close', () => toast.error("Peer disconnected"))
