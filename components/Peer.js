@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { GoX } from 'react-icons/go'
-import { chunkSize, minBuffer } from '../constants'
+import { chunkSize } from '../constants'
 import { bytesToSize, speed } from '../modules/functions'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -27,7 +27,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
         reader.onload = ({ target: { result: chunk, error } }) => {
             if (error) return readChunk();
             const proceed = setInterval(() => {
-                if (channel.bufferedAmount > minBuffer) return;
+                if (channel.bufferedAmount > chunkSize) return;
                 conn.send({ chunk, type: 'file' });
                 clearInterval(proceed)
                 if (bytesSent < size) readChunk();
