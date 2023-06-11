@@ -31,7 +31,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
                 conn.send({ chunk, type: 'file' });
                 clearInterval(proceed)
                 if (bytesSent < size) readChunk();
-            }, 20);
+            }, 10);
         };
         readChunk()
     }
