@@ -25,7 +25,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
         conn.send({ chunk, name: names[count], size, type: 'file', initial: true })
         const proceed = setInterval(() => {
             if (bytesSent >= size || !channel) clearInterval(proceed)
-            else if (channel.bufferedAmount < minBuffer) {
+            else if (channel.bufferedAmount <= minBuffer) {
                 const chunk = file.slice(bytesSent, bytesSent += chunkSize)
                 conn.send({ chunk, type: 'file' })
             }

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import BarProgress from '../../components/BarProgress';
 import Loader from '../../components/Loader';
@@ -11,6 +11,7 @@ import { FaCopy } from 'react-icons/fa';
 
 export default function Id({ router }) {
     const { roomId } = router.query
+    const peerRef = useRef();
     const [connection, setConnection] = useState()
     const [file, setFile] = useState()
     const [size, setSize] = useState()
@@ -21,10 +22,52 @@ export default function Id({ router }) {
     const downPercent = Math.round(bytes * 100 / size) - +(bytes < 0);
     const isDownloading = downPercent >= 0
 
+    function connect() {
+        let fileName, fileSize, bytes, blob = new Blob([]);
+        const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
+        conn.on('open', () => {
+            setConnection(conn)
+            toast.success('Connection established')
+        })
+        conn.on('data', ({ type, name, length, totalSize, text, chunk, size, initial = false }) => {
+            if (type === 'details') {
+                setFile(length <= 1 ? name : `${length} files`)
+                setSize(totalSize)
+                setText(text)
+            } else if (type === 'file') {
+                const { byteLength } = chunk;
+                if (initial) {
+                    fileName = name
+                    fileSize = size
+                    blob = new Blob([chunk])
+                    bytes = byteLength
+                } else {
+                    blob = new Blob([blob, chunk])
+                    bytes += byteLength
+                }
+                conn.send({ type: 'progress', bytes })
+                setBytes(old => old + byteLength)
+                if (bytes !== fileSize) return
+                try {
+                    download(blob, fileName)
+                    toast.success('File downloaded successfully!')
+                } catch { toast.error("Couldn't download file") }
+            }
+        })
+        conn.on('close', () => toast.error("Peer disconnected"))
+    }
+
     function request() {
         connection?.send({ type: 'request' })
         setBytes(0)
         setTime(Date.now())
+    }
+
+    function retry() {
+        connection?.removeAllListeners()
+        connection?.close()
+        connect()
+        setError()
     }
 
     function copy() {
@@ -35,41 +78,13 @@ export default function Id({ router }) {
     useEffect(() => {
         const Peer = require("peerjs").default
         const peer = new Peer(peerOptions)
-        peer.on('open', () => {
-            let fileName, fileSize, bytes, blob = new Blob([]);
-            const conn = peer.connect(roomId, { metadata: getStorage('username') })
-            conn.on('open', () => {
-                setConnection(conn)
-                toast.success('Connection established')
-            })
-            conn.on('data', ({ type, name, length, totalSize, text, chunk, size, initial = false }) => {
-                if (type === 'details') {
-                    setFile(length <= 1 ? name : `${length} files`)
-                    setSize(totalSize)
-                    setText(text)
-                } else if (type === 'file') {
-                    const { byteLength } = chunk;
-                    if (initial) {
-                        fileName = name
-                        fileSize = size
-                        blob = new Blob([chunk])
-                        bytes = byteLength
-                    } else {
-                        blob = new Blob([blob, chunk])
-                        bytes += byteLength
-                    }
-                    conn.send({ type: 'progress', bytes })
-                    setBytes(old => old + byteLength)
-                    if (bytes !== fileSize) return
-                    try {
-                        download(blob, fileName)
-                        toast.success('File downloaded successfully!')
-                    } catch { toast.error("Couldn't download file") }
-                }
-            })
-            conn.on('close', () => toast.error("Peer disconnected"))
-        })
+        peerRef.current = peer;
+        peer.on('open', connect)
         peer.on('error', () => setError("Connection couldn't be established. Retry again!"))
+        peer.on('disconnected', () => {
+            peer.reconnect()
+            retry()
+        })
         return () => {
             peer.removeAllListeners()
             peer.destroy()
@@ -80,7 +95,7 @@ export default function Id({ router }) {
         <Head><title>Peer-to-peer transfer | CloudBreeze</title></Head>
         {error ? <div className='center space-y-5 text-center'>
             <h3 className='text-lg'>{error}</h3>
-            <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={() => window.location.reload()}>Retry</button>
+            <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={retry}>Retry</button>
         </div> : !file && !text ? <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' /> : <div className='mb-[4.5rem] space-y-8'>
             {file && <div className='flex justify-center'>
                 <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full grid grid-cols-[auto_1fr] gap-2 px-2'>
