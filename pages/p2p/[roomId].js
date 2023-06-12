@@ -26,6 +26,8 @@ export default function Id({ router }) {
         let fileName, fileSize, bytes, blob
         const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
         conn.on('open', () => {
+            connection?.removeAllListeners()
+            connection?.close()
             setConnection(conn)
             toast.success('Connection established')
         })
@@ -62,11 +64,10 @@ export default function Id({ router }) {
     }
 
     function retry() {
-        connection?.removeAllListeners()
-        connection?.close()
         connect()
         setFile()
         setText()
+        setBytes(-1)
         setError()
     }
 
