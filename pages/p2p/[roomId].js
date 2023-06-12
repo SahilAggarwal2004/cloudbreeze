@@ -63,6 +63,8 @@ export default function Id({ router }) {
         connection?.removeAllListeners()
         connection?.close()
         connect()
+        setFile()
+        setText()
         setError()
     }
 
