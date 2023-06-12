@@ -77,7 +77,7 @@ export default function P2p({ router }) {
 			})
 		})
 		peer.on('error', ({ type }) => {
-			toast.error(type === 'network' ? 'Reconnecting...' : 'Room busy. Try another!')
+			toast.error(type === 'network' ? 'Reconnecting...' : type === 'unavailable-id' && 'Room busy. Try another!')
 			setProgress(100)
 		})
 		peer.on('disconnected', () => setTimeout(() => !peer.destroyed && peer.reconnect(), 1000))

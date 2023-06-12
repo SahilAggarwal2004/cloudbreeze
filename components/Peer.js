@@ -30,8 +30,8 @@ export default function Peer({ names, sizes, totalSize, data }) {
                 if (!conn.open) return
                 if (channel.bufferedAmount > chunkSize) return setTimeout(send, Math.ceil(t / n))
                 const start = performance.now()
-                conn.send({ chunk, type: 'file' });
                 if ((bytesSent += chunkSize) < size) readChunk();
+                conn.send({ chunk, type: 'file' });
                 n++
                 t += performance.now() - start
             }
