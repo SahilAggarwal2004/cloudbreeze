@@ -23,7 +23,7 @@ export default function Id({ router }) {
     const isDownloading = downPercent >= 0
 
     function connect() {
-        let fileName, fileSize, bytes = 0, blob = new Blob([]);
+        let fileName, fileSize, bytes, blob = new Blob([]);
         const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
         conn.on('open', () => {
             setConnection(conn)
@@ -44,6 +44,7 @@ export default function Id({ router }) {
             } else if (type === 'initial') {
                 fileName = name
                 fileSize = size
+                bytes = 0
             } else if (type === 'details') {
                 setFile(length <= 1 ? name : `${length} files`)
                 setSize(totalSize)
