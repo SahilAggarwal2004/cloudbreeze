@@ -21,17 +21,21 @@ export default function Peer({ names, sizes, totalSize, data }) {
 
     function sendFile() {
         conn.send({ name: names[count], size, type: 'initial' })
-        let bytesSent = 0
+        let bytesSent = 0, t = 0, n = 0;
         const reader = new FileReader();
         const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent += chunkSize))
         reader.onload = ({ target: { result: chunk, error } }) => {
             if (error) return readChunk();
-            const proceed = setInterval(() => {
-                if (channel.bufferedAmount > chunkSize) return;
-                conn.send({ chunk, type: 'file' });
-                clearInterval(proceed)
+            function send() {
+                if (!conn.open) return
+                if (channel.bufferedAmount > chunkSize) return setTimeout(send, Math.ceil(t / n))
+                const start = performance.now()
                 if (bytesSent < size) readChunk();
-            }, 10);
+                conn.send({ chunk, type: 'file' });
+                t += performance.now() - start
+                n++
+            }
+            setTimeout(send, Math.ceil(t / n) || 20);
         };
         readChunk()
     }
