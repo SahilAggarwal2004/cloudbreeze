@@ -32,7 +32,7 @@
     }
   ],
   "start_url": "/",
-  "share_target": [
+  "share_targets": [
     {
       "action": "/file/upload",
       "method": "POST",
