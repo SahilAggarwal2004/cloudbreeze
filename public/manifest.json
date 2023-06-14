@@ -1,6 +1,6 @@
 {
   "short_name": "CloudBreeze",
-  "name": "CloudBreeze - Breeze your files on the cloud!",
+  "name": "CloudBreeze",
   "version": "1.0.1",
   "manifest_version": 2,
   "description": "CloudBreeze is an online platform to where you can share files via cloud or p2p between your friends for free.",
@@ -32,24 +32,41 @@
     }
   ],
   "start_url": "/",
-  "share_target": {
-    "action": "/share",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url",
-      "files": [
-        {
-          "name": "files",
-          "accept": [
-            "*/*"
-          ]
-        }
-      ]
+  "share_target": [
+    {
+      "action": "/file/upload",
+      "method": "POST",
+      "enctype": "multipart/form-data",
+      "params": {
+        "files": [
+          {
+            "name": "files",
+            "accept": [
+              "*/*"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "action": "/p2p",
+      "method": "POST",
+      "enctype": "multipart/form-data",
+      "params": {
+        "title": "title",
+        "text": "text",
+        "url": "url",
+        "files": [
+          {
+            "name": "files",
+            "accept": [
+              "*/*"
+            ]
+          }
+        ]
+      }
     }
-  },
+  ],
   "shortcuts": [
     {
       "name": "Upload files",
