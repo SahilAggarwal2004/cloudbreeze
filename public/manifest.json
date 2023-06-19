@@ -75,5 +75,12 @@
   "categories": [
     "productivity",
     "utilities"
-  ]
+  ],
+  "display_override": [
+    "standalone",
+    "window-controls-overlay"
+  ],
+  "edge_side_panel": {
+    "preferred_width": 500
+  }
 }
