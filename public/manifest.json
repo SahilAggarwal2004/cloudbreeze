@@ -66,5 +66,14 @@
   ],
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "dir": "auto",
+  "scope": "/",
+  "lang": "en",
+  "orientation": "any",
+  "prefer_related_applications": false,
+  "categories": [
+    "productivity",
+    "utilities"
+  ]
 }
