@@ -35,14 +35,11 @@ export default function Id({ router }) {
                 const downloadComplete = (bytes += byteLength) === fileSize
                 conn.send({ type: 'progress', bytes })
                 setBytes(old => old + byteLength)
-                if (byteLength < chunkSize && !downloadComplete) correction = chunk
-                else if (!correction) blob = new Blob([blob, chunk])
-                else {
-                    blob = new Blob([blob, chunk, correction])
-                    correction = null;
-                }
+                if (byteLength === chunkSize || downloadComplete) blob = new Blob([blob, chunk])
+                else correction = chunk
                 if (!downloadComplete) return
                 try {
+                    if (correction) blob = new Blob([blob, correction])
                     download(blob, fileName)
                     toast.success('File downloaded successfully!')
                 } catch { toast.error("Couldn't download file") }
