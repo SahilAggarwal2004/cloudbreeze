@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import BarProgress from '../../components/BarProgress';
 import Loader from '../../components/Loader';
-import { peerOptions } from '../../constants';
+import { chunkSize, peerOptions } from '../../constants';
 import { bytesToSize, download, speed } from '../../modules/functions';
 import { getStorage } from '../../modules/storage';
 import { FaCopy } from 'react-icons/fa';
@@ -23,7 +23,7 @@ export default function Id({ router }) {
     const isDownloading = downPercent >= 0
 
     function connect() {
-        let fileName, fileSize, bytes, blob
+        let fileName, fileSize, bytes, blob, correction
         const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
         conn.on('open', () => {
             setConnection(conn)
@@ -32,11 +32,16 @@ export default function Id({ router }) {
         conn.on('data', ({ type, name, length, totalSize, text, chunk, size }) => {
             if (type === 'file') {
                 const { byteLength } = chunk;
-                blob = new Blob([blob, chunk])
-                bytes += byteLength
+                const downloadComplete = (bytes += byteLength) === fileSize
                 conn.send({ type: 'progress', bytes })
                 setBytes(old => old + byteLength)
-                if (bytes !== fileSize) return
+                if (byteLength < chunkSize && !downloadComplete) correction = chunk
+                else if (!correction) blob = new Blob([blob, chunk])
+                else {
+                    blob = new Blob([blob, chunk, correction])
+                    correction = null;
+                }
+                if (!downloadComplete) return
                 try {
                     download(blob, fileName)
                     toast.success('File downloaded successfully!')
