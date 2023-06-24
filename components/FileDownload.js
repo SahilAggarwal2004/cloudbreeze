@@ -18,17 +18,17 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     const fileRef = useRef()
     const password = useRef()
     const [unzipFile, setUnzip] = useStorage('unzip', true)
-    const [downPercent, setDownPercent] = useState(-1)
-    const isDownloaded = downPercent === 100
-    const isDownloading = downPercent >= 0 && !isDownloaded
+    const [progress, setProgress] = useState(-1)
+    const isDownloaded = progress === 100
+    const isDownloading = progress >= 0 && !isDownloaded
 
     async function submit(e) {
         e.preventDefault()
         const fileId = fileIdFromUrl || generateId(fileRef.current.value, 'file')
         if (!fileId) return;
-        setDownPercent(0)
+        setProgress(0)
         const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value } })
-        if (error) setDownPercent(-1)
+        if (error) setProgress(-1)
         else {
             async function downloadFile(blob) {
                 try {
@@ -55,7 +55,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                 let blob = new Blob()
                 stream.on('data', data => blob = new Blob([blob, data]))
                 stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
-                    setDownPercent(Math.round(bytesLoaded * 100 / bytesTotal))
+                    setProgress(Math.round(bytesLoaded * 100 / bytesTotal))
                     if (bytesLoaded == bytesTotal) {
                         stream.removeAllListeners();
                         try {
@@ -65,7 +65,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     }
                 })
             } catch {
-                const { data } = await axios({ url: link, method: 'GET', responseType: 'blob', onDownloadProgress: ({ loaded, total }) => setDownPercent(Math.round((loaded * 100) / total)) })
+                const { data } = await axios({ url: link, method: 'GET', responseType: 'blob', onDownloadProgress: ({ loaded, total }) => setProgress(Math.round((loaded * 100) / total)) })
                 downloadFile(data)
             }
         }
@@ -90,7 +90,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             <button type="submit" disabled={isDownloading} className='primary-button'>{isDownloaded ? 'Download Again' : 'Download'}</button>
         </form>
 
-        {downPercent > 0 ? <BarProgress percent={downPercent} /> : downPercent === 0 ? <Loader className='flex items-center space-x-2' text='Please wait, accessing the file(s)...' /> : !fileIdFromUrl && <div className='text-center'>
+        {progress > 0 ? <BarProgress percent={progress} /> : progress === 0 ? <Loader className='flex items-center space-x-2' text='Please wait, accessing the file(s)...' /> : !fileIdFromUrl && <div className='text-center'>
             <div className='font-bold mb-3'>OR</div>
             <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={() => setModal({ active: true, type: 'qrReader' })}>
                 <FaQrcode />

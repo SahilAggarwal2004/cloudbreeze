@@ -40,7 +40,7 @@ export default function ContextProvider({ children, router }) {
             const response = await axios({
                 url, method, data, ...options,
                 headers: {
-                    token, 'Content-Type': type,
+                    token: token || getStorage('token'), 'Content-Type': type,
                     csrftoken: sign(process.env.NEXT_PUBLIC_SECRET, undefined, { expiresIn: 300000 })
                 }
             })

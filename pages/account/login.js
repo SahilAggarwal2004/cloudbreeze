@@ -13,11 +13,12 @@ export default function Login({ router }) {
 
   async function submit(e) {
     e.preventDefault()
-    const { success, name, type, files } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
+    const { success, name, type, token, files } = await fetchApp({ url: 'auth/login', method: 'POST', data: { email: email.current.value, password: password.current.value } })
     if (success) {
+      setStorage('username', name)
+      setStorage('token', token)
       setUploadFiles(files)
       setDownloadFiles([])
-      setStorage('username', name)
       setType(type)
       router.push('/')
     }
