@@ -2,18 +2,11 @@ import { createRouter } from 'next-connect'
 import { Storage } from "megajs"
 import multer from 'multer';
 import { createReadStream } from 'fs';
-import NextCors from 'nextjs-cors';
 
 const router = createRouter();
 const upload = multer({ dest: 'uploads' });
 
 router.use(upload.single('files')).post(async (req, res) => {
-    await NextCors(req, res, {
-        // Options
-        methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-        origin: '*',
-        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    });
     const storage = await new Storage({ email: process.env.MEGA_EMAIL, password: process.env.MEGA_PASSWORD }).ready
     res.json({ success: true })
     const { file: { filename, originalname, path, size } } = req
