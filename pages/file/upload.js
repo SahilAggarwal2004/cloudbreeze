@@ -42,9 +42,9 @@ export default function Upload({ router }) {
 			return toast.warning('Empty file(s)');
 		}
 		if (size > limit * 1048576) { // size limit
-			// toast('Try Peer-to-peer transfer for big files')
-			// setFiles(files)
-			// return router.push('/p2p?share=true')
+			toast('Try Peer-to-peer transfer for big files')
+			setFiles(files)
+			return router.push('/p2p?share=true')
 		}
 		setFiles(files)
 	}
@@ -86,26 +86,26 @@ export default function Upload({ router }) {
 		data.append('daysLimit', daysLimit.current.value)
 		data.append('downloadLimit', downloadLimit.current.value)
 
-		// let { success: verified, token, server, servers } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId } })
-		// if (!verified) return setProgress(-1)
+		let { success: verified, token, server, servers } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId } })
+		if (!verified) return setProgress(-1)
 
-		// while (!success) {
-		// if (!servers.length) {
-		// 	setLink('error')
-		// 	setProgress(-1)
-		// 	return
-		// }
-		var { fileId, name, success } = await fetchApp({
-			url: 'https://cloudbreeze.vercel.app/api/upload', method: 'POST', data, type: 'multipart/form-data',
-			showToast: false, options: {
-				onUploadProgress: ({ loaded, total }) => setProgress(Math.round(loaded * 100 / total))
+		while (!success) {
+			if (!servers.length) {
+				setLink('error')
+				setProgress(-1)
+				return
 			}
-		})
-		// remove(servers, server)
-		// server = randomElement(servers)
-		// }
-		// setLink(fileId)
-		// setUploadFiles(uploadFiles.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit }))
+			var { fileId, name, success } = await fetchApp({
+				url: getUploadUrl(server), method: 'POST', data, type: 'multipart/form-data', token,
+				showToast: servers.length === 1 || 'success', options: {
+					onUploadProgress: ({ loaded, total }) => setProgress(Math.round(loaded * 100 / total))
+				}
+			})
+			remove(servers, server)
+			server = randomElement(servers)
+		}
+		setLink(fileId)
+		setUploadFiles(uploadFiles.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit }))
 	}
 
 	useEffect(() => {

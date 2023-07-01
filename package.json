@@ -10,13 +10,10 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
-    "fs": "^0.0.1-security",
     "jszip": "^3.10.1",
     "megajs": "^1.1.3",
     "mini-jwt": "^0.2.2",
-    "multer": "^1.4.5-lts.1",
     "next": "^13.4.7",
-    "next-connect": "^1.0.0",
     "next-pwa": "^5.6.0",
     "peerjs": "^1.4.7",
     "random-stuff-js": "^0.5.5",
