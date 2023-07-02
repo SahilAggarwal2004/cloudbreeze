@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
-import { sign } from 'mini-jwt';
+import { sign } from 'jssign';
 import { randomName } from 'random-stuff-js';
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
@@ -41,7 +41,7 @@ export default function ContextProvider({ children, router }) {
                 url, method, data, ...options,
                 headers: {
                     token: token || getStorage('token'), 'Content-Type': type,
-                    csrftoken: sign(process.env.NEXT_PUBLIC_SECRET, undefined, { expiresIn: 300000 })
+                    csrftoken: sign(undefined, process.env.NEXT_PUBLIC_SECRET, { expiresIn: 300000 })
                 }
             })
             if (showProgress) setProgress(100)
