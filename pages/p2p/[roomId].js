@@ -2,12 +2,13 @@
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import { FaCopy } from 'react-icons/fa';
+import { Balancer } from 'react-wrap-balancer';
 import BarProgress from '../../components/BarProgress';
 import Loader from '../../components/Loader';
 import { chunkSize, peerOptions } from '../../constants';
 import { bytesToSize, download, speed } from '../../modules/functions';
 import { getStorage } from '../../modules/storage';
-import { FaCopy } from 'react-icons/fa';
 
 export default function Id({ router }) {
     const { roomId } = router.query
@@ -119,7 +120,9 @@ export default function Id({ router }) {
                     <span className='text-lg font-medium'>Text</span>
                     <FaCopy className='cursor-pointer' onClick={copy} />
                 </div>
-                <div className='whitespace-pre-line' style={{ wordBreak: 'break-word' }}>{text}</div>
+                <div className='whitespace-pre-line' style={{ wordBreak: 'break-word' }}>
+                    <Balancer>{text}</Balancer>
+                </div>
             </div>}
         </div>}
     </>
