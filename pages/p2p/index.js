@@ -73,7 +73,6 @@ export default function P2p({ router }) {
 				dispatchConnections({ peer, name, conn })
 			})
 			conn.on('close', () => dispatchConnections({ type: 'remove', peer, name }))
-			conn.on('iceStateChanged', state => state === 'disconnected' && dispatchConnections({ type: 'remove', peer, name }))
 		})
 		peer.on('error', ({ type }) => {
 			toast.error(type === 'network' ? 'Reconnecting...' : type === 'unavailable-id' && 'Room busy. Try another!')

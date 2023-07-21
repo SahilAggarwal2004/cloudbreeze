@@ -30,6 +30,7 @@ export default function Id({ router }) {
         conn.on('open', () => {
             peerRef.current.off('error', setError)
             setConnection(conn)
+            clearError()
             toast.success('Connection established')
         })
         conn.on('data', ({ type, name, length, totalSize, text, chunk, size }) => {
@@ -67,7 +68,7 @@ export default function Id({ router }) {
                 timeout = setTimeout(() => {
                     peerRef.current.on('error', setError)
                     retry(conn)
-                }, peerOptions.pingInterval * 2)
+                }, peerOptions.pingInterval * 1.5)
             }
         })
     }
