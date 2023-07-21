@@ -68,7 +68,7 @@ export default function Id({ router }) {
                 timeout = setTimeout(() => {
                     peerRef.current.on('error', setError)
                     retry(conn)
-                }, peerOptions.pingInterval * 1.5)
+                }, peerOptions.pingInterval * 2)
             }
         })
     }
