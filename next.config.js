@@ -16,8 +16,8 @@ const withPWA = require('next-pwa')({
     { url: '/file/download', revision },
     { url: '/p2p', revision },
     { url: '/images/account.webp', revision },
-    { url: '/images/arrow.webp', revision },
     { url: '/images/cloud.webp', revision },
+    { url: '/images/arrow.png', revision },
     { url: '/images/p2p.webp', revision }
   ],
   runtimeCaching: [
