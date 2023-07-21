@@ -12,10 +12,12 @@ import { fileDetails, generateId } from '../../modules/functions';
 function reducer(state, { type = 'add', peer, name, conn }) {
 	switch (type) {
 		case 'add':
+			toast.success(`${name} connected`)
 			return { ...state, [peer]: { name, conn } }
 		case 'remove':
 			const newState = {}
 			Object.entries(state).filter(conn => conn[0] !== peer).forEach(conn => newState[conn[0]] = conn[1])
+			toast.error(`${name} disconnected`)
 			return newState
 		default:
 			return state
@@ -64,17 +66,14 @@ export default function P2p({ router }) {
 		})
 		peer.on('connection', conn => {
 			const peer = conn.peer
-			const peerName = conn.metadata || 'Anonymous User'
+			const name = conn.metadata || 'Anonymous User'
 			conn.on('open', () => {
-				if (connections[peerName]) return
+				if (connections[name]) return
 				conn.send({ name: names[0], length: names.length, totalSize, text, type: 'details' })
-				dispatchConnections({ peer, name: peerName, conn })
-				toast.success(`${peerName} connected`)
+				dispatchConnections({ peer, name, conn })
 			})
-			conn.on('close', () => {
-				dispatchConnections({ type: 'remove', peer })
-				toast.error(`${peerName} disconnected`)
-			})
+			conn.on('close', () => dispatchConnections({ type: 'remove', peer, name }))
+			conn.on('iceStateChanged', state => state === 'disconnected' && dispatchConnections({ type: 'remove', peer, name }))
 		})
 		peer.on('error', ({ type }) => {
 			toast.error(type === 'network' ? 'Reconnecting...' : type === 'unavailable-id' && 'Room busy. Try another!')

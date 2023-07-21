@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { GoX } from 'react-icons/go'
+import { FaXmark } from 'react-icons/fa6'
 import { chunkSize } from '../constants'
 import { bytesToSize, speed } from '../modules/functions'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
@@ -68,7 +68,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
     }, [count])
 
     return <div className='relative flex flex-col justify-center p-4 pb-0 border rounded text-center bg-gray-50 hover:bg-transparent hover:shadow-lg transition-all duration-300 min-w-[270px]'>
-        <GoX className='absolute top-2 right-2 scale-110' onClick={() => conn.close()} />
+        <FaXmark className='absolute top-2 right-2 scale-110' onClick={() => conn.close()} />
         <h4 className='font-medium'>{name}</h4>
         <CircularProgressbarWithChildren value={bytes} maxValue={size} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
