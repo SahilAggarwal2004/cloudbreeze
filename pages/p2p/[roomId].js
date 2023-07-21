@@ -20,7 +20,6 @@ export default function Id({ router }) {
     const [text, setText] = useState()
     const [bytes, setBytes] = useState(-1)
     const [time, setTime] = useState(0)
-    const [loading, setLoading] = useState(true)
     const [error, setError, clearError] = useError("Connection couldn't be established. Retry again!")
     const downPercent = Math.round(bytes * 100 / size) - +(bytes < 0);
     const isDownloading = downPercent >= 0
@@ -56,7 +55,6 @@ export default function Id({ router }) {
                 setFile(length <= 1 ? name : `${length} files`)
                 setSize(totalSize)
                 setText(text)
-                setLoading(false)
             }
         })
         conn.on('close', () => {
@@ -64,15 +62,12 @@ export default function Id({ router }) {
             toast.error("Peer disconnected")
         })
         conn.on('iceStateChanged', state => {
-            if (state === 'connected') {
-                clearTimeout(timeout)
-                setLoading(false)
-            }
+            if (state === 'connected') clearTimeout(timeout)
             else if (state === 'disconnected') {
                 timeout = setTimeout(() => {
                     peerRef.current.on('error', setError)
                     retry(conn)
-                }, peerOptions.pingInterval)
+                }, peerOptions.pingInterval * 2)
             }
         })
     }
@@ -90,7 +85,6 @@ export default function Id({ router }) {
         connect()
         setFile()
         setText()
-        setLoading(true)
         setBytes(-1)
         clearError()
     }
@@ -115,11 +109,10 @@ export default function Id({ router }) {
 
     return <>
         <Head><title>Peer-to-peer transfer | CloudBreeze</title></Head>
-        {JSON.stringify(connection?.open)}
         {error ? <div className='center space-y-5 text-center'>
             <h3 className='text-lg'>{error}</h3>
             <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={() => retry()}>Retry</button>
-        </div> : loading ? <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' /> : <div className='mb-[4.5rem] space-y-8'>
+        </div> : !file && !text ? <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' /> : <div className='mb-[4.5rem] space-y-8'>
             {file && <div className='flex justify-center'>
                 <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full grid grid-cols-[auto_1fr] gap-2 px-2'>
                     <span className='text-lg font-medium col-span-2 text-center'>Files</span>
