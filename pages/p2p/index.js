@@ -68,7 +68,6 @@ export default function P2p({ router }) {
 			const peer = conn.peer
 			const name = conn.metadata || 'Anonymous User'
 			conn.on('open', () => {
-				if (connections[peer]) return
 				conn.send({ name: names[0], length: names.length, totalSize, text, type: 'details' })
 				dispatchConnections({ peer, name, conn })
 			})
