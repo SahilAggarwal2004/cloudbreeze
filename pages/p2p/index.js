@@ -41,6 +41,7 @@ export default function P2p({ router }) {
 	const verifyRoomId = e => e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "")
 
 	function reset() {
+		peerRef.current?.removeAllListeners()
 		peerRef.current?.destroy()
 		setTimeout(() => setLink(''), 0)
 	}
@@ -67,12 +68,17 @@ export default function P2p({ router }) {
 		peer.on('connection', conn => {
 			const peer = conn.peer
 			const name = conn.metadata || 'Anonymous User'
+			const timeouts = {}
 			conn.on('open', () => {
 				if (connections[peer]) return
 				conn.send({ name: names[0], length: names.length, totalSize, text, type: 'details' })
 				dispatchConnections({ peer, name, conn })
 			})
 			conn.on('close', () => dispatchConnections({ type: 'remove', peer, name }))
+			conn.on('iceStateChanged', state => {
+				if (state === 'connected') clearTimeout(timeouts[peer])
+				else if (state === 'disconnected') timeouts[peer] = setTimeout(() => dispatchConnections({ type: 'remove', peer, name }), peerOptions.pingInterval * 2)
+			})
 		})
 		peer.on('error', ({ type }) => {
 			toast.error(type === 'network' ? 'Reconnecting...' : type === 'unavailable-id' && 'Room busy. Try another!')

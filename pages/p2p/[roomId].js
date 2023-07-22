@@ -67,7 +67,7 @@ export default function Id({ router }) {
             else if (state === 'disconnected') {
                 timeout = setTimeout(() => {
                     peerRef.current.on('error', setError)
-                    retry(conn)
+                    retry()
                 }, peerOptions.pingInterval * 2)
             }
         })
@@ -79,10 +79,10 @@ export default function Id({ router }) {
         setTime(Date.now())
     }
 
-    function retry(conn) {
-        conn ||= connection
-        conn?.removeAllListeners()
-        conn?.close()
+    function retry(manual = false) {
+        if (manual && !navigator.onLine) return toast.error('Please check your internet connectivity')
+        connection?.removeAllListeners()
+        connection?.close()
         connect()
         setFile()
         setText()
@@ -112,7 +112,7 @@ export default function Id({ router }) {
         <Head><title>Peer-to-peer transfer | CloudBreeze</title></Head>
         {error ? <div className='center space-y-5 text-center'>
             <h3 className='text-lg'>{error}</h3>
-            <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={() => retry()}>Retry</button>
+            <button className='mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300' onClick={() => retry(true)}>Retry</button>
         </div> : !file && !text ? <Loader text='Connecting to the peer...' className='center flex flex-col items-center space-y-2 text-lg' /> : <div className='mb-[4.5rem] space-y-8'>
             {file && <div className='flex justify-center'>
                 <div className='w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full grid grid-cols-[auto_1fr] gap-2 px-2'>
