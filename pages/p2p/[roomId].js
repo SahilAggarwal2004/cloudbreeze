@@ -57,7 +57,7 @@ export default function Id({ router }) {
                 setSize(totalSize)
                 setText(text)
             } else if (type === 'text') {
-                setText(text || ' ')
+                setText(text)
                 toast.success('Text updated')
             }
         })

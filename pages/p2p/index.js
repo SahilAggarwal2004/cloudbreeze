@@ -58,6 +58,7 @@ export default function P2p({ router }) {
 	}
 
 	function edit() {
+		if (!length && !text) return toast.error('Please provide files or text to share!')
 		setOldText(text)
 		peerRef.current.off('connection')
 		peerRef.current.on('connection', connect)
