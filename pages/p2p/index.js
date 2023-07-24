@@ -29,8 +29,9 @@ export default function P2p({ router }) {
 	const { share } = router.query
 	const shareRoom = useRef();
 	const receiveRoom = useRef();
-	const textRef = useRef();
 	const peerRef = useRef();
+	const [oldText, setOldText] = useState('')
+	const [text, setText] = useState('')
 	const [link, setLink] = useState('')
 	const [connections, dispatchConnections] = useReducer(reducer, {})
 	const connArr = Object.entries(connections)
@@ -40,10 +41,37 @@ export default function P2p({ router }) {
 
 	const verifyRoomId = e => e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "")
 
+	function connect(conn) {
+		const peer = conn.peer
+		const name = conn.metadata || 'Anonymous User'
+		const timeouts = {}
+		conn.on('open', () => {
+			if (connections[peer]) return
+			conn.send({ name: names[0], length: names.length, totalSize, text, type: 'details' })
+			dispatchConnections({ peer, name, conn })
+		})
+		conn.on('close', () => dispatchConnections({ type: 'remove', peer, name }))
+		conn.on('iceStateChanged', state => {
+			if (state === 'connected') clearTimeout(timeouts[peer])
+			else if (state === 'disconnected') timeouts[peer] = setTimeout(() => dispatchConnections({ type: 'remove', peer, name }), peerOptions.pingInterval * 2)
+		})
+	}
+
+	function edit() {
+		setOldText(text)
+		peerRef.current.off('connection')
+		peerRef.current.on('connection', connect)
+		connArr.forEach(([_, { conn }]) => conn.send({ text, type: 'text' }))
+		toast.success('Text edited successfully!')
+	}
+
 	function reset() {
 		peerRef.current?.removeAllListeners()
 		peerRef.current?.destroy()
-		setTimeout(() => setLink(''), 0)
+		setTimeout(() => {
+			setText('')
+			setLink('')
+		}, 0)
 	}
 
 	function enterRoom(event) {
@@ -51,9 +79,8 @@ export default function P2p({ router }) {
 		router.push(`/p2p/${generateId(receiveRoom.current.value, 'p2p')}`)
 	}
 
-	async function handleSubmit(e) {
+	async function submit(e) {
 		e.preventDefault()
-		const text = textRef.current.value
 		if (!length && !text) return toast.error('Please provide files or text to share!')
 		setProgress(100 / 8)
 		const Peer = require("peerjs").default
@@ -62,24 +89,11 @@ export default function P2p({ router }) {
 		const peer = new Peer(peerId, peerOptions)
 		peerRef.current = peer;
 		peer.on('open', id => {
+			setOldText(text)
 			setLink(id)
 			setProgress(100)
 		})
-		peer.on('connection', conn => {
-			const peer = conn.peer
-			const name = conn.metadata || 'Anonymous User'
-			const timeouts = {}
-			conn.on('open', () => {
-				if (connections[peer]) return
-				conn.send({ name: names[0], length: names.length, totalSize, text, type: 'details' })
-				dispatchConnections({ peer, name, conn })
-			})
-			conn.on('close', () => dispatchConnections({ type: 'remove', peer, name }))
-			conn.on('iceStateChanged', state => {
-				if (state === 'connected') clearTimeout(timeouts[peer])
-				else if (state === 'disconnected') timeouts[peer] = setTimeout(() => dispatchConnections({ type: 'remove', peer, name }), peerOptions.pingInterval * 2)
-			})
-		})
+		peer.on('connection', connect)
 		peer.on('error', ({ type }) => {
 			toast.error(type === 'network' ? 'Reconnecting...' : type === 'unavailable-id' && 'Room busy. Try another!')
 			setProgress(100)
@@ -96,15 +110,15 @@ export default function P2p({ router }) {
 		<Head><title>Peer-to-peer transfer | CloudBreeze</title></Head>
 		<div className='space-y-12'>
 			<div className='grid grid-cols-1 md:grid-cols-[50fr_0fr_50fr] items-center my-10 gap-x-4 gap-y-8 px-4 pb-5 text-sm sm:text-base'>
-				<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">
+				<form onSubmit={submit} className="grid grid-cols-[auto_1fr] gap-3 items-center mx-auto">
 					<label htmlFor="files">File(s):</label>
 					{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
 						: <input type="file" id='files' onChange={e => setFiles(e.target.files)} disabled={disable} multiple />}
 					<label htmlFor="text" className='self-start pt-1 sm:pt-0.5'>Text: </label>
-					<textarea id='text' ref={textRef} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' placeholder='Text / Description (Optional)' rows='3' />
+					<textarea id='text' className='border rounded px-2 py-0.5 placeholder:text-sm' placeholder='Text / Description (Optional)' rows='3' onChange={e => setText(e.target.value)} />
 					<label htmlFor="room-id">Room Id: </label>
 					<input type="text" id='room-id' ref={shareRoom} onInput={verifyRoomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />
-					<button type="submit" disabled={disable} className='primary-button'>Share</button>
+					{link ? <button className='primary-button' disabled={text === oldText} onClick={edit}>Edit Text</button> : <button type="submit" disabled={disable} className='primary-button'>Share</button>}
 					{link && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={reset}>Reset</button>}
 				</form>
 				<div className='md:h-[calc(100%+2.5rem)] p-0 m-0 border-[0.5px] border-black col-span-1' />

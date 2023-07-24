@@ -61,7 +61,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
 
     useEffect(() => {
         if (!count) return
-        conn.removeAllListeners('data')
+        conn.off('data')
         if (totalBytes >= totalSize) return
         conn.on('data', acceptData)
         sendFile()

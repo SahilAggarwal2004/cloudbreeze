@@ -28,7 +28,7 @@ export default function Id({ router }) {
         let fileName, fileSize, bytes, blob, correction, timeout;
         const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
         conn.on('open', () => {
-            peerRef.current.off('error', setError)
+            peerRef.current.off('error')
             setConnection(conn)
             clearError()
             toast.success('Connection established')
@@ -56,6 +56,9 @@ export default function Id({ router }) {
                 setFile(length <= 1 ? name : `${length} files`)
                 setSize(totalSize)
                 setText(text)
+            } else if (type === 'text') {
+                setText(text || ' ')
+                toast.success('Text updated')
             }
         })
         conn.on('close', () => {
