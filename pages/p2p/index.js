@@ -119,7 +119,7 @@ export default function P2p({ router }) {
 					<textarea id='text' className='border rounded px-2 py-0.5 placeholder:text-sm' placeholder='Text / Description (Optional)' rows='3' onChange={e => setText(e.target.value)} />
 					<label htmlFor="room-id">Room Id: </label>
 					<input type="text" id='room-id' ref={shareRoom} onInput={verifyRoomId} disabled={disable} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />
-					{link ? <button className='primary-button' disabled={text === oldText} onClick={edit}>Edit Text</button> : <button type="submit" disabled={disable} className='primary-button'>Share</button>}
+					{link ? <button type="button" className='primary-button' disabled={text === oldText} onClick={edit}>Edit Text</button> : <button type="submit" disabled={disable} className='primary-button'>Share</button>}
 					{link && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={reset}>Reset</button>}
 				</form>
 				<div className='md:h-[calc(100%+2.5rem)] p-0 m-0 border-[0.5px] border-black col-span-1' />
