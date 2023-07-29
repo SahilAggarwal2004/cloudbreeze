@@ -65,7 +65,7 @@ export default function Upload({ router }) {
 		else {
 			const zip = new JSZip();
 			for (let i = 0; i < length; i++) zip.file(files[i].name, files[i])
-			content = await zip.generateAsync({ type: 'arraybuffer', compression: 'STORE' })
+			content = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
 		}
 
 		const data = new FormData();
