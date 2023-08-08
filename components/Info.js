@@ -25,7 +25,7 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
         </div> : <div className='cursor-pointer px-1 break-all mb-4' onClick={() => share('Room Id')}>
             Room Id: <span className='font-medium'>{roomId}</span>
         </div>}
-        <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={() => share()}>
+        <div className='cursor-pointer select-none font-medium text-gray-800 flex items-center space-x-1 w-fit mx-auto' onClick={() => share()}>
             <FaShareSquare />
             <span>Click here to share the url</span>
         </div>
