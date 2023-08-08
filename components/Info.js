@@ -20,9 +20,9 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
 
     return <div className='text-center text-sm sm:text-base space-y-2 bg-white text-black max-w-[95vw]'>
         {modal && <h2 className='font-bold text-lg mb-2'>File Details</h2>}
-        {fileId ? <div className='cursor-pointer px-1 break-all mb-4' onClick={() => share('File Id')}>
+        {fileId ? <div className='cursor-pointer px-1 break-all mb-4 w-fit mx-auto' onClick={() => share('File Id')}>
             File Id: <span className='font-medium'>{fileId}</span>
-        </div> : <div className='cursor-pointer px-1 break-all mb-4' onClick={() => share('Room Id')}>
+        </div> : <div className='cursor-pointer px-1 break-all mb-4 w-fit mx-auto' onClick={() => share('Room Id')}>
             Room Id: <span className='font-medium'>{roomId}</span>
         </div>}
         <div className='cursor-pointer select-none font-medium text-gray-800 flex items-center space-x-1 w-fit mx-auto' onClick={() => share()}>
