@@ -6,9 +6,10 @@ import { FaQrcode } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { unzip } from 'unzipit';
 import { wait } from 'random-stuff-js';
+import { sign } from 'jssign';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
-import { download, generateId, getTransferDownloadUrl, resolvePromises } from '../modules/functions';
+import { download, generateId, getDownloadUrl, resolvePromises } from '../modules/functions';
 import BarProgress from './BarProgress';
 import useStorage from '../hooks/useStorage';
 import { regex } from '../constants';
@@ -28,11 +29,34 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         if (!id) return;
         setProgress(0)
         const [fileId, server] = id.split('@')
-        const mode = server ? 'transfer' : 'save'
-        const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: getTransferDownloadUrl(fileId, server), method: 'POST', data: { pass: password.current.value } })
+
+        async function fetchDownload() {
+            const options = server ? {
+                url: getDownloadUrl(fileId, server), method: 'POST', data: { pass: password.current.value },
+                headers: { csrftoken: sign(undefined, process.env.NEXT_PUBLIC_SECRET, { expiresIn: 300000 }) }
+            } : { url: link, method: 'GET' }
+            try {
+                return await axios({
+                    ...options, responseType: 'blob',
+                    onDownloadProgress: ({ loaded, total }) => setProgress(Math.round((loaded * 100) / total))
+                })
+            } catch {
+                toast.error("Couldn't download file")
+                setProgress(-1)
+                return {}
+            }
+        }
+
+        if (server) {
+            const { data, headers } = await fetchDownload()
+            return data && download(data, headers.filename)
+        }
+
+        const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: getDownloadUrl(fileId), method: 'POST', data: { pass: password.current.value } })
         if (error) setProgress(-1)
         else {
             async function downloadFile(blob) {
+                if (!blob) return
                 try {
                     if (!unzipFile || !regex.test(name)) throw new Error();
                     const { entries } = await unzip(blob);
@@ -46,7 +70,6 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     nameList = [name]
                     download(blob, name)
                 }
-                if (mode === 'transfer') return
                 const updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
                 updatedFiles.push({ nameList, _id: fileId, createdAt, daysLimit })
                 setDownloadFiles(updatedFiles)
@@ -68,7 +91,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     }
                 })
             } catch {
-                const { data } = await axios({ url: link, method: 'GET', responseType: 'blob', onDownloadProgress: ({ loaded, total }) => setProgress(Math.round((loaded * 100) / total)) })
+                const { data } = await fetchDownload()
                 downloadFile(data)
             }
         }

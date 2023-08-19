@@ -7,7 +7,7 @@ export const getUploadUrl = server => (process.env.NODE_ENV === 'production' ? `
 
 export const getTransferUploadUrl = () => (process.env.NODE_ENV === 'production' ? `https://cloudbreeze-transfer-${randomNumber(0, process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT - 1)}.onrender.com` : '') + '/file/upload'
 
-export const getTransferDownloadUrl = (fileId, server) => (server ? `https://cloudbreeze-transfer-${server}.onrender.com` : '') + `/file/get/${fileId}`
+export const getDownloadUrl = (fileId, server) => ((server && process.env.NODE_ENV === 'production') ? `https://cloudbreeze-transfer-${server}.onrender.com` : '') + `/file/get/${fileId}`
 
 export const speed = (bytes, total, startTime = 0) => round(+(bytes !== total) && (bytesToSize(bytes, total) / (Date.now() - startTime) * 1000) || 0) + ' ' + (total >= 1048576 ? 'MB' : total >= 1024 ? 'KB' : 'B')
 
