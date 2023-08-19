@@ -5,11 +5,12 @@ import JSZip from 'jszip';
 import Loader from '../../components/Loader';
 import Info from '../../components/Info';
 import { useFileContext } from '../../contexts/ContextProvider';
-import { limit, options } from '../../constants';
+import { limit, maxLimit, unavailable } from '../../constants';
 import BarProgress from '../../components/BarProgress';
-import { fileDetails, getUploadUrl, remove } from '../../modules/functions';
+import { fileDetails, getTransferUploadUrl, getUploadUrl, remove } from '../../modules/functions';
 import Head from 'next/head';
 import { randomElement } from 'random-stuff-js';
+import ModeSelect from '../../components/ModeSelect';
 
 export default function Upload({ router }) {
 	const { fetchApp, files, setFiles, uploadFiles, setUploadFiles, type } = useFileContext()
@@ -18,6 +19,7 @@ export default function Upload({ router }) {
 	const password = useRef()
 	const daysLimit = useRef()
 	const downloadLimit = useRef()
+	const [mode, setMode] = useState('save')
 	const [link, setLink] = useState()
 	const [progress, setProgress] = useState(-1)
 	const isUploading = progress >= 0
@@ -34,23 +36,27 @@ export default function Upload({ router }) {
 		if (fileDetails(files).totalSize > limit * 1048576) router.push('/p2p?share=true')
 	}
 
-	async function updateFile(e) {
-		const { files } = e.target
+	async function updateFile({ target }) {
+		const files = target.files || [target.file]
 		const size = fileDetails(files).totalSize
 		if (!size) {
-			e.target.value = "";
+			target.value = "";
 			return toast.warning('Empty file(s)');
 		}
-		if (size > limit * 1048576) { // size limit
-			toast('Try Peer-to-peer transfer for big files')
+		if (size > maxLimit * 1048576) { // size limit
+			toast('Try Peer-to-peer transfer for large files')
 			setFiles(files)
 			return router.push('/p2p?share=true')
+		}
+		if (mode === 'save' && size > limit * 1048576) {
+			toast('Try transfer mode for large files')
+			setMode('transfer')
 		}
 		setFiles(files)
 	}
 
 	function reset() {
-		// Don't remove the setTimeout as file reset doesn't work without it
+		// Don't remove the setTimeout as file reset doesn't work without it (idk why)
 		setTimeout(() => {
 			setFiles([])
 			setLink()
@@ -61,7 +67,7 @@ export default function Upload({ router }) {
 	async function handleSubmit(e) {
 		e.preventDefault()
 		setProgress(0)
-		if (length === 1) var content = files[0]
+		if (length === 1 || mode === 'transfer') var content = files[0]
 		else {
 			const zip = new JSZip();
 			for (let i = 0; i < length; i++) zip.file(files[i].name, files[i])
@@ -74,7 +80,7 @@ export default function Upload({ router }) {
 		const nameList = []
 		for (let i = 0; i < length; i++) nameList.push(files[i].name)
 		if (fileId = fileIdRef.current.value) {
-			if (options.includes(fileId)) {
+			if (unavailable.includes(fileId)) {
 				toast.warning(`File Id cannot be ${fileId}`);
 				setProgress(-1)
 				return
@@ -83,29 +89,41 @@ export default function Upload({ router }) {
 		}
 		if (length > 1) data.append('nameList', nameList)
 		data.append('password', password.current.value)
-		data.append('daysLimit', daysLimit.current.value)
+		data.append('daysLimit', daysLimit.current?.value)
 		data.append('downloadLimit', downloadLimit.current.value)
 
-		let { success: verified, token, server, servers } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId } })
-		if (!verified) return setProgress(-1)
+		if (mode === 'save') {
+			let { success: verified, token, server, servers } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId } })
+			if (!verified) return setProgress(-1)
 
-		while (!success) {
-			if (!servers.length) {
-				setLink('error')
-				setProgress(-1)
-				return
+			while (!success) {
+				if (!servers.length) {
+					setLink('error')
+					setProgress(-1)
+					return
+				}
+				var { fileId, name, success } = await fetchApp({
+					url: getUploadUrl(server), method: 'POST', data, type: 'multipart/form-data', token,
+					showToast: servers.length === 1 || 'success', options: {
+						onUploadProgress: ({ loaded, total }) => setProgress(Math.round(loaded * 100 / total))
+					}
+				})
+				remove(servers, server)
+				server = randomElement(servers)
 			}
-			var { fileId, name, success } = await fetchApp({
-				url: getUploadUrl(server), method: 'POST', data, type: 'multipart/form-data', token,
-				showToast: servers.length === 1 || 'success', options: {
+			setLink(fileId)
+			setUploadFiles(uploadFiles.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit }))
+		} else {
+			const { success, fileId } = await fetchApp({
+				url: getTransferUploadUrl(), method: 'POST', data, type: 'multipart/form-data', token: 1,
+				showToast: true, options: {
 					onUploadProgress: ({ loaded, total }) => setProgress(Math.round(loaded * 100 / total))
 				}
 			})
-			remove(servers, server)
-			server = randomElement(servers)
+			if (success) return setLink(fileId)
+			setLink('error')
+			setProgress(-1)
 		}
-		setLink(fileId)
-		setUploadFiles(uploadFiles.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit }))
 	}
 
 	useEffect(() => {
@@ -118,11 +136,12 @@ export default function Upload({ router }) {
 
 	return <>
 		<Head><title>Upload a file | CloudBreeze</title></Head>
+		<ModeSelect mode={mode} setMode={setMode} modes={[{ value: 'save', label: 'Save to Cloud' }, { value: 'transfer', label: 'Transfer file' }]} />
 		<div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
 				<label htmlFor="files">File(s):</label>
 				{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
-					: <input type="file" id='files' onChange={updateFile} disabled={isUploading} required multiple />}
+					: <input type="file" id='files' onChange={updateFile} disabled={isUploading} required multiple={mode === 'save'} />}
 
 				<label htmlFor="file-id">File Id: </label>
 				<input type="text" id='file-id' ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />
@@ -130,8 +149,10 @@ export default function Upload({ router }) {
 				<label htmlFor="password">Password:</label>
 				<input type="password" id='password' ref={password} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="new-password" placeholder='No protection' />
 
-				<label htmlFor="days-limit">Days Limit:</label>
-				<input type="number" id='days-limit' ref={daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={1} max={maxDaysLimit} />
+				{mode === 'save' && <>
+					<label htmlFor="days-limit">Days Limit:</label>
+					<input type="number" id='days-limit' ref={daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={1} max={maxDaysLimit} />
+				</>}
 
 				<label htmlFor="download-limit">Download Limit:</label>
 				<input type="number" id='download-limit' ref={downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete="off" placeholder='No limit' min={1} />

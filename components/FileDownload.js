@@ -8,7 +8,7 @@ import { unzip } from 'unzipit';
 import { wait } from 'random-stuff-js';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
-import { download, generateId, resolvePromises } from '../modules/functions';
+import { download, generateId, getTransferDownloadUrl, resolvePromises } from '../modules/functions';
 import BarProgress from './BarProgress';
 import useStorage from '../hooks/useStorage';
 import { regex } from '../constants';
@@ -24,10 +24,12 @@ export default function FileDownload({ fileIdFromUrl = false }) {
 
     async function submit(e) {
         e.preventDefault()
-        const fileId = fileIdFromUrl || generateId(fileRef.current.value, 'file')
-        if (!fileId) return;
+        const id = fileIdFromUrl || generateId(fileRef.current.value, 'file')
+        if (!id) return;
         setProgress(0)
-        const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: `file/get/${fileId}`, method: 'POST', data: { pass: password.current.value } })
+        const [fileId, server] = id.split('@')
+        const mode = server ? 'transfer' : 'save'
+        const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: getTransferDownloadUrl(fileId, server), method: 'POST', data: { pass: password.current.value } })
         if (error) setProgress(-1)
         else {
             async function downloadFile(blob) {
@@ -44,6 +46,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     nameList = [name]
                     download(blob, name)
                 }
+                if (mode === 'transfer') return
                 const updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
                 updatedFiles.push({ nameList, _id: fileId, createdAt, daysLimit })
                 setDownloadFiles(updatedFiles)
