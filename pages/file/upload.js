@@ -33,7 +33,7 @@ export default function Upload({ router }) {
 
 	function handleMessage({ data: { files } }) {
 		setFiles(files)
-		if (fileDetails(files).totalSize > limit * 1048576) router.push('/p2p?share=true')
+		if (fileDetails(files).totalSize > maxLimit * 1073741824) router.push('/p2p?share=true')
 	}
 
 	async function updateFile({ target }) {
@@ -43,13 +43,13 @@ export default function Upload({ router }) {
 			target.value = "";
 			return toast.warning('Empty file(s)');
 		}
-		if (size > maxLimit * 1048576) { // size limit
+		if (size > maxLimit * 1073741824) { // size limit
 			toast('Try Peer-to-peer transfer for large files')
 			setFiles(files)
 			return router.push('/p2p?share=true')
 		}
 		if (mode === 'save' && size > limit * 1048576) {
-			toast('Try transfer mode for large files')
+			toast(`Try transfer mode for large files upto ${maxLimit}GB`)
 			setMode('transfer')
 		}
 		setFiles(files)
