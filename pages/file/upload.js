@@ -66,6 +66,7 @@ export default function Upload({ router }) {
 
 	async function handleSubmit(e) {
 		e.preventDefault()
+		if (mode === 'save' && fileDetails(files).totalSize > limit * 1048576) return toast(`File size must not exceed ${limit}MB`)
 		setProgress(0)
 		if (length === 1 || mode === 'transfer') var content = files[0]
 		else {
