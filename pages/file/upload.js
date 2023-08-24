@@ -1,16 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
-import JSZip from 'jszip';
-import Loader from '../../components/Loader';
-import Info from '../../components/Info';
-import { useFileContext } from '../../contexts/ContextProvider';
-import { limit, maxLimit, unavailable } from '../../constants';
-import BarProgress from '../../components/BarProgress';
-import { fileDetails, getTransferUploadUrl, getUploadUrl, remove } from '../../modules/functions';
 import Head from 'next/head';
 import { randomElement } from 'random-stuff-js';
-import ModeSelect from '../../components/ModeSelect';
+import JSZip from 'jszip';
+import { useFileContext } from '../../contexts/ContextProvider';
+import { fileDetails, getTransferUploadUrl, getUploadUrl, remove } from '../../modules/functions';
+import { limit, maxLimit, unavailable } from '../../constants';
+import Loader from '../../components/Loader';
+import Info from '../../components/Info';
+import BarProgress from '../../components/BarProgress';
+import Select from '../../components/Select';
 
 export default function Upload({ router }) {
 	const { fetchApp, files, setFiles, uploadFiles, setUploadFiles, type } = useFileContext()
@@ -137,7 +137,7 @@ export default function Upload({ router }) {
 
 	return <>
 		<Head><title>Upload a file | CloudBreeze</title></Head>
-		<ModeSelect mode={mode} setMode={setMode} modes={[{ value: 'save', label: 'Save to Cloud' }, { value: 'transfer', label: 'Transfer file' }]} />
+		<Select active={mode} setActive={setMode} values={[{ value: 'save', label: 'Save to Cloud' }, { value: 'transfer', label: 'Transfer file' }]} />
 		<div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
 				<label htmlFor="files">File(s):</label>
