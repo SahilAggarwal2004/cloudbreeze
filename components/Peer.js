@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import { FaXmark } from 'react-icons/fa6'
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
+import { wait } from 'random-stuff-js'
 import { chunkSize } from '../constants'
 import { bytesToSize, speed } from '../modules/functions'
-import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useFileContext } from '../contexts/ContextProvider'
 
@@ -21,20 +22,20 @@ export default function Peer({ names, sizes, totalSize, data }) {
 
     function sendFile() {
         conn.send({ name: names[count], size, type: 'initial' })
-        let bytesSent = 0, t = 20;
+        let bytesSent = 0, t = 0;
         const reader = new FileReader();
         const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent + chunkSize))
-        reader.onload = ({ target: { result: chunk, error } }) => {
+        reader.onload = async ({ target: { result: chunk, error } }) => {
             if (error) return readChunk();
-            function send() {
-                if (!conn.open) return
-                if (channel.bufferedAmount > chunkSize) return setTimeout(send, Math.ceil(t))
-                const start = performance.now()
-                if ((bytesSent += chunkSize) < size) readChunk();
-                conn.send({ chunk, type: 'file' });
-                t = performance.now() - start
+            while (conn.open) {
+                await wait(t)
+                if (channel.bufferedAmount < chunkSize) {
+                    const start = performance.now()
+                    if ((bytesSent += chunkSize) < size) readChunk();
+                    conn.send({ chunk, type: 'file' });
+                    return t = Math.ceil(performance.now() - start)
+                }
             }
-            setTimeout(send, Math.ceil(t));
         };
         readChunk()
     }
