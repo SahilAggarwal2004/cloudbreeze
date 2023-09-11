@@ -6,7 +6,7 @@ export default function Confirm({ router }) {
 
   async function verify() {
     const { success } = await fetchApp({ url: 'auth/confirm', method: 'PUT', token: router.query.token })
-    if (success) router.push('/account/login')
+    if (success) router.replace('/account/login')
   }
 
   return <>

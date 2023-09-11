@@ -86,7 +86,7 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         if (!type) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false }).then(({ success }) => success && setType('guest'))
-        else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.push('/account')
+        else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.replace('/account')
         else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
     }, [router.pathname])
 

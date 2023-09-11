@@ -14,7 +14,7 @@ export default function Signup({ router }) {
     async function submit(e) {
         e.preventDefault()
         const { error } = await fetchApp({ url: 'auth/signup', method: 'POST', data: { name: name.current.value, email: email.current.value, password: password.current.value } })
-        if (!error) router.push('/account/login')
+        if (!error) router.replace('/account/login')
     }
 
     return <>

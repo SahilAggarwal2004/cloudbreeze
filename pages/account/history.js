@@ -8,7 +8,7 @@ import { relativeTime } from '../../modules/functions'
 
 export default function History({ router }) {
     const { uploadFiles, downloadFiles, clearHistory, setModal } = useFileContext()
-    const filter = router.query.filter || "upload"
+    const { filter = 'upload' } = router.query
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
 
     useEffect(() => { setHistory((filter === 'upload' ? uploadFiles : filter === 'download' ? downloadFiles : []) || []) }, [filter, uploadFiles, downloadFiles])
@@ -16,7 +16,7 @@ export default function History({ router }) {
     return <>
         <Head><title>File history | CloudBreeze</title></Head>
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-400 px-1 space-x-0.5">
-            {options.map(option => <Link key={option} href={`/account/history?filter=${option}`} className={`inline-block px-4 py-3 rounded-t-lg capitalize ${filter === option ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`}>{option}ed Files</Link>)}
+            {options.map(option => <Link key={option} href={`/account/history?filter=${option}`} replace className={`inline-block px-4 py-3 rounded-t-lg capitalize ${filter === option ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`}>{option}ed Files</Link>)}
         </ul>
         {!history.length ? <div className='center'>
             No files to show
