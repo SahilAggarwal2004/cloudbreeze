@@ -14,6 +14,8 @@ import BarProgress from './BarProgress';
 import useStorage from '../hooks/useStorage';
 import { regex } from '../constants';
 
+const csrfSecret = process.env.NEXT_PUBLIC_SECRET
+
 export default function FileDownload({ fileIdFromUrl = false }) {
     const { downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
     const fileRef = useRef()
@@ -33,7 +35,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         async function fetchDownload() {
             const options = server ? {
                 url: getDownloadUrl(fileId, server), method: 'POST', data: { pass: password.current.value },
-                headers: { csrftoken: sign(undefined, process.env.NEXT_PUBLIC_SECRET, { expiresIn: 300000 }) }
+                headers: { csrftoken: sign(undefined, csrfSecret, { expiresIn: 300000 }) }
             } : { url: link, method: 'GET' }
             try {
                 return await axios({

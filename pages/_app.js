@@ -12,6 +12,9 @@ import Loader from '../components/Loader';
 import { hideNavbar } from '../constants';
 import Script from 'next/script';
 
+const production = process.env.NODE_ENV === 'production'
+const api = process.env.NEXT_PUBLIC_API
+
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
     const [loading, setLoading] = useState(true)
@@ -19,7 +22,7 @@ export default function MyApp({ Component, pageProps }) {
 
     useEffect(() => {
         setLoading(false)
-        if (process.env.NODE_ENV === "production") navigator.serviceWorker?.register('/share-sw.js', { scope: '/share' })
+        if (production) navigator.serviceWorker?.register('/share-sw.js', { scope: '/share' })
     }, []);
 
     return <>
@@ -33,6 +36,8 @@ export default function MyApp({ Component, pageProps }) {
                 content="cloud, breeze, cloudbreeze, platform, encryption, security, save, share, vercel, reactjs, nextjs, online, online platform, free, access, anywhere, anytime, fast, independent, web app, world, files, password, protected, webrtc, p2p, peer, transfer, file, speed, privacy, friends" />
             <meta name="description" content="CloudBreeze is an online platform to where you can share files via cloud or p2p between your friends for free. We respect your privacy and that's why we make sure your files are totally encrypted and password protected." />
             <link rel='manifest' href='/manifest.json' />
+
+            <link rel='preconnect' href={api} />
 
             <meta name="google-site-verification" content="5_rdfkDpTLo7tXDzIkEfmQb1wH_0AmpbcQOAPhLNBLQ" />
 

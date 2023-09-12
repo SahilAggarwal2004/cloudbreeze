@@ -11,6 +11,8 @@ import { getStorage, setStorage } from '../modules/storage';
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 axios.defaults.withCredentials = true
 
+const csrfSecret = process.env.NEXT_PUBLIC_SECRET
+
 const Context = createContext();
 export const useFileContext = () => useContext(Context)
 
@@ -41,7 +43,7 @@ export default function ContextProvider({ children, router }) {
                 url, method, data, ...options,
                 headers: {
                     token: token || getStorage('token'), 'Content-Type': type,
-                    csrftoken: sign(undefined, process.env.NEXT_PUBLIC_SECRET, { expiresIn: 300000 })
+                    csrftoken: sign(undefined, csrfSecret, { expiresIn: 300000 })
                 }
             })
             if (showProgress) setProgress(100)

@@ -1,13 +1,16 @@
 import { randomNumber } from "random-stuff-js";
 import { toast } from "react-toastify";
 
+const production = process.env.NODE_ENV === 'production'
+const transferServerCount = process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT
+
 const round = (number, digits = 2) => Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits)
 
-export const getUploadUrl = server => (process.env.NODE_ENV === 'production' ? `https://cloudbreeze-upload-${server}.onrender.com` : 'http://localhost:5002') + '/file/upload'
+export const getUploadUrl = server => (production ? `https://cloudbreeze-upload-${server}.onrender.com` : 'http://localhost:5002') + '/file/upload'
 
-export const getTransferUploadUrl = () => (process.env.NODE_ENV === 'production' ? `https://cloudbreeze-transfer-${randomNumber(0, process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT - 1)}.onrender.com` : '') + '/file/upload'
+export const getTransferUploadUrl = () => (production ? `https://cloudbreeze-transfer-${randomNumber(0, transferServerCount - 1)}.onrender.com` : '') + '/file/upload'
 
-export const getDownloadUrl = (fileId, server) => ((server && process.env.NODE_ENV === 'production') ? `https://cloudbreeze-transfer-${server}.onrender.com` : '') + `/file/get/${fileId}`
+export const getDownloadUrl = (fileId, server) => ((server && production) ? `https://cloudbreeze-transfer-${server}.onrender.com` : '') + `/file/get/${fileId}`
 
 export const speed = (bytes, total, startTime = 0) => round(+(bytes !== total) && (bytesToSize(bytes, total) / (Date.now() - startTime) * 1000) || 0) + ' ' + (total >= 1048576 ? 'MB' : total >= 1024 ? 'KB' : 'B')
 
