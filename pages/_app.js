@@ -12,7 +12,6 @@ import Loader from '../components/Loader';
 import { hideNavbar } from '../constants';
 import Script from 'next/script';
 
-const production = process.env.NODE_ENV === 'production'
 const api = process.env.NEXT_PUBLIC_API
 
 export default function MyApp({ Component, pageProps }) {
@@ -20,10 +19,7 @@ export default function MyApp({ Component, pageProps }) {
     const [loading, setLoading] = useState(true)
     pageProps.router = router;
 
-    useEffect(() => {
-        setLoading(false)
-        if (production) navigator.serviceWorker?.register('/share-sw.js', { scope: '/share' })
-    }, []);
+    useEffect(() => { setLoading(false) }, []);
 
     return <>
         <Head>
