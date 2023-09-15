@@ -9,6 +9,8 @@ import { getStorage, removeStorage, setStorage } from '../modules/storage';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
 
+const dimensions = typeof screen !== 'undefined' && screen.width + screen.height
+
 const Context = createContext();
 export const useFileContext = () => useContext(Context)
 
@@ -37,9 +39,8 @@ export default function ContextProvider({ children, router }) {
             const response = await axios({
                 url, method, data, ...options,
                 headers: {
-                    'Content-Type': type,
-                    token: token || getStorage('token'),
-                    guest: getStorage('guest')
+                    'Content-Type': type, dimensions,
+                    token: token || getStorage('token'), guest: getStorage('guest')
                 }
             })
             if (showProgress) setProgress(100)
@@ -76,7 +77,6 @@ export default function ContextProvider({ children, router }) {
         else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.replace('/account')
         else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
     }, [router.pathname])
-
 
     return <Context.Provider value={{ uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType }}>
         {children}
