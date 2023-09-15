@@ -49,7 +49,7 @@ export default function ContextProvider({ children, router }) {
             if (!json) {
                 const error = err.response?.data?.error || "Please check your internet connectivity"
                 json = { success: false, error }
-                const authenticationError = error.includes('authenticate')
+                const authenticationError = error.toLowerCase().includes('session expired')
                 if (authenticationError) logout('auto')
                 if (authenticationError || showToast === true) toast.error(error)
             }
