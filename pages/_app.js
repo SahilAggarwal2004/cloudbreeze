@@ -1,25 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useRouter } from 'next/router';
 import Head from 'next/head'
+import Script from 'next/script';
 import { ToastContainer } from 'react-toastify';
-import '../styles/globals.css'
-import 'react-toastify/dist/ReactToastify.css';
 import ContextProvider from '../contexts/ContextProvider';
 import Navbar from '../components/Navbar';
-import { useRouter } from 'next/router';
 import Modal from '../components/Modal';
-import { useEffect, useState } from 'react';
-import Loader from '../components/Loader';
 import { hideNavbar } from '../constants';
-import Script from 'next/script';
+import '../styles/globals.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 const api = process.env.NEXT_PUBLIC_API
 
 export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
-    const [loading, setLoading] = useState(true)
     pageProps.router = router;
-
-    useEffect(() => { setLoading(false) }, []);
 
     return <>
         <Head>
@@ -100,7 +95,7 @@ export default function MyApp({ Component, pageProps }) {
         {<ContextProvider router={router}>
             {!hideNavbar.includes(router.pathname) && <Navbar />}
             {router.pathname === '/account/confirm/[token]' && <h1 className='sticky inset-0 z-30 bg-black text-white py-2 px-5 shadow-lg text-xl font-medium text-center sm:text-left'>CloudBreeze</h1>}
-            {loading || !router.isReady ? <Loader className='center flex flex-col items-center space-y-2' text='Loading...' /> : <Component {...pageProps} />}
+            <Component {...pageProps} />
             <Modal pathname={router.pathname} redirect={router.push} />
             <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' closeButton={false} />
         </ContextProvider>}
