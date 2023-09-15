@@ -6,15 +6,12 @@ import { FaQrcode } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { unzip } from 'unzipit';
 import { wait } from 'random-stuff-js';
-import { sign } from 'jssign';
 import Loader from './Loader';
 import { useFileContext } from '../contexts/ContextProvider';
 import { download, generateId, getDownloadUrl, resolvePromises } from '../modules/functions';
 import BarProgress from './BarProgress';
 import useStorage from '../hooks/useStorage';
 import { regex } from '../constants';
-
-const csrfSecret = process.env.NEXT_PUBLIC_SECRET
 
 export default function FileDownload({ fileIdFromUrl = false }) {
     const { downloadFiles, setDownloadFiles, fetchApp, setModal } = useFileContext()
@@ -33,10 +30,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         const [fileId, server] = id.split('@')
 
         async function fetchDownload() {
-            const options = server ? {
-                url: getDownloadUrl(fileId, server), method: 'POST', data: { pass: password.current.value },
-                headers: { csrftoken: sign(undefined, csrfSecret, { expiresIn: 300000 }) }
-            } : { url: link, method: 'GET' }
+            const options = server ? { url: getDownloadUrl(fileId, server), method: 'POST', data: { pass: password.current.value } } : { url: link, method: 'GET' }
             try {
                 return await axios({
                     ...options, responseType: 'blob',

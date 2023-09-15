@@ -35,6 +35,8 @@ export default function MyApp({ Component, pageProps }) {
 
             <link rel='preconnect' href={api} />
 
+            <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src *" />
+
             <meta name="google-site-verification" content="5_rdfkDpTLo7tXDzIkEfmQb1wH_0AmpbcQOAPhLNBLQ" />
 
             <link rel="apple-touch-icon" href="icons/apple-icon-180.png" />

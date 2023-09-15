@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
-import { sign } from 'jssign';
 import { randomName } from 'random-stuff-js';
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
@@ -9,9 +8,6 @@ import useStorage from '../hooks/useStorage';
 import { getStorage, setStorage } from '../modules/storage';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API
-axios.defaults.withCredentials = true
-
-const csrfSecret = process.env.NEXT_PUBLIC_SECRET
 
 const Context = createContext();
 export const useFileContext = () => useContext(Context)
@@ -25,12 +21,10 @@ export default function ContextProvider({ children, router }) {
     const [files, setFiles] = useState([])
 
     async function logout(type) {
-        if (type === 'manual') {
-            const { success } = await fetchApp({ url: 'auth/logout' })
-            if (!success) return;
-            toast.success('Logged out successfully')
-        } else router.push('/account')
+        if (type === 'manual') toast.success('Logged out successfully')
+        else if (type === 'auto') router.push('/account')
         setStorage('username', randomName())
+        setStorage('guest', crypto.randomUUID())
         setType('guest')
         setUploadFiles([])
         setDownloadFiles([])
@@ -42,8 +36,9 @@ export default function ContextProvider({ children, router }) {
             const response = await axios({
                 url, method, data, ...options,
                 headers: {
-                    token: token || getStorage('token'), 'Content-Type': type,
-                    csrftoken: sign(undefined, csrfSecret, { expiresIn: 300000 })
+                    'Content-Type': type,
+                    token: token || getStorage('token'),
+                    guest: getStorage('guest')
                 }
             })
             if (showProgress) setProgress(100)
@@ -76,18 +71,7 @@ export default function ContextProvider({ children, router }) {
     useEffect(() => { getStorage('username', randomName()) }, [])
 
     useEffect(() => {
-        if (type) fetchApp({ url: 'auth/check', showProgress: false, showToast: false }).then(({ error }) => {
-            const success = error !== 'Cookies not allowed'
-            const cookiesAccepted = getStorage('cookies') === 'accepted'
-            if (!success || success && !cookiesAccepted) {
-                if (!cookiesAccepted) setStorage('cookies', 'requested')
-                setModal({ active: true, type: 'cookies', allowed: success })
-            }
-        })
-    }, [type])
-
-    useEffect(() => {
-        if (!type) fetchApp({ url: 'auth/logout', showProgress: false, showToast: false }).then(({ success }) => success && setType('guest'))
+        if (!type) logout()
         else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.replace('/account')
         else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
     }, [router.pathname])
