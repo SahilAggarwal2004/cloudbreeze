@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useFileContext } from '../../contexts/ContextProvider';
 import Logo from '../../components/Logo';
 import Password from '../../components/Password';
-import { setStorage } from '../../modules/storage';
+import { removeStorage, setStorage } from '../../modules/storage';
 import Head from 'next/head';
 
 export default function Login({ router }) {
@@ -17,9 +17,10 @@ export default function Login({ router }) {
     if (success) {
       setStorage('username', name)
       setStorage('token', token)
+      removeStorage('guest')
+      setType(type)
       setUploadFiles(files)
       setDownloadFiles([])
-      setType(type)
       router.replace('/')
     }
   }
