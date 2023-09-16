@@ -14,7 +14,7 @@ import { getStorage } from '../../modules/storage';
 export default function Id({ router }) {
     const { roomId } = router.query
     const peerRef = useRef();
-    const [connection, setConnection] = useState()
+    const connection = useRef();
     const [file, setFile] = useState()
     const [size, setSize] = useState()
     const [text, setText] = useState()
@@ -27,9 +27,9 @@ export default function Id({ router }) {
     function connect() {
         let fileName, fileSize, bytes, blob, correction, timeout;
         const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
+        connection.current = conn;
         conn.on('open', () => {
             peerRef.current.off('error')
-            setConnection(conn)
             clearError()
             toast.success('Connection established')
         })
@@ -77,15 +77,15 @@ export default function Id({ router }) {
     }
 
     function request() {
-        connection?.send({ type: 'request' })
+        connection.current?.send({ type: 'request' })
         setBytes(0)
         setTime(Date.now())
     }
 
     function retry(manual = false) {
         if (manual && !navigator.onLine) return toast.error('Please check your internet connectivity')
-        connection?.removeAllListeners()
-        connection?.close()
+        connection.current?.removeAllListeners()
+        connection.current?.close()
         connect()
         setFile()
         setText()

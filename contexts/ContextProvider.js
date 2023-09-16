@@ -27,7 +27,7 @@ export default function ContextProvider({ children, router }) {
         else if (type === 'auto') router.push('/account')
         setStorage('username', randomName())
         removeStorage('token')
-        setStorage('guest', crypto.randomUUID())
+        setStorage('guest', crypto.randomUUID?.() || Date.now())
         setType('guest')
         setUploadFiles([])
         setDownloadFiles([])
