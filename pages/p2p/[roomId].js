@@ -26,7 +26,7 @@ export default function Id({ router }) {
 
     function connect() {
         let fileName, fileSize, bytes, blob, correction, timeout;
-        const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
+        const conn = peerRef.current.connect(roomId, { metadata: getStorage('username'), reliable: true })
         connection.current = conn;
         conn.on('open', () => {
             peerRef.current.off('error')
