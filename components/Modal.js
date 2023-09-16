@@ -40,7 +40,7 @@ export default function Modal({ pathname, redirect }) {
 					<button className='py-1 px-3 rounded border button-animation' onClick={() => deleteFile(fileId)}>Yes</button>
 					<button className='py-1 px-3 rounded border button-animation' onClick={handleCancel}>No</button>
 				</div>
-			</div> : type === 'showFile' ? <Info fileId={fileId} filter={filter} downloadCount={downloadCount} modal={true} /> : type === 'qrReader' && <QrScanner redirect={redirect} />}
+			</div> : type === 'showFile' ? <Info fileId={fileId} filter={filter} downloadCount={downloadCount} modal /> : type === 'qrReader' && <QrScanner redirect={redirect} />}
 		</div>
 	</>
 }
