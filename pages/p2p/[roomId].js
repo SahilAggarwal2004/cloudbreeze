@@ -25,7 +25,7 @@ export default function Id({ router }) {
     const isDownloading = downPercent >= 0
 
     function connect() {
-        let fileName, fileSize, bytes, blob, correction, timeout;
+        let fileName, fileSize, bytes, blob, timeout;
         const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
         connection.current = conn;
         conn.on('open', () => {
@@ -39,11 +39,9 @@ export default function Id({ router }) {
                 const downloadComplete = (bytes += byteLength) === fileSize
                 conn.send({ type: 'progress', bytes })
                 setBytes(old => old + byteLength)
-                if (byteLength === chunkSize || downloadComplete) blob = new Blob([blob, chunk])
-                else correction = chunk
+                blob = new Blob([blob, chunk])
                 if (!downloadComplete) return
                 try {
-                    if (correction) blob = new Blob([blob, correction])
                     download(blob, fileName)
                     toast.success('File downloaded successfully!')
                 } catch { toast.error("Couldn't download file") }
