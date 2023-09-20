@@ -12,7 +12,7 @@
     "axios": "^1.5.0",
     "jszip": "^3.10.1",
     "megajs": "^1.1.4",
-    "next": "^13.4.19",
+    "next": "^13.5.1",
     "next-pwa": "^5.6.0",
     "peerjs": "^1.5.0",
     "random-stuff-js": "^0.6.2",
@@ -25,15 +25,15 @@
     "react-toastify": "^9.1.3",
     "react-top-loading-bar": "^2.3.1",
     "react-wrap-balancer": "^1.1.0",
-    "sharp": "^0.32.5",
+    "sharp": "^0.32.6",
     "unzipit": "^1.4.3"
   },
   "devDependencies": {
     "@builder.io/partytown": "^0.8.1",
     "autoprefixer": "^10.4.15",
     "eslint": "^8.49.0",
-    "eslint-config-next": "^13.4.19",
-    "postcss": "^8.4.29",
+    "eslint-config-next": "^13.5.1",
+    "postcss": "^8.4.30",
     "tailwindcss": "^3.3.3"
   }
 }
