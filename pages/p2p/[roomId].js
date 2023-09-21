@@ -62,6 +62,7 @@ export default function Id({ router }) {
         conn.on('close', () => {
             peerRef.current.on('error', setError)
             toast.error("Peer disconnected")
+            close()
         })
         conn.on('iceStateChanged', state => {
             if (state === 'connected') clearTimeout(timeout)
@@ -80,10 +81,14 @@ export default function Id({ router }) {
         setTime(Date.now())
     }
 
-    function retry(manual = false) {
-        if (manual && !navigator.onLine) return toast.error('Please check your internet connectivity')
+    function close() {
         connection.current?.removeAllListeners()
         connection.current?.close()
+    }
+
+    function retry(manual = false) {
+        if (manual && !navigator.onLine) return toast.error('Please check your internet connectivity')
+        close()
         connect()
         setFile()
         setText()

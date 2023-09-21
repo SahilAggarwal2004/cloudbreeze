@@ -41,6 +41,11 @@ export default function P2p({ router }) {
 
 	const verifyRoomId = e => e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "")
 
+	function close(conn) {
+		dispatchConnections({ type: 'remove', peer: conn.peer, name: conn.name })
+		conn.removeAllListeners()
+	}
+
 	function connect(conn) {
 		const peer = conn.peer
 		const name = conn.metadata || 'Anonymous User'
@@ -50,10 +55,10 @@ export default function P2p({ router }) {
 			conn.send({ name: names[0], length: names.length, totalSize, text, type: 'details' })
 			dispatchConnections({ peer, name, conn })
 		})
-		conn.on('close', () => dispatchConnections({ type: 'remove', peer, name }))
+		conn.on('close', () => close(conn))
 		conn.on('iceStateChanged', state => {
 			if (state === 'connected') clearTimeout(timeouts[peer])
-			else if (state === 'disconnected') timeouts[peer] = setTimeout(() => dispatchConnections({ type: 'remove', peer, name }), peerOptions.pingInterval * 2)
+			else if (state === 'disconnected') timeouts[peer] = setTimeout(() => close(conn), peerOptions.pingInterval * 2)
 		})
 	}
 
