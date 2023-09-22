@@ -9,7 +9,7 @@ import { getStorage, setStorage } from '../../modules/storage'
 import { types } from '../../constants'
 
 export default function Account() {
-    const { uploadFiles, downloadFiles, logout, setModal, type } = useFileContext()
+    const { uploadFiles, transferFiles, downloadFiles, logout, setModal, type } = useFileContext()
     const guest = !types.includes(type)
 
     useEffect(() => {
@@ -33,6 +33,10 @@ export default function Account() {
                 <Link href='/account/history?filter=upload'>
                     <div className='text-lg sm:text-xl font-semibold'>{uploadFiles.length}</div>
                     Files Uploaded
+                </Link>
+                <Link href='/account/history?filter=transfer'>
+                    <div className='text-lg sm:text-xl font-semibold'>{transferFiles.length}</div>
+                    Files Transferred
                 </Link>
                 <Link href='/account/history?filter=download'>
                     <div className='text-lg sm:text-xl font-semibold'>{downloadFiles.length}</div>

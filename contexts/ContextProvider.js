@@ -74,7 +74,7 @@ export default function ContextProvider({ children, router }) {
         else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
     }, [router.pathname])
 
-    return <Context.Provider value={{ uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, transferFiles, setTransferFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType }}>
+    return <Context.Provider value={{ uploadFiles, setUploadFiles, transferFiles, setTransferFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType }}>
         {children}
     </Context.Provider>
 }

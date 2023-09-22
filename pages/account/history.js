@@ -7,20 +7,23 @@ import { useFileContext } from '../../contexts/ContextProvider'
 import { relativeTime } from '../../modules/functions'
 
 export default function History({ router }) {
-    const { uploadFiles, downloadFiles, transferFiles, clearHistory, setModal } = useFileContext()
+    const { uploadFiles, transferFiles, downloadFiles, clearHistory, setModal } = useFileContext()
     const { filter = 'upload' } = router.query
     const [history, setHistory] = useState([]) // just to handle the 'initial render not matching' error
 
     useEffect(() => {
-        setHistory(filter === 'upload' ? uploadFiles : filter === 'download' ? downloadFiles : filter === 'transfer' ? transferFiles : [])
-    }, [filter, uploadFiles, downloadFiles, transferFiles])
+        setHistory(filter === 'upload' ? uploadFiles : filter === 'transfer' ? transferFiles : filter === 'download' ? downloadFiles : [])
+    }, [filter, uploadFiles, transferFiles, downloadFiles])
 
     return <>
         <Head><title>File history | CloudBreeze</title></Head>
-        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-400 px-1 space-x-0.5">
-            {Object.entries(options).map(([option, label]) => <Link key={option} href={`/account/history?filter=${option}`} replace className={`inline-block px-4 py-3 rounded-t-lg capitalize ${filter === option ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`}>{label} Files</Link>)}
+        <ul className="flex overflow-x-scroll text-xs xs:text-sm font-medium text-center text-gray-500 border-b border-gray-400 px-1">
+            {Object.entries(options).map(([option, label]) => <Link key={option} href={`/account/history?filter=${option}`} replace className={`inline-block p-3 rounded-t-lg ${filter === option ? 'text-white bg-black cursor-default' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 cursor-pointer'}`}>
+                {label}
+                <span className='hidden sm:inline-block'>&nbsp;Files</span>
+            </Link>)}
         </ul>
-        {!history.length ? <div className='center'>
+        {!history.length ? <div className='center text-sm xs:text-base'>
             No files to show
         </div> : <div className="overflow-x-auto">
             <div className="pb-2 inline-block min-w-full">
