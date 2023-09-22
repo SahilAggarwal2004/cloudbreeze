@@ -14,7 +14,7 @@ export default function Modal({ pathname, redirect }) {
 		setModal({ active: false })
 		const { success, files } = await fetchApp({ url: getDeleteUrl(fileId, server), method: 'DELETE' })
 		if (!success) return
-		if (server) clearHistory(fileId, 'transfer')
+		if (server) clearHistory(id, 'transfer')
 		else setUploadFiles(files)
 	}
 
