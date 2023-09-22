@@ -13,7 +13,7 @@ import BarProgress from '../../components/BarProgress';
 import Select from '../../components/Select';
 
 export default function Upload({ router }) {
-	const { fetchApp, files, setFiles, uploadFiles, setUploadFiles, type } = useFileContext()
+	const { fetchApp, files, setFiles, setUploadFiles, setTransferFiles, type } = useFileContext()
 	const { share, mode = 'save' } = router.query
 	const fileIdRef = useRef()
 	const password = useRef()
@@ -82,8 +82,7 @@ export default function Upload({ router }) {
 		if (fileId = fileIdRef.current.value) {
 			if (unavailable.includes(fileId)) {
 				toast.warning(`File Id cannot be ${fileId}`);
-				setProgress(-1)
-				return
+				return setProgress(-1)
 			}
 			data.append('fileId', fileId)
 		}
@@ -99,8 +98,7 @@ export default function Upload({ router }) {
 			while (!success) {
 				if (!servers.length) {
 					setLink('error')
-					setProgress(-1)
-					return
+					return setProgress(-1)
 				}
 				var { fileId, name, success } = await fetchApp({
 					url: getUploadUrl(server), method: 'POST', data, type: 'multipart/form-data', token,
@@ -112,7 +110,7 @@ export default function Upload({ router }) {
 				server = randomElement(servers)
 			}
 			setLink(fileId)
-			setUploadFiles(uploadFiles.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit }))
+			setUploadFiles(prev => prev.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit }))
 		} else {
 			const { success, fileId } = await fetchApp({
 				url: getTransferUploadUrl(), method: 'POST', data, type: 'multipart/form-data', token: 1,
@@ -120,9 +118,13 @@ export default function Upload({ router }) {
 					onUploadProgress: ({ loaded, total }) => setProgress(Math.round(loaded * 100 / total))
 				}
 			})
-			if (success) return setLink(fileId)
-			setLink('error')
-			setProgress(-1)
+			if (success) {
+				setLink(fileId)
+				setTransferFiles(prev => prev.concat({ _id: fileId, nameList, createdAt: Date.now(), daysLimit: 1 / 24 }))
+			} else {
+				setLink('error')
+				setProgress(-1)
+			}
 		}
 	}
 

@@ -12,6 +12,8 @@ export const getTransferUploadUrl = () => (production ? `https://cloudbreeze-tra
 
 export const getDownloadUrl = (fileId, server) => ((server && production) ? `https://cloudbreeze-transfer-${server}.onrender.com` : '') + `/file/get/${fileId}`
 
+export const getDeleteUrl = (fileId, server) => ((server && production) ? `https://cloudbreeze-transfer-${server}.onrender.com` : '') + `/file/delete/${fileId}`
+
 export const speed = (bytes, total, startTime = 0) => round(+(bytes !== total) && (bytesToSize(bytes, total) / (Date.now() - startTime) * 1000) || 0) + ' ' + (total >= 1048576 ? 'MB' : total >= 1024 ? 'KB' : 'B')
 
 export function bytesToSize(bytes, max = 0, string = false) {

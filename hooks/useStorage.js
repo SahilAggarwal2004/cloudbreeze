@@ -11,8 +11,11 @@ export default function useStorage(key, initialValue, local = true) {
     // Return a wrapped version of useState's setter function that ...
     // ... persists the new value to localStorage.
     const setValue = value => {
-        setStoredValue(value);
-        if (typeof window !== "undefined") setStorage(key, value, local)
+        setStoredValue(old => {
+            const updatedValue = typeof value === 'function' ? value(old) : value;
+            setStorage(key, updatedValue, local);
+            return updatedValue;
+        });
     };
     return [storedValue, setValue];
 }

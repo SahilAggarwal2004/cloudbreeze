@@ -17,6 +17,7 @@ export const useFileContext = () => useContext(Context)
 export default function ContextProvider({ children, router }) {
     const [uploadFiles, setUploadFiles] = useStorage('upload-files', [])
     const [downloadFiles, setDownloadFiles] = useStorage('download-files', [])
+    const [transferFiles, setTransferFiles] = useStorage('transfer-files', [])
     const [type, setType] = useStorage('type', '')
     const [progress, setProgress] = useState(0)
     const [modal, setModal] = useState({ active: false })
@@ -60,14 +61,9 @@ export default function ContextProvider({ children, router }) {
     }
 
     function clearHistory(fileId, filter) {
-        let updatedFiles;
-        if (filter === 'upload') {
-            updatedFiles = uploadFiles.filter(({ _id }) => _id !== fileId)
-            setUploadFiles(updatedFiles)
-        } else if (filter === 'download') {
-            updatedFiles = downloadFiles.filter(({ _id }) => _id !== fileId)
-            setDownloadFiles(updatedFiles)
-        }
+        if (filter === 'upload') setUploadFiles(prev => prev.filter(({ _id }) => _id !== fileId))
+        else if (filter === 'transfer') setTransferFiles(prev => prev.filter(({ _id }) => _id !== fileId))
+        else if (filter === 'download') setDownloadFiles(prev => prev.filter(({ _id }) => _id !== fileId))
     }
 
     useEffect(() => { getStorage('username', randomName()) }, [])
@@ -78,7 +74,7 @@ export default function ContextProvider({ children, router }) {
         else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
     }, [router.pathname])
 
-    return <Context.Provider value={{ uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType }}>
+    return <Context.Provider value={{ uploadFiles, setUploadFiles, downloadFiles, setDownloadFiles, transferFiles, setTransferFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType }}>
         {children}
     </Context.Provider>
 }

@@ -1,18 +1,21 @@
 import { showModal } from '../constants'
 import { useFileContext } from '../contexts/ContextProvider'
+import { getDeleteUrl } from '../modules/functions'
 import Info from './Info'
 import QrScanner from './QrScanner'
 
 export default function Modal({ pathname, redirect }) {
-	const { modal: { active, type, allowed, props }, setModal, setProgress, fetchApp, logout, setUploadFiles } = useFileContext()
+	const { modal: { active, type, props }, setModal, setProgress, fetchApp, logout, setUploadFiles, clearHistory } = useFileContext()
 	const { fileId, filter, downloadCount } = props || {}
 	const handleCancel = () => setModal({ active: false })
 
-	async function deleteFile(fileId) {
+	async function deleteFile(id) {
+		const [fileId, server] = id.split('@')
 		setModal({ active: false })
-		const { success, files } = await fetchApp({ url: `file/delete/${fileId}`, method: 'DELETE' })
+		const { success, files } = await fetchApp({ url: getDeleteUrl(fileId, server), method: 'DELETE' })
 		if (!success) return
-		setUploadFiles(files)
+		if (server) clearHistory(fileId, 'transfer')
+		else setUploadFiles(files)
 	}
 
 	async function deleteUser() {
