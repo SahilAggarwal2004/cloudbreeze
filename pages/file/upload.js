@@ -14,11 +14,12 @@ import Select from '../../components/Select';
 
 export default function Upload({ router }) {
 	const { fetchApp, files, setFiles, setUploadFiles, setTransferFiles, type } = useFileContext()
-	const { share, mode = 'save' } = router.query
+	const { share } = router.query
 	const fileIdRef = useRef()
 	const password = useRef()
 	const daysLimit = useRef()
 	const downloadLimit = useRef()
+	const [mode, setMode] = useState('save')
 	const [link, setLink] = useState()
 	const [progress, setProgress] = useState(-1)
 	const isUploading = progress >= 0
@@ -49,7 +50,7 @@ export default function Upload({ router }) {
 		}
 		if (mode === 'save' && size > limit * 1048576) {
 			toast(`Try transfer mode for large files upto ${maxLimit}GB`)
-			router.replace('/file/upload?mode=transfer')
+			setMode('transfer')
 		}
 		setFiles(files)
 	}
@@ -138,7 +139,7 @@ export default function Upload({ router }) {
 
 	return <>
 		<Head><title>Upload a file | CloudBreeze</title></Head>
-		<Select active={mode} values={[{ value: 'save', label: 'Save to Cloud' }, { value: 'transfer', label: 'Transfer file' }]} />
+		<Select active={mode} setActive={setMode} values={[{ value: 'save', label: 'Save to Cloud' }, { value: 'transfer', label: 'Transfer file' }]} />
 		<div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
 				<label htmlFor="files">File(s):</label>
