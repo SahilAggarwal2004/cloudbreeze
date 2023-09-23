@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 
-const pages = ['/', '/account/forgot', '/account/history?filter=upload', '/account/history?filter=transfer', '/account/history?filter=download', '/account/login', '/account/signup', '/file/upload', '/file/download', '/p2p', '/images/account.webp', '/images/cloud.webp', '/images/arrow.png', '/images/p2p.webp']
+const pages = ['/', '/account/forgot', '/account/history?filter=upload', '/account/history?filter=transfer', '/account/history?filter=download', '/account/login', '/account/signup', '/file/upload', '/file/download', '/p2p']
+const images = ['/images/account.webp', '/images/cloud.webp', '/images/arrow.png', '/images/p2p.webp']
 const revision = `${Date.now()}`
 
 const withPWA = require('next-pwa')({
@@ -9,7 +10,7 @@ const withPWA = require('next-pwa')({
   cacheStartUrl: false,
   reloadOnOnline: false,
   importScripts: ['/share-sw.js'],
-  additionalManifestEntries: pages.map(url => ({ url, revision })),
+  additionalManifestEntries: pages.concat(images).map(url => ({ url, revision })),
   runtimeCaching: [
     {
       urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
