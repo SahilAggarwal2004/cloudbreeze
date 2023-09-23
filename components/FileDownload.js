@@ -32,7 +32,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         async function fetchDownload() {
             const options = server ? { url: getDownloadUrl(fileId, server), method: 'POST', data: { pass: password.current.value } } : { url: link, method: 'GET' }
             try {
-                return await axios({
+                return axios({
                     ...options, responseType: 'blob',
                     onDownloadProgress: ({ loaded, total }) => setProgress(Math.round((loaded * 100) / total))
                 })
