@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 
+const pages = ['/', '/account/forgot', '/account/history?filter=upload', '/account/history?filter=transfer', '/account/history?filter=download', '/account/login', '/account/signup', '/file/upload', '/file/download', '/p2p', '/images/account.webp', '/images/cloud.webp', '/images/arrow.png', '/images/p2p.webp']
 const revision = `${Date.now()}`
 
 const withPWA = require('next-pwa')({
@@ -8,23 +9,7 @@ const withPWA = require('next-pwa')({
   cacheStartUrl: false,
   reloadOnOnline: false,
   importScripts: ['/share-sw.js'],
-  additionalManifestEntries: [
-    { url: '/', revision },
-    { url: '/account', revision },
-    { url: '/account/forgot', revision },
-    { url: '/account/history?filter=upload', revision },
-    { url: '/account/history?filter=transfer', revision },
-    { url: '/account/history?filter=download', revision },
-    { url: '/account/login', revision },
-    { url: '/account/signup', revision },
-    { url: '/file/upload', revision },
-    { url: '/file/download', revision },
-    { url: '/p2p', revision },
-    { url: '/images/account.webp', revision },
-    { url: '/images/cloud.webp', revision },
-    { url: '/images/arrow.png', revision },
-    { url: '/images/p2p.webp', revision }
-  ],
+  additionalManifestEntries: pages.map(url => ({ url, revision })),
   runtimeCaching: [
     {
       urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
