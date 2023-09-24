@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const pages = ['/', '/account/forgot', '/account/history?filter=upload', '/account/history?filter=transfer', '/account/history?filter=download', '/account/login', '/account/signup', '/file/upload', '/file/download', '/p2p']
+const pages = ['/', '/account', '/account/forgot', '/account/history?filter=upload', '/account/history?filter=transfer', '/account/history?filter=download', '/account/login', '/account/signup', '/file/upload', '/file/download', '/file/[fileId]', '/p2p', '/p2p/[roomId]']
 const images = ['/images/account.webp', '/images/cloud.webp', '/images/arrow.png', '/images/p2p.webp']
 const revision = `${Date.now()}`
 

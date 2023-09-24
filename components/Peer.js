@@ -47,8 +47,11 @@ export default function Peer({ names, sizes, totalSize, data }) {
             setTime(Date.now())
             sendFile()
         } else if (type === 'progress') {
-            setBytes(bytes)
-            if (bytes >= size) setCount(count + 1)
+            if (bytes < size) setBytes(bytes)
+            else {
+                setBytes(0)
+                setCount(count + 1)
+            }
         }
     }
 
