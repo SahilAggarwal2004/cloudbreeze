@@ -7,7 +7,7 @@ import { Balancer } from 'react-wrap-balancer';
 import BarProgress from '../../components/BarProgress';
 import Loader from '../../components/Loader';
 import useError from '../../hooks/useError';
-import { chunkSize, peerOptions } from '../../constants';
+import { peerOptions } from '../../constants';
 import { bytesToSize, download, speed } from '../../modules/functions';
 import { getStorage } from '../../modules/storage';
 
@@ -26,11 +26,12 @@ export default function Id({ router }) {
 
     function connect() {
         let fileName, fileSize, bytes, blob, timeout;
-        const conn = peerRef.current.connect(roomId, { metadata: getStorage('username') })
+        const conn = peerRef.current.connect(roomId, { metadata: getStorage('username'), reliable: true })
         connection.current = conn;
         conn.on('open', () => {
             peerRef.current.off('error')
             clearError()
+            setBytes(-1)
             toast.success('Connection established')
         })
         conn.on('data', ({ type, name, length, totalSize, text, chunk, size }) => {
@@ -49,7 +50,7 @@ export default function Id({ router }) {
                 fileName = name
                 fileSize = size
                 bytes = 0
-                blob = new Blob([])
+                blob = new Blob()
             } else if (type === 'details') {
                 setFile(length <= 1 ? name : `${length} files`)
                 setSize(totalSize)

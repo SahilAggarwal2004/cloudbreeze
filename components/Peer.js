@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { FaXmark } from 'react-icons/fa6'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
@@ -15,10 +15,11 @@ export default function Peer({ names, sizes, totalSize, data }) {
     const { files } = useFileContext()
     const [count, setCount] = useState(0)
     const [bytes, setBytes] = useState(0)
-    const [totalBytes, setTotalBytes] = useState(0)
     const [time, setTime] = useState(0)
-    const file = files[count]
-    const size = sizes[count]
+    const file = useMemo(() => files[count], [count])
+    const size = useMemo(() => sizes[count], [count])
+    const prevBytes = useMemo(() => sizes.slice(0, count).reduce((size, cur) => size + cur, 0), [count])
+    const totalBytes = prevBytes + bytes
 
     function sendFile() {
         conn.send({ name: names[count], size, type: 'initial' })
@@ -28,13 +29,13 @@ export default function Peer({ names, sizes, totalSize, data }) {
         reader.onload = async ({ target: { result: chunk, error } }) => {
             if (error) return readChunk();
             while (conn.open) {
-                await wait(t)
                 if (channel.bufferedAmount < chunkSize) {
                     const start = performance.now()
                     if ((bytesSent += chunkSize) < size) readChunk();
                     conn.send({ chunk, type: 'file' });
                     return t = Math.ceil(performance.now() - start)
                 }
+                await wait(t)
             }
         };
         readChunk()
@@ -47,7 +48,6 @@ export default function Peer({ names, sizes, totalSize, data }) {
             sendFile()
         } else if (type === 'progress') {
             setBytes(bytes)
-            setTotalBytes(totalBytes + bytes)
             if (bytes >= size) setCount(count + 1)
         }
     }
