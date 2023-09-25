@@ -29,13 +29,13 @@ export default function Peer({ names, sizes, totalSize, data }) {
         reader.onload = async ({ target: { result: chunk, error } }) => {
             if (error) return readChunk();
             while (conn.open) {
+                await wait(t)
                 if (channel.bufferedAmount < chunkSize) {
                     const start = performance.now()
-                    if ((bytesSent += chunkSize) < size) readChunk();
                     conn.send({ chunk, type: 'file' });
-                    return t = Math.ceil(performance.now() - start)
+                    if ((bytesSent += chunkSize) < size) readChunk();
+                    return t = Math.max(performance.now() - start, (bytesSent / chunkSize) < 20 && 50)
                 }
-                await wait(t)
             }
         };
         readChunk()
