@@ -32,6 +32,7 @@ export default function Peer({ names, sizes, totalSize, data }) {
                 await wait(t)
                 if (channel.bufferedAmount < chunkSize) {
                     const start = performance.now()
+                    setBytes(bytesSent)
                     conn.send({ chunk, type: 'file' });
                     if ((bytesSent += chunkSize) < size) readChunk();
                     return t = Math.max(performance.now() - start, (bytesSent / chunkSize) < 20 && 50)
@@ -41,17 +42,14 @@ export default function Peer({ names, sizes, totalSize, data }) {
         readChunk()
     }
 
-    function acceptData({ type, bytes }) {
+    function acceptData({ type }) {
         if (type === 'request') {
             toast.success(`Transferring file(s) to ${name}`)
             setTime(Date.now())
             sendFile()
-        } else if (type === 'progress') {
-            if (bytes < size) setBytes(bytes)
-            else {
-                setBytes(0)
-                setCount(count + 1)
-            }
+        } else if (type === 'next') {
+            setBytes(0)
+            setCount(count + 1)
         }
     }
 
