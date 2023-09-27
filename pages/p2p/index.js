@@ -8,6 +8,7 @@ import Peer from '../../components/Peer';
 import { peerOptions } from '../../constants';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { fileDetails, generateId } from '../../modules/functions';
+import axios from 'axios';
 
 function reducer(state, { type = 'add', peer, name, conn }) {
 	switch (type) {
@@ -108,6 +109,7 @@ export default function P2p({ router }) {
 	}
 
 	useEffect(() => {
+		axios('/')
 		if (!share) setFiles([])
 		return reset
 	}, [])

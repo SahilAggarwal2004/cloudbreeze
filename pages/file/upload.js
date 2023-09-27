@@ -15,6 +15,7 @@ import Select from '../../components/Select';
 export default function Upload({ router }) {
 	const { fetchApp, files, setFiles, setUploadFiles, setTransferFiles, type } = useFileContext()
 	const { share } = router.query
+	const filesRef = useRef()
 	const fileIdRef = useRef()
 	const password = useRef()
 	const daysLimit = useRef()
@@ -24,7 +25,7 @@ export default function Upload({ router }) {
 	const [progress, setProgress] = useState(-1)
 	const isUploading = progress >= 0
 	const isUploaded = link && link !== 'error'
-	const maxDaysLimit = type === 'premium' ? 365 : type === 'normal' ? 30 : 3
+	const maxDaysLimit = type === 'premium' ? 365 : type === 'normal' ? 30 : 7
 	const length = files.length
 
 	const verifyFileId = e => e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "")
@@ -34,6 +35,11 @@ export default function Upload({ router }) {
 	function handleMessage({ data: { files } }) {
 		setFiles(files)
 		if (fileDetails(files).totalSize > maxLimit * 1073741824) router.replace('/p2p?share=true')
+	}
+
+	function setActive(mode) {
+		setMode(mode)
+		filesRef.current.value = null;
 	}
 
 	async function updateFile({ target }) {
@@ -139,12 +145,12 @@ export default function Upload({ router }) {
 
 	return <>
 		<Head><title>Upload a file | CloudBreeze</title></Head>
-		<Select active={mode} setActive={setMode} values={[{ value: 'save', label: 'Save to Cloud' }, { value: 'transfer', label: 'Transfer file' }]} />
+		<Select active={mode} setActive={setActive} values={[{ value: 'save', label: 'Save to Cloud' }, { value: 'transfer', label: 'Transfer file' }]} />
 		<div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
 				<label htmlFor="files">File(s):</label>
 				{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
-					: <input type="file" id='files' onChange={updateFile} disabled={isUploading} required multiple={mode === 'save'} />}
+					: <input type="file" id='files' ref={filesRef} onChange={updateFile} disabled={isUploading} required multiple={mode === 'save'}  />}
 
 				<label htmlFor="file-id">File Id: </label>
 				<input type="text" id='file-id' ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />

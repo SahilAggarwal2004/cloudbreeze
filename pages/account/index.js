@@ -16,7 +16,7 @@ export default function Account() {
         if (guest && getStorage('tip', true, false)) {
             setStorage('tip', false, false)
             const toastId = toast(<span className='text-gray-700 text-sm sm:text-base'>
-                Create a permanent account to keep your files <strong>synced</strong> across all your devices and increase time limit of cloud uploads to upto <strong>30 days (10x)</strong>!
+                Create a permanent account to keep your files <strong>synced</strong> across all your devices and increase time limit of cloud uploads to upto <strong>30 days (4x)</strong>!
             </span>, { autoClose: 5000, pauseOnFocusLoss: true, pauseOnHover: true })
             return () => { toast.dismiss(toastId) }
         }
