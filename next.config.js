@@ -72,7 +72,10 @@ const withPWA = require('next-pwa')({
 })
 
 const nextConfig = {
-  experimental: { nextScriptWorkers: true }
+  experimental: {
+    nextScriptWorkers: true,
+    optimizePackageImports: ['']
+  }
 }
 
 module.exports = withPWA(nextConfig)
