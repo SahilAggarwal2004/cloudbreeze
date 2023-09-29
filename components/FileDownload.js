@@ -32,7 +32,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         async function fetchDownload() {
             const options = server ? { url: getDownloadUrl(fileId, server), method: 'POST', data: { pass: password.current.value } } : { url: link, method: 'GET' }
             try {
-                return axios({
+                return await axios({
                     ...options, responseType: 'blob',
                     onDownloadProgress: ({ loaded, total }) => setProgress(Math.round((loaded * 100) / total))
                 })
@@ -43,32 +43,34 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             }
         }
 
+        async function downloadFile(blob, name) {
+            if (!blob) return
+            try {
+                if (!unzipFile || !regex.test(name)) throw new Error();
+                const { entries } = await unzip(blob);
+                var nameList = Object.keys(entries);
+                const blobs = await resolvePromises(Object.values(entries).map(e => e.blob()));
+                for (let i = 0; i < nameList.length;) {
+                    download(blobs[i], nameList[i])
+                    if (!(++i % 10)) await wait(1000)
+                }
+            } catch {
+                nameList = [name]
+                download(blob, name)
+            }
+            if (server) return
+            setDownloadFiles(prev => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt, daysLimit }))
+            fetchApp({ url: `/file/downloaded/${fileId}`, showProgress: false })
+        }
+
         if (server) {
             const { data, headers } = await fetchDownload()
-            return data && download(data, headers.filename)
+            return data && downloadFile(data, headers.filename)
         }
 
         const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: getDownloadUrl(fileId), method: 'POST', data: { pass: password.current.value } })
         if (error) setProgress(-1)
         else {
-            async function downloadFile(blob) {
-                if (!blob) return
-                try {
-                    if (!unzipFile || !regex.test(name)) throw new Error();
-                    const { entries } = await unzip(blob);
-                    var nameList = Object.keys(entries);
-                    const blobs = await resolvePromises(Object.values(entries).map(e => e.blob()));
-                    for (let i = 0; i < nameList.length;) {
-                        download(blobs[i], nameList[i])
-                        if (!(++i % 10)) await wait(1000)
-                    }
-                } catch {
-                    nameList = [name]
-                    download(blob, name)
-                }
-                setDownloadFiles(prev => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt, daysLimit }))
-                fetchApp({ url: `/file/downloaded/${fileId}`, showProgress: false })
-            }
             try {
                 const file = File.fromURL(link)
                 const stream = file.download();
@@ -79,14 +81,14 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     if (bytesLoaded == bytesTotal) {
                         stream.removeAllListeners();
                         try {
-                            downloadFile(blob)
+                            downloadFile(blob, name)
                             toast.success('File(s) downloaded successfully!')
                         } catch { toast.error("Couldn't download file") }
                     }
                 })
             } catch {
                 const { data } = await fetchDownload()
-                downloadFile(data)
+                downloadFile(data, name)
             }
         }
     }

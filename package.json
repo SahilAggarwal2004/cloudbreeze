@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "axios": "^1.5.1",
-    "jszip": "^3.10.1",
     "megajs": "^1.1.4",
     "next": "^13.5.3",
     "next-pwa": "^5.6.0",
@@ -33,7 +32,7 @@
     "autoprefixer": "^10.4.16",
     "eslint": "^8.50.0",
     "eslint-config-next": "^13.5.3",
-    "postcss": "^8.4.30",
+    "postcss": "^8.4.31",
     "tailwindcss": "^3.3.3"
   }
 }

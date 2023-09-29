@@ -10,4 +10,4 @@ export const limit = 100 // In MB
 export const maxLimit = 2 // In GB
 export const peerOptions = { host: 'cloudbreeze-peer.onrender.com', secure: true, pingInterval: 5000 }
 export const chunkSize = 1048576 // In bytes (1 MB)
-export const regex = /cloudbreeze_\d{13}.zip/
+export const regex = /^cloudbreeze_.*\.zip$/

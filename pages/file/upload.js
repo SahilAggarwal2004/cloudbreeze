@@ -3,7 +3,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
 import Head from 'next/head';
 import { randomElement } from 'random-stuff-js';
-import JSZip from 'jszip';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { fileDetails, getTransferUploadUrl, getUploadUrl, remove } from '../../modules/functions';
 import { limit, maxLimit, unavailable } from '../../constants';
@@ -35,11 +34,6 @@ export default function Upload({ router }) {
 	function handleMessage({ data: { files } }) {
 		setFiles(files)
 		if (fileDetails(files).totalSize > maxLimit * 1073741824) router.replace('/p2p?share=true')
-	}
-
-	function setActive(mode) {
-		setMode(mode)
-		filesRef.current.value = null;
 	}
 
 	async function updateFile({ target }) {
@@ -74,15 +68,8 @@ export default function Upload({ router }) {
 		e.preventDefault()
 		if (mode === 'save' && fileDetails(files).totalSize > limit * 1048576) return toast.warning(`File size must not exceed ${limit}MB`)
 		setProgress(0)
-		if (length === 1 || mode === 'transfer') var content = files[0]
-		else {
-			const zip = new JSZip();
-			for (const file of files) zip.file(file.name, file)
-			content = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
-		}
-
 		const data = new FormData();
-		data.append('files', content) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
+		for (const file of files) data.append('files', file) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
 		data.append('length', length)
 		const nameList = Array.from(files).map(({ name }) => name)
 		if (fileId = fileIdRef.current.value) {
@@ -144,12 +131,12 @@ export default function Upload({ router }) {
 
 	return <>
 		<Head><title>Upload a file | CloudBreeze</title></Head>
-		<Select active={mode} setActive={setActive} values={[{ value: 'save', label: 'Save to Cloud' }, { value: 'transfer', label: 'Transfer file' }]} />
+		<Select active={mode} setActive={setMode} values={[{ value: 'save', label: 'Save to Cloud' }, { value: 'transfer', label: 'Transfer file' }]} />
 		<div className='flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base'>
 			<form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
 				<label htmlFor="files">File(s):</label>
 				{share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div>
-					: <input type="file" id='files' ref={filesRef} onChange={updateFile} disabled={isUploading} required multiple={mode === 'save'} />}
+					: <input type="file" id='files' ref={filesRef} onChange={updateFile} disabled={isUploading} required multiple />}
 
 				<label htmlFor="file-id">File Id: </label>
 				<input type="text" id='file-id' ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className='border rounded px-2 py-0.5 placeholder:text-sm' autoComplete='off' placeholder='Auto' maxLength={30} />
