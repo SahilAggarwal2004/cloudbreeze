@@ -77,14 +77,14 @@ export default function Upload({ router }) {
 		if (length === 1 || mode === 'transfer') var content = files[0]
 		else {
 			const zip = new JSZip();
-			files.forEach(file => zip.file(file.name, file))
+			for (const file of files) zip.file(file.name, file)
 			content = await zip.generateAsync({ type: 'blob', compression: 'STORE' })
 		}
 
 		const data = new FormData();
 		data.append('files', content) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
 		data.append('length', length)
-		const nameList = files.map(({ name }) => name)
+		const nameList = Array.from(files).map(({ name }) => name)
 		if (fileId = fileIdRef.current.value) {
 			if (unavailable.includes(fileId)) {
 				toast.warning(`File Id cannot be ${fileId}`);
