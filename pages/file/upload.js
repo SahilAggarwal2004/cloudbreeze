@@ -156,7 +156,12 @@ export default function Upload({ router }) {
 				{isUploaded && <button type="reset" className='col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800' onClick={reset}>Reset</button>}
 			</form>
 
-			{!link && (progress === 100 ? <Loader className='flex items-center space-x-2' text='Please wait, processing the file(s)...' /> : <BarProgress percent={progress} />)}
+			{!link && (progress === 100 ? <Loader className='flex items-center space-x-3'>
+				<div>
+					<div>Please wait, processing the file(s)...</div>
+					{mode === 'transfer' && <div>This may take a few minutes</div>}
+				</div>
+			</Loader> : <BarProgress percent={progress} />)}
 
 			{isUploaded && <div className='pb-16'><Info fileId={link} /></div>}
 		</div>

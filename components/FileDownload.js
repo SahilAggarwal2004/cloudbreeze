@@ -112,7 +112,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             <button type="submit" disabled={isDownloading} className='primary-button'>{isDownloaded ? 'Download Again' : 'Download'}</button>
         </form>
 
-        {progress > 0 ? <BarProgress percent={progress} /> : progress === 0 ? <Loader className='flex items-center space-x-2' text='Please wait, accessing the file(s)...' /> : !fileIdFromUrl && <div className='text-center'>
+        {progress > 0 ? <BarProgress percent={progress} /> : progress === 0 ? <Loader className='flex items-center space-x-3' text='Please wait, accessing the file(s)...' /> : !fileIdFromUrl && <div className='text-center'>
             <div className='font-bold mb-3'>OR</div>
             <div className='cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1' onClick={() => setModal({ active: true, type: 'qrReader' })}>
                 <FaQrcode />
