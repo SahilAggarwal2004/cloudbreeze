@@ -37,35 +37,38 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     onDownloadProgress: ({ loaded, total }) => setProgress(Math.round((loaded * 100) / total))
                 })
             } catch {
-                toast.error("Couldn't download file")
+                toast.error("Couldn't download file(s)")
                 setProgress(-1)
                 return {}
             }
         }
 
         async function downloadFile(blob, name) {
-            if (!blob) return
             try {
-                if (!unzipFile || !regex.test(name)) throw new Error();
-                const { entries } = await unzip(blob);
-                var nameList = Object.keys(entries);
-                const blobs = await resolvePromises(Object.values(entries).map(e => e.blob()));
-                for (let i = 0; i < nameList.length;) {
-                    download(blobs[i], nameList[i])
-                    if (!(++i % 10)) await wait(1000)
+                if (!blob) throw new Error();
+                try {
+                    if (!unzipFile || !regex.test(name)) throw new Error();
+                    const { entries } = await unzip(blob);
+                    var nameList = Object.keys(entries);
+                    const blobs = await resolvePromises(Object.values(entries).map(e => e.blob()));
+                    for (let i = 0; i < nameList.length;) {
+                        download(blobs[i], nameList[i])
+                        if (!(++i % 10)) await wait(1000)
+                    }
+                } catch {
+                    nameList = [name]
+                    download(blob, name)
                 }
-            } catch {
-                nameList = [name]
-                download(blob, name)
-            }
-            if (server) return
-            setDownloadFiles(prev => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt, daysLimit }))
-            fetchApp({ url: `/file/downloaded/${fileId}`, showProgress: false })
+                toast.success('File(s) downloaded successfully!')
+                if (server) return
+                setDownloadFiles(prev => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt, daysLimit }))
+                fetchApp({ url: `/file/downloaded/${fileId}`, showProgress: false })
+            } catch { toast.error("Couldn't download file(s)") }
         }
 
         if (server) {
             const { data, headers } = await fetchDownload()
-            return data && downloadFile(data, headers.filename)
+            return downloadFile(data, headers.filename)
         }
 
         const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: getDownloadUrl(fileId), method: 'POST', data: { pass: password.current.value } })
@@ -80,10 +83,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                     setProgress(Math.round(bytesLoaded * 100 / bytesTotal))
                     if (bytesLoaded == bytesTotal) {
                         stream.removeAllListeners();
-                        try {
-                            downloadFile(blob, name)
-                            toast.success('File(s) downloaded successfully!')
-                        } catch { toast.error("Couldn't download file") }
+                        downloadFile(blob, name)
                     }
                 })
             } catch {
