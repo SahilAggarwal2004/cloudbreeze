@@ -72,24 +72,22 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         }
 
         const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: getDownloadUrl(fileId), method: 'POST', data: { pass: password.current.value } })
-        if (error) setProgress(-1)
-        else {
-            try {
-                const file = File.fromURL(link)
-                const stream = file.download();
-                let blob = new Blob()
-                stream.on('data', data => blob = new Blob([blob, data]))
-                stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
-                    setProgress(Math.round(bytesLoaded * 100 / bytesTotal))
-                    if (bytesLoaded == bytesTotal) {
-                        stream.removeAllListeners();
-                        downloadFile(blob, name)
-                    }
-                })
-            } catch {
-                const { data } = await fetchDownload()
-                downloadFile(data, name)
-            }
+        if (error) return setProgress(-1)
+        try {
+            const file = File.fromURL(link)
+            const stream = file.download();
+            let blob = new Blob()
+            stream.on('data', data => blob = new Blob([blob, data]))
+            stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
+                setProgress(Math.round(bytesLoaded * 100 / bytesTotal))
+                if (bytesLoaded === bytesTotal) {
+                    stream.removeAllListeners();
+                    downloadFile(blob, name)
+                }
+            })
+        } catch {
+            const { data } = await fetchDownload()
+            downloadFile(data, name)
         }
     }
 
