@@ -7,7 +7,7 @@ import { removeStorage, setStorage } from '../../modules/storage';
 import Head from 'next/head';
 
 export default function Login({ router }) {
-  const { setUploadFiles, setDownloadFiles, fetchApp, setType } = useFileContext()
+  const { setUploadFiles, setTransferFiles, setDownloadFiles, fetchApp, setType } = useFileContext()
   const email = useRef();
   const password = useRef();
 
@@ -20,6 +20,7 @@ export default function Login({ router }) {
       removeStorage('guest')
       setType(type)
       setUploadFiles(files)
+      setTransferFiles([])
       setDownloadFiles([])
       router.replace('/')
     }

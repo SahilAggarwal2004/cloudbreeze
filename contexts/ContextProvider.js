@@ -31,6 +31,7 @@ export default function ContextProvider({ children, router }) {
         setStorage('guest', crypto.randomUUID?.() || Date.now())
         setType('guest')
         setUploadFiles([])
+        setTransferFiles([])
         setDownloadFiles([])
     }
 
