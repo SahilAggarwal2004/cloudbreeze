@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ducanh2912/next-pwa": "^9.7.1",
     "axios": "^1.5.1",
     "megajs": "^1.1.4",
     "next": "^13.5.3",
-    "next-pwa": "^5.6.0",
     "peerjs": "^1.5.1",
     "random-stuff-js": "^0.6.2",
     "react": "^18.2.0",
