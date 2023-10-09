@@ -39,7 +39,7 @@ dependencies:
     specifier: ^2.0.12
     version: 2.0.12(react@18.2.0)
   react-qr-reader:
-    specifier: 3.0.0-beta-1
+    specifier: ^3.0.0-beta-1
     version: 3.0.0-beta-1(react-dom@18.2.0)(react@18.2.0)
   react-toastify:
     specifier: ^9.1.3
