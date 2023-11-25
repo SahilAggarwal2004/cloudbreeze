@@ -70,11 +70,11 @@ export default function ContextProvider({ children, router, setLoading }) {
     useEffect(() => { getStorage('username', randomName()) }, [])
 
     useEffect(() => {
-        if (!type) logout()
-        else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.replace('/account')
+        if (types.includes(type) && onlyGuest.includes(router.pathname)) router.replace('/account')
         else {
             setLoading(false)
-            if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+            if (!type) logout()
+            else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
         }
     }, [router.pathname])
 
