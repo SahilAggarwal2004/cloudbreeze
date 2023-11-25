@@ -14,7 +14,7 @@ const dimensions = typeof screen !== 'undefined' && screen.width + screen.height
 const Context = createContext();
 export const useFileContext = () => useContext(Context)
 
-export default function ContextProvider({ children, router }) {
+export default function ContextProvider({ children, router, setLoading }) {
     const [uploadFiles, setUploadFiles] = useStorage('upload-files', [])
     const [downloadFiles, setDownloadFiles] = useStorage('download-files', [])
     const [transferFiles, setTransferFiles] = useStorage('transfer-files', [])
@@ -23,9 +23,9 @@ export default function ContextProvider({ children, router }) {
     const [modal, setModal] = useState({ active: false })
     const [files, setFiles] = useState([])
 
-    async function logout(type) {
-        if (type === 'manual') toast.success('Logged out successfully')
-        else if (type === 'auto') router.push('/account')
+    async function logout(type = 'auto') {
+        if (type === 'auto') router.push('/account')
+        else if (type === 'manual') toast.success('Logged out successfully')
         setStorage('username', randomName())
         removeStorage('token')
         setStorage('guest', crypto.randomUUID?.() || Date.now())
@@ -54,7 +54,7 @@ export default function ContextProvider({ children, router }) {
                 const error = err.response?.data?.error || "Please check your internet connectivity"
                 json = { success: false, error }
                 const authenticationError = error.toLowerCase().includes('session expired')
-                if (authenticationError) logout('auto')
+                if (authenticationError) logout()
                 if (authenticationError || showToast === true) toast.error(error)
             }
         }
@@ -72,7 +72,10 @@ export default function ContextProvider({ children, router }) {
     useEffect(() => {
         if (!type) logout()
         else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.replace('/account')
-        else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+        else {
+            setLoading(false)
+            if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+        }
     }, [router.pathname])
 
     return <Context.Provider value={{ uploadFiles, setUploadFiles, transferFiles, setTransferFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType }}>
