@@ -23,9 +23,9 @@ export default function ContextProvider({ children, router, setLoading }) {
     const [modal, setModal] = useState({ active: false })
     const [files, setFiles] = useState([])
 
-    async function logout(type = 'auto') {
-        if (type === 'auto') router.push('/account')
-        else if (type === 'manual') toast.success('Logged out successfully')
+    async function logout(type) {
+        if (type === 'manual') toast.success('Logged out successfully')
+        else if (type === 'redirect') router.push('/account')
         setStorage('username', randomName())
         removeStorage('token')
         setStorage('guest', crypto.randomUUID?.() || Date.now())
@@ -54,7 +54,7 @@ export default function ContextProvider({ children, router, setLoading }) {
                 const error = err.response?.data?.error || "Please check your internet connectivity"
                 json = { success: false, error }
                 const authenticationError = error.toLowerCase().includes('session expired')
-                if (authenticationError) logout()
+                if (authenticationError) logout('redirect')
                 if (authenticationError || showToast === true) toast.error(error)
             }
         }

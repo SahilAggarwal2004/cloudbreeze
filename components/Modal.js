@@ -23,7 +23,7 @@ export default function Modal({ pathname, redirect }) {
 		setProgress(100 / 3)
 		const { success, error } = await fetchApp({ url: 'auth/delete', method: 'DELETE' })
 		setProgress(100)
-		if (success || error === 'User not found!') logout()
+		if (success || error === 'User not found!') logout('redirect')
 	}
 
 	return showModal.includes(pathname) && <>
