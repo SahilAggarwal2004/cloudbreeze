@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router';
 import Head from 'next/head'
 import Script from 'next/script';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import ContextProvider from '../contexts/ContextProvider';
 import Navbar from '../components/Navbar';
@@ -18,6 +18,8 @@ export default function MyApp({ Component, pageProps }) {
     const router = useRouter()
     const [loading, setLoading] = useState(true)
     pageProps.router = router;
+
+    useEffect(() => { setLoading(false) }, [])
 
     return <>
         <Head>
@@ -95,7 +97,7 @@ export default function MyApp({ Component, pageProps }) {
             gtag('config', 'G-VDY08PZTBH');`}
         </Script>
 
-        {<ContextProvider router={router} setLoading={setLoading}>
+        {<ContextProvider router={router}>
             {!hideNavbar.includes(router.pathname) && <Navbar />}
             {loading || !router.isReady ? <Loader className='center flex flex-col items-center space-y-2' text='Loading...' /> : <Component {...pageProps} />}
             <Modal pathname={router.pathname} redirect={router.push} />
