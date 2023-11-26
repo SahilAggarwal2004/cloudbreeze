@@ -7,7 +7,6 @@ import { ToastContainer } from 'react-toastify';
 import ContextProvider from '../contexts/ContextProvider';
 import Navbar from '../components/Navbar';
 import Modal from '../components/Modal';
-import Loader from '../components/Loader';
 import { hideNavbar } from '../constants';
 import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
@@ -97,11 +96,13 @@ export default function MyApp({ Component, pageProps }) {
             gtag('config', 'G-VDY08PZTBH');`}
         </Script>
 
-        {<ContextProvider router={router}>
-            {!hideNavbar.includes(router.pathname) && <Navbar />}
-            {loading || !router.isReady ? <Loader className='center flex flex-col items-center space-y-2' text='Loading...' /> : <Component {...pageProps} />}
-            <Modal pathname={router.pathname} redirect={router.push} />
-            <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' closeButton={false} />
-        </ContextProvider>}
+        <ContextProvider router={router}>
+            {!loading && router.isReady && <>
+                {!hideNavbar.includes(router.pathname) && <Navbar />}
+                <Component {...pageProps} />
+                <Modal pathname={router.pathname} redirect={router.push} />
+                <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' closeButton={false} />
+            </>}
+        </ContextProvider>
     </>
 }
