@@ -5,8 +5,8 @@ import Info from './Info'
 import QrScanner from './QrScanner'
 
 export default function Modal({ pathname, redirect }) {
-	const { modal: { active, type, props }, setModal, setProgress, fetchApp, logout, setUploadFiles, clearHistory } = useFileContext()
-	const { fileId, filter, downloadCount } = props || {}
+	const { modal: { active, type, ...props }, setModal, setProgress, fetchApp, logout, setUploadFiles, clearHistory } = useFileContext()
+	const { fileId, filter, downloadCount } = props
 	const handleCancel = () => setModal({ active: false })
 
 	async function deleteFile(id) {

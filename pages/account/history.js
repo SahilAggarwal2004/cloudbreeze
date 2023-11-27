@@ -41,7 +41,7 @@ export default function History({ router }) {
                             const minutesLeft = (daysLimit * 24 * 60) - Math.ceil((Date.now() - new Date(createdAt)) / (60 * 1000))
                             if (minutesLeft < 0) return clearHistory(fileId, filter)
 
-                            return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: 'showFile', props: { fileId, filter, downloadCount } })}>
+                            return <tr key={fileId} className="bg-white border-b transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: 'showFile', fileId, filter, downloadCount })}>
                                 <td className="text-sm text-gray-900 font-medium px-[1.0625rem] py-4">{i + 1}</td>
                                 <td className="text-sm text-gray-900 font-light px-[1.0625rem] py-4" style={{ wordBreak: 'break-word' }}>
                                     <ul className='space-y-1'>

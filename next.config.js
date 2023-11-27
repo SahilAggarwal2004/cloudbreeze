@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const pages = ['/', '/account', '/account/forgot', '/account/history?filter=upload', '/account/history?filter=transfer', '/account/history?filter=download', '/account/login', '/account/signup', '/file/upload', '/file/upload?share=true', '/file/download', '/p2p', '/p2p?share=true']
-const images = ['/images/account.webp', '/images/cloud.webp', '/images/arrow.png', '/images/p2p.webp']
+const images = ['/images/upload.webp', '/images/download.webp', '/images/p2p.webp', '/images/arrow.png', '/images/logo.webp']
 const revision = `${Date.now()}`
 
 const withPWA = require('@ducanh2912/next-pwa').default({
