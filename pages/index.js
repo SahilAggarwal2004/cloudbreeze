@@ -23,7 +23,7 @@ export default function Home({ router }) {
             <div className='x-center bottom-4'>Upload files</div>
         </div>
         <div className='image-container pt-1 pb-16' onMouseEnter={() => setHover('download')} onMouseLeave={() => setHover()} onClick={() => redirect('/file/download')} onContextMenu={e => e.preventDefault()}>
-            <img src='/images/download.webp' alt='' width={250} />
+            <img src='/images/download.webp' alt='' width={250} className='opacity-95' />
             <div className={`x-center top-3 transition-all duration-300 rotate-180 ${hover === 'download' ? 'translate-y-[3.5rem] opacity-100' : 'opacity-0'}`}>
                 <img src='/images/arrow.png' alt='' width={40} fetchPriority='low' />
             </div>
