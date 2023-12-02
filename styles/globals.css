@@ -27,7 +27,7 @@
 }
 
 .image-container {
-    @apply shadow-md rounded-lg w-80 h-80 max-w-[90vw] cursor-pointer select-none hover:shadow-2xl transition-all duration-300 relative flex justify-center
+    @apply shadow-md rounded-lg w-80 h-80 max-w-[90vw] max-h-[35vh] cursor-pointer select-none hover:shadow-2xl transition-all duration-300 relative flex justify-center pt-4 pb-12 sm:flex-[0_0_40%]
 }
 
 * {
