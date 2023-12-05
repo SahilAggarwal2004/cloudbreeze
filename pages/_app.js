@@ -100,7 +100,7 @@ export default function MyApp({ Component, pageProps }) {
             {!loading && router.isReady && <>
                 {!hideNavbar.includes(router.pathname) && <Navbar />}
                 <Component {...pageProps} />
-                <Modal pathname={router.pathname} redirect={router.push} />
+                <Modal />
                 <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' closeButton={false} />
             </>}
         </ContextProvider>

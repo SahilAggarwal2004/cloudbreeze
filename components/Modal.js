@@ -1,10 +1,12 @@
+import { usePathname } from 'next/navigation'
 import { showModal } from '../constants'
 import { useFileContext } from '../contexts/ContextProvider'
 import { getDeleteUrl } from '../modules/functions'
 import Info from './Info'
 import QrScanner from './QrScanner'
 
-export default function Modal({ pathname, redirect }) {
+export default function Modal() {
+	const pathname = usePathname()
 	const { modal: { active, type, ...props }, setModal, setProgress, fetchApp, logout, setUploadFiles, clearHistory } = useFileContext()
 	const { fileId, filter, downloadCount } = props
 	const handleCancel = () => setModal({ active: false })
@@ -43,7 +45,7 @@ export default function Modal({ pathname, redirect }) {
 					<button className='py-1 px-3 rounded border button-animation' onClick={() => deleteFile(fileId)}>Yes</button>
 					<button className='py-1 px-3 rounded border button-animation' onClick={handleCancel}>No</button>
 				</div>
-			</div> : type === 'showFile' ? <Info fileId={fileId} filter={filter} downloadCount={downloadCount} modal /> : type === 'qrReader' && <QrScanner redirect={redirect} />}
+			</div> : type === 'showFile' ? <Info fileId={fileId} filter={filter} downloadCount={downloadCount} modal /> : type === 'qrReader' && <QrScanner />}
 		</div>
 	</>
 }

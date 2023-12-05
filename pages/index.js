@@ -19,17 +19,17 @@ export default function Home({ router }) {
             <img src='/images/account.webp' alt='' className='min-h-full aspect-square scale-90' />
             <div className='x-center bottom-4'>Your account</div>
         </div>
-        <div className='image-container items-end' onMouseEnter={() => setHover('upload')} onMouseLeave={() => setHover()} onClick={() => redirect('/file/upload')} onContextMenu={e => e.preventDefault()}>
+        <div className='image-container' onMouseEnter={() => setHover('upload')} onMouseLeave={() => setHover()} onClick={() => redirect('/file/upload')} onContextMenu={e => e.preventDefault()}>
             <img src='/images/upload.webp' alt='' className='min-h-full aspect-square' />
-            <div className={`x-center top-[57%] transition-all duration-300 ${hover === 'upload' ? '-translate-y-[5rem]' : 'opacity-0'}`}>
-                <img src='/images/arrow.png' alt='' className='scale-95' fetchPriority='low' />
+            <div className={`x-center top-[60%] transition-all duration-300 ${hover === 'upload' ? 'top-[calc(35%-1rem)]' : 'opacity-0'}`}>
+                <img src='/images/arrow.png' alt='' className='scale-90' />
             </div>
             <div className='x-center bottom-4'>Upload files</div>
         </div>
         <div className='image-container' onMouseEnter={() => setHover('download')} onMouseLeave={() => setHover()} onClick={() => redirect('/file/download')} onContextMenu={e => e.preventDefault()}>
             <img src='/images/download.webp' alt='' className='min-h-full aspect-square scale-90 top-0 opacity-95' />
-            <div className={`x-center top-0 transition-all duration-300 rotate-180 ${hover === 'download' ? 'top-[20%]' : 'opacity-0'}`}>
-                <img src='/images/arrow.png' alt='' className='scale-[0.6]' fetchPriority='low' />
+            <div className={`x-center top-0 transition-all duration-300 rotate-180 ${hover === 'download' ? 'top-[calc(26%-1rem)]' : 'opacity-0'}`}>
+                <img src='/images/arrow.png' alt='' className='scale-[0.6]' />
             </div>
             <div className='x-center bottom-4'>Download files</div>
         </div>
