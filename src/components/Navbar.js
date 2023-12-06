@@ -11,7 +11,7 @@ export default function Navbar() {
         <LoadingBar color='#ffffff' progress={progress} waitingTime={300} onLoaderFinished={() => setProgress(0)} />
         <nav className='sticky inset-0 z-30 flex bg-black text-white items-center justify-between p-2 xs:px-4 sm:px-5 shadow-lg'>
             {/* title attribute displays text on element hover */}
-            <div className='flex space-x-3 sm:space-x-4 items-center justify-center'>
+            <div className='flex space-x-3 sm:space-x-4 items-center'>
                 <Link href="/account"><FaUserAlt className='xs:scale-110' title='Your Account' /></Link>
                 <Link href="/"><h1 className='text-lg xs:text-xl cursor-pointer select-none font-medium' title='Home'>CloudBreeze</h1></Link>
             </div>

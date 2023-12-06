@@ -9,11 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ducanh2912/next-pwa": "^9.7.2",
+    "@serwist/next": "^8.0.1",
+    "@serwist/sw": "^8.0.1",
     "axios": "^1.6.2",
     "megajs": "^1.1.4",
     "next": "^14.0.3",
-    "peerjs": "^1.5.1",
+    "peerjs": "^1.5.2",
     "random-stuff-js": "^0.6.3",
     "react": "^18.2.0",
     "react-circular-progressbar": "^2.1.0",
