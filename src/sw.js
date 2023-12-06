@@ -4,11 +4,11 @@ installSerwist({
     skipWaiting: true,
     clientsClaim: true,
     cleanupOutdatedCaches: true,
+    offlineAnalyticsConfig: true,
     importScripts: ['/share-sw.js'],
     precacheEntries: self.__SW_MANIFEST.filter(({ url }) => url !== '/sw.js'),
     precacheOptions: { ignoreURLParametersMatching: [/.*/] },
     navigateFallback: '/_offline', // add fallback instead when supported
-    // offlineAnalyticsConfig: 
     runtimeCaching: [
         {
             urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,

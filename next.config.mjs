@@ -12,7 +12,6 @@ const withSerwist = withSerwistInit({
   reloadOnOnline: false,
   additionalPrecacheEntries: pages.concat(images).map(url => ({ url, revision }))
   // fallbacks
-  // offlineGoogleAnalytics: true
 })
 
 /** @type {import('next').NextConfig} */
