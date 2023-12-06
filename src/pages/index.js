@@ -23,14 +23,14 @@ export default function Home({ router }) {
             <div className='image-container' onMouseEnter={() => setHover('upload')} onMouseLeave={() => setHover()} onClick={() => redirect('/file/upload')} onContextMenu={e => e.preventDefault()}>
                 <div className='relative'>
                     <img src='/images/upload.webp' alt='' className='h-full aspect-square' />
-                    <img src='/images/arrow.png' alt='' className={`x-center bottom-0 transition-all duration-300 h-[6vh] ${hover === 'upload' ? 'bottom-[45%]' : 'opacity-0'}`} />
+                    <img src='/images/arrow.png' alt='' className={`x-center bottom-0 transition-all duration-300 h-[24%] ${hover === 'upload' ? 'bottom-[45%]' : 'opacity-0'}`} />
                 </div>
                 <div className='x-center bottom-4'>Upload files</div>
             </div>
             <div className='image-container' onMouseEnter={() => setHover('download')} onMouseLeave={() => setHover()} onClick={() => redirect('/file/download')} onContextMenu={e => e.preventDefault()}>
                 <div className='relative'>
                     <img src='/images/download.webp' alt='' className='h-full aspect-square opacity-95' />
-                    <img src='/images/arrow.png' alt='' className={`x-center top-0 transition-all duration-300 rotate-180 h-[4.5vh] ${hover === 'download' ? 'top-[20%]' : 'opacity-0'}`} />
+                    <img src='/images/arrow.png' alt='' className={`x-center top-0 transition-all duration-300 rotate-180 h-[18%] ${hover === 'download' ? 'top-[20%]' : 'opacity-0'}`} />
                 </div>
                 <div className='x-center bottom-4'>Download files</div>
             </div>
