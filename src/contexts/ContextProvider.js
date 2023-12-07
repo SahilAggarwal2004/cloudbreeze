@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
-import { usePathname } from 'next/navigation';
 import { randomName } from 'random-stuff-js';
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
@@ -16,7 +15,6 @@ const Context = createContext();
 export const useFileContext = () => useContext(Context)
 
 export default function ContextProvider({ children, router }) {
-    const pathname = usePathname()
     const [uploadFiles, setUploadFiles] = useStorage('upload-files', [])
     const [downloadFiles, setDownloadFiles] = useStorage('download-files', [])
     const [transferFiles, setTransferFiles] = useStorage('transfer-files', [])
@@ -73,9 +71,9 @@ export default function ContextProvider({ children, router }) {
 
     useEffect(() => {
         if (!type) logout()
-        else if (types.includes(type) && onlyGuest.includes(pathname)) router.replace('/account')
-        else if (fetchHistory.includes(pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
-    }, [pathname])
+        else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.replace('/account')
+        else if (fetchHistory.includes(router.pathname)) fetchApp({ url: 'file/history', method: 'POST', showToast: false }).then(({ success, files }) => success && setUploadFiles(files))
+    }, [router.pathname])
 
     return <Context.Provider value={{ uploadFiles, setUploadFiles, transferFiles, setTransferFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, setModal, files, setFiles, type, setType }}>
         {children}
