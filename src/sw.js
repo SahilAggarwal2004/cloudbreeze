@@ -10,7 +10,7 @@ installSerwist({
     precacheOptions: { ignoreURLParametersMatching: [/.*/] },
     runtimeCaching: [
         {
-            urlPattern: /^\/(?:file|p2p|account\/confirm)\/.+$/i,
+            urlPattern: /\/(?:file|p2p|account\/confirm)\/.+$/i,
             handler: 'NetworkOnly',
             options: { cacheName: 'files' }
         },
