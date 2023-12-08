@@ -1,7 +1,7 @@
 import withSerwistInit from "@serwist/next";
 
 const pages = ['/', '/account', '/account/forgot', '/account/history', '/account/login', '/account/signup', '/file/upload', '/file/download', '/p2p']
-const images = ['/images/account.webp', '/images/upload.webp', '/images/download.webp', '/images/p2p.webp', '/images/arrow.png', '/images/logo.webp']
+const images = ['account.webp', 'upload.webp', 'download.webp', 'p2p.webp', 'arrow.png', 'logo.webp'].map(image => `/images/${image}`)
 const revision = `${Date.now()}`
 
 const withSerwist = withSerwistInit({
