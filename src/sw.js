@@ -70,5 +70,5 @@ installSerwist({
             handler: 'NetworkOnly',
             options: { cacheName: 'others' }
         }
-    ],
+    ]
 });
