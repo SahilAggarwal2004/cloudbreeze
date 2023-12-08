@@ -1,10 +1,10 @@
-import withSerwistInit from "@serwist/next";
+import withPWAInit from "@serwist/next";
 
 const pages = ['/', '/account', '/account/forgot', '/account/history', '/account/login', '/account/signup', '/file/upload', '/file/download', '/p2p']
 const images = ['account.webp', 'upload.webp', 'download.webp', 'p2p.webp', 'arrow.png', 'logo.webp'].map(image => `/images/${image}`)
 const revision = `${Date.now()}`
 
-const withSerwist = withSerwistInit({
+const withPWA = withPWAInit({
   swSrc: 'src/sw.js',
   swDest: 'public/sw.js',
   exclude: [/public\/sw.js/],
@@ -22,4 +22,4 @@ const nextConfig = {
   }
 }
 
-export default withSerwist(nextConfig)
+export default withPWA(nextConfig)
