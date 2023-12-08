@@ -12,7 +12,7 @@ installSerwist({
         {
             urlPattern: /\/(?:file|p2p|account\/confirm)\/.+$/i,
             handler: 'NetworkOnly',
-            options: { cacheName: 'files' }
+            options: { cacheName: 'network-only' }
         },
         {
             urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
