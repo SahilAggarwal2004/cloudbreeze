@@ -127,7 +127,7 @@ export default function Upload({ router }) {
 		return () => navigator.serviceWorker?.removeEventListener('message', handleMessage)
 	}, [])
 
-	useEffect(() => { isUploaded && window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }, [link])
+	useEffect(() => { if (isUploaded) window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }) }, [link])
 
 	return <>
 		<Head><title>Upload a file | CloudBreeze</title></Head>
