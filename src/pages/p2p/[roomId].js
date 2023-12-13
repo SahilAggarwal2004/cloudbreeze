@@ -124,7 +124,7 @@ export default function Id({ router }) {
                     <span className='text-right'>{file}</span>
                     <span>Size:</span>
                     <span className='text-right'>{bytesToSize(size, size, true)}</span>
-                    <button className='primary-button' disabled={isDownloading} onClick={request}>Download File</button>
+                    <button className='primary-button' disabled={isDownloading} onClick={request}>Download</button>
                     {isDownloading && <>
                         <BarProgress percent={downPercent} className='col-span-2 max-w-[100%]' />
                         <div className='text-center w-full col-span-2'>Speed: {speed(bytes, size, time)}/s</div>

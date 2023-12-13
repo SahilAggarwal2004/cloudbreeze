@@ -3,7 +3,7 @@ import FileDownload from '../../components/FileDownload'
 
 export default function Download() {
     return <>
-        <Head><title>Download a file | CloudBreeze</title></Head>
+        <Head><title>Download files | CloudBreeze</title></Head>
         <FileDownload />
     </>
 }

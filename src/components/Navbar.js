@@ -17,9 +17,9 @@ export default function Navbar() {
             </div>
             <div className='flex space-x-4 xs:space-x-5 sm:space-x-6'>
                 <Link href="/account/history?filter=upload"><FaHistory className='hidden sm:block scale-110 sm:scale-125' title='History' /></Link>
-                <Link href="/file/upload"><FaUpload className='scale-110 sm:scale-125' title='Upload File' /></Link>
-                <Link href="/file/download"><FaDownload className='scale-110 sm:scale-125' title='Download File' /></Link>
-                <Link href="/p2p"><GrSend className='scale-110 sm:scale-125' title='Peer-to-peer Transfer' /></Link>
+                <Link href="/file/upload"><FaUpload className='scale-110 sm:scale-125' title='Upload files' /></Link>
+                <Link href="/file/download"><FaDownload className='scale-110 sm:scale-125' title='Download files' /></Link>
+                <Link href="/p2p"><GrSend className='scale-110 sm:scale-125' title='Peer-to-peer transfer' /></Link>
             </div>
         </nav>
         <div className='h-10' />
