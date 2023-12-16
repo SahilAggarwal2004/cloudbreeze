@@ -5,7 +5,7 @@ import Head from 'next/head';
 import { randomElement } from 'random-stuff-js';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { fileDetails, getTransferUploadUrl, getUploadUrl, remove } from '../../modules/functions';
-import { limit, maxLimit, unavailable } from '../../constants';
+import { cloudLimit, cloudLimitMB, transferLimit, transferLimitGB, unavailable } from '../../constants';
 import Loader from '../../components/Loader';
 import Info from '../../components/Info';
 import BarProgress from '../../components/BarProgress';
@@ -33,7 +33,7 @@ export default function Upload({ router }) {
 
 	function handleMessage({ data: { files } }) {
 		setFiles(files)
-		if (fileDetails(files).totalSize > maxLimit * 1073741824) router.replace('/p2p?share=true')
+		if (fileDetails(files).totalSize > transferLimit) router.replace('/p2p?share=true')
 	}
 
 	async function updateFile({ target }) {
@@ -43,13 +43,13 @@ export default function Upload({ router }) {
 			target.value = "";
 			return toast.warning('Empty file(s)');
 		}
-		if (size > maxLimit * 1073741824) { // size limit
+		if (size > transferLimit) {
 			toast('Try Peer-to-peer transfer for large files')
 			setFiles(files)
 			return router.push('/p2p?share=true')
 		}
-		if (mode === 'save' && size > limit * 1048576) {
-			toast(`Try transfer mode for large files upto ${maxLimit}GB`)
+		if (mode === 'save' && size > cloudLimit) {
+			toast(`Try transfer mode for large files upto ${transferLimitGB}GB`)
 			setMode('transfer')
 		}
 		setFiles(files)
@@ -66,7 +66,7 @@ export default function Upload({ router }) {
 
 	async function handleSubmit(e) {
 		e.preventDefault()
-		if (mode === 'save' && fileDetails(files).totalSize > limit * 1048576) return toast.warning(`File size must not exceed ${limit}MB`)
+		if (mode === 'save' && fileDetails(files).totalSize > cloudLimit) return toast.warning(`File size must not exceed ${cloudLimitMB}MB`)
 		setProgress(0)
 		const data = new FormData();
 		for (const file of files) data.append('files', file) // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function

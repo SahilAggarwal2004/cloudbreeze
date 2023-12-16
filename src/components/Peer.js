@@ -4,14 +4,13 @@ import { toast } from 'react-toastify'
 import { FaXmark } from 'react-icons/fa6'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import { wait } from 'random-stuff-js'
-import { chunkSize } from '../constants'
+import { chunkSize, maxBufferSize } from '../constants'
 import { bytesToSize, speed } from '../modules/functions'
 import 'react-circular-progressbar/dist/styles.css';
 import { useFileContext } from '../contexts/ContextProvider'
 
 export default function Peer({ names, sizes, totalSize, data }) {
     const { name, conn } = data
-    const channel = conn.dataChannel
     const { files } = useFileContext()
     const [count, setCount] = useState(0)
     const [bytes, setBytes] = useState(0)
@@ -23,21 +22,16 @@ export default function Peer({ names, sizes, totalSize, data }) {
 
     function sendFile() {
         conn.send({ name: names[count], size, type: 'initial' })
-        let bytesSent = 0, t = 0;
+        let bytesSent = 0;
+        const channel = conn.dataChannel
         const reader = new FileReader();
         const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent + chunkSize))
         reader.onload = async ({ target: { result: chunk, error } }) => {
-            if (error) return readChunk();
-            while (conn.open) {
-                await wait(t)
-                if (channel.bufferedAmount < chunkSize) {
-                    const start = performance.now()
-                    conn.send({ chunk, type: 'file' });
-                    setBytes(bytesSent)
-                    if ((bytesSent += chunkSize) < size) readChunk();
-                    return t = Math.max(performance.now() - start, (bytesSent / chunkSize) < 20 && 50)
-                }
-            }
+            if (error || !conn.open) return readChunk();
+            while (channel.bufferedAmount > maxBufferSize) await wait(1);
+            conn.send({ chunk, type: 'file' });
+            setBytes(bytesSent)
+            if ((bytesSent += chunkSize) < size) readChunk();
         };
         readChunk()
     }

@@ -92,8 +92,7 @@ export default function P2p({ router }) {
 		const Peer = require("peerjs").default
 		const peerId = shareRoom.current.value || Date.now()
 		setProgress(100 / 3)
-		const peer = new Peer(peerId, peerOptions)
-		peerRef.current = peer;
+		const peer = peerRef.current = new Peer(peerId, peerOptions)
 		peer.on('open', id => {
 			setOldText(text)
 			setLink(id)

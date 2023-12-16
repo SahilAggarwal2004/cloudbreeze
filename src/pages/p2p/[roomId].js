@@ -26,8 +26,7 @@ export default function Id({ router }) {
 
     function connect() {
         let fileName, fileSize, bytes, blob, timeout;
-        const conn = peerRef.current.connect(roomId, { metadata: getStorage('username'), reliable: true })
-        connection.current = conn;
+        const conn = connection.current = peerRef.current.connect(roomId, { metadata: getStorage('username'), reliable: true })
         conn.on('open', () => {
             peerRef.current.off('error')
             clearError()
@@ -36,11 +35,9 @@ export default function Id({ router }) {
         })
         conn.on('data', ({ type, name, length, totalSize, text, chunk, size }) => {
             if (type === 'file') {
-                const { byteLength } = chunk;
-                const downloadComplete = (bytes += byteLength) === fileSize
-                setBytes(old => old + byteLength)
+                setBytes(bytes += chunk.byteLength)
                 blob = new Blob([blob, chunk])
-                if (!downloadComplete) return
+                if (bytes !== fileSize) return
                 try {
                     conn.send({ type: 'next' })
                     download(blob, fileName)
@@ -100,8 +97,7 @@ export default function Id({ router }) {
 
     useEffect(() => {
         const Peer = require("peerjs").default
-        const peer = new Peer(peerOptions)
-        peerRef.current = peer;
+        const peer = peerRef.current = new Peer(peerOptions)
         peer.on('open', connect)
         peer.on('error', setError)
         peer.on('disconnected', () => peer.reconnect())
