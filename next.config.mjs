@@ -1,6 +1,6 @@
 import withPWAInit from "@serwist/next";
 
-const pages = ['/', '/account', '/account/forgot', '/account/history', '/account/login', '/account/signup', '/file/upload', '/file/download', '/p2p']
+const pages = ['/', '/account', '/account/forgot', '/account/history', '/account/login', '/account/signup', '/file/upload', '/file/download', '/p2p', '/_offline']
 const images = ['account.webp', 'upload.webp', 'download.webp', 'p2p.webp', 'arrow.png', 'logo.webp'].map(image => `/images/${image}`)
 const revision = `${Date.now()}`
 
@@ -11,7 +11,6 @@ const withPWA = withPWAInit({
   disable: process.env.NODE_ENV === 'development',
   reloadOnOnline: false,
   additionalPrecacheEntries: pages.concat(images).map(url => ({ url, revision }))
-  // fallbacks
 })
 
 /** @type {import('next').NextConfig} */
