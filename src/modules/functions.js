@@ -1,10 +1,13 @@
 import { randomNumber } from "random-stuff-js";
 import { toast } from "react-toastify";
+import { bitwise } from "../constants";
 
+const KB = 1 << bitwise.KB, MB = 1 << bitwise.MB
+const sizes = { B: 1, KB, MB }
 const production = process.env.NODE_ENV === 'production'
 const transferServerCount = process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT
 
-const round = (number, digits = 2) => Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits)
+const round = (number, digits = 2) => +number.toFixed(digits)
 
 export const getUploadUrl = server => (production ? `https://cloudbreeze-upload-${server}.onrender.com` : 'http://localhost:5002') + '/file/upload'
 
@@ -14,11 +17,15 @@ export const getDownloadUrl = (fileId, server) => ((server && production) ? `htt
 
 export const getDeleteUrl = (fileId, server) => ((server && production) ? `https://cloudbreeze-transfer-${server}.onrender.com` : '') + `/file/delete/${fileId}`
 
-export const speed = (bytes, total, startTime = 0) => round(+(bytes !== total) && (bytesToSize(bytes, total) / (Date.now() - startTime) * 1000) || 0) + ' ' + (total >= 1048576 ? 'MB' : total >= 1024 ? 'KB' : 'B')
+export const speed = (bytes, max, startTime = 0) => round(bytesToSize(bytes, max) / (Date.now() - startTime) * 1000) + ` ${bytesToUnit(max)}`
 
-export function bytesToSize(bytes, max = 0, string = false) {
-    const digits = bytes === max ? 2 : 0;
-    return Math.max(bytes, max) >= 1048576 ? round(bytes / 1048576, digits) + (+string && ' MB') : Math.max(bytes, max) >= 1024 ? round(bytes / 1024, digits) + (+string && ' KB') : bytes + (+string && ' B')
+export const bytesToUnit = bytes => bytes >= MB ? 'MB' : bytes >= KB ? 'KB' : 'B'
+
+export const bytesToFraction = (bytes, max) => `${bytesToSize(bytes, max)} / ${bytesToSize(max, max, true)}`
+
+export function bytesToSize(bytes, max, suffix = false) {
+    const unit = bytesToUnit(max)
+    return round(bytes / sizes[unit], bytes === max ? 2 : 0) + (+suffix && ` ${unit}`)
 }
 
 export function relativeTime(minutes) {
@@ -53,16 +60,16 @@ export function generateId(value, type) {
 }
 
 export function fileDetails(files) {
-    const names = [], sizes = []
+    const length = files.length, names = [], sizes = []
     let totalSize = 0;
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < length; i++) {
         const file = files[i]
         const { name, size } = file
         names.push(name)
         sizes.push(size)
         totalSize += size
     }
-    return { names, sizes, totalSize }
+    return { length, names, sizes, totalSize }
 }
 
 export async function resolvePromises(promises) {

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head';
-import { useEffect, useReducer, useRef, useState } from 'react'
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { FaQrcode } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Info from '../../components/Info';
@@ -36,8 +36,7 @@ export default function P2p({ router }) {
 	const [connections, dispatchConnections] = useReducer(reducer, {})
 	const connArr = Object.entries(connections)
 	const disable = progress > 0 || link
-	const { names, sizes, totalSize } = fileDetails(files);
-	const length = files.length
+	const { length, names, sizes, totalSize } = useMemo(() => fileDetails(files), [files])
 
 	const verifyRoomId = e => e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "")
 
@@ -52,7 +51,7 @@ export default function P2p({ router }) {
 		const timeouts = {}
 		conn.on('open', () => {
 			if (connections[peer]) return
-			conn.send({ name: names[0], length: names.length, totalSize, text, type: 'details' })
+			conn.send({ name: length <= 1 ? names[0] : `${length} files`, totalSize, text, type: 'details' })
 			dispatchConnections({ peer, name, conn })
 		})
 		conn.on('close', () => close(conn, name))
@@ -142,7 +141,7 @@ export default function P2p({ router }) {
 					</div>
 				</div>}
 			</div>
-			{Boolean(files.length && connArr.length) && <div className='space-y-8'>
+			{Boolean(length && connArr.length) && <div className='space-y-8'>
 				<h2 className='text-lg md:text-xl font-medium text-center'>Active Users</h2>
 				<div className='flex items-center justify-center gap-5 pb-10 mx-5 flex-wrap'>
 					{connArr.map(conn => <Peer key={conn[0]} data={conn[1]} names={names} sizes={sizes} totalSize={totalSize} />)}

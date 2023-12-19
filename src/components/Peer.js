@@ -5,11 +5,11 @@ import { FaXmark } from 'react-icons/fa6'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import { wait } from 'random-stuff-js'
 import { chunkSize, maxBufferSize } from '../constants'
-import { bytesToSize, speed } from '../modules/functions'
+import { bytesToFraction, speed } from '../modules/functions'
 import 'react-circular-progressbar/dist/styles.css';
 import { useFileContext } from '../contexts/ContextProvider'
 
-export default function Peer({ names, sizes, totalSize, data }) {
+export default function Peer({ data, names, sizes, totalSize }) {
     const { name, conn } = data
     const { files } = useFileContext()
     const [count, setCount] = useState(0)
@@ -26,10 +26,10 @@ export default function Peer({ names, sizes, totalSize, data }) {
         const channel = conn.dataChannel
         const reader = new FileReader();
         const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent + chunkSize))
-        reader.onload = async ({ target: { result: chunk, error } }) => {
+        reader.onload = async ({ target: { result, error } }) => {
             if (error || !conn.open) return readChunk();
             while (channel.bufferedAmount > maxBufferSize) await wait(1);
-            conn.send({ chunk, type: 'file' });
+            conn.send({ chunk: result, type: 'file' });
             setBytes(bytesSent)
             if ((bytesSent += chunkSize) < size) readChunk();
         };
@@ -68,9 +68,9 @@ export default function Peer({ names, sizes, totalSize, data }) {
         <h4 className='font-medium'>{name}</h4>
         <CircularProgressbarWithChildren value={bytes} maxValue={size} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
-                <div>{bytesToSize(totalBytes, totalSize)} / {bytesToSize(totalSize, totalSize, true)}</div>
+                <div>{bytesToFraction(totalBytes, totalSize)}</div>
                 <div>{count} / {names.length} files transferred</div>
-                <div>Speed: {speed(totalBytes, totalSize, time)}/s</div>
+                {totalBytes !== totalSize && <div>Speed: {speed(totalBytes, totalSize, time)}/s</div>}
             </div>
         </CircularProgressbarWithChildren>
     </div>

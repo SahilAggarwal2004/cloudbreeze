@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head'
 import Link from 'next/link'
-import { useMemo } from 'react'
 import { options } from '../../constants'
 import { useFileContext } from '../../contexts/ContextProvider'
 import { relativeTime } from '../../modules/functions'
@@ -9,7 +8,7 @@ import { relativeTime } from '../../modules/functions'
 export default function History({ router }) {
     const { uploadFiles, transferFiles, downloadFiles, clearHistory, setModal } = useFileContext()
     const { filter = 'upload' } = router.query
-    const history = useMemo(() => filter === 'upload' ? uploadFiles : filter === 'transfer' ? transferFiles : filter === 'download' ? downloadFiles : [], [filter, uploadFiles, transferFiles, downloadFiles])
+    const history = filter === 'upload' ? uploadFiles : filter === 'transfer' ? transferFiles : filter === 'download' ? downloadFiles : []
 
     return <>
         <Head><title>File history | CloudBreeze</title></Head>

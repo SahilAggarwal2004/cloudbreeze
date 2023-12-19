@@ -33,7 +33,7 @@ export default function Id({ router }) {
             setBytes(-1)
             toast.success('Connection established')
         })
-        conn.on('data', ({ type, name, length, totalSize, text, chunk, size }) => {
+        conn.on('data', ({ type, name, totalSize, text, chunk, size }) => {
             if (type === 'file') {
                 setBytes(bytes += chunk.byteLength)
                 blob = new Blob([blob, chunk])
@@ -49,7 +49,7 @@ export default function Id({ router }) {
                 bytes = 0
                 blob = new Blob()
             } else if (type === 'details') {
-                setFile(length <= 1 ? name : `${length} files`)
+                setFile(name)
                 setSize(totalSize)
                 setText(text)
             } else if (type === 'text') {
@@ -123,7 +123,7 @@ export default function Id({ router }) {
                     <button className='primary-button' disabled={isDownloading} onClick={request}>Download</button>
                     {isDownloading && <>
                         <BarProgress percent={downPercent} className='col-span-2 max-w-[100%]' />
-                        <div className='text-center w-full col-span-2'>Speed: {speed(bytes, size, time)}/s</div>
+                        {bytes !== size && <div className='text-center w-full col-span-2'>Speed: {speed(bytes, size, time)}/s</div>}
                     </>}
                 </div>
             </div>}
