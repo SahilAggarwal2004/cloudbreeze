@@ -79,10 +79,10 @@ export async function resolvePromises(promises) {
 }
 
 export async function download(blob, name) {
-    await wait(100)
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
     a.download = name; // giving default name to download prompt
     a.click();
+    await wait(100)
 }
