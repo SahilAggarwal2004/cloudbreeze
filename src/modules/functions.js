@@ -16,16 +16,13 @@ export const getDownloadUrl = (fileId, server) => ((server && production) ? `htt
 
 export const getDeleteUrl = (fileId, server) => ((server && production) ? `https://cloudbreeze-transfer-${server}.onrender.com` : '') + `/file/delete/${fileId}`
 
-export const speed = (bytes, max, startTime = 0) => round(bytesToSize(bytes, max) / (Date.now() - startTime) * 1000) + ` ${bytesToUnit(max)}`
-
 export const bytesToUnit = bytes => bytes >= MB ? 'MB' : bytes >= KB ? 'KB' : 'B'
 
-export const bytesToFraction = (bytes, max) => `${bytesToSize(bytes, max)} / ${bytesToSize(max, max, true)}`
+export const bytesToSize = (bytes, max, unit) => round(bytes / sizes[unit], bytes === max ? 2 : 0)
 
-export function bytesToSize(bytes, max, suffix = false) {
-    const unit = bytesToUnit(max)
-    return round(bytes / sizes[unit], bytes === max ? 2 : 0) + (+suffix && ` ${unit}`)
-}
+export const bytesToFraction = (bytes, max, unit) => `${bytesToSize(bytes, max, unit)} / ${bytesToSize(max, max, unit)}`
+
+export const speed = (bytes, max, unit, startTime = 0) => round(bytesToSize(bytes, max, unit) / (Date.now() - startTime || 0) * 1000)
 
 export function relativeTime(minutes) {
     let result = '';

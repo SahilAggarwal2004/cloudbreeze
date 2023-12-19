@@ -5,7 +5,7 @@ import { FaXmark } from 'react-icons/fa6'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import { wait } from 'random-stuff-js'
 import { chunkSize, maxBufferSize } from '../constants'
-import { bytesToFraction, speed } from '../modules/functions'
+import { bytesToFraction, bytesToUnit, speed } from '../modules/functions'
 import 'react-circular-progressbar/dist/styles.css';
 import { useFileContext } from '../contexts/ContextProvider'
 
@@ -17,6 +17,7 @@ export default function Peer({ data, names, sizes, totalSize }) {
     const [time, setTime] = useState(0)
     const file = useMemo(() => files[count], [count])
     const size = useMemo(() => sizes[count], [count])
+    const unit = useMemo(() => bytesToUnit(totalSize), [])
     const prevBytes = useMemo(() => sizes.slice(0, count).reduce((size, cur) => size + cur, 0), [count])
     const totalBytes = prevBytes + bytes
 
@@ -68,9 +69,9 @@ export default function Peer({ data, names, sizes, totalSize }) {
         <h4 className='font-medium'>{name}</h4>
         <CircularProgressbarWithChildren value={bytes} maxValue={size} strokeWidth={2.5} className='scale-75' styles={{ path: { stroke: '#48BB6A' } }}>
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
-                <div>{bytesToFraction(totalBytes, totalSize)}</div>
+                <div>{bytesToFraction(totalBytes, totalSize, unit)} {unit}</div>
                 <div>{count} / {names.length} files transferred</div>
-                {totalBytes !== totalSize && <div>Speed: {speed(totalBytes, totalSize, time)}/s</div>}
+                {totalBytes !== totalSize && <div>Speed: {speed(totalBytes, totalSize, unit, time)} {unit}/s</div>}
             </div>
         </CircularProgressbarWithChildren>
     </div>
