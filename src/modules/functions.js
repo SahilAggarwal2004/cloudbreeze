@@ -22,7 +22,7 @@ export const bytesToSize = (bytes, max, unit) => round(bytes / sizes[unit], byte
 
 export const bytesToFraction = (bytes, max, unit) => `${bytesToSize(bytes, max, unit)} / ${bytesToSize(max, max, unit)}`
 
-export const speed = (bytes, max, unit, startTime = 0) => round(bytesToSize(bytes, max, unit) / (Date.now() - startTime || 0) * 1000)
+export const speed = (bytes, max, unit, startTime = 0) => round(bytesToSize(bytes, max, unit) / (Date.now() - startTime || 1) * 1000)
 
 export function relativeTime(minutes) {
     let result = '';
