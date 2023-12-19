@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@serwist/next": "^8.0.4",
-    "@serwist/sw": "^8.0.4",
+    "@serwist/next": "^8.0.5",
+    "@serwist/sw": "^8.0.5",
     "axios": "^1.6.2",
     "megajs": "^1.1.4",
     "next": "^14.0.4",
@@ -33,6 +33,6 @@
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
     "postcss": "^8.4.32",
-    "tailwindcss": "^3.3.6"
+    "tailwindcss": "^3.3.7"
   }
 }

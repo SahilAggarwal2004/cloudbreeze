@@ -1,9 +1,8 @@
 import { randomNumber } from "random-stuff-js";
 import { toast } from "react-toastify";
-import { bitwise } from "../constants";
+import { sizes } from "../constants";
 
-const KB = 1 << bitwise.KB, MB = 1 << bitwise.MB
-const sizes = { B: 1, KB, MB }
+const { KB, MB } = sizes
 const production = process.env.NODE_ENV === 'production'
 const transferServerCount = process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT
 
