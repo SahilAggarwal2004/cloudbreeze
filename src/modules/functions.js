@@ -1,4 +1,4 @@
-import { randomNumber } from "random-stuff-js";
+import { randomNumber, wait } from "random-stuff-js";
 import { toast } from "react-toastify";
 import { sizes } from "../constants";
 
@@ -78,7 +78,8 @@ export async function resolvePromises(promises) {
     } catch { }
 }
 
-export function download(blob, name) {
+export async function download(blob, name) {
+    await wait(100)
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

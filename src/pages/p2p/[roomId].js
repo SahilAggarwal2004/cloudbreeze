@@ -33,7 +33,7 @@ export default function Id({ router }) {
             setBytes(-1)
             toast.success('Connection established')
         })
-        conn.on('data', ({ type, name, totalSize, text, chunk, size }) => {
+        conn.on('data', async ({ type, name, totalSize, text, chunk, size }) => {
             if (type === 'file') {
                 const { byteLength } = chunk
                 setBytes(old => old += byteLength)
@@ -41,7 +41,7 @@ export default function Id({ router }) {
                 if ((bytes += byteLength) !== fileSize) return
                 try {
                     conn.send({ type: 'next' })
-                    download(blob, fileName)
+                    await download(blob, fileName)
                     toast.success('File downloaded successfully!')
                 } catch { toast.error("Couldn't download file") }
             } else if (type === 'initial') {
