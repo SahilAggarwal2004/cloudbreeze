@@ -21,8 +21,8 @@ export default function Id({ router }) {
     const [bytes, setBytes] = useState(-1)
     const [time, setTime] = useState(0)
     const [error, setError, clearError] = useError("Connection couldn't be established. Retry again!")
-    const downPercent = Math.round(bytes * 100 / size) - +(bytes < 0);
-    const isDownloading = downPercent >= 0
+    const downPercent = Math.round(bytes * 100 / size)
+    const isDownloading = bytes >= 0
 
     function connect() {
         let fileName, fileSize, bytes, blob, timeout;
@@ -35,9 +35,10 @@ export default function Id({ router }) {
         })
         conn.on('data', ({ type, name, totalSize, text, chunk, size }) => {
             if (type === 'file') {
-                setBytes(bytes += chunk.byteLength)
+                const { byteLength } = chunk
+                setBytes(old => old += byteLength)
                 blob = new Blob([blob, chunk])
-                if (bytes !== fileSize) return
+                if ((bytes += byteLength) !== fileSize) return
                 try {
                     conn.send({ type: 'next' })
                     download(blob, fileName)
