@@ -9,7 +9,7 @@ import { bytesToFraction, bytesToUnit, speed } from '../modules/functions'
 import 'react-circular-progressbar/dist/styles.css';
 import { useFileContext } from '../contexts/ContextProvider'
 
-const reader = new FileReader();
+const reader = typeof FileReader !== "undefined" && new FileReader();
 
 export default function Peer({ data, names, sizes, totalSize }) {
     const { name, conn } = data
