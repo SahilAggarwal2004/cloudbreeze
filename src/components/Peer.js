@@ -9,6 +9,8 @@ import { bytesToFraction, bytesToUnit, speed } from '../modules/functions'
 import 'react-circular-progressbar/dist/styles.css';
 import { useFileContext } from '../contexts/ContextProvider'
 
+const reader = new FileReader();
+
 export default function Peer({ data, names, sizes, totalSize }) {
     const { name, conn } = data
     const { files } = useFileContext()
@@ -25,7 +27,6 @@ export default function Peer({ data, names, sizes, totalSize }) {
         conn.send({ name: names[count], size, type: 'initial' })
         let bytesSent = 0;
         const channel = conn.dataChannel
-        const reader = new FileReader();
         const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent + chunkSize))
         reader.onload = async ({ target: { result, error } }) => {
             if (error || !conn.open) return readChunk();
@@ -59,6 +60,7 @@ export default function Peer({ data, names, sizes, totalSize }) {
     useEffect(() => {
         if (!count) return
         conn.off('data')
+        reader.onload = null;
         if (totalBytes >= totalSize) return
         conn.on('data', acceptData)
         sendFile()
