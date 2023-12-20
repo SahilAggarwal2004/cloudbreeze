@@ -9,11 +9,11 @@ import { peerOptions } from '../../constants';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { fileDetails, generateId } from '../../modules/functions';
 
-function reducer(state, { type = 'add', peer, name, conn }) {
+function reducer(state, { conn, name, peer, type = 'add' }) {
 	switch (type) {
 		case 'add':
 			toast.success(`${name} connected`)
-			return { ...state, [peer]: { name, conn } }
+			return { ...state, [peer]: { conn, name } }
 		case 'remove':
 			const newState = {}
 			Object.entries(state).filter(conn => conn[0] !== peer).forEach(conn => newState[conn[0]] = conn[1])
@@ -41,7 +41,7 @@ export default function P2p({ router }) {
 	const verifyRoomId = e => e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "")
 
 	function close(conn, name) {
-		dispatchConnections({ type: 'remove', peer: conn.peer, name })
+		dispatchConnections({ name, peer: conn.peer, type: 'remove' })
 		conn.removeAllListeners()
 	}
 
@@ -51,8 +51,8 @@ export default function P2p({ router }) {
 		const timeouts = {}
 		conn.on('open', () => {
 			if (connections[peer]) return
-			conn.send({ name: length <= 1 ? names[0] : `${length} files`, totalSize, text, type: 'details' })
-			dispatchConnections({ peer, name, conn })
+			conn.send({ name: length <= 1 ? names[0] : `${length} files`, text, totalSize, type: 'details' })
+			dispatchConnections({ conn, name, peer })
 		})
 		conn.on('close', () => close(conn, name))
 		conn.on('iceStateChanged', state => {

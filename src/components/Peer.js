@@ -29,10 +29,10 @@ export default function Peer({ data, names, sizes, totalSize }) {
         const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent + chunkSize))
         reader.onload = async ({ target: { result, error } }) => {
             if (error || !conn.open) return readChunk();
-            while (channel.bufferedAmount > maxBufferSize) await wait(1);
+            while (channel.bufferedAmount > maxBufferSize) await wait(0);
             setBytes(bytesSent)
             if ((bytesSent += chunkSize) < size) readChunk();
-            conn.send({ chunk: result, type: 'file' });
+            conn.send(result);
         };
         readChunk()
     }

@@ -34,11 +34,11 @@ export default function Id({ router }) {
             setBytes(-1)
             toast.success('Connection established')
         })
-        conn.on('data', async ({ type, name, totalSize, text, chunk, size }) => {
-            if (type === 'file') {
-                const { byteLength } = chunk
-                setBytes(old => old += byteLength)
-                blob = new Blob([blob, chunk])
+        conn.on('data', async data => {
+            const { byteLength, name, size, text, totalSize, type } = data
+            if (!type) {
+                setBytes(old => old + byteLength)
+                blob = new Blob([blob, data])
                 if ((bytes += byteLength) !== fileSize) return
                 try {
                     conn.send({ type: 'next' })
