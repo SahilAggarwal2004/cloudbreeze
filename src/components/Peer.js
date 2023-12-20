@@ -23,14 +23,14 @@ export default function Peer({ data, names, sizes, totalSize }) {
 
     function sendFile() {
         conn.send({ name: names[count], size, type: 'initial' })
-        let bytesSent = 0, bufferedAmount;
+        let bytesSent = 0;
         const channel = conn.dataChannel
         const reader = new FileReader();
         const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent + chunkSize))
         reader.onload = async ({ target: { result, error } }) => {
             if (error || !conn.open) return readChunk();
-            while ((bufferedAmount = channel.bufferedAmount) > maxBufferSize) await wait(0);
-            setBytes(bytesSent - bufferedAmount)
+            while (channel.bufferedAmount > maxBufferSize) await wait(1);
+            setBytes(bytesSent)
             if ((bytesSent += chunkSize) < size) readChunk();
             conn.send({ chunk: result, type: 'file' });
         };
