@@ -6,11 +6,11 @@ settings:
 
 dependencies:
   '@serwist/next':
-    specifier: ^8.0.5
-    version: 8.0.5(next@14.0.4)(webpack@5.89.0)
+    specifier: ^8.1.0
+    version: 8.1.0(next@14.0.4)(webpack@5.89.0)
   '@serwist/sw':
-    specifier: ^8.0.5
-    version: 8.0.5
+    specifier: ^8.1.0
+    version: 8.1.0
   axios:
     specifier: ^1.6.2
     version: 1.6.2
@@ -384,154 +384,258 @@ packages:
     dev: false
     optional: true
 
+  /@rollup/rollup-android-arm-eabi@4.9.1:
+    resolution: {integrity: sha512-6vMdBZqtq1dVQ4CWdhFwhKZL6E4L1dV6jUjuBvsavvNJSppzi6dLBbuV+3+IyUREaj9ZFvQefnQm28v4OCXlig==}
+    cpu: [arm]
+    os: [android]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-android-arm64@4.9.1:
+    resolution: {integrity: sha512-Jto9Fl3YQ9OLsTDWtLFPtaIMSL2kwGyGoVCmPC8Gxvym9TCZm4Sie+cVeblPO66YZsYH8MhBKDMGZ2NDxuk/XQ==}
+    cpu: [arm64]
+    os: [android]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-darwin-arm64@4.9.1:
+    resolution: {integrity: sha512-LtYcLNM+bhsaKAIGwVkh5IOWhaZhjTfNOkGzGqdHvhiCUVuJDalvDxEdSnhFzAn+g23wgsycmZk1vbnaibZwwA==}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-darwin-x64@4.9.1:
+    resolution: {integrity: sha512-KyP/byeXu9V+etKO6Lw3E4tW4QdcnzDG/ake031mg42lob5tN+5qfr+lkcT/SGZaH2PdW4Z1NX9GHEkZ8xV7og==}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-linux-arm-gnueabihf@4.9.1:
+    resolution: {integrity: sha512-Yqz/Doumf3QTKplwGNrCHe/B2p9xqDghBZSlAY0/hU6ikuDVQuOUIpDP/YcmoT+447tsZTmirmjgG3znvSCR0Q==}
+    cpu: [arm]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-linux-arm64-gnu@4.9.1:
+    resolution: {integrity: sha512-u3XkZVvxcvlAOlQJ3UsD1rFvLWqu4Ef/Ggl40WAVCuogf4S1nJPHh5RTgqYFpCOvuGJ7H5yGHabjFKEZGExk5Q==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-linux-arm64-musl@4.9.1:
+    resolution: {integrity: sha512-0XSYN/rfWShW+i+qjZ0phc6vZ7UWI8XWNz4E/l+6edFt+FxoEghrJHjX1EY/kcUGCnZzYYRCl31SNdfOi450Aw==}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-linux-riscv64-gnu@4.9.1:
+    resolution: {integrity: sha512-LmYIO65oZVfFt9t6cpYkbC4d5lKHLYv5B4CSHRpnANq0VZUQXGcCPXHzbCXCz4RQnx7jvlYB1ISVNCE/omz5cw==}
+    cpu: [riscv64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-linux-x64-gnu@4.9.1:
+    resolution: {integrity: sha512-kr8rEPQ6ns/Lmr/hiw8sEVj9aa07gh1/tQF2Y5HrNCCEPiCBGnBUt9tVusrcBBiJfIt1yNaXN6r1CCmpbFEDpg==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-linux-x64-musl@4.9.1:
+    resolution: {integrity: sha512-t4QSR7gN+OEZLG0MiCgPqMWZGwmeHhsM4AkegJ0Kiy6TnJ9vZ8dEIwHw1LcZKhbHxTY32hp9eVCMdR3/I8MGRw==}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-win32-arm64-msvc@4.9.1:
+    resolution: {integrity: sha512-7XI4ZCBN34cb+BH557FJPmh0kmNz2c25SCQeT9OiFWEgf8+dL6ZwJ8f9RnUIit+j01u07Yvrsuu1rZGxJCc51g==}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-win32-ia32-msvc@4.9.1:
+    resolution: {integrity: sha512-yE5c2j1lSWOH5jp+Q0qNL3Mdhr8WuqCNVjc6BxbVfS5cAS6zRmdiw7ktb8GNpDCEUJphILY6KACoFoRtKoqNQg==}
+    cpu: [ia32]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@rollup/rollup-win32-x64-msvc@4.9.1:
+    resolution: {integrity: sha512-PyJsSsafjmIhVgaI1Zdj7m8BB8mMckFah/xbpplObyHfiXzKcI5UOUXRyOdHW7nz4DpMCuzLnF7v5IWHenCwYA==}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
   /@rushstack/eslint-patch@1.6.0:
     resolution: {integrity: sha512-2/U3GXA6YiPYQDLGwtGlnNgKYBSwCFIHf8Y9LUY5VATHdtbLlU0Y1R3QoBnT0aB4qv/BEiVVsj7LJXoQCgJ2vA==}
     dev: true
 
-  /@serwist/background-sync@8.0.5:
-    resolution: {integrity: sha512-t/lxPsyyjqGqa52/H9se10IXBaW/TrmW+8ouqsH3FGCUjgJS68rOnBlnoJfMMjaNdnR/P6eeX9Nhzx/O3lNm1Q==}
+  /@serwist/background-sync@8.1.0:
+    resolution: {integrity: sha512-p522f6lKw8GLWcaf/7mLJwTqodg2iOfKfQrd1tWtpP6t2ztccNRUtc0UgeH/PfmFpMgZ9HSgkfJEK0cWUGepPw==}
     dependencies:
-      '@serwist/core': 8.0.5
+      '@serwist/core': 8.1.0
       idb: 8.0.0
     dev: false
 
-  /@serwist/broadcast-update@8.0.5:
-    resolution: {integrity: sha512-L4ofjkg3IT1jDkNHGzaEXEv+nkteQlwa7Ccgg3ospf8CrqQdPXh3UBrs30LfMmjWsIq3Lb6VNdDXOXpOOFOQZA==}
+  /@serwist/broadcast-update@8.1.0:
+    resolution: {integrity: sha512-ZssGhCiyUKadzlTb154Vd3v8BsahDIeI6iXv8zbmFLACdFVnEdkZOUnT3RKhwlcGQRLBGAprXTuz+xkXX6EX5w==}
     dependencies:
-      '@serwist/core': 8.0.5
+      '@serwist/core': 8.1.0
     dev: false
 
-  /@serwist/build@8.0.5:
-    resolution: {integrity: sha512-/+ln6UGOJ/AIyKcu3tcDSCncLOiphWKd1n880ZhnR+v6QM1uiKy+jv72JMhSBdm6/HdHTScclfvV4pu8Jxj+zA==}
+  /@serwist/build@8.1.0:
+    resolution: {integrity: sha512-femAS/q1NEAumPZUCNZyWuvcsGsZxfn11B7x2a1UNwt5g0Mhaa7Je7AYDMFjNbaLkKSSh5w2eEtgsyQc9wDI/w==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@apideck/better-ajv-errors': 0.3.6(ajv@8.12.0)
-      '@serwist/background-sync': 8.0.5
-      '@serwist/broadcast-update': 8.0.5
-      '@serwist/cacheable-response': 8.0.5
-      '@serwist/core': 8.0.5
-      '@serwist/expiration': 8.0.5
-      '@serwist/google-analytics': 8.0.5
-      '@serwist/precaching': 8.0.5
-      '@serwist/routing': 8.0.5
+      '@serwist/background-sync': 8.1.0
+      '@serwist/broadcast-update': 8.1.0
+      '@serwist/cacheable-response': 8.1.0
+      '@serwist/core': 8.1.0
+      '@serwist/expiration': 8.1.0
+      '@serwist/google-analytics': 8.1.0
+      '@serwist/precaching': 8.1.0
+      '@serwist/routing': 8.1.0
       ajv: 8.12.0
       common-tags: 1.8.2
       fast-json-stable-stringify: 2.1.0
       fs-extra: 11.2.0
       glob: 10.3.10
-      rollup: 3.28.1
+      rollup: 4.9.1
       source-map: 0.8.0-beta.0
       stringify-object: 5.0.0
       strip-comments: 2.0.1
       upath: 2.0.1
     dev: false
 
-  /@serwist/cacheable-response@8.0.5:
-    resolution: {integrity: sha512-JKknHowXN5DXv+ND5CW90SeRtUOMFs1XhYnJnfZqwhZOJvGPRcg21+do9eoKMXr/diN/cNSyFsu8bv0cBz0SHA==}
+  /@serwist/cacheable-response@8.1.0:
+    resolution: {integrity: sha512-6jyU91jwi+p+vB4c5chzvsbcy2i6QgNB1NJPT1GtLYLrm2rIk6YQX3eNiyZ11xSSms5oq4xnaMRDpwdNZooXjw==}
     dependencies:
-      '@serwist/core': 8.0.5
+      '@serwist/core': 8.1.0
     dev: false
 
-  /@serwist/core@8.0.5:
-    resolution: {integrity: sha512-GjmsLpCEfkCaj8cLTvS8jd3wPBzIWwpd3Ga5ohHZtxQD9/wMXJFX3UTqA8qTPRl9Xzh88VM90avJxB/zdADqBQ==}
+  /@serwist/core@8.1.0:
+    resolution: {integrity: sha512-zFdc3ucxcBnNHsR6bGsKghTfpTcugus2xqyeWXva4yJGRXR1hiCj9kAyrAwCjjMKh7Eh8W4FFQX+JsuwvWJXVQ==}
     dev: false
 
-  /@serwist/expiration@8.0.5:
-    resolution: {integrity: sha512-CQZIZ/yvwGj9uKOklZJ/jkC9zJ1tg9LekWuX44Yx4Zsq+PAw+8sAN4BpeBEnVTS8Ma91to25/JaJ7DHPDkK0Kg==}
+  /@serwist/expiration@8.1.0:
+    resolution: {integrity: sha512-sNYJqc0lru3Hab4Cl6J+xvKc9mnxhuFEs4vL01V1+/abJlGCPRnk04xPRFhd744fKI2fpTphVqiLAAt31J+2gQ==}
     dependencies:
-      '@serwist/core': 8.0.5
+      '@serwist/core': 8.1.0
       idb: 8.0.0
     dev: false
 
-  /@serwist/google-analytics@8.0.5:
-    resolution: {integrity: sha512-HOCk/E4J2lXf2x4EaMxlHTu22sOO/WUPQuzdgaNNB0EmfcV7UjjskxmM6c2q7w1NkbYhCANKQtkmJK6fiLrXyg==}
+  /@serwist/google-analytics@8.1.0:
+    resolution: {integrity: sha512-A7bASUEiWFl8I7sDGd52T+yrpWnkPKV58wOzeJ2XHwNgmDxOh8b90Eq8/m3rP0NofRDDdbhIjTQf6rNxS7mVYQ==}
     dependencies:
-      '@serwist/background-sync': 8.0.5
-      '@serwist/core': 8.0.5
-      '@serwist/routing': 8.0.5
-      '@serwist/strategies': 8.0.5
+      '@serwist/background-sync': 8.1.0
+      '@serwist/core': 8.1.0
+      '@serwist/routing': 8.1.0
+      '@serwist/strategies': 8.1.0
     dev: false
 
-  /@serwist/navigation-preload@8.0.5:
-    resolution: {integrity: sha512-6Ogln+qvoWAChgXV71yNE5027LlYjS0khtW2qsog61z79ymuPaWFlte3mF6BRehOODDehpPRpGVSmwJ+LUIUAw==}
+  /@serwist/navigation-preload@8.1.0:
+    resolution: {integrity: sha512-spqURMvJSMSgLFAZMlnTSRACMvN3rsG/LYshNpqdOTwxe0Firj+Wn/aDKSZEe5gWSMyiBie5iog2UByPP83b1A==}
     dependencies:
-      '@serwist/core': 8.0.5
+      '@serwist/core': 8.1.0
     dev: false
 
-  /@serwist/next@8.0.5(next@14.0.4)(webpack@5.89.0):
-    resolution: {integrity: sha512-fN9cd2MMzezOHWbJOyB788Reg4HmmpRzAu3SkZOKXT2jrAL9TCftWyA4YxwXIUEUZBe3S/lM3ffDNkhOQ4QhFA==}
+  /@serwist/next@8.1.0(next@14.0.4)(webpack@5.89.0):
+    resolution: {integrity: sha512-4XLU3kXn7Ttl7vc+esvpeiYZiveySPtgQY2vFmyKdagPFeo6MjXpFRtyuhygELDWdNruUDdbblfhCAMFazs//g==}
     peerDependencies:
       next: '>=14.0.0'
       webpack: '>=5.9.0'
     dependencies:
-      '@serwist/build': 8.0.5
-      '@serwist/webpack-plugin': 8.0.5(webpack@5.89.0)
-      '@serwist/window': 8.0.5
+      '@serwist/build': 8.1.0
+      '@serwist/webpack-plugin': 8.1.0(webpack@5.89.0)
+      '@serwist/window': 8.1.0
       clean-webpack-plugin: 4.0.0(webpack@5.89.0)
       fast-glob: 3.3.2
       next: 14.0.4(react-dom@18.2.0)(react@18.2.0)
       webpack: 5.89.0
     dev: false
 
-  /@serwist/precaching@8.0.5:
-    resolution: {integrity: sha512-1r77pJoJ6n4TJ2zUFpRG5QTfTw98ZYkaYFEFl+H2jSWASbxUeU9Gdl4pL+Zww1/QaZVQFSsfOC5s7J3A6I6+IA==}
+  /@serwist/precaching@8.1.0:
+    resolution: {integrity: sha512-+aA1BFHj2FtQI8qM/hKdhvvzuVi5GZVCqht6fUDwEMm//Y44siltwrkj7yiZk/PKNzCcj3TKKgqUR2STDzSeag==}
     dependencies:
-      '@serwist/core': 8.0.5
-      '@serwist/routing': 8.0.5
-      '@serwist/strategies': 8.0.5
+      '@serwist/core': 8.1.0
+      '@serwist/routing': 8.1.0
+      '@serwist/strategies': 8.1.0
     dev: false
 
-  /@serwist/range-requests@8.0.5:
-    resolution: {integrity: sha512-4UGwV/+T/zszDt+CBbrsD09W+zBau45XBEjqtuEDilg9s3RPeS5eDQp3wFVATgr2L8fVvEO2EKR5Y5kUSJ8D+w==}
+  /@serwist/range-requests@8.1.0:
+    resolution: {integrity: sha512-VfQqaXL+Yos9b6oo6F3v03OprrwODsUAs1l5cSQCNw/ptMzfZDqSYhjnF7pibELenLjPqrNwDzzOW/HD2H9d6Q==}
     dependencies:
-      '@serwist/core': 8.0.5
+      '@serwist/core': 8.1.0
     dev: false
 
-  /@serwist/routing@8.0.5:
-    resolution: {integrity: sha512-iAE9ov2yB+dPskf+R5NYJOPhzJHW8S5OBea8PlJo2dgs6o/uf18VDKuYyIfQCHhhjHHkE2bNF72ndQKoFIPnSA==}
+  /@serwist/routing@8.1.0:
+    resolution: {integrity: sha512-shlMOyhASh9V14j3qEbyei7LY+U5tChejB/QO1McJY0eO/K2DuTlTeH+2DLvPfPG7qeAPyMKlduQoD4K/a+G4w==}
     dependencies:
-      '@serwist/core': 8.0.5
+      '@serwist/core': 8.1.0
     dev: false
 
-  /@serwist/strategies@8.0.5:
-    resolution: {integrity: sha512-XGy2OrFxiFbZ4fdfO4vHDBOqWrJkYd2HZbSh8EiasMHM3C+iXF7V4VNewBCAaYKAzjuxVrNkMtg3UHgDmP3wSg==}
+  /@serwist/strategies@8.1.0:
+    resolution: {integrity: sha512-DWyFJgiru/dB/tauMJzLfP/IlNkf0pnp/XQLKFHOoIWaCdvJCwras9zG90swZZ5SqpfTnMZgDuhsfB5TkvjPPg==}
     dependencies:
-      '@serwist/core': 8.0.5
+      '@serwist/core': 8.1.0
     dev: false
 
-  /@serwist/sw@8.0.5:
-    resolution: {integrity: sha512-iNE0iirsDhJhNgrrJCTh3yeUmDMRrWmitjjNRHBQ5IbhACNp826Uc+r4wUUnr+Q9loax8ThkZ1SDTsuoRbHYEg==}
+  /@serwist/sw@8.1.0:
+    resolution: {integrity: sha512-miL1qaGie1x+D7n19FlmCmjq/m/oy9l38v1ej1ff2UrK5w+uBbMpdm8BACRDVSbEVpA9eL6+OD2IZea1sXDEUA==}
     dependencies:
-      '@serwist/background-sync': 8.0.5
-      '@serwist/broadcast-update': 8.0.5
-      '@serwist/cacheable-response': 8.0.5
-      '@serwist/core': 8.0.5
-      '@serwist/expiration': 8.0.5
-      '@serwist/google-analytics': 8.0.5
-      '@serwist/navigation-preload': 8.0.5
-      '@serwist/precaching': 8.0.5
-      '@serwist/range-requests': 8.0.5
-      '@serwist/routing': 8.0.5
-      '@serwist/strategies': 8.0.5
+      '@serwist/background-sync': 8.1.0
+      '@serwist/broadcast-update': 8.1.0
+      '@serwist/cacheable-response': 8.1.0
+      '@serwist/core': 8.1.0
+      '@serwist/expiration': 8.1.0
+      '@serwist/google-analytics': 8.1.0
+      '@serwist/navigation-preload': 8.1.0
+      '@serwist/precaching': 8.1.0
+      '@serwist/range-requests': 8.1.0
+      '@serwist/routing': 8.1.0
+      '@serwist/strategies': 8.1.0
     dev: false
 
-  /@serwist/webpack-plugin@8.0.5(webpack@5.89.0):
-    resolution: {integrity: sha512-WD3a6DML6a/WbSMoeRWsfnscPtc0BG47Flp3uE3zpfj4tPNneADS5Li6OEgIP0RiaQQiiLdg8K2NR2bajvbP4g==}
+  /@serwist/webpack-plugin@8.1.0(webpack@5.89.0):
+    resolution: {integrity: sha512-WOTdZaUZMtkcNdi3f2REHUpc7hOqruovY/XA6ShPOvLGw9ws4//pgNAvH7Ac7K/7bjQKb1iSu+9Xboxx/xRiOg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       webpack: 4.4.0 || ^5.9.0
     dependencies:
-      '@serwist/build': 8.0.5
+      '@serwist/build': 8.1.0
       fast-json-stable-stringify: 2.1.0
-      rollup: 3.28.1
+      rollup: 4.9.1
       upath: 2.0.1
       webpack: 5.89.0
     dev: false
 
-  /@serwist/window@8.0.5:
-    resolution: {integrity: sha512-eZIfmPGaC5Hj6cNVUbFi92NAxZjYuNbx8M15YxhQyzAssvK0fEqA19k/GJbYqaiOVvL25C9Atz+PYBAxL0KTZQ==}
+  /@serwist/window@8.1.0:
+    resolution: {integrity: sha512-tdTPXtUJOT4nhrqz74Ur0gGLE0WtjEyHOA0v58INKjcz3srwmN/pGpCqNLjKHg+6SFzFKk20nQCNBB6/8rPLQA==}
     dependencies:
-      '@serwist/core': 8.0.5
+      '@serwist/core': 8.1.0
       '@types/trusted-types': 2.0.7
     dev: false
 
@@ -3172,11 +3276,24 @@ packages:
       fsevents: 2.3.3
     dev: false
 
-  /rollup@3.28.1:
-    resolution: {integrity: sha512-R9OMQmIHJm9znrU3m3cpE8uhN0fGdXiawME7aZIpQqvpS/85+Vt1Hq1/yVIcYfOmaQiHjvXkQAoJukvLpau6Yw==}
-    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+  /rollup@4.9.1:
+    resolution: {integrity: sha512-pgPO9DWzLoW/vIhlSoDByCzcpX92bKEorbgXuZrqxByte3JFk2xSW2JEeAcyLc9Ru9pqcNNW+Ob7ntsk2oT/Xw==}
+    engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
     optionalDependencies:
+      '@rollup/rollup-android-arm-eabi': 4.9.1
+      '@rollup/rollup-android-arm64': 4.9.1
+      '@rollup/rollup-darwin-arm64': 4.9.1
+      '@rollup/rollup-darwin-x64': 4.9.1
+      '@rollup/rollup-linux-arm-gnueabihf': 4.9.1
+      '@rollup/rollup-linux-arm64-gnu': 4.9.1
+      '@rollup/rollup-linux-arm64-musl': 4.9.1
+      '@rollup/rollup-linux-riscv64-gnu': 4.9.1
+      '@rollup/rollup-linux-x64-gnu': 4.9.1
+      '@rollup/rollup-linux-x64-musl': 4.9.1
+      '@rollup/rollup-win32-arm64-msvc': 4.9.1
+      '@rollup/rollup-win32-ia32-msvc': 4.9.1
+      '@rollup/rollup-win32-x64-msvc': 4.9.1
       fsevents: 2.3.3
     dev: false
 

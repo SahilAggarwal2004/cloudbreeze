@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@serwist/next": "^8.0.5",
-    "@serwist/sw": "^8.0.5",
+    "@serwist/next": "^8.1.0",
+    "@serwist/sw": "^8.1.0",
     "axios": "^1.6.2",
     "megajs": "^1.1.4",
     "next": "^14.0.4",
