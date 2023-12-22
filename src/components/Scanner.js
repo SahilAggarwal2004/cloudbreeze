@@ -13,13 +13,13 @@ export default function Scanner() {
     const video = useRef()
 
     useLayoutEffect(() => {
-        const qrScanner = new QrScanner(video.current, ({ result }) => {
-            const { verified, pathname } = verifyUrl(result)
+        const qrScanner = new QrScanner(video.current, ({ data }) => {
+            const { verified, pathname } = verifyUrl(data)
             if (!verified) return setMessage('Please scan a valid QR Code')
             setModal({ active: false })
             toast.success('Successfuly scanned the QR Code')
             router.push(pathname)
-        });
+        }, { returnDetailedScanResult: true });
         qrScanner.start().then(() => {
             setMessage('Scan QR Code using camera')
         }).catch(() => {
