@@ -29,8 +29,8 @@ export default function Scanner() {
         return () => qrScanner.stop()
     }, [])
 
-    return <div className={`text-center w-[80vw] max-w-96 max-h-[50vh] flex flex-col justify-center px-3 space-y-3 ${!message && 'hidden'}`}>
+    return <div className={`text-center w-[80vw] max-w-96 max-h-[50vh] flex flex-col items-center justify-center px-3 space-y-3 ${!message && 'hidden'}`}>
         <span className='text-xs xs:text-sm md:text-base'>{message}</span>
-        <video ref={video} />
+        <video ref={video} className='max-h-[calc(50vh-2.25rem)]' />
     </div>
 }
