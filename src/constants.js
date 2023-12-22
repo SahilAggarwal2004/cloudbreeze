@@ -5,7 +5,6 @@ export const onlyGuest = ['/account/signup', '/account/login', '/account/forgot'
 export const options = { upload: 'Uploaded', transfer: 'Transferred', download: 'Downloaded' }
 export const unavailable = Object.keys(options).concat('error')
 export const types = ['normal', 'premium']
-export const uselessErrors = ['e', 'ta']
 export const sizes = { B: 1, KB: 1024, MB: 1048576, GB: 1073741824 } // In bytes
 export const cloudLimitMB = 100 // In MB
 export const cloudLimit = cloudLimitMB * sizes.MB

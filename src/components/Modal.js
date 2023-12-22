@@ -1,12 +1,9 @@
-import { usePathname } from 'next/navigation'
-import { showModal } from '../constants'
 import { useFileContext } from '../contexts/ContextProvider'
 import { getDeleteUrl } from '../modules/functions'
 import Info from './Info'
-import QrScanner from './QrScanner'
+import Scanner from './Scanner'
 
 export default function Modal() {
-	const pathname = usePathname()
 	const { modal: { active, type, ...props }, setModal, setProgress, fetchApp, logout, setUploadFiles, clearHistory } = useFileContext()
 	const { fileId, filter, downloadCount } = props
 	const handleCancel = () => setModal({ active: false })
@@ -28,9 +25,9 @@ export default function Modal() {
 		if (success || error === 'User not found!') logout('redirect')
 	}
 
-	return showModal.includes(pathname) && <>
+	return <>
 		<div className={`${active ? 'bg-opacity-50' : 'invisible bg-opacity-0'} bg-black fixed inset-0 transition-all duration-700 z-40`} onClick={handleCancel} />
-		<div className={`z-50 w-max max-w-[90vw] max-h-[98vh] overflow-y-auto center text-center bg-white rounded-md py-4 ${type === 'showFile' ? 'px-1' : 'px-3'} ${active ? 'opacity-100' : 'hidden'}`}>
+		<div className={`z-50 w-max max-w-[90vw] max-h-[98vh] overflow-y-auto center text-center bg-white rounded-md py-4 ${type === 'showFile' ? 'px-1' : type === 'qrScanner' ? 'px-0' : 'px-3'} ${active ? 'opacity-100' : 'hidden'}`}>
 			{type === 'deleteUser' ? <div>
 				<h3 className='font-bold'>Delete account?</h3>
 				<p className='text-red-600 text-sm'>This action is irreversible</p>
@@ -45,7 +42,7 @@ export default function Modal() {
 					<button className='py-1 px-3 rounded border button-animation' onClick={() => deleteFile(fileId)}>Yes</button>
 					<button className='py-1 px-3 rounded border button-animation' onClick={handleCancel}>No</button>
 				</div>
-			</div> : type === 'showFile' ? <Info fileId={fileId} filter={filter} downloadCount={downloadCount} modal /> : type === 'qrReader' && <QrScanner />}
+			</div> : type === 'showFile' ? <Info fileId={fileId} filter={filter} downloadCount={downloadCount} modal /> : type === 'qrScanner' && <Scanner />}
 		</div>
 	</>
 }

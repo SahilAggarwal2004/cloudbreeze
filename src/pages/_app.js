@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import ContextProvider from '../contexts/ContextProvider';
 import Navbar from '../components/Navbar';
 import Modal from '../components/Modal';
-import { hideNavbar } from '../constants';
+import { hideNavbar, showModal } from '../constants';
 import '../styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -34,7 +34,7 @@ export default function MyApp({ Component, pageProps }) {
 
             <link rel='preconnect' href={api} />
 
-            <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src *" />
+            <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src *; worker-src *" />
 
             <meta name="google-site-verification" content="5_rdfkDpTLo7tXDzIkEfmQb1wH_0AmpbcQOAPhLNBLQ" />
 
@@ -100,7 +100,7 @@ export default function MyApp({ Component, pageProps }) {
             {!loading && router.isReady && <>
                 {!hideNavbar.includes(router.pathname) && <Navbar />}
                 <Component {...pageProps} />
-                <Modal />
+                {showModal.includes(router.pathname) && <Modal />}
                 <ToastContainer autoClose={2500} pauseOnFocusLoss={false} pauseOnHover={false} position='bottom-right' closeButton={false} />
             </>}
         </ContextProvider>
