@@ -71,7 +71,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         if (error) return setProgress(-1)
         try {
             const file = File.fromURL(link)
-            const stream = file.download();
+            const stream = file.download({ maxConnections: 6 });
             let blob = new Blob()
             stream.on('data', data => blob = new Blob([blob, data]))
             stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
