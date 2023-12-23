@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import Head from 'next/head';
 import { randomElement } from 'random-stuff-js';
 import { useFileContext } from '../../contexts/ContextProvider';
-import { fileDetails, getTransferUploadUrl, getUploadUrl, remove } from '../../modules/functions';
+import { fileDetails, getUploadUrl, remove } from '../../modules/functions';
 import { cloudLimit, cloudLimitMB, transferLimit, transferLimitGB, unavailable } from '../../constants';
 import Loader from '../../components/Loader';
 import Info from '../../components/Info';
@@ -85,40 +85,29 @@ export default function Upload({ router }) {
 		data.append('downloadLimit', downloadLimit.current.value)
 
 		if (mode === 'save') {
-			let { success: verified, token, server, servers } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId } })
+			var { success: verified, token, server, servers } = await fetchApp({ url: 'file/verify', method: 'POST', data: { fileId } })
 			if (!verified) return setProgress(-1)
-
-			while (!success) {
-				if (!servers.length) {
-					setLink('error')
-					return setProgress(-1)
-				}
-				var { fileId, name, success } = await fetchApp({
-					url: getUploadUrl(server), method: 'POST', data, type: 'multipart/form-data', token,
-					showToast: servers.length === 1 || 'success', options: {
-						onUploadProgress: ({ loaded, total }) => setProgress(Math.round(loaded * 100 / total))
-					}
-				})
-				remove(servers, server)
-				server = randomElement(servers)
-			}
-			setLink(fileId)
-			setUploadFiles(prev => prev.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit }))
 		} else {
-			const { success, fileId } = await fetchApp({
-				url: getTransferUploadUrl(), method: 'POST', data, type: 'multipart/form-data', token: 1,
-				showToast: true, options: {
-					onUploadProgress: ({ loaded, total }) => setProgress(Math.round(loaded * 100 / total))
-				}
-			})
-			if (success) {
-				setLink(fileId)
-				setTransferFiles(prev => prev.concat({ _id: fileId, nameList, createdAt: Date.now(), daysLimit: 1 / 24 }))
-			} else {
-				setLink('error')
-				setProgress(-1)
-			}
+			servers = Array.from(Array(process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT).keys())
+			server = randomElement(servers)
 		}
+
+		while (!success) {
+			if (!servers.length) {
+				setLink('error')
+				return setProgress(-1)
+			}
+			var { fileId, name, success } = await fetchApp({
+				url: getUploadUrl(mode, server), method: 'POST', data, type: 'multipart/form-data', token, showToast: servers.length === 1 || 'success',
+				options: { onUploadProgress: ({ loaded, total }) => setProgress(Math.round(loaded * 100 / total)) }
+			})
+			remove(servers, server)
+			server = randomElement(servers)
+		}
+		setLink(fileId)
+
+		if (mode === 'save') setUploadFiles(prev => prev.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit }))
+		else setTransferFiles(prev => prev.concat({ _id: fileId, nameList, createdAt: Date.now(), daysLimit: 1 / 24 }))
 	}
 
 	useEffect(() => {

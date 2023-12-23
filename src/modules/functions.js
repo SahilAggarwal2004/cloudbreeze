@@ -4,13 +4,10 @@ import { sizes } from "../constants";
 
 const { KB, MB } = sizes
 const production = process.env.NODE_ENV === 'production'
-const transferServerCount = process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT
 
 const round = (number, digits = 2) => +number.toFixed(digits)
 
-export const getUploadUrl = server => (production ? `https://cloudbreeze-upload-${server}.onrender.com` : 'http://localhost:5002') + '/file/upload'
-
-export const getTransferUploadUrl = () => (production ? `https://cloudbreeze-transfer-${randomNumber(0, transferServerCount - 1)}.onrender.com` : '') + '/file/upload'
+export const getUploadUrl = (mode, server) => (production ? `https://cloudbreeze-${mode === 'save' ? 'upload' : mode}-${server}.onrender.com` : (mode === 'save' ? 'http://localhost:5002' : '')) + '/file/upload'
 
 export const getDownloadUrl = (fileId, server) => ((server && production) ? `https://cloudbreeze-transfer-${server}.onrender.com` : '') + `/file/get/${fileId}`
 
