@@ -10,8 +10,13 @@ export const cloudLimitMB = 100
 export const cloudLimit = cloudLimitMB * sizes.MB
 export const transferLimitGB = 2
 export const transferLimit = transferLimitGB * sizes.GB
+export const regex = /^cloudbreeze_.*\.zip$/
+
+// Mega
+export const maxConnections = 6
+export const minChunkSize = 128 * sizes.KB
+
+// P2P
 export const peerOptions = { host: 'cloudbreeze-peer.onrender.com', secure: true, pingInterval: 5000 }
 export const chunkSize = 64 * sizes.KB;
 export const maxBufferSize = 4 * chunkSize;
-export const regex = /^cloudbreeze_.*\.zip$/
-export const maxConnections = 6 // Mega
