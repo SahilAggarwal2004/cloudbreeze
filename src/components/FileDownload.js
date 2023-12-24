@@ -10,7 +10,7 @@ import { useFileContext } from '../contexts/ContextProvider';
 import { download, generateId, getDownloadUrl, resolvePromises } from '../modules/functions';
 import BarProgress from './BarProgress';
 import useStorage from '../hooks/useStorage';
-import { regex } from '../constants';
+import { maxConnections, regex } from '../constants';
 
 export default function FileDownload({ fileIdFromUrl = false }) {
     const { setDownloadFiles, fetchApp, setModal } = useFileContext()
@@ -67,11 +67,12 @@ export default function FileDownload({ fileIdFromUrl = false }) {
             return downloadFile(data, headers.filename)
         }
 
-        const { link, name, createdAt, daysLimit, error } = await fetchApp({ url: getDownloadUrl(fileId), method: 'POST', data: { pass: password.current.value } })
+        const { createdAt, daysLimit, error, link, name, size } = await fetchApp({ url: getDownloadUrl(fileId), method: 'POST', data: { pass: password.current.value } })
         if (error) return setProgress(-1)
         try {
             const file = File.fromURL(link)
-            const stream = file.download({ maxConnections: 6 });
+            const chunkSize = size / maxConnections
+            const stream = file.download({ maxConnections, initialChunkSize: chunkSize, maxChunkSize: chunkSize });
             let blob = new Blob()
             stream.on('data', data => blob = new Blob([blob, data]))
             stream.on('progress', ({ bytesLoaded, bytesTotal }) => {

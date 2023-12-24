@@ -14,3 +14,4 @@ export const peerOptions = { host: 'cloudbreeze-peer.onrender.com', secure: true
 export const chunkSize = 64 * sizes.KB;
 export const maxBufferSize = 4 * chunkSize;
 export const regex = /^cloudbreeze_.*\.zip$/
+export const maxConnections = 6 // Mega
