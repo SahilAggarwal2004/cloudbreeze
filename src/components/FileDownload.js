@@ -71,16 +71,14 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         if (error) return setProgress(-1)
         try {
             const file = File.fromURL(link)
-            const chunkSize = Math.max(minChunkSize, Math.ceil(size / maxConnections))
+            const chunkSize = Math.max(Math.ceil(size / maxConnections), minChunkSize)
             const stream = file.download({ maxConnections, initialChunkSize: chunkSize, maxChunkSize: chunkSize });
-            let blob = new Blob()
+            let blob = new Blob();
             stream.on('data', data => blob = new Blob([blob, data]))
-            stream.on('progress', ({ bytesLoaded, bytesTotal }) => {
-                setProgress(Math.round(bytesLoaded * 100 / bytesTotal))
-                if (bytesLoaded === bytesTotal) {
-                    stream.removeAllListeners();
-                    downloadFile(blob, name)
-                }
+            stream.on('progress', ({ bytesLoaded, bytesTotal }) => setProgress(Math.round(bytesLoaded * 100 / bytesTotal)))
+            stream.on('end', () => {
+                stream.removeAllListeners();
+                downloadFile(blob, name);
             })
         } catch {
             const { data } = await fetchDownload()
