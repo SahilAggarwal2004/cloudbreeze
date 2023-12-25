@@ -13,7 +13,7 @@ export const transferLimit = transferLimitGB * sizes.GB
 export const regex = /^cloudbreeze_.*\.zip$/
 
 // Mega
-export const maxConnections = 6
+export const maxConnections = 12
 export const minChunkSize = 128 * sizes.KB
 
 // P2P
