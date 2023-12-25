@@ -56,8 +56,7 @@ export function fileDetails(files) {
     const length = files.length, names = [], sizes = []
     let totalSize = 0;
     for (let i = 0; i < length; i++) {
-        const file = files[i]
-        const { name, size } = file
+        const { name, size } = files[i]
         names.push(name)
         sizes.push(size)
         totalSize += size
