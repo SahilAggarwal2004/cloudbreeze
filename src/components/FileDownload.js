@@ -71,8 +71,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         if (error) return setProgress(-1)
         try {
             const file = File.fromURL(link)
-            const chunkSize = Math.max(Math.ceil(size / maxConnections), minChunkSize)
-            const stream = file.download({ maxConnections, initialChunkSize: chunkSize, maxChunkSize: chunkSize });
+            const stream = file.download({ maxConnections, initialChunkSize: Math.max(Math.ceil(size / maxConnections), minChunkSize) });
             let blob = new Blob();
             stream.on('data', data => blob = new Blob([blob, data]))
             stream.on('progress', ({ bytesLoaded, bytesTotal }) => setProgress(Math.round(bytesLoaded * 100 / bytesTotal)))
