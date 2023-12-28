@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { FaXmark } from 'react-icons/fa6'
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
-import { wait } from 'random-stuff-js'
+import { wait } from 'utility-kit'
 import { chunkSize, maxBufferSize } from '../constants'
 import { bytesToFraction, bytesToUnit, speed } from '../modules/functions'
 import 'react-circular-progressbar/dist/styles.css';

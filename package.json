@@ -9,14 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@serwist/next": "^8.1.1",
-    "@serwist/sw": "^8.1.1",
-    "axios": "^1.6.2",
+    "@serwist/next": "^8.2.0",
+    "@serwist/sw": "^8.2.0",
+    "axios": "^1.6.3",
     "megajs": "^1.1.6",
     "next": "^14.0.4",
     "peerjs": "^1.5.2",
     "qr-scanner": "^1.4.2",
-    "random-stuff-js": "^0.6.3",
     "react": "^18.2.0",
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "^18.2.0",
@@ -25,7 +24,8 @@
     "react-toastify": "^9.1.3",
     "react-top-loading-bar": "^2.3.1",
     "react-wrap-balancer": "^1.1.0",
-    "unzipit": "^1.4.3"
+    "unzipit": "^1.4.3",
+    "utility-kit": "^0.2.2"
   },
   "devDependencies": {
     "@builder.io/partytown": "^0.8.1",

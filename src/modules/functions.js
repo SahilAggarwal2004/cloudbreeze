@@ -1,4 +1,4 @@
-import { randomNumber, wait } from "random-stuff-js";
+import { wait } from "utility-kit";
 import { toast } from "react-toastify";
 import { sizes } from "../constants";
 

@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'react-toastify';
 import Head from 'next/head';
-import { randomElement } from 'random-stuff-js';
+import { randomElement } from 'utility-kit';
 import { useFileContext } from '../../contexts/ContextProvider';
 import { fileDetails, getUploadUrl, remove } from '../../modules/functions';
 import { cloudLimit, cloudLimitMB, transferLimit, transferLimitGB, unavailable } from '../../constants';

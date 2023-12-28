@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   '@serwist/next':
-    specifier: ^8.1.1
-    version: 8.1.1(next@14.0.4)(webpack@5.89.0)
+    specifier: ^8.2.0
+    version: 8.2.0(next@14.0.4)(webpack@5.89.0)
   '@serwist/sw':
-    specifier: ^8.1.1
-    version: 8.1.1
+    specifier: ^8.2.0
+    version: 8.2.0
   axios:
-    specifier: ^1.6.2
-    version: 1.6.2
+    specifier: ^1.6.3
+    version: 1.6.3
   megajs:
     specifier: ^1.1.6
     version: 1.1.6
@@ -26,9 +26,6 @@ dependencies:
   qr-scanner:
     specifier: ^1.4.2
     version: 1.4.2
-  random-stuff-js:
-    specifier: ^0.6.3
-    version: 0.6.3
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -56,6 +53,9 @@ dependencies:
   unzipit:
     specifier: ^1.4.3
     version: 1.4.3
+  utility-kit:
+    specifier: ^0.2.2
+    version: 0.2.2
 
 devDependencies:
   '@builder.io/partytown':
@@ -492,32 +492,32 @@ packages:
     resolution: {integrity: sha512-2/U3GXA6YiPYQDLGwtGlnNgKYBSwCFIHf8Y9LUY5VATHdtbLlU0Y1R3QoBnT0aB4qv/BEiVVsj7LJXoQCgJ2vA==}
     dev: true
 
-  /@serwist/background-sync@8.1.1:
-    resolution: {integrity: sha512-UkUUdk5CIBZTykrJEL0yCN/DlB5ZomRwakVl7aI41hKpvEx3hCPOl39ufoUgq6fuy/oZpqMpEMhLtdOElh5fwQ==}
+  /@serwist/background-sync@8.2.0:
+    resolution: {integrity: sha512-XEgAYSG91G0OPCTPugfVMwPBm52eRQ8ZsD28MsuQCALpwwcGzSxMjJ4nMg30Mhk0BcShf+MnZ242hTSU78UZ4g==}
     dependencies:
-      '@serwist/core': 8.1.1
+      '@serwist/core': 8.2.0
       idb: 8.0.0
     dev: false
 
-  /@serwist/broadcast-update@8.1.1:
-    resolution: {integrity: sha512-Vj7fNOSmNb36LUN3dVZI3UEhCIwdxlDQVvaby0j/n5oPBAkHBhdR/4Gwb94q6Orw3wvf+dsLK3BQWS1b0OzvLg==}
+  /@serwist/broadcast-update@8.2.0:
+    resolution: {integrity: sha512-2mix586mchELXi6PV8IiIKvfJk9EOi6imz25MvD95WELVCqDoOIDF0sHHHXcs5q/GdB9tp/rGYy1la/00vVbpA==}
     dependencies:
-      '@serwist/core': 8.1.1
+      '@serwist/core': 8.2.0
     dev: false
 
-  /@serwist/build@8.1.1:
-    resolution: {integrity: sha512-36N3dlLjiPkCeLP3cwntDewnETqR+0ylKhlpdoLn7NB9Gyt6e95SZuf6lMJskrgGaipM8HqktQohdSE+ogV6Kw==}
+  /@serwist/build@8.2.0:
+    resolution: {integrity: sha512-wkFIKGi5VkYuk1PZpM8ECnFRZsW8ZzgPoB9PSVD0EtMonlGErHtrNWZeJEt4uWqoAQthPQ4F15ba8zIr9cNzDw==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@apideck/better-ajv-errors': 0.3.6(ajv@8.12.0)
-      '@serwist/background-sync': 8.1.1
-      '@serwist/broadcast-update': 8.1.1
-      '@serwist/cacheable-response': 8.1.1
-      '@serwist/core': 8.1.1
-      '@serwist/expiration': 8.1.1
-      '@serwist/google-analytics': 8.1.1
-      '@serwist/precaching': 8.1.1
-      '@serwist/routing': 8.1.1
+      '@serwist/background-sync': 8.2.0
+      '@serwist/broadcast-update': 8.2.0
+      '@serwist/cacheable-response': 8.2.0
+      '@serwist/core': 8.2.0
+      '@serwist/expiration': 8.2.0
+      '@serwist/google-analytics': 8.2.0
+      '@serwist/precaching': 8.2.0
+      '@serwist/routing': 8.2.0
       ajv: 8.12.0
       common-tags: 1.8.2
       fast-json-stable-stringify: 2.1.0
@@ -530,112 +530,112 @@ packages:
       upath: 2.0.1
     dev: false
 
-  /@serwist/cacheable-response@8.1.1:
-    resolution: {integrity: sha512-kn1PCleJd8Gs4QthBeasRVZg+HSJVYwNuAwfafJ52Ty6EGqB8hEcOK7oRhgSKaVAMKLuaoLq9jlE2D6p03WLsw==}
+  /@serwist/cacheable-response@8.2.0:
+    resolution: {integrity: sha512-BDueuXTEKJ2S3RLgKawGmeSy3Tj5xslZ1C4m01VhvI2JrTmS5Sxsn65qXjpsXCb6lW+OtIQNtpkOHBYOTbag2Q==}
     dependencies:
-      '@serwist/core': 8.1.1
+      '@serwist/core': 8.2.0
     dev: false
 
-  /@serwist/core@8.1.1:
-    resolution: {integrity: sha512-GTs+3qgeKHxIjexrQg5iI1/c0k3/EjTvzT/SC2uZ7gEkIpQDVQAJMVBSUJe/hvs/1HOehYUYdcJNj3NOWrUeAg==}
+  /@serwist/core@8.2.0:
+    resolution: {integrity: sha512-91TAZqau0/uF7pZLMiqgq263FYojFeGoNmMMkRkdtAldrIIIFwejRvuoslon8vIi/uDPNRzl0aD8TFTfazN5dQ==}
     dev: false
 
-  /@serwist/expiration@8.1.1:
-    resolution: {integrity: sha512-Xc/ncqIqhHp4wl1YvGLqJChTWVj+wX/Oiqq8+pDwU80nOpQowzptOC2qUYWtIaV7algpLzx0+rzOZLcpICpYLw==}
+  /@serwist/expiration@8.2.0:
+    resolution: {integrity: sha512-hZcMHI39VVSK2sJWhAfmQrB1A5YAL/KK51tthZvnq4yf+Y3aPqtCxoHkFgesVRDKpDNpzr+wU7AHvUerKYNLcQ==}
     dependencies:
-      '@serwist/core': 8.1.1
+      '@serwist/core': 8.2.0
       idb: 8.0.0
     dev: false
 
-  /@serwist/google-analytics@8.1.1:
-    resolution: {integrity: sha512-qyVLxvb4c4v6ztN/cTXAD6p9ccR6I9IQuXqzxF47fZ2rJlXmGiSQ7pVmYdyBmZ212q92ZhmgVVPWWqJiSxaIPA==}
+  /@serwist/google-analytics@8.2.0:
+    resolution: {integrity: sha512-/igmb3SyzOSG6/hNv9JuRqnRpINgKTJph9aWJ4eJocaNxrp1R/15qj1REXIrShamHk1IPqbQ1O7lvFlFnZmOnQ==}
     dependencies:
-      '@serwist/background-sync': 8.1.1
-      '@serwist/core': 8.1.1
-      '@serwist/routing': 8.1.1
-      '@serwist/strategies': 8.1.1
+      '@serwist/background-sync': 8.2.0
+      '@serwist/core': 8.2.0
+      '@serwist/routing': 8.2.0
+      '@serwist/strategies': 8.2.0
     dev: false
 
-  /@serwist/navigation-preload@8.1.1:
-    resolution: {integrity: sha512-CYKoIsMHFN022Bb3kyiROP9Z6rr+zBKjRfTwt0Ni+ZVZUB30C8qFdde4kly79TSi1T36GGjk0TnjBDtOjJSWhQ==}
+  /@serwist/navigation-preload@8.2.0:
+    resolution: {integrity: sha512-fY6U3H7akLOo9XsIDKf9H/2bl2Erxt4lnYJEyiuitxRlDWgYKqpAelOZ+0eHnvsPrM+3LQrjYMVo4pXth6O3bg==}
     dependencies:
-      '@serwist/core': 8.1.1
+      '@serwist/core': 8.2.0
     dev: false
 
-  /@serwist/next@8.1.1(next@14.0.4)(webpack@5.89.0):
-    resolution: {integrity: sha512-9JUKsYOe8Rz81Lfu31Vc1faPPop93OGc50z5ijrKpDx9ogE0ix7V3OD14M9AEE37TdI7k714BvXec+5rpJaa9w==}
+  /@serwist/next@8.2.0(next@14.0.4)(webpack@5.89.0):
+    resolution: {integrity: sha512-MTiAQMVBSIP0axAeKItztD7FJJqrev6iJkN69UL+ww2ohiq1UK1H8woPrrDfQCZ6gihA2xIZOb6eJdaMzsF+sQ==}
     peerDependencies:
       next: '>=14.0.0'
       webpack: '>=5.9.0'
     dependencies:
-      '@serwist/build': 8.1.1
-      '@serwist/webpack-plugin': 8.1.1(webpack@5.89.0)
-      '@serwist/window': 8.1.1
+      '@serwist/build': 8.2.0
+      '@serwist/webpack-plugin': 8.2.0(webpack@5.89.0)
+      '@serwist/window': 8.2.0
       clean-webpack-plugin: 4.0.0(webpack@5.89.0)
       fast-glob: 3.3.2
       next: 14.0.4(react-dom@18.2.0)(react@18.2.0)
       webpack: 5.89.0
     dev: false
 
-  /@serwist/precaching@8.1.1:
-    resolution: {integrity: sha512-uS0jOvklPC6g0K5FiYRoemlnPPcfsO+c5sEVmyRTszyA6mfaA2g6s3t9PxorJT1I9PSzMOfuy760TU6UjA5HlA==}
+  /@serwist/precaching@8.2.0:
+    resolution: {integrity: sha512-xGn5p2SwkibEC2x4tEaFi2UB3hsmWvgx1bAsoUDNbex2dndf0VEPSsFj/N1l1lfxDRF3Q/9uo89F5tr4OBYOtw==}
     dependencies:
-      '@serwist/core': 8.1.1
-      '@serwist/routing': 8.1.1
-      '@serwist/strategies': 8.1.1
+      '@serwist/core': 8.2.0
+      '@serwist/routing': 8.2.0
+      '@serwist/strategies': 8.2.0
     dev: false
 
-  /@serwist/range-requests@8.1.1:
-    resolution: {integrity: sha512-CCFhQmKVlcnYEM842/LRoXjcRLDnmX4h4mG75WWrm3KWTFA+6EiktYCMBAjfTdzp6jYJQTXVUma9MLHh7npirg==}
+  /@serwist/range-requests@8.2.0:
+    resolution: {integrity: sha512-P6f4qPUbaOdnvRFY+KIC6k/wkKHKTTwPfzh0LwuvOFrZUq8RZBro/msoFFXvu++hSfrBCI52ayURQSPTwVo3tQ==}
     dependencies:
-      '@serwist/core': 8.1.1
+      '@serwist/core': 8.2.0
     dev: false
 
-  /@serwist/routing@8.1.1:
-    resolution: {integrity: sha512-QSGs1jaFg2W+QBDBYAPu3dAFz2UGhX12juRoyI02jXUr4mQ5szYoGFKuMU+nOfj/1bp5x1JMJecI4ssFZkmtKg==}
+  /@serwist/routing@8.2.0:
+    resolution: {integrity: sha512-SnV5KIUI+0GzvgGGIe+VBohThBPVPKAvWvgr9GkFiAOCS3ls4RDN1OEXNwQseuxiVvHYB/HyqYsx5SqG2o7M6g==}
     dependencies:
-      '@serwist/core': 8.1.1
+      '@serwist/core': 8.2.0
     dev: false
 
-  /@serwist/strategies@8.1.1:
-    resolution: {integrity: sha512-syObcLVYiYdeb1jNsrWNHYLXxF+UX18D+t3TibBxAN7R2qnyITICMejdN2TQqCR4a9o/OGG8S6ZRKNNF5vuwnQ==}
+  /@serwist/strategies@8.2.0:
+    resolution: {integrity: sha512-Q/MEC5GUKjBxMIM+gFyPJJ9uWHOgk9EvQ5bh35d3vAkM9V84fTakR1xrbrzZfyPDnWfeyKJ11Z9CjYSM/FrrLg==}
     dependencies:
-      '@serwist/core': 8.1.1
+      '@serwist/core': 8.2.0
     dev: false
 
-  /@serwist/sw@8.1.1:
-    resolution: {integrity: sha512-FCBiv0YsUQ1KkCLj3ZM/N+y449wrc0CwOzx5FQUtJGtFkeNUWWEsiF3GhH6fmqPfUO7tKFSJC+ENyd9rZIOi9Q==}
+  /@serwist/sw@8.2.0:
+    resolution: {integrity: sha512-1BRZ9vmeoxfj7Cms0wSNVE7qdSj1Bkfk/lxlaAxP8gM07ACg3uJkBYcFLvDDrvgGM/s0CSLklC1DZKa6jLxcww==}
     dependencies:
-      '@serwist/background-sync': 8.1.1
-      '@serwist/broadcast-update': 8.1.1
-      '@serwist/cacheable-response': 8.1.1
-      '@serwist/core': 8.1.1
-      '@serwist/expiration': 8.1.1
-      '@serwist/google-analytics': 8.1.1
-      '@serwist/navigation-preload': 8.1.1
-      '@serwist/precaching': 8.1.1
-      '@serwist/range-requests': 8.1.1
-      '@serwist/routing': 8.1.1
-      '@serwist/strategies': 8.1.1
+      '@serwist/background-sync': 8.2.0
+      '@serwist/broadcast-update': 8.2.0
+      '@serwist/cacheable-response': 8.2.0
+      '@serwist/core': 8.2.0
+      '@serwist/expiration': 8.2.0
+      '@serwist/google-analytics': 8.2.0
+      '@serwist/navigation-preload': 8.2.0
+      '@serwist/precaching': 8.2.0
+      '@serwist/range-requests': 8.2.0
+      '@serwist/routing': 8.2.0
+      '@serwist/strategies': 8.2.0
     dev: false
 
-  /@serwist/webpack-plugin@8.1.1(webpack@5.89.0):
-    resolution: {integrity: sha512-dsbmdmDELKYoGmwCelr7mMtK5nE1FldK03kK2IlTW5u3RsFtTeN7xfC6DNjU7PrLEnepj8leQ7PIW+kgP6VN3g==}
+  /@serwist/webpack-plugin@8.2.0(webpack@5.89.0):
+    resolution: {integrity: sha512-mI40c+n45ctDUA/3kQ7yQ4z9IO1TpijqWwnJeyOyrT+K9eJtecXYlnfGVm6J/6+lYp+WXys24Vxb78vRGERvoQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       webpack: 4.4.0 || ^5.9.0
     dependencies:
-      '@serwist/build': 8.1.1
+      '@serwist/build': 8.2.0
       fast-json-stable-stringify: 2.1.0
       rollup: 4.9.1
       upath: 2.0.1
       webpack: 5.89.0
     dev: false
 
-  /@serwist/window@8.1.1:
-    resolution: {integrity: sha512-OdIoYKPWdQGGXaT/DdVnVqOSj4wRhF0oFr47nzhfTY/rkyqR69O38vA+J1O+hTVVWnIhGD010HlvS1Sr/UbIGg==}
+  /@serwist/window@8.2.0:
+    resolution: {integrity: sha512-QpDZs+RRZB03jTRiT4HPEmqsMJ0bLT1F/BaSrtlRnOPcM7V8BQSWTHNZ90r5f2D3TLRr5THFqt0IeYvvDKwYCA==}
     dependencies:
-      '@serwist/core': 8.1.1
+      '@serwist/core': 8.2.0
       '@types/trusted-types': 2.0.7
     dev: false
 
@@ -1105,8 +1105,8 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /axios@1.6.2:
-    resolution: {integrity: sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==}
+  /axios@1.6.3:
+    resolution: {integrity: sha512-fWyNdeawGam70jXSVlKl+SUNVcL6j6W79CuSIPfi6HnDUmSCH6gyUys/HrqHeA/wU0Az41rRgean494d0Jb+ww==}
     dependencies:
       follow-redirects: 1.15.3
       form-data: 4.0.0
@@ -3055,10 +3055,6 @@ packages:
   /queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
-  /random-stuff-js@0.6.3:
-    resolution: {integrity: sha512-7fTp4hpZnKxzYoWU5fOtugyNHog8BGjEBG+TZUk9e1hM3oFf5M80sWD70uqTshb9x6od1kNr8w3oQz3mz8h6tA==}
-    dev: false
-
   /randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
     dependencies:
@@ -3795,6 +3791,10 @@ packages:
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  /utility-kit@0.2.2:
+    resolution: {integrity: sha512-Gie0/iBbQZMCJkcg7bBql36BUjbnDlubY0Pzn8RG9MgxOc/oLjAsISJ2dG5dMkc7c3KQvnt2SAtyT7Ki2Fl0jQ==}
+    dev: false
 
   /uzip-module@1.0.3:
     resolution: {integrity: sha512-AMqwWZaknLM77G+VPYNZLEruMGWGzyigPK3/Whg99B3S6vGHuqsyl5ZrOv1UUF3paGK1U6PM0cnayioaryg/fA==}

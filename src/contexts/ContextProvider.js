@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from 'axios';
-import { randomName } from 'random-stuff-js';
+import { randomName } from 'utility-kit';
 import { createContext, useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import { fetchHistory, onlyGuest, types } from '../constants';

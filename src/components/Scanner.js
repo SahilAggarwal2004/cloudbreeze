@@ -19,7 +19,7 @@ export default function Scanner() {
             setModal({ active: false })
             toast.success('Successfuly scanned the QR Code')
             router.push(pathname)
-        }, { returnDetailedScanResult: true });
+        }, { maxScansPerSecond: 10, calculateScanRegion: ({ width, height }) => ({ x: 0, y: 0, width, height }) });
         qrScanner.start().then(() => {
             setMessage('Scan QR Code using camera')
         }).catch(() => {
