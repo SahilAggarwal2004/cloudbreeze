@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@serwist/next": "^8.2.0",
-    "@serwist/sw": "^8.2.0",
+    "@serwist/next": "^8.3.0",
+    "@serwist/sw": "^8.3.0",
     "axios": "^1.6.3",
     "megajs": "^1.1.6",
     "next": "^14.0.4",
@@ -25,7 +25,7 @@
     "react-top-loading-bar": "^2.3.1",
     "react-wrap-balancer": "^1.1.0",
     "unzipit": "^1.4.3",
-    "utility-kit": "^0.2.2"
+    "utility-kit": "^0.3.2"
   },
   "devDependencies": {
     "@builder.io/partytown": "^0.8.1",
