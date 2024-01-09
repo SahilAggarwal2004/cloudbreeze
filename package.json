@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@serwist/next": "^8.3.0",
-    "@serwist/sw": "^8.3.0",
-    "axios": "^1.6.3",
-    "megajs": "^1.1.6",
+    "@serwist/next": "^8.4.0",
+    "@serwist/sw": "^8.4.0",
+    "axios": "^1.6.5",
+    "megajs": "^1.1.7",
     "next": "^14.0.4",
     "peerjs": "^1.5.2",
     "qr-scanner": "^1.4.2",
@@ -25,14 +25,14 @@
     "react-top-loading-bar": "^2.3.1",
     "react-wrap-balancer": "^1.1.0",
     "unzipit": "^1.4.3",
-    "utility-kit": "^0.3.2"
+    "utility-kit": "^0.3.3"
   },
   "devDependencies": {
     "@builder.io/partytown": "^0.8.1",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.4.0"
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1"
   }
 }
