@@ -25,10 +25,12 @@ const accounts = [
 export const peerOptions = {
     host: 'cloudbreeze-peer.onrender.com', secure: true, pingInterval: 5000,
     config: {
-        iceServers: [
-            { urls: "stun:stun.l.google.com:19302" },
-            { urls: "stun:stun.relay.metered.ca:80" }
-        ].concat(accounts.map(account => ({
+        iceServers: [{
+            urls: [
+                "stun:stun.l.google.com:19302",
+                "stun:stun.relay.metered.ca:80"
+            ]
+        }].concat(accounts.map(account => ({
             urls: [
                 "turn:standard.relay.metered.ca:80",
                 "turn:standard.relay.metered.ca:80?transport=tcp",
