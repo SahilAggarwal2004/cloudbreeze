@@ -17,6 +17,24 @@ export const maxConnections = 12
 export const minChunkSize = 128 * sizes.KB
 
 // P2P
-export const peerOptions = { host: 'cloudbreeze-peer.onrender.com', secure: true, pingInterval: 5000 }
+export const peerOptions = {
+    host: 'cloudbreeze-peer.onrender.com', secure: true, pingInterval: 5000,
+    config: {
+        iceServers: [
+            { urls: "stun:stun.l.google.com:19302" },
+            { urls: "stun:stun.relay.metered.ca:80" },
+            {
+                urls: [
+                    "turn:standard.relay.metered.ca:80",
+                    "turn:standard.relay.metered.ca:80?transport=tcp",
+                    "turn:standard.relay.metered.ca:443",
+                    "turns:standard.relay.metered.ca:443?transport=tcp"
+                ],
+                username: process.env.NEXT_PUBLIC_TURN_SERVER_USERNAME,
+                password: process.env.NEXT_PUBLIC_TURN_SERVER_PASSWORD
+            }
+        ]
+    }
+}
 export const chunkSize = 64 * sizes.KB;
 export const maxBufferSize = 4 * chunkSize;
