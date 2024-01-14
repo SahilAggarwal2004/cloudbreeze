@@ -31,7 +31,7 @@ export const peerOptions = {
                     "turns:standard.relay.metered.ca:443?transport=tcp"
                 ],
                 username: process.env.NEXT_PUBLIC_TURN_SERVER_USERNAME,
-                password: process.env.NEXT_PUBLIC_TURN_SERVER_PASSWORD
+                credential: process.env.NEXT_PUBLIC_TURN_SERVER_PASSWORD
             }
         ]
     }
