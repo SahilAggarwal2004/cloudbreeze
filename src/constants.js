@@ -18,9 +18,9 @@ export const minChunkSize = 128 * sizes.KB
 
 // P2P
 const accounts = [
-    { username: "23d2d924e3c7a3d878d3ecb1", credential: "PYCjdq025mRAMqu5" },
-    { username: "26757539465fdba06ea1880c", credential: "vMyhFZr6d6Wflths" },
-    { username: "4634db834cc4cd836dd62801", credential: "+Gp9d9TcMmHl1P0Y" }
+    { username: "dd04ac99db2364f5ca8099ff", credential: "anUIE98Lhv76fqoa" },
+    { username: "ac225820ee7ebeab86dfa3f6", credential: "+U3jTgFpmEvq7ZOM" },
+    { username: "de634c5368a4108018a3592d", credential: "HAvcyZqALRzC7EFG" }
 ]
 export const peerOptions = {
     host: 'cloudbreeze-peer.onrender.com', secure: true, pingInterval: 5000,
