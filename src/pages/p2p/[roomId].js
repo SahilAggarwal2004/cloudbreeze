@@ -1,55 +1,61 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Head from 'next/head';
 import { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
 import { FaCopy } from 'react-icons/fa';
 import { Balancer } from 'react-wrap-balancer';
+import { toast } from 'react-toastify';
 import BarProgress from '../../components/BarProgress';
 import Loader from '../../components/Loader';
-import useError from '../../hooks/useError';
 import { peerOptions } from '../../constants';
-import { bytesToSize, bytesToUnit, download, speed } from '../../modules/functions';
+import { bytesToSize, bytesToUnit, speed } from '../../modules/functions';
 import { getStorage } from '../../modules/storage';
 
 export default function Id({ router }) {
     const { roomId } = router.query
     const peerRef = useRef();
     const connection = useRef();
+    const writerRef = useRef();
     const [file, setFile] = useState()
     const [size, setSize] = useState(0)
     const [text, setText] = useState()
     const [unit, setUnit] = useState('B')
     const [bytes, setBytes] = useState(-1)
     const [time, setTime] = useState(0)
-    const [error, setError, clearError] = useError("Connection couldn't be established. Retry again!")
+    const [error, setError] = useState()
     const downPercent = Math.round(bytes * 100 / size)
     const isDownloading = bytes >= 0
 
+    const abort = () => writerRef.current?.abort()
+
+    function handleError() {
+        abort()
+        setError("Connection couldn't be established. Retry again!")
+    }
+
     function connect() {
-        let fileName, fileSize, bytes, blob, timeout;
+        let fileSize, bytesReceived, timeout;
         const conn = connection.current = peerRef.current.connect(roomId, { metadata: getStorage('username'), reliable: true })
+        const { createWriteStream } = require('streamsaver')
+
         conn.on('open', () => {
             peerRef.current.off('error')
-            clearError()
             setBytes(-1)
+            setError()
             toast.success('Connection established')
         })
         conn.on('data', async data => {
             const { byteLength, name, size, text, totalSize, type } = data
             if (!type) {
                 setBytes(old => old + byteLength)
-                blob = new Blob([blob, data])
-                if ((bytes += byteLength) !== fileSize) return
-                try {
-                    conn.send({ type: 'next' })
-                    await download(blob, fileName)
-                    toast.success('File downloaded successfully!')
-                } catch { toast.error("Couldn't download file") }
+                writerRef.current.write(new Uint8Array(data))
+                if ((bytesReceived += byteLength) !== fileSize) return
+                conn.send({ type: 'next' })
+                writerRef.current.ready.then(() => writerRef.current.close())
             } else if (type === 'initial') {
-                fileName = name
                 fileSize = size
-                bytes = 0
-                blob = new Blob()
+                bytesReceived = 0
+                const writer = writerRef.current = createWriteStream(name, { size }).getWriter()
+                writer.closed.then(() => toast.success('File downloaded successfully!')).catch(() => toast.error("Couldn't download file"))
             } else if (type === 'details') {
                 setFile(name)
                 setSize(totalSize)
@@ -61,7 +67,7 @@ export default function Id({ router }) {
             }
         })
         conn.on('close', () => {
-            peerRef.current.on('error', setError)
+            peerRef.current.on('error', handleError)
             conn.removeAllListeners()
             toast.error("Peer disconnected")
         })
@@ -69,7 +75,7 @@ export default function Id({ router }) {
             if (state === 'connected') clearTimeout(timeout)
             else if (state === 'disconnected') {
                 timeout = setTimeout(() => {
-                    peerRef.current.on('error', setError)
+                    peerRef.current.on('error', handleError)
                     retry()
                 }, peerOptions.pingInterval * 2)
             }
@@ -90,7 +96,7 @@ export default function Id({ router }) {
         setFile()
         setText()
         setBytes(-1)
-        clearError()
+        setError()
     }
 
     function copy() {
@@ -102,11 +108,16 @@ export default function Id({ router }) {
         const Peer = require("peerjs").default
         const peer = peerRef.current = new Peer(peerOptions)
         peer.on('open', connect)
-        peer.on('error', setError)
+        peer.on('error', handleError)
         peer.on('disconnected', () => peer.reconnect())
+        window.addEventListener('unload', abort)
+        window.addEventListener('popstate', abort)
         return () => {
+            abort()
             peer.removeAllListeners()
             peer.destroy()
+            window.removeEventListener('unload', abort)
+            window.removeEventListener('popstate', abort)
         }
     }, [])
 

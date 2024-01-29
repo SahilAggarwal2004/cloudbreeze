@@ -9,10 +9,7 @@ import { bytesToFraction, bytesToUnit, speed } from '../modules/functions'
 import 'react-circular-progressbar/dist/styles.css';
 import { useFileContext } from '../contexts/ContextProvider'
 
-const reader = typeof FileReader !== "undefined" && new FileReader();
-
-export default function Peer({ data, names, sizes, totalSize }) {
-    const { name, conn } = data
+export default function Peer({ data: { name, conn }, names, sizes, totalSize }) {
     const { files } = useFileContext()
     const [count, setCount] = useState(0)
     const [bytes, setBytes] = useState(0)
@@ -27,6 +24,7 @@ export default function Peer({ data, names, sizes, totalSize }) {
         conn.send({ name: names[count], size, type: 'initial' })
         let bytesSent = 0;
         const channel = conn.dataChannel
+        const reader = new FileReader()
         const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent + chunkSize))
         reader.onload = async ({ target: { result, error } }) => {
             if (error || !conn.open) return readChunk();
@@ -39,18 +37,16 @@ export default function Peer({ data, names, sizes, totalSize }) {
     }
 
     function acceptData({ type }) {
+        setTime(Date.now())
         if (type === 'request') {
             toast.success(`Transferring file(s) to ${name}`)
-            setTime(Date.now())
             sendFile()
         } else if (type === 'next') {
-            setBytes(0)
             setCount(count + 1)
         }
     }
 
     useEffect(() => {
-        conn.on('data', acceptData)
         return () => {
             conn.removeAllListeners()
             conn.close()
@@ -58,12 +54,12 @@ export default function Peer({ data, names, sizes, totalSize }) {
     }, [])
 
     useEffect(() => {
-        if (!count) return
-        conn.off('data')
-        reader.onload = null;
-        if (totalBytes >= totalSize) return
         conn.on('data', acceptData)
-        sendFile()
+        if (count && count < names.length) sendFile()
+        return () => {
+            conn.off('data')
+            setBytes(0)
+        }
     }, [count])
 
     return <div className='relative flex flex-col justify-center p-4 pb-0 border rounded text-center bg-gray-50 hover:bg-transparent hover:shadow-lg transition-all duration-300 min-w-[270px]'>
@@ -73,7 +69,7 @@ export default function Peer({ data, names, sizes, totalSize }) {
             <div className='text-sm md:text-base text-center space-y-1 w-1/2 break-words'>
                 <div>{bytesToFraction(totalBytes, totalSize, unit)} {unit}</div>
                 <div>{count} / {names.length} files transferred</div>
-                {totalBytes !== totalSize && <div>Speed: {speed(totalBytes, totalSize, unit, time)} {unit}/s</div>}
+                <div>Speed: {speed(bytes, size, unit, time)} {unit}/s</div>
             </div>
         </CircularProgressbarWithChildren>
     </div>
