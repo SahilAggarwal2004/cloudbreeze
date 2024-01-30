@@ -58,7 +58,6 @@ export default function FileDownload({ fileIdFromUrl = false }) {
                 toast.success('File(s) downloaded successfully!')
                 if (server) return
                 setDownloadFiles(prev => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt, daysLimit }))
-                fetchApp({ url: `/file/downloaded/${fileId}`, showProgress: false })
             } catch { toast.error("Couldn't download file(s)") }
         }
 
