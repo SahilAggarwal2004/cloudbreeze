@@ -29,7 +29,7 @@ export default function MyApp({ Component, pageProps }) {
             <meta name="theme-color" content="#ffffff" />
             <meta name="keywords"
                 content="cloud, breeze, cloudbreeze, platform, encryption, security, save, share, vercel, reactjs, nextjs, online, online platform, free, access, anywhere, anytime, fast, independent, web app, world, files, password, protected, webrtc, p2p, peer, transfer, file, speed, privacy, friends" />
-            <meta name="description" content="CloudBreeze is an online platform to where you can share files via cloud or p2p between your friends for free. We respect your privacy and that's why we make sure your files are totally encrypted and password protected." />
+            <meta name="description" content="CloudBreeze is an online platform where you can share files via cloud or p2p between your friends for free. We respect your privacy and that's why we make sure your files are totally encrypted and password protected." />
             <link rel='manifest' href='/manifest.json' />
 
             <link rel='preconnect' href={api} />
