@@ -29,7 +29,7 @@
     "utility-kit": "^0.3.4"
   },
   "devDependencies": {
-    "@builder.io/partytown": "^0.9.1",
+    "@builder.io/partytown": "^0.9.2",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
