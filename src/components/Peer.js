@@ -30,7 +30,7 @@ export default function Peer({ data: { name, conn }, names, sizes, totalSize }) 
       if (error || !conn.open) return readChunk();
       while (channel.bufferedAmount > maxBufferSize) await wait(0);
       setBytes(bytesSent);
-      if ((bytesSent += chunkSize) < size) readChunk();
+      if ((bytesSent += result.byteLength) < size) readChunk();
       conn.send(result);
     };
     readChunk();
