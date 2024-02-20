@@ -6,8 +6,8 @@ import { Balancer } from "react-wrap-balancer";
 import { toast } from "react-toastify";
 import BarProgress from "../../components/BarProgress";
 import Loader from "../../components/Loader";
-import { peerOptions } from "../../constants";
-import { bytesToSize, bytesToUnit, speed } from "../../modules/functions";
+import { peerOptions, sizes } from "../../constants";
+import { bytesToUnit, round, speed } from "../../modules/functions";
 import { getStorage } from "../../modules/storage";
 
 export default function Id({ router }) {
@@ -18,7 +18,7 @@ export default function Id({ router }) {
   const [file, setFile] = useState();
   const [size, setSize] = useState(0);
   const [text, setText] = useState();
-  const [unit, setUnit] = useState("B");
+  const [{ symbol, size: unitSize }, setUnit] = useState({});
   const [bytes, setBytes] = useState(-1);
   const [time, setTime] = useState(0);
   const [error, setError] = useState();
@@ -60,7 +60,10 @@ export default function Id({ router }) {
         setFile(name);
         setSize(totalSize);
         setText(text);
-        setUnit(bytesToUnit(totalSize));
+        setUnit(() => {
+          const symbol = bytesToUnit(totalSize);
+          return { symbol, size: sizes[symbol] };
+        });
       } else if (type === "text") {
         setText(text);
         toast.success("Text updated");
@@ -145,7 +148,7 @@ export default function Id({ router }) {
                 <span className="text-right">{file}</span>
                 <span>Size:</span>
                 <span className="text-right">
-                  {bytesToSize(size, size, unit)} {unit}
+                  {round(size / unitSize)} {symbol}
                 </span>
                 <button className="primary-button" disabled={isDownloading} onClick={request}>
                   Download
@@ -155,7 +158,7 @@ export default function Id({ router }) {
                     <BarProgress percent={downPercent} className="col-span-2 max-w-[100%]" />
                     {bytes !== size && (
                       <div className="text-center w-full col-span-2">
-                        Speed: {speed(bytes, size, unit, time)} {unit}/s
+                        Speed: {speed(bytes, unitSize, time)} {symbol}/s
                       </div>
                     )}
                   </>

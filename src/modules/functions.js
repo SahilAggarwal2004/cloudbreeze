@@ -5,7 +5,7 @@ import { sizes } from "../constants";
 const { KB, MB } = sizes;
 const production = process.env.NODE_ENV === "production";
 
-const round = (number, digits = 2) => +number.toFixed(digits);
+export const round = (number, digits = 2) => (digits ? number.toFixed(digits) : Math.floor(number));
 
 export const getUploadUrl = (mode, server) => (production ? `https://cloudbreeze-${mode === "save" ? "upload" : mode}-${server}.onrender.com` : mode === "save" ? "http://localhost:5002" : "") + "/file/upload";
 
@@ -15,11 +15,11 @@ export const getDeleteUrl = (fileId, server) => (server && production ? `https:/
 
 export const bytesToUnit = (bytes) => (bytes >= MB ? "MB" : bytes >= KB ? "KB" : "B");
 
-export const bytesToSize = (bytes, max, unit) => round(bytes / sizes[unit], bytes === max ? 2 : 0);
+export const bytesToSize = (bytes, max, unitSize) => round(bytes / unitSize, bytes === max ? 2 : 0);
 
-export const bytesToFraction = (bytes, max, unit) => `${bytesToSize(bytes, max, unit)} / ${bytesToSize(max, max, unit)}`;
+export const bytesToFraction = (bytes, max, unitSize) => `${bytesToSize(bytes, max, unitSize)} / ${round(max / unitSize)}`;
 
-export const speed = (bytes, max, unit, startTime = 0) => round((bytesToSize(bytes, max, unit) / (Date.now() - startTime || 1)) * 1000);
+export const speed = (bytes, unitSize, startTime = 0) => round((bytes * 1000) / (unitSize * (Date.now() - startTime || 1)));
 
 export function relativeTime(minutes) {
   let result = "";
