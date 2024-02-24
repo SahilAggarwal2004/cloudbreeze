@@ -15,10 +15,10 @@ export default function Forgot({ router }) {
   async function submit(e) {
     e.preventDefault();
     if (!stage) {
-      const { success, error } = await fetchApp({ url: "auth/otp", method: "POST", data: { email: email.current.value } });
+      const { success, error } = await fetchApp({ url: "auth/otp", method: "POST", body: { email: email.current.value } });
       if (success || error === "OTP already sent!") setStage(1);
     } else {
-      const { success } = await fetchApp({ url: "auth/forgot", method: "PUT", data: { email: email.current.value, otp: otp.current.value, password: password.current.value } });
+      const { success } = await fetchApp({ url: "auth/forgot", method: "PUT", body: { email: email.current.value, otp: otp.current.value, password: password.current.value } });
       if (success) router.push("/account/login");
     }
   }

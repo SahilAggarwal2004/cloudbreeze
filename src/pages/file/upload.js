@@ -68,24 +68,24 @@ export default function Upload({ router }) {
     e.preventDefault();
     if (mode === "save" && fileDetails(files).totalSize > cloudLimit) return toast.warning(`File size must not exceed ${cloudLimitMB}MB`);
     setProgress(0);
-    const data = new FormData();
-    for (const file of files) data.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
-    data.append("length", length);
+    const body = new FormData();
+    for (const file of files) body.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
+    body.append("length", length);
     const nameList = Array.from(files).map(({ name }) => name);
     if ((fileId = fileIdRef.current.value)) {
       if (unavailable.includes(fileId)) {
         toast.warning(`File Id cannot be ${fileId}`);
         return setProgress(-1);
       }
-      data.append("fileId", fileId);
+      body.append("fileId", fileId);
     }
-    if (length > 1) data.append("nameList", nameList);
-    if (password.current.value) data.append("password", password.current.value);
-    if (daysLimit.current?.value) data.append("daysLimit", daysLimit.current.value);
-    if (downloadLimit.current.value) data.append("downloadLimit", downloadLimit.current.value);
+    if (length > 1) body.append("nameList", nameList);
+    if (password.current.value) body.append("password", password.current.value);
+    if (daysLimit.current?.value) body.append("daysLimit", daysLimit.current.value);
+    if (downloadLimit.current.value) body.append("downloadLimit", downloadLimit.current.value);
 
     if (mode === "save") {
-      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", data: { fileId } });
+      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId } });
       if (!verified) return setProgress(-1);
     } else {
       servers = Array.from(Array(process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT).keys());
@@ -100,7 +100,7 @@ export default function Upload({ router }) {
       var { fileId, name, success } = await fetchApp({
         url: getUploadUrl(mode, server),
         method: "POST",
-        data,
+        body,
         type: "multipart/form-data",
         token,
         showToast: servers.length === 1 || "success",

@@ -35,13 +35,13 @@ export default function ContextProvider({ children, router }) {
     setDownloadFiles([]);
   }
 
-  async function fetchApp({ url, token, method = "GET", type = "application/json", data = {}, options = {}, showToast = true, showProgress = true }) {
+  async function fetchApp({ url, token, method = "GET", type = "application/json", body = {}, options = {}, showToast = true, showProgress = true }) {
     try {
       if (showProgress) setProgress(100 / 3);
       var { data } = await axios({
         url,
         method,
-        data,
+        data: body,
         ...options,
         headers: {
           "Content-Type": type,
