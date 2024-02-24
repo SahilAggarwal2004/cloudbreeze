@@ -38,7 +38,7 @@ export default function ContextProvider({ children, router }) {
   async function fetchApp({ url, token, method = "GET", type = "application/json", data = {}, options = {}, showToast = true, showProgress = true }) {
     try {
       if (showProgress) setProgress(100 / 3);
-      const response = await axios({
+      var { data } = await axios({
         url,
         method,
         data,
@@ -50,20 +50,17 @@ export default function ContextProvider({ children, router }) {
           guest: getStorage("guest"),
         },
       });
-      if (showProgress) setProgress(100);
-      var json = response.data;
-      if (showToast) toast.success(json.msg);
-    } catch (err) {
-      if (showProgress) setProgress(100);
-      if (!json) {
-        const error = err.response?.data?.error || "Please check your internet connectivity";
-        json = { success: false, error };
-        const authenticationError = error.toLowerCase().includes("session expired");
+      if (showToast) toast.success(data.msg);
+    } catch (error) {
+      if (!data) {
+        data = error.response?.data || { success: false, error: "Please check your internet connectivity" };
+        const authenticationError = data.error.toLowerCase().includes("session expired");
         if (authenticationError) logout("redirect");
-        if (authenticationError || showToast === true) toast.error(error);
+        if (showToast === true || authenticationError) toast.error(error);
       }
     }
-    return json;
+    if (showProgress) setProgress(100);
+    return data;
   }
 
   function clearHistory(fileId, filter) {
