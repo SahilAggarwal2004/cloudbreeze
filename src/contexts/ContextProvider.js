@@ -56,7 +56,7 @@ export default function ContextProvider({ children, router }) {
         data = error.response?.data || { success: false, error: "Please check your internet connectivity" };
         const authenticationError = data.error.toLowerCase().includes("session expired");
         if (authenticationError) logout("redirect");
-        if (showToast === true || authenticationError) toast.error(error);
+        if (showToast === true || authenticationError) toast.error(data.error);
       }
     }
     if (showProgress) setProgress(100);
