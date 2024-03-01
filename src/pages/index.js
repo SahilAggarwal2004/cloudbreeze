@@ -16,7 +16,7 @@ export default function Home({ router }) {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row sm:flex-wrap text-center mx-[5vw] mb-10 gap-x-8 gap-y-10 items-center sm:justify-center sm:min-h-[calc(100vh-11rem)]">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap text-center mx-[5vw] mb-10 gap-8 items-center sm:justify-center sm:min-h-[calc(100vh-11rem)]">
         <div className="image-container" onClick={() => redirect("/account")} onContextMenu={(e) => e.preventDefault()}>
           <img src="/images/account.webp" alt="" className="min-h-full aspect-square scale-90" />
           <div className="x-center bottom-4">Your account</div>

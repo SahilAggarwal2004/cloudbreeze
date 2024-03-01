@@ -36,7 +36,7 @@ export default function MyApp({ Component, pageProps }) {
 
         <link rel="preconnect" href={api} />
 
-        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src *; worker-src 'self' blob:; frame-src 'self' https://jimmywarting.github.io/" />
+        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; img-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src *; worker-src 'self' blob:; frame-src 'self' https://jimmywarting.github.io/" />
 
         <meta name="google-site-verification" content="5_rdfkDpTLo7tXDzIkEfmQb1wH_0AmpbcQOAPhLNBLQ" />
 
@@ -179,7 +179,7 @@ export default function MyApp({ Component, pageProps }) {
             {!hideNavbar.includes(router.pathname) && <Navbar />}
             <Component {...pageProps} />
             {showModal.includes(router.pathname) && <Modal />}
-            <ToastContainer stacked autoClose={3000} pauseOnFocusLoss={false} position="bottom-right" />
+            <ToastContainer stacked autoClose={3000} pauseOnFocusLoss={false} position="bottom-right" style={{ marginBottom: "2rem" }} />
           </>
         )}
       </ContextProvider>
