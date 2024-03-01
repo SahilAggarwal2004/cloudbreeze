@@ -46,3 +46,7 @@
 ::-webkit-scrollbar-thumb {
     background-color: rgb(128, 128, 128, 0.75);
 }
+
+.adsbygoogle {
+    z-index: 0;
+}
