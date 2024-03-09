@@ -179,7 +179,7 @@ export default function MyApp({ Component, pageProps }) {
             {!hideNavbar.includes(router.pathname) && <Navbar />}
             <Component {...pageProps} />
             {showModal.includes(router.pathname) && <Modal />}
-            <ToastContainer stacked autoClose={3000} pauseOnFocusLoss={false} position="bottom-right" style={{ marginBottom: "2rem" }} />
+            <ToastContainer stacked autoClose={3000} pauseOnFocusLoss={false} position="bottom-right" />
           </>
         )}
       </ContextProvider>

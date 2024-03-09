@@ -37,7 +37,7 @@ export default function Navbar() {
           </Link>
         </div>
       </nav>
-      <div className="h-7" />
+      <div className="h-10" />
     </>
   );
 }
