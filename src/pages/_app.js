@@ -171,7 +171,7 @@ export default function MyApp({ Component, pageProps }) {
       </Script>
 
       {/* Google adsense */}
-      <Script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8121166207556471" strategy="worker" crossOrigin="anonymous" />
+      {/* <Script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8121166207556471" strategy="worker" crossOrigin="anonymous" /> */}
 
       <ContextProvider router={router}>
         {!loading && router.isReady && (
