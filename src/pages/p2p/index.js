@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import Head from "next/head";
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import Head from "next/head";
+import Textarea from "react-textarea-autosize";
 import { FaQrcode } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Info from "../../components/Info";
@@ -125,7 +126,7 @@ export default function P2p({ router }) {
             <label htmlFor="text" className="self-start pt-1 sm:pt-0.5">
               Text:{" "}
             </label>
-            <textarea id="text" className="border rounded px-2 py-0.5 placeholder:text-sm" placeholder="Text / Description (Optional)" rows="3" onChange={(e) => setText(e.target.value)} />
+            <Textarea id="text" minRows={3} maxRows={20} className="border rounded px-2 py-0.5 placeholder:text-sm" placeholder="Text / Description (Optional)" onChange={(e) => setText(e.target.value)} />
             <label htmlFor="room-id">Room Id: </label>
             <input type="text" id="room-id" ref={shareRoom} onInput={verifyRoomId} disabled={disable} className="border rounded px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />
             {link ? (
