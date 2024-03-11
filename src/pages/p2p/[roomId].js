@@ -1,14 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
-import { FaCopy } from "react-icons/fa";
-import { Balancer } from "react-wrap-balancer";
 import { toast } from "react-toastify";
 import BarProgress from "../../components/BarProgress";
 import Loader from "../../components/Loader";
 import { peerOptions, sizes } from "../../constants";
 import { bytesToUnit, round, speed } from "../../modules/functions";
 import { getStorage } from "../../modules/storage";
+import Text from "../../components/Text";
 
 export default function Id({ router }) {
   const { roomId } = router.query;
@@ -102,11 +101,6 @@ export default function Id({ router }) {
     setError();
   }
 
-  function copy() {
-    navigator.clipboard.writeText(text);
-    toast.success("Text copied to clipboard!");
-  }
-
   useEffect(() => {
     const Peer = require("peerjs").default;
     const peer = (peerRef.current = new Peer(peerOptions));
@@ -166,17 +160,7 @@ export default function Id({ router }) {
               </div>
             </div>
           )}
-          {text && (
-            <div className="flex flex-col items-center px-3 text-justify space-y-1">
-              <div className="flex items-center space-x-2">
-                <span className="text-lg font-medium">Text</span>
-                <FaCopy className="cursor-pointer" onClick={copy} />
-              </div>
-              <div className="whitespace-pre-line" style={{ wordBreak: "break-word" }}>
-                <Balancer>{text}</Balancer>
-              </div>
-            </div>
-          )}
+          {text && <Text id={roomId} text={text} />}
         </div>
       )}
     </>
