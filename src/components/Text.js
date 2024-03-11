@@ -37,7 +37,7 @@ export default function Text({ id, text }) {
   }
 
   return (
-    <div className="flex flex-col items-center px-4 text-justify space-y-1">
+    <div className="flex flex-col items-center px-4 text-justify space-y-2.5">
       <div className="flex justify-around w-[80vw] max-w-60">
         <span className="text-lg font-medium">Text</span>
         <div className="flex items-center space-x-2">

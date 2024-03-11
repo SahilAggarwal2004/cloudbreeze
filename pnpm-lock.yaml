@@ -48,8 +48,8 @@ dependencies:
     specifier: ^2.0.12
     version: 2.0.12(react@18.2.0)
   react-text-to-speech:
-    specifier: ^0.9.2
-    version: 0.9.2(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.9.3
+    version: 0.9.3(react-dom@18.2.0)(react@18.2.0)
   react-toastify:
     specifier: ^10.0.4
     version: 10.0.4(react-dom@18.2.0)(react@18.2.0)
@@ -3820,8 +3820,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-text-to-speech@0.9.2(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-H/KH9rDM7V1/EYX75MYb4Hx8rBHI0pzpty6bVSkdrFvLjh1CLriFAOn0yHZ5uSVZXLLU25tzIsa04XEbcyvqEw==}
+  /react-text-to-speech@0.9.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-vI2gpyr5cdU/VAbC9BGwWU4M2n8ClOJ0m6x47fe+G2A8x3wgOvBwrRRyHeTwBpxP0AnoPTJFlHggAS6UdraCbw==}
     peerDependencies:
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
