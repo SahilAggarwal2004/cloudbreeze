@@ -5,6 +5,7 @@ import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
 import { useSpeech } from "react-text-to-speech";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeReact from "rehype-react";
 import parse from "html-react-parser";
 import { toast } from "react-toastify";
 
@@ -16,7 +17,7 @@ export default function Text({ id, text }) {
         {markdown ? (
           parse(markdown)
         ) : (
-          <Markdown className={`markdown-${id}`} remarkPlugins={[remarkGfm]}>
+          <Markdown className={`markdown-${id}`} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeReact]}>
             {text}
           </Markdown>
         )}

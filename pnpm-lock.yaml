@@ -59,6 +59,9 @@ dependencies:
   react-top-loading-bar:
     specifier: ^2.3.1
     version: 2.3.1(react@18.2.0)
+  rehype-react:
+    specifier: ^8.0.0
+    version: 8.0.0
   remark-gfm:
     specifier: ^4.0.0
     version: 4.0.0
@@ -3915,6 +3918,16 @@ packages:
       define-properties: 1.2.1
       set-function-name: 2.0.1
     dev: true
+
+  /rehype-react@8.0.0:
+    resolution: {integrity: sha512-vzo0YxYbB2HE+36+9HWXVdxNoNDubx63r5LBzpxBGVWM8s9mdnMdbmuJBAX6TTyuGdZjZix6qU3GcSuKCIWivw==}
+    dependencies:
+      '@types/hast': 3.0.4
+      hast-util-to-jsx-runtime: 2.3.0
+      unified: 11.0.4
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /remark-gfm@4.0.0:
     resolution: {integrity: sha512-U92vJgBPkbw4Zfu/IiW2oTZLSL3Zpv+uI7My2eq8JxKgqraFdU8YUGicEJCEgSbeaG+QDFqIcwwfMTOEelPxuA==}

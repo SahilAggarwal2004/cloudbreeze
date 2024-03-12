@@ -23,10 +23,8 @@ const accounts = [
   { username: "de634c5368a4108018a3592d", credential: "HAvcyZqALRzC7EFG" },
 ];
 export const peerOptions = {
-  host: "localhost",
-  port: 5001,
-  // host: "cloudbreeze-peer.onrender.com",
-  // secure: true,
+  host: "cloudbreeze-peer.onrender.com",
+  secure: true,
   pingInterval: 5000,
   config: {
     iceServers: [
