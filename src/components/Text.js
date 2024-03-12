@@ -3,10 +3,8 @@ import { useLayoutEffect, useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
 import { useSpeech } from "react-text-to-speech";
-import { Balancer } from "react-wrap-balancer";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
 import parse from "html-react-parser";
 import { toast } from "react-toastify";
 
@@ -18,13 +16,14 @@ export default function Text({ id, text }) {
         {markdown ? (
           parse(markdown)
         ) : (
-          <Markdown className={`markdown-${id}`} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+          <Markdown className={`markdown-${id}`} remarkPlugins={[remarkGfm]}>
             {text}
           </Markdown>
         )}
       </div>
     ),
     highlightText: true,
+    highlightProps: { style: { backgroundColor: "yellow", color: "black" } },
   });
 
   useLayoutEffect(() => {
@@ -42,7 +41,7 @@ export default function Text({ id, text }) {
   }
 
   return (
-    <div className="flex flex-col items-center px-4 sm:px-5 md:px-6 text-justify space-y-2.5">
+    <div className="flex flex-col items-center px-4 sm:px-5 md:px-6 text-justify space-y-3">
       <div className="flex justify-around w-[80vw] max-w-60">
         <span className="text-lg font-medium">Text</span>
         <div className="flex items-center space-x-2">
@@ -53,9 +52,7 @@ export default function Text({ id, text }) {
         </div>
       </div>
       <div className="whitespace-pre-line max-w-full overflow-x-scroll" style={{ wordBreak: "break-word" }}>
-        <Balancer>
-          <Text />
-        </Balancer>
+        <Text />
       </div>
     </div>
   );
