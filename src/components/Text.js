@@ -6,6 +6,7 @@ import { useSpeech } from "react-text-to-speech";
 import { Balancer } from "react-wrap-balancer";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import parse from "html-react-parser";
 import { toast } from "react-toastify";
 
@@ -17,7 +18,7 @@ export default function Text({ id, text }) {
         {markdown ? (
           parse(markdown)
         ) : (
-          <Markdown className={`markdown-${id}`} remarkPlugins={[remarkGfm]}>
+          <Markdown className={`markdown-${id}`} remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
             {text}
           </Markdown>
         )}

@@ -28,6 +28,7 @@
     "react-toastify": "^10.0.4",
     "react-top-loading-bar": "^2.3.1",
     "react-wrap-balancer": "^1.1.0",
+    "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
     "streamsaver": "^2.0.6",
     "unzipit": "^1.4.3",
