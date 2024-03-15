@@ -51,7 +51,7 @@ export default function Text({ id, text }) {
           <button className="scale-125">{speechStatus === "started" ? <HiVolumeOff onClick={stop} /> : <HiVolumeUp onClick={start} />}</button>
         </div>
       </div>
-      <div className="whitespace-pre-line max-w-full overflow-x-scroll" style={{ wordBreak: "break-word" }}>
+      <div className="whitespace-pre-line max-w-full overflow-x-scroll">
         <Text />
       </div>
     </div>
