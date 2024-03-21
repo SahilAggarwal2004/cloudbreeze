@@ -66,11 +66,11 @@ export default function Peer({ data: { name, conn }, names, sizes, totalSize }) 
   }, [count]);
 
   return (
-    <div className="relative flex flex-col justify-center p-4 pb-0 border rounded text-center bg-gray-50 hover:bg-transparent hover:shadow-lg transition-all duration-300 min-w-[270px]">
-      <FaXmark className="absolute top-2 right-2 scale-110" onClick={() => conn.close()} />
+    <div className="relative flex min-w-[270px] flex-col justify-center rounded border bg-gray-50 p-4 pb-0 text-center transition-all duration-300 hover:bg-transparent hover:shadow-lg">
+      <FaXmark className="absolute right-2 top-2 scale-110" onClick={() => conn.close()} />
       <h4 className="font-medium">{name}</h4>
       <CircularProgressbarWithChildren value={bytes} maxValue={size} strokeWidth={2.5} className="scale-75" styles={{ path: { stroke: "#48BB6A" } }}>
-        <div className="text-sm md:text-base text-center space-y-1 w-1/2 break-words">
+        <div className="w-1/2 space-y-1 break-words text-center text-sm md:text-base">
           <div>
             {bytesToFraction(totalBytes, totalSize, unitSize)} {symbol}
           </div>

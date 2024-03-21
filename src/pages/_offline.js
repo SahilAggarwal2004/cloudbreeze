@@ -6,8 +6,8 @@ export default function Offline() {
       <Head>
         <title>You are Offline!</title>
       </Head>
-      <div className="w-screen h-screen flex justify-center items-center inset-0 fixed z-20">
-        <div className="text-center px-4 font-sans space-y-2">
+      <div className="fixed inset-0 z-20 flex h-screen w-screen items-center justify-center">
+        <div className="space-y-2 px-4 text-center font-sans">
           <h1 className="text-3xl">Offline...</h1>
           <p>{"The current page isn't available offline. Please try again when you're back online."}</p>
         </div>

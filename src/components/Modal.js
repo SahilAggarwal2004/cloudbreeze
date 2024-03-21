@@ -35,17 +35,17 @@ export default function Modal() {
 
   return (
     <>
-      <div className={`${active ? "bg-opacity-50" : "invisible bg-opacity-0"} bg-black fixed inset-0 transition-all duration-700 z-40`} onClick={handleCancel} />
-      <div className={`z-50 w-max max-w-[90vw] max-h-[98vh] overflow-y-auto center text-center bg-white rounded-md py-4 ${type === "showFile" ? "px-1" : type === "qrScanner" ? "px-0" : "px-3"} ${active ? "opacity-100" : "hidden"}`}>
+      <div className={`${active ? "bg-opacity-50" : "invisible bg-opacity-0"} fixed inset-0 z-40 bg-black transition-all duration-700`} onClick={handleCancel} />
+      <div className={`center z-50 max-h-[98vh] w-max max-w-[90vw] overflow-y-auto rounded-md bg-white py-4 text-center ${type === "showFile" ? "px-1" : type === "qrScanner" ? "px-0" : "px-3"} ${active ? "opacity-100" : "hidden"}`}>
         {type === "deleteUser" ? (
           <div>
             <h3 className="font-bold">Delete account?</h3>
-            <p className="text-red-600 text-sm">This action is irreversible</p>
-            <div className="space-x-4 mt-6 text-sm">
-              <button className="py-1 px-3 rounded border button-animation" onClick={deleteUser}>
+            <p className="text-sm text-red-600">This action is irreversible</p>
+            <div className="mt-6 space-x-4 text-sm">
+              <button className="button-animation rounded border px-3 py-1" onClick={deleteUser}>
                 Yes
               </button>
-              <button className="py-1 px-3 rounded border button-animation" onClick={handleCancel}>
+              <button className="button-animation rounded border px-3 py-1" onClick={handleCancel}>
                 No
               </button>
             </div>
@@ -53,12 +53,12 @@ export default function Modal() {
         ) : type === "deleteFile" ? (
           <div>
             <h3 className="font-bold">Delete file?</h3>
-            <p className="text-red-600 text-sm">This action is irreversible</p>
-            <div className="space-x-4 mt-6 text-sm">
-              <button className="py-1 px-3 rounded border button-animation" onClick={() => deleteFile(fileId)}>
+            <p className="text-sm text-red-600">This action is irreversible</p>
+            <div className="mt-6 space-x-4 text-sm">
+              <button className="button-animation rounded border px-3 py-1" onClick={() => deleteFile(fileId)}>
                 Yes
               </button>
-              <button className="py-1 px-3 rounded border button-animation" onClick={handleCancel}>
+              <button className="button-animation rounded border px-3 py-1" onClick={handleCancel}>
                 No
               </button>
             </div>

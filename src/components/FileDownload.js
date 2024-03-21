@@ -88,19 +88,19 @@ export default function FileDownload({ fileIdFromUrl = false }) {
   }
 
   return (
-    <div className="flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base">
-      <form onSubmit={submit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
+    <div className="flex flex-col items-center justify-center space-y-5 px-4 pb-5 text-sm sm:text-base">
+      <form onSubmit={submit} className="grid grid-cols-[auto_1fr] items-center gap-3">
         {!fileIdFromUrl && (
           <>
             <label htmlFor="fileId">File Id or Link:</label>
-            <input type="text" id="fileId" ref={fileRef} className="border rounded px-2 py-0.5" required autoComplete="off" />
+            <input type="text" id="fileId" ref={fileRef} className="rounded border px-2 py-0.5" required autoComplete="off" />
           </>
         )}
         <label htmlFor="password">Password (if any):</label>
-        <input type="password" id="password" ref={password} className="border rounded px-2 py-0.5" autoComplete="new-password" />
-        <label className="col-span-2 relative inline-flex items-center cursor-pointer place-self-center">
-          <input type="checkbox" checked={unzipFile} className="sr-only peer" onChange={() => setUnzip((prev) => !prev)} />
-          <div className="w-[2.3125rem] h-[1.3125rem] bg-gray-200 rounded-full peer peer-focus:ring-2 peer-focus:ring-gray-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2.5px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-black" />
+        <input type="password" id="password" ref={password} className="rounded border px-2 py-0.5" autoComplete="new-password" />
+        <label className="relative col-span-2 inline-flex cursor-pointer items-center place-self-center">
+          <input type="checkbox" checked={unzipFile} className="peer sr-only" onChange={() => setUnzip((prev) => !prev)} />
+          <div className="peer relative h-[1.3125rem] w-[2.3125rem] rounded-full bg-gray-200 after:absolute after:left-[9%] after:top-[10%] after:aspect-square after:h-[78%] after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-black peer-checked:after:translate-x-[90%] peer-checked:after:border-white peer-focus:ring-2 peer-focus:ring-gray-300" />
           <span className="ml-3 text-sm">Extract files</span>
         </label>
         <div className="col-span-2 text-center text-xs sm:text-sm">
@@ -118,8 +118,8 @@ export default function FileDownload({ fileIdFromUrl = false }) {
       ) : (
         !fileIdFromUrl && (
           <div className="text-center">
-            <div className="font-bold mb-3">OR</div>
-            <div className="cursor-pointer select-none font-medium text-gray-800 flex justify-center items-center space-x-1" onClick={() => setModal({ active: true, type: "qrScanner" })}>
+            <div className="mb-3 font-bold">OR</div>
+            <div className="flex cursor-pointer select-none items-center justify-center space-x-1 font-medium text-gray-800" onClick={() => setModal({ active: true, type: "qrScanner" })}>
               <FaQrcode />
               <span>Scan a QR Code</span>
             </div>

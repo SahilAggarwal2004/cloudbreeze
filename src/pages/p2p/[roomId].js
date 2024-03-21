@@ -126,7 +126,7 @@ export default function Id({ router }) {
       {error ? (
         <div className="center space-y-5 text-center">
           <h3 className="text-lg">{error}</h3>
-          <button className="mt-1 py-1 px-2 rounded-md border-[1.5px] border-black text-white bg-black hover:text-black hover:bg-white transition-all duration-300" onClick={() => retry(true)}>
+          <button className="mt-1 rounded-md border-[1.5px] border-black bg-black px-2 py-1 text-white transition-all duration-300 hover:bg-white hover:text-black" onClick={() => retry(true)}>
             Retry
           </button>
         </div>
@@ -136,8 +136,8 @@ export default function Id({ router }) {
         <div className="mb-[4.5rem] space-y-8" style={{ wordBreak: "break-word" }}>
           {file && (
             <div className="flex justify-center">
-              <div className="w-max min-w-[90vw] sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw] max-w-full grid grid-cols-[auto_1fr] gap-2 px-3">
-                <span className="text-lg font-medium col-span-2 text-center">Files</span>
+              <div className="grid w-max min-w-[90vw] max-w-full grid-cols-[auto_1fr] gap-2 px-3 sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw]">
+                <span className="col-span-2 text-center text-lg font-medium">Files</span>
                 <span>File:</span>
                 <span className="text-right">{file}</span>
                 <span>Size:</span>
@@ -151,7 +151,7 @@ export default function Id({ router }) {
                   <>
                     <BarProgress percent={downPercent} className="col-span-2 max-w-[100%]" />
                     {bytes !== size && (
-                      <div className="text-center w-full col-span-2">
+                      <div className="col-span-2 w-full text-center">
                         Speed: {speed(bytes, unitSize, time)} {symbol}/s
                       </div>
                     )}

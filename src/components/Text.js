@@ -41,8 +41,8 @@ export default function Text({ id, text }) {
   }
 
   return (
-    <div className="flex flex-col items-center px-4 sm:px-5 md:px-6 text-justify space-y-3">
-      <div className="flex justify-around w-[80vw] max-w-60">
+    <div className="flex flex-col items-center space-y-3 px-4 text-justify sm:px-5 md:px-6">
+      <div className="flex w-[80vw] max-w-60 justify-around">
         <span className="text-lg font-medium">Text</span>
         <div className="flex items-center space-x-2">
           <button>
@@ -51,7 +51,7 @@ export default function Text({ id, text }) {
           <button className="scale-125">{speechStatus === "started" ? <HiVolumeOff onClick={stop} /> : <HiVolumeUp onClick={start} />}</button>
         </div>
       </div>
-      <div className="whitespace-pre-line max-w-full overflow-x-scroll">
+      <div className="max-w-full overflow-x-scroll whitespace-pre-line">
         <Text />
       </div>
     </div>

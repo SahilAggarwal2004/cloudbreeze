@@ -138,32 +138,32 @@ export default function Upload({ router }) {
           { value: "transfer", label: "Transfer file" },
         ]}
       />
-      <div className="flex flex-col space-y-5 justify-center items-center px-4 pb-5 text-sm sm:text-base">
-        <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] gap-3 items-center">
+      <div className="flex flex-col items-center justify-center space-y-5 px-4 pb-5 text-sm sm:text-base">
+        <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] items-center gap-3">
           <label htmlFor="files">File(s):</label>
           {share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div> : <input type="file" id="files" ref={filesRef} onChange={updateFile} disabled={isUploading} required multiple />}
 
           <label htmlFor="file-id">File Id: </label>
-          <input type="text" id="file-id" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="border rounded px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />
+          <input type="text" id="file-id" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />
 
           <label htmlFor="password">Password:</label>
-          <input type="password" id="password" ref={password} disabled={isUploading} className="border rounded px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
+          <input type="password" id="password" ref={password} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
 
           {mode === "save" && (
             <>
               <label htmlFor="days-limit">Days Limit:</label>
-              <input type="number" id="days-limit" ref={daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="border rounded px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={1} max={maxDaysLimit} />
+              <input type="number" id="days-limit" ref={daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={1} max={maxDaysLimit} />
             </>
           )}
 
           <label htmlFor="download-limit">Download Limit:</label>
-          <input type="number" id="download-limit" ref={downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className="border rounded px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="No limit" min={1} />
+          <input type="number" id="download-limit" ref={downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="No limit" min={1} />
 
           <button type="submit" disabled={isUploading} className="primary-button">
             Upload
           </button>
           {isUploaded && (
-            <button type="reset" className="col-span-2 py-1 border border-black rounded bg-gray-100 font-medium text-gray-800" onClick={reset}>
+            <button type="reset" className="col-span-2 rounded border border-black bg-gray-100 py-1 font-medium text-gray-800" onClick={reset}>
               Reset
             </button>
           )}
