@@ -100,7 +100,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         <input type="password" id="password" ref={password} className="rounded border px-2 py-0.5" autoComplete="new-password" />
         <label className="relative col-span-2 inline-flex cursor-pointer items-center place-self-center">
           <input type="checkbox" checked={unzipFile} className="peer sr-only" onChange={() => setUnzip((prev) => !prev)} />
-          <div className="peer relative flex h-[1.3125rem] w-[2.3125rem] items-center rounded-full bg-gray-200 after:absolute after:left-[9%] after:aspect-square after:w-[41%] after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-black peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-2 peer-focus:ring-gray-300" />
+          <div className="peer relative flex aspect-[1.8] w-9 items-center rounded-full bg-gray-200 after:absolute after:left-[8%] after:aspect-square after:w-[42%] after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-black peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-2 peer-focus:ring-gray-300" />
           <span className="ml-3 text-sm">Extract files</span>
         </label>
         <div className="col-span-2 text-center text-xs sm:text-sm">
