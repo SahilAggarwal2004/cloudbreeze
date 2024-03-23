@@ -48,8 +48,8 @@ dependencies:
     specifier: ^2.0.12
     version: 2.0.12(react@18.2.0)
   react-text-to-speech:
-    specifier: ^0.12.1
-    version: 0.12.1(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.12.3
+    version: 0.12.3(react-dom@18.2.0)(react@18.2.0)
   react-textarea-autosize:
     specifier: ^8.5.3
     version: 8.5.3(@types/react@18.2.64)(react@18.2.0)
@@ -65,6 +65,9 @@ dependencies:
   streamsaver:
     specifier: ^2.0.6
     version: 2.0.6
+  tts-react:
+    specifier: ^3.0.6
+    version: 3.0.6(react-dom@18.2.0)(react@18.2.0)
   unzipit:
     specifier: ^1.4.3
     version: 1.4.3
@@ -3883,8 +3886,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-text-to-speech@0.12.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-J3qVD/Wl4rzCCMSa0vOCuJdwY+7sXJSMvowMf30qL1g45TgEJ/yyOGumbgECk6xYKGNTLx4BRdGX4feEnihyAw==}
+  /react-text-to-speech@0.12.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-hR/a4RI8X1NtGUsGOm/3ngvn+jsGYDsuWHEZ3A3XqQDIQXG/Q1mXyIrDlvXZg6p2JN5umFwG3uLDhqYh3U1Qcw==}
     peerDependencies:
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
@@ -4545,6 +4548,17 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+    dev: false
+
+  /tts-react@3.0.6(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-r8WYOihMEdS6apoQFJ6iVf+pDxc77Z6cWRcC1DQ8tHRcarEZ1VDEA29mnvjN1AhQNflIhtp5qYTz/0/iJWjsjA==}
+    engines: {node: '>=18.16.0', npm: '>=9.5.1'}
+    peerDependencies:
+      react: '>=17.0.0'
+      react-dom: '>=17.0.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /type-check@0.4.0:

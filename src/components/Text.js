@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useMemo, useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
 import { useSpeech } from "react-text-to-speech";
@@ -10,8 +10,8 @@ import { toast } from "react-toastify";
 
 export default function Text({ id, text }) {
   const [markdown, setMarkdown] = useState("");
-  const { Text, speechStatus, start, stop } = useSpeech({
-    text: (
+  const memoizedText = useMemo(
+    () => (
       <div className="markdown">
         {markdown ? (
           parse(markdown)
@@ -22,6 +22,10 @@ export default function Text({ id, text }) {
         )}
       </div>
     ),
+    [text, markdown],
+  );
+  const { Text, speechStatus, start, stop } = useSpeech({
+    text: memoizedText,
     highlightText: true,
     highlightProps: { style: { backgroundColor: "yellow", color: "black" } },
   });
