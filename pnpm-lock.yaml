@@ -48,8 +48,8 @@ dependencies:
     specifier: ^2.0.12
     version: 2.0.12(react@18.2.0)
   react-text-to-speech:
-    specifier: ^0.12.9
-    version: 0.12.9(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.12.10
+    version: 0.12.10(react-dom@18.2.0)(react@18.2.0)
   react-textarea-autosize:
     specifier: ^8.5.3
     version: 8.5.3(@types/react@18.2.64)(react@18.2.0)
@@ -69,8 +69,8 @@ dependencies:
     specifier: ^1.4.3
     version: 1.4.3
   utility-kit:
-    specifier: ^0.3.5
-    version: 0.3.5
+    specifier: 0.3.7
+    version: 0.3.7
 
 devDependencies:
   '@builder.io/partytown':
@@ -3907,8 +3907,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-text-to-speech@0.12.9(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-USs+A9pT4myyO4QkQu2YaA3zxvJYA3toWEsO9VGFrN+H41SrvThzgjXmve36gQCL4FL+8VlS0zkTNXrqnyH9YQ==}
+  /react-text-to-speech@0.12.10(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-E8vH6ZcZxSbtOBKK9CAM8EgDw9h0jStg8uYEmeP+wF28QgK0mxfAj/eLuvVFb13Mi/qVR6R4aFB1Hc+lZjat/w==}
     peerDependencies:
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
@@ -4764,8 +4764,8 @@ packages:
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  /utility-kit@0.3.5:
-    resolution: {integrity: sha512-DpIP2EzUWMSUgggQk4gXynXl/xT+CV4ujfuNQyWst4Cq5bQtl3LzhQSu4gxxuFa1ftA6oFAEt1eSA0Nw7/OHTg==}
+  /utility-kit@0.3.7:
+    resolution: {integrity: sha512-c0XA8+uyYSGYhQQcxN0eerDJ3K1qDWNqxW9i1A7Nf0UuIfzd+gcRmtAnQN7Dc4oAV6IVJnHlzbNJ6eSppaLosw==}
     dev: false
 
   /uzip-module@1.0.3:
