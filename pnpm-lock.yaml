@@ -15,8 +15,8 @@ dependencies:
     specifier: ^1.6.8
     version: 1.6.8
   html-react-parser:
-    specifier: ^5.1.9
-    version: 5.1.9(@types/react@18.2.64)(react@18.2.0)
+    specifier: ^5.1.10
+    version: 5.1.10(@types/react@18.2.64)(react@18.2.0)
   megajs:
     specifier: ^1.1.8
     version: 1.1.8
@@ -48,8 +48,8 @@ dependencies:
     specifier: ^2.0.12
     version: 2.0.12(react@18.2.0)
   react-text-to-speech:
-    specifier: ^0.12.7
-    version: 0.12.7(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.12.9
+    version: 0.12.9(react-dom@18.2.0)(react@18.2.0)
   react-textarea-autosize:
     specifier: ^8.5.3
     version: 8.5.3(@types/react@18.2.64)(react@18.2.0)
@@ -77,8 +77,8 @@ devDependencies:
     specifier: ^0.10.1
     version: 0.10.1
   '@tailwindcss/typography':
-    specifier: ^0.5.11
-    version: 0.5.11(tailwindcss@3.4.1)
+    specifier: ^0.5.12
+    version: 0.5.12(tailwindcss@3.4.3)
   autoprefixer:
     specifier: ^10.4.19
     version: 10.4.19(postcss@8.4.38)
@@ -92,11 +92,11 @@ devDependencies:
     specifier: ^8.4.38
     version: 8.4.38
   prettier-plugin-tailwindcss:
-    specifier: ^0.5.12
-    version: 0.5.12(prettier@3.2.5)
+    specifier: ^0.5.13
+    version: 0.5.13(prettier@3.2.5)
   tailwindcss:
-    specifier: ^3.4.1
-    version: 3.4.1
+    specifier: ^3.4.3
+    version: 3.4.3
 
 packages:
 
@@ -660,8 +660,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@tailwindcss/typography@0.5.11(tailwindcss@3.4.1):
-    resolution: {integrity: sha512-ahOULqBQGCdSqL3vMNjH1R5cU2gxTh059fJIKF2enHXE8c/s3yKGDSKZ1+4poCr7BZRREJS8n5cCFmwsW4Ok3A==}
+  /@tailwindcss/typography@0.5.12(tailwindcss@3.4.3):
+    resolution: {integrity: sha512-CNwpBpconcP7ppxmuq3qvaCxiRWnbhANpY/ruH4L5qs2GCiVDJXde/pjj2HWPV1+Q4G9+V/etrwUYopdcjAlyg==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
     dependencies:
@@ -669,7 +669,7 @@ packages:
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
-      tailwindcss: 3.4.1
+      tailwindcss: 3.4.3
     dev: true
 
   /@types/debug@4.1.12:
@@ -2354,8 +2354,8 @@ packages:
       htmlparser2: 9.1.0
     dev: false
 
-  /html-react-parser@5.1.9(@types/react@18.2.64)(react@18.2.0):
-    resolution: {integrity: sha512-MP0MQDEGlzkJT0OwY//tKYrgIzBM1frYLxx9RF7ALdIjI+MCMumydcNovXDX4X/iDi1zfgaU28VxoNXZn7EPjQ==}
+  /html-react-parser@5.1.10(@types/react@18.2.64)(react@18.2.0):
+    resolution: {integrity: sha512-gV22PvLij4wdEdtrZbGVC7Zy2OVWnQ0bYhX63S196ZRSx4+K0TuutCreHSXr+saUia8KeKB+2TYziVfijpH4Tw==}
     peerDependencies:
       '@types/react': 17 || 18
       react: 0.14 || 15 || 16 || 17 || 18
@@ -2368,7 +2368,7 @@ packages:
       html-dom-parser: 5.0.8
       react: 18.2.0
       react-property: 2.0.2
-      style-to-js: 1.1.11
+      style-to-js: 1.1.12
     dev: false
 
   /html-url-attributes@3.0.0:
@@ -2417,6 +2417,10 @@ packages:
 
   /inline-style-parser@0.2.2:
     resolution: {integrity: sha512-EcKzdTHVe8wFVOGEYXiW9WmJXPjqi1T+234YpJr98RiFYKHV3cdy1+3mkTE+KHTHxFFLH51SfaGOoUdW+v7ViQ==}
+    dev: false
+
+  /inline-style-parser@0.2.3:
+    resolution: {integrity: sha512-qlD8YNDqyTKTyuITrDOffsl6Tdhv+UC4hcdAVuQsK4IMQ99nSgd1MIA/Q+jQYoh9r3hVUXhYh7urSRmXPkW04g==}
     dev: false
 
   /internal-slot@1.0.6:
@@ -3720,14 +3724,15 @@ packages:
     engines: {node: '>= 0.8.0'}
     dev: true
 
-  /prettier-plugin-tailwindcss@0.5.12(prettier@3.2.5):
-    resolution: {integrity: sha512-o74kiDBVE73oHW+pdkFSluHBL3cYEvru5YgEqNkBMFF7Cjv+w1vI565lTlfoJT4VLWDe0FMtZ7FkE/7a4pMXSQ==}
+  /prettier-plugin-tailwindcss@0.5.13(prettier@3.2.5):
+    resolution: {integrity: sha512-2tPWHCFNC+WRjAC4SIWQNSOdcL1NNkydXim8w7TDqlZi+/ulZYz2OouAI6qMtkggnPt7lGamboj6LcTMwcCvoQ==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
       '@prettier/plugin-pug': '*'
       '@shopify/prettier-plugin-liquid': '*'
       '@trivago/prettier-plugin-sort-imports': '*'
+      '@zackad/prettier-plugin-twig-melody': '*'
       prettier: ^3.0
       prettier-plugin-astro: '*'
       prettier-plugin-css-order: '*'
@@ -3739,7 +3744,6 @@ packages:
       prettier-plugin-sort-imports: '*'
       prettier-plugin-style-order: '*'
       prettier-plugin-svelte: '*'
-      prettier-plugin-twig-melody: '*'
     peerDependenciesMeta:
       '@ianvs/prettier-plugin-sort-imports':
         optional: true
@@ -3748,6 +3752,8 @@ packages:
       '@shopify/prettier-plugin-liquid':
         optional: true
       '@trivago/prettier-plugin-sort-imports':
+        optional: true
+      '@zackad/prettier-plugin-twig-melody':
         optional: true
       prettier-plugin-astro:
         optional: true
@@ -3768,8 +3774,6 @@ packages:
       prettier-plugin-style-order:
         optional: true
       prettier-plugin-svelte:
-        optional: true
-      prettier-plugin-twig-melody:
         optional: true
     dependencies:
       prettier: 3.2.5
@@ -3903,8 +3907,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-text-to-speech@0.12.7(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-9vuoaUJnbto4505pBENXqFVaoBBn6DZ0KQ4mXwkXezzI45NdNdvQLaq/9J1D6DHVHSTC9TD9c6Hwe8SMKrjrxA==}
+  /react-text-to-speech@0.12.9(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-USs+A9pT4myyO4QkQu2YaA3zxvJYA3toWEsO9VGFrN+H41SrvThzgjXmve36gQCL4FL+8VlS0zkTNXrqnyH9YQ==}
     peerDependencies:
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
@@ -4368,16 +4372,22 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /style-to-js@1.1.11:
-    resolution: {integrity: sha512-yHpYzXzEkx7iDjGEmE8Eyl4K/hWIm36FXPdRsl2NHEpbigLeawLVsv6tcYp+2xNhfpCrut4w08dYqeCxWMdRxw==}
+  /style-to-js@1.1.12:
+    resolution: {integrity: sha512-tv+/FkgNYHI2fvCoBMsqPHh5xovwiw+C3X0Gfnss/Syau0Nr3IqGOJ9XiOYXoPnToHVbllKFf5qCNFJGwFg5mg==}
     dependencies:
-      style-to-object: 1.0.5
+      style-to-object: 1.0.6
     dev: false
 
   /style-to-object@1.0.5:
     resolution: {integrity: sha512-rDRwHtoDD3UMMrmZ6BzOW0naTjMsVZLIjsGleSKS/0Oz+cgCfAPRspaqJuE8rDzpKha/nEvnM0IF4seEAZUTKQ==}
     dependencies:
       inline-style-parser: 0.2.2
+    dev: false
+
+  /style-to-object@1.0.6:
+    resolution: {integrity: sha512-khxq+Qm3xEyZfKd/y9L3oIWQimxuc4STrQKtQn8aSDRHb8mFgpukgX1hdzfrMEW6JCjyJ8p89x+IUMVnCBI1PA==}
+    dependencies:
+      inline-style-parser: 0.2.3
     dev: false
 
   /styled-jsx@5.1.1(react@18.2.0):
@@ -4430,8 +4440,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /tailwindcss@3.4.1:
-    resolution: {integrity: sha512-qAYmXRfk3ENzuPBakNK0SRrUDipP8NQnEY6772uDhflcQz5EhRdD7JNZxyrFHVQNCwULPBn6FNPp9brpO7ctcA==}
+  /tailwindcss@3.4.3:
+    resolution: {integrity: sha512-U7sxQk/n397Bmx4JHbJx/iSOOv5G+II3f1kpLpY2QeUv5DcPdcTsYLlusZfq1NthHS1c1cZoyFmmkex1rzke0A==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
