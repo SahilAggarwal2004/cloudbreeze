@@ -12,23 +12,8 @@ import useStorage from "../hooks/useStorage";
 
 export default function Text({ id, text }) {
   const [showMarkdown, setShowMarkdown] = useStorage("markdown", true);
-  const [markdown, setMarkdown] = useState("");
-  const memoizedText = useMemo(
-    () => (
-      <div className="markdown">
-        {!showMarkdown ? (
-          text
-        ) : markdown ? (
-          parse(markdown)
-        ) : (
-          <Markdown className={`markdown-${id}`} remarkPlugins={[remarkGfm]}>
-            {text}
-          </Markdown>
-        )}
-      </div>
-    ),
-    [text, showMarkdown, markdown],
-  );
+  const [markdown, setMarkdown] = useState();
+  const memoizedText = useMemo(() => <>{!showMarkdown ? text : markdown && parse(markdown)}</>, [text, showMarkdown, markdown]);
   const { Text, speechStatus, start, stop } = useSpeech({
     text: memoizedText,
     highlightText: true,
@@ -37,12 +22,12 @@ export default function Text({ id, text }) {
 
   useLayoutEffect(() => {
     stop();
-    setTimeout(() => setMarkdown(""), 1);
+    setTimeout(setMarkdown, 1);
   }, [text, showMarkdown]);
 
   useLayoutEffect(() => {
-    if (showMarkdown && !markdown) setMarkdown(document.querySelector(`.markdown-${id}`)?.innerHTML || "");
-  }, [showMarkdown, markdown]);
+    if (!markdown) setMarkdown(document.querySelector(`.markdown-${id}`)?.innerHTML);
+  }, [markdown]);
 
   function copy() {
     navigator.clipboard.writeText(text);
@@ -63,8 +48,11 @@ export default function Text({ id, text }) {
           <button className="scale-125">{speechStatus === "started" ? <HiVolumeOff onClick={stop} /> : <HiVolumeUp onClick={start} />}</button>
         </div>
       </div>
-      <div className="max-w-full overflow-x-scroll whitespace-pre-line">
+      <div className="markdown">
         <Text />
+        <Markdown className={`markdown-${id} ${(!showMarkdown || markdown) && "hidden"}`} remarkPlugins={[remarkGfm]}>
+          {text}
+        </Markdown>
       </div>
     </div>
   );
