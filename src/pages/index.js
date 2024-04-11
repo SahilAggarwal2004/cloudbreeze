@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from "react";
 import { useFileContext } from "../contexts/ContextProvider";
 
