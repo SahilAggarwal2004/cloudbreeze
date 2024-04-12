@@ -22,16 +22,17 @@ export default function Text({ id, text }) {
 
   useLayoutEffect(() => {
     stop();
-    setTimeout(setMarkdown, 1);
-  }, [text, showMarkdown]);
-
-  useLayoutEffect(() => {
-    if (!markdown) setMarkdown(document.querySelector(`.markdown-${id}`)?.innerHTML);
-  }, [markdown]);
+    setMarkdown(document.querySelector(`.markdown-${id}`)?.innerHTML);
+  }, [text]);
 
   function copy() {
     navigator.clipboard.writeText(text);
     toast.success("Text copied to clipboard!");
+  }
+
+  function toggleMarkdown() {
+    stop();
+    setTimeout(() => setShowMarkdown((prev) => !prev), 1);
   }
 
   return (
@@ -42,7 +43,7 @@ export default function Text({ id, text }) {
           <button>
             <FaCopy onClick={copy} />
           </button>
-          <button className="scale-150" onClick={() => setShowMarkdown(!showMarkdown)}>
+          <button className="scale-150" onClick={toggleMarkdown}>
             {showMarkdown ? <TbMarkdownOff /> : <TbMarkdown />}
           </button>
           <button className="scale-125">{speechStatus === "started" ? <HiVolumeOff onClick={stop} /> : <HiVolumeUp onClick={start} />}</button>
