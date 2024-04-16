@@ -1,10 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
 import { useFileContext } from "../contexts/ContextProvider";
 
 export default function Home({ router }) {
   const { setProgress } = useFileContext();
-  const [hover, setHover] = useState();
   const redirect = (url) => {
     setProgress(100 / 3);
     setTimeout(() => {
@@ -20,17 +18,17 @@ export default function Home({ router }) {
           <img src="/images/account.webp" alt="" className="aspect-square min-h-full scale-90" />
           <div className="x-center bottom-4">Your account</div>
         </div>
-        <div className="image-container" onMouseEnter={() => setHover("upload")} onMouseLeave={() => setHover()} onClick={() => redirect("/file/upload")} onContextMenu={(e) => e.preventDefault()}>
+        <div className="image-container group" onClick={() => redirect("/file/upload")} onContextMenu={(e) => e.preventDefault()}>
           <div className="relative">
             <img src="/images/upload.webp" alt="" className="aspect-square h-full" />
-            <img src="/images/arrow.png" alt="" className={`x-center bottom-0 h-[24%] transition-all duration-300 ${hover === "upload" ? "bottom-[45%]" : "opacity-0"}`} />
+            <img src="/images/arrow.png" alt="" className="x-center bottom-0 h-[24%] opacity-0 transition-all duration-300 group-hover:bottom-[45%] group-hover:opacity-100" />
           </div>
           <div className="x-center bottom-4">Upload files</div>
         </div>
-        <div className="image-container" onMouseEnter={() => setHover("download")} onMouseLeave={() => setHover()} onClick={() => redirect("/file/download")} onContextMenu={(e) => e.preventDefault()}>
+        <div className="image-container group" onClick={() => redirect("/file/download")} onContextMenu={(e) => e.preventDefault()}>
           <div className="relative">
             <img src="/images/download.webp" alt="" className="aspect-square h-full opacity-95" />
-            <img src="/images/arrow.png" alt="" className={`x-center top-0 h-[18%] rotate-180 transition-all duration-300 ${hover === "download" ? "top-[20%]" : "opacity-0"}`} />
+            <img src="/images/arrow.png" alt="" className="x-center top-0 h-[18%] rotate-180 opacity-0 transition-all duration-300 group-hover:top-[20%] group-hover:opacity-100" />
           </div>
           <div className="x-center bottom-4">Download files</div>
         </div>
