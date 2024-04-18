@@ -160,7 +160,7 @@ export default function Id({ router }) {
               </div>
             </div>
           )}
-          {text && <Text id={roomId} text={text} />}
+          {text && <Text value={text} />}
         </div>
       )}
     </>

@@ -10,23 +10,23 @@ import parse from "html-react-parser";
 import { toast } from "react-toastify";
 import useStorage from "../hooks/useStorage";
 
-export default function Text({ id, text }) {
-  const [showMarkdown, setShowMarkdown] = useStorage("markdown", true);
+export default function Text({ value }) {
+  const [showMarkdown, setShowMarkdown] = useStorage("markdown", false);
   const [markdown, setMarkdown] = useState();
-  const memoizedText = useMemo(() => <>{!showMarkdown ? text : markdown && parse(markdown)}</>, [text, showMarkdown, markdown]);
+  const text = useMemo(() => <>{!showMarkdown ? value : markdown && parse(markdown)}</>, [value, showMarkdown, markdown]);
   const { Text, speechStatus, start, stop } = useSpeech({
-    text: memoizedText,
+    text,
     highlightText: true,
     highlightProps: { style: { backgroundColor: "yellow", color: "black" } },
   });
 
   useLayoutEffect(() => {
     stop();
-    setMarkdown(document.querySelector(`.markdown-${id}`)?.innerHTML);
-  }, [text]);
+    setMarkdown(document.querySelector("[data-markdown]")?.innerHTML);
+  }, [value]);
 
   function copy() {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(value);
     toast.success("Text copied to clipboard!");
   }
 
@@ -40,19 +40,19 @@ export default function Text({ id, text }) {
       <div className="flex w-[80vw] max-w-60 justify-around">
         <span className="text-lg font-medium">Text</span>
         <div className="flex items-center space-x-3">
-          <button>
-            <FaCopy onClick={copy} />
+          <button title="Copy text" onClick={copy}>
+            <FaCopy />
           </button>
           <button className="scale-150" onClick={toggleMarkdown}>
-            {showMarkdown ? <TbMarkdownOff /> : <TbMarkdown />}
+            {showMarkdown ? <TbMarkdownOff title="Disable markdown" /> : <TbMarkdown title="Enable markdown" />}
           </button>
-          <button className="scale-125">{speechStatus === "started" ? <HiVolumeOff onClick={stop} /> : <HiVolumeUp onClick={start} />}</button>
+          <button className="scale-125">{speechStatus === "started" ? <HiVolumeOff title="Stop speech" onClick={stop} /> : <HiVolumeUp title="Start speech" onClick={start} />}</button>
         </div>
       </div>
       <div className="markdown">
         <Text />
-        <Markdown className={`markdown-${id} ${(!showMarkdown || markdown) && "hidden"}`} remarkPlugins={[remarkGfm]}>
-          {text}
+        <Markdown data-markdown className={(!showMarkdown || markdown) && "hidden"} remarkPlugins={[remarkGfm]}>
+          {value}
         </Markdown>
       </div>
     </div>
