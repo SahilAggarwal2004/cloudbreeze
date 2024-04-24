@@ -6,7 +6,7 @@ import Logo from "../../components/Logo";
 import Password from "../../components/Password";
 
 export default function Signup({ router }) {
-  const { fetchApp } = useFileContext();
+  const { fetchApp, progress } = useFileContext();
   const name = useRef();
   const email = useRef();
   const password = useRef();
@@ -40,7 +40,7 @@ export default function Signup({ router }) {
               <input ref={email} type="email" autoComplete="email" required className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-none focus:ring-black sm:text-sm" placeholder="Email address" />
               <Password password={password} />
             </div>
-            <button type="submit" className="button-animation relative flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium">
+            <button type="submit" disabled={progress > 0} className="button-animation relative flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium">
               Sign up
             </button>
           </form>

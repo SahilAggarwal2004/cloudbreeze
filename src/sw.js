@@ -1,72 +1,57 @@
-import { installSerwist } from "@serwist/sw";
+import { CacheFirst, NetworkFirst, NetworkOnly, RangeRequestsPlugin, Serwist, StaleWhileRevalidate } from "serwist";
 
 const matcher = ({ request }) => request.destination === "document";
 
-installSerwist({
+const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
-  cleanupOutdatedCaches: true,
   offlineAnalyticsConfig: true,
   importScripts: ["/share-sw.js"],
   precacheEntries: self.__SW_MANIFEST,
-  precacheOptions: { ignoreURLParametersMatching: [/.*/] },
+  precacheOptions: { cleanupOutdatedCaches: true, ignoreURLParametersMatching: [/.*/] },
   fallbacks: { entries: [{ url: "/_offline", revision: `${Date.now()}`, matcher }] },
   runtimeCaching: [
     {
-      urlPattern: matcher,
-      handler: "NetworkOnly",
-      options: { cacheName: "documents" },
+      matcher,
+      handler: new NetworkOnly(),
     },
     {
-      urlPattern: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
-      handler: "CacheFirst",
-      options: { cacheName: "static-font-assets" },
+      matcher: /\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,
+      handler: new CacheFirst({ cacheName: "static-font-assets" }),
     },
     {
-      urlPattern: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
-      handler: "CacheFirst",
-      options: { cacheName: "static-image-assets" },
+      matcher: /\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,
+      handler: new CacheFirst({ cacheName: "static-image-assets" }),
     },
     {
-      urlPattern: /\/_next\/image\?url=.+$/i,
-      handler: "CacheFirst",
-      options: { cacheName: "next-image" },
+      matcher: /\/_next\/image\?url=.+$/i,
+      handler: new CacheFirst({ cacheName: "next-image" }),
     },
     {
-      urlPattern: /\.(?:mp3|wav|ogg)$/i,
-      handler: "CacheFirst",
-      options: {
-        rangeRequests: true,
-        cacheName: "static-audio-assets",
-      },
+      matcher: /\.(?:mp3|wav|ogg)$/i,
+      handler: new CacheFirst({ cacheName: "static-audio-assets", plugins: [RangeRequestsPlugin] }),
     },
     {
-      urlPattern: /\.(?:mp4)$/i,
-      handler: "CacheFirst",
-      options: {
-        rangeRequests: true,
-        cacheName: "static-video-assets",
-      },
+      matcher: /\.(?:mp4)$/i,
+      handler: new CacheFirst({ cacheName: "static-video-assets", plugins: [RangeRequestsPlugin] }),
     },
     {
-      urlPattern: /\.(?:js)$/i,
-      handler: "StaleWhileRevalidate",
-      options: { cacheName: "js-assets" },
+      matcher: /\.(?:js)$/i,
+      handler: new StaleWhileRevalidate({ cacheName: "js-assets" }),
     },
     {
-      urlPattern: /\.(?:css|less)$/i,
-      handler: "CacheFirst",
-      options: { cacheName: "static-style-assets" },
+      matcher: /\.(?:css|less)$/i,
+      handler: new CacheFirst({ cacheName: "static-style-assets" }),
     },
     {
-      urlPattern: /\/_next\/data\/.+\/.+\.json$/i,
-      handler: "StaleWhileRevalidate",
-      options: { cacheName: "next-data" },
+      matcher: /\/_next\/data\/.+\/.+\.json$/i,
+      handler: new StaleWhileRevalidate({ cacheName: "next-data" }),
     },
     {
-      urlPattern: /\.(?:json|xml|csv)$/i,
-      handler: "NetworkFirst",
-      options: { cacheName: "static-data-assets" },
+      matcher: /\.(?:json|xml|csv)$/i,
+      handler: new NetworkFirst({ cacheName: "static-data-assets" }),
     },
   ],
 });
+
+serwist.addEventListeners();

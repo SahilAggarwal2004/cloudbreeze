@@ -7,7 +7,7 @@ import { removeStorage, setStorage } from "../../modules/storage";
 import Head from "next/head";
 
 export default function Login({ router }) {
-  const { setUploadFiles, setTransferFiles, setDownloadFiles, fetchApp, setType } = useFileContext();
+  const { fetchApp, progress, setDownloadFiles, setTransferFiles, setType, setUploadFiles } = useFileContext();
   const email = useRef();
   const password = useRef();
 
@@ -53,7 +53,7 @@ export default function Login({ router }) {
               <div className="mt-2 cursor-pointer text-sm font-medium text-gray-600 hover:text-black">Forgot your password?</div>
             </Link>
 
-            <button type="submit" className="button-animation relative flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium">
+            <button type="submit" disabled={progress > 0} className="button-animation relative flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium">
               Log in
             </button>
           </form>

@@ -6,7 +6,7 @@ import Password from "../../components/Password";
 import Head from "next/head";
 
 export default function Forgot({ router }) {
-  const { fetchApp } = useFileContext();
+  const { fetchApp, progress } = useFileContext();
   const email = useRef();
   const otp = useRef();
   const password = useRef();
@@ -50,7 +50,7 @@ export default function Forgot({ router }) {
                 </>
               )}
             </div>
-            <button type="submit" className="button-animation relative flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium">
+            <button type="submit" disabled={progress > 0} className="button-animation relative flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium">
               {stage ? "Reset password" : "Send OTP"}
             </button>
           </form>
