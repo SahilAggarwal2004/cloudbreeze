@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@serwist/next": "^9.0.1",
     "axios": "^1.6.8",
     "html-react-parser": "^5.1.10",
     "megajs": "^1.2.0",
@@ -32,7 +33,6 @@
   },
   "devDependencies": {
     "@builder.io/partytown": "^0.10.1",
-    "@serwist/next": "^9.0.1",
     "@tailwindcss/typography": "^0.5.12",
     "autoprefixer": "^10.4.19",
     "eslint": "^9.1.1",
