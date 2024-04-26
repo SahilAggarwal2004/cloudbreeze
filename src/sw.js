@@ -9,7 +9,7 @@ const serwist = new Serwist({
   importScripts: ["/share-sw.js"],
   precacheEntries: self.__SW_MANIFEST,
   precacheOptions: { cleanupOutdatedCaches: true, ignoreURLParametersMatching: [/.*/] },
-  fallbacks: { entries: [{ url: "/_offline", revision: `${Date.now()}`, matcher }] },
+  fallbacks: { entries: [{ url: "/_offline", matcher }] },
   runtimeCaching: [
     {
       matcher,
