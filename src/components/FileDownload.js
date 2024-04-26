@@ -66,7 +66,8 @@ export default function FileDownload({ fileIdFromUrl = false }) {
 
     if (server) {
       const { data, headers } = await fetchDownload();
-      return downloadFile(data, headers.filename);
+      if (data) downloadFile(data, headers.filename);
+      return;
     }
 
     const { createdAt, daysLimit, error, link, name, size } = await fetchApp({ url: getDownloadUrl(fileId), method: "POST", body: { pass: password.current.value } });
