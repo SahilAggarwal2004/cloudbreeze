@@ -37,7 +37,6 @@ export default function FileDownload({ fileIdFromUrl = false }) {
           onDownloadProgress: ({ loaded, total }) => setProgress(Math.round((loaded * 100) / total)),
         });
       } catch {
-        toast.error("Couldn't download file(s)");
         setProgress(-1);
         return {};
       }
@@ -66,8 +65,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
 
     if (server) {
       const { data, headers } = await fetchDownload();
-      if (data) downloadFile(data, headers.filename);
-      return;
+      return downloadFile(data, headers.filename);
     }
 
     const { createdAt, daysLimit, error, link, name, size } = await fetchApp({ url: getDownloadUrl(fileId), method: "POST", body: { pass: password.current.value } });
