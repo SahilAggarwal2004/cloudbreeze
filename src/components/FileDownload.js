@@ -68,11 +68,11 @@ export default function FileDownload({ fileIdFromUrl = false }) {
       return downloadFile(data, headers.filename);
     }
 
-    const { createdAt, daysLimit, error, link, name } = await fetchApp({ url: getDownloadUrl(fileId), method: "POST", body: { pass: password.current.value } });
+    const { createdAt, daysLimit, error, link, name, size } = await fetchApp({ url: getDownloadUrl(fileId), method: "POST", body: { pass: password.current.value } });
     if (error) return setProgress(-1);
     try {
       const file = File.fromURL(link);
-      const stream = file.download();
+      const stream = file.download({ initialChunkSize: Math.ceil(size / 3), chunkSizeIncrement: 0 });
       let blob = new Blob();
       stream.on("data", (data) => (blob = new Blob([blob, data])));
       stream.on("progress", ({ bytesLoaded, bytesTotal }) => setProgress(Math.round((bytesLoaded * 100) / bytesTotal)));
