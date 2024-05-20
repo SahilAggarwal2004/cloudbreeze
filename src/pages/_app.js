@@ -16,7 +16,6 @@ const api = process.env.NEXT_PUBLIC_API;
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  pageProps.router = router;
 
   useEffect(() => {
     setLoading(false);
@@ -177,7 +176,7 @@ export default function MyApp({ Component, pageProps }) {
         {!loading && router.isReady && (
           <>
             {!hideNavbar.includes(router.pathname) && <Navbar />}
-            <Component {...pageProps} />
+            <Component router={router} {...pageProps} />
             {showModal.includes(router.pathname) && <Modal />}
             <ToastContainer stacked autoClose={3000} pauseOnFocusLoss={false} position="bottom-right" />
           </>

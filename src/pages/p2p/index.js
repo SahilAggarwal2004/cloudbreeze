@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import Peer from "peerjs";
 import Head from "next/head";
 import Textarea from "react-textarea-autosize";
 import { FaQrcode } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Info from "../../components/Info";
-import Peer from "../../components/Peer";
+import PeerCard from "../../components/PeerCard";
 import { peerOptions } from "../../constants";
 import { useFileContext } from "../../contexts/ContextProvider";
 import { fileDetails, generateId } from "../../modules/functions";
@@ -91,7 +92,6 @@ export default function P2p({ router }) {
     e.preventDefault();
     if (!length && !text) return toast.error("Please provide files or text to share!");
     setProgress(100 / 8);
-    const Peer = require("peerjs").default;
     const peerId = shareRoom.current.value || Date.now();
     setProgress(100 / 3);
     const peer = (peerRef.current = new Peer(peerId, peerOptions));
@@ -171,7 +171,7 @@ export default function P2p({ router }) {
             <h2 className="text-center text-lg font-medium md:text-xl">Active Users</h2>
             <div className="mx-5 flex flex-wrap items-center justify-center gap-5 pb-10">
               {connArr.map((conn) => (
-                <Peer key={conn[0]} data={conn[1]} names={names} sizes={sizes} totalSize={totalSize} />
+                <PeerCard key={conn[0]} data={conn[1]} names={names} sizes={sizes} totalSize={totalSize} />
               ))}
             </div>
           </div>

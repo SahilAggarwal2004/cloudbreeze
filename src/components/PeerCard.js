@@ -9,7 +9,7 @@ import { bytesToFraction, bytesToUnit, speed } from "../modules/functions";
 import "react-circular-progressbar/dist/styles.css";
 import { useFileContext } from "../contexts/ContextProvider";
 
-export default function Peer({ data: { name, conn }, names, sizes, totalSize }) {
+export default function PeerCard({ data: { name, conn }, names, sizes, totalSize }) {
   const { files } = useFileContext();
   const [count, setCount] = useState(0);
   const [bytes, setBytes] = useState(0);

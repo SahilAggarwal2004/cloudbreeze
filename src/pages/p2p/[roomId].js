@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Head from "next/head";
+import Peer from "peerjs";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import BarProgress from "../../components/BarProgress";
@@ -102,7 +103,6 @@ export default function Id({ router }) {
   }
 
   useEffect(() => {
-    const Peer = require("peerjs").default;
     const peer = (peerRef.current = new Peer(peerOptions));
     peer.on("open", connect);
     peer.on("error", handleError);
