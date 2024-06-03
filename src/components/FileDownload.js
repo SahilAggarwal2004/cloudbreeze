@@ -16,7 +16,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
   const { setDownloadFiles, fetchApp, setModal } = useFileContext();
   const fileRef = useRef();
   const password = useRef();
-  const [unzipFile, setUnzip] = useStorage("unzip", true);
+  const [unzipFile, setUnzip] = useStorage("unzip", false);
   const [progress, setProgress] = useState(-1);
   const isDownloaded = progress === 100;
   const isDownloading = progress >= 0 && !isDownloaded;
@@ -44,6 +44,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
 
     async function downloadFile(blob, name) {
       try {
+        setProgress(100);
         if (!blob) throw new Error();
         try {
           if (!unzipFile || !regex.test(name)) throw new Error();
@@ -59,6 +60,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         if (server) return;
         setDownloadFiles((prev) => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt, daysLimit }));
       } catch {
+        setProgress(-1);
         toast.error("Couldn't download file(s)");
       }
     }
