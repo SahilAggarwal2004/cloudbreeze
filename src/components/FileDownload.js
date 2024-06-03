@@ -60,7 +60,6 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         if (server) return;
         setDownloadFiles((prev) => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt, daysLimit }));
       } catch {
-        setProgress(-1);
         toast.error("Couldn't download file(s)");
       }
     }
