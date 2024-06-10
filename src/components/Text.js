@@ -2,8 +2,8 @@
 import { useLayoutEffect, useMemo, useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import { TbMarkdown, TbMarkdownOff } from "react-icons/tb";
-import { HiVolumeOff, HiVolumeUp } from "react-icons/hi";
 import { useSpeech } from "react-text-to-speech";
+import { HiVolumeOff, HiVolumeUp } from "react-text-to-speech/icons";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import parse from "html-react-parser";
@@ -14,15 +14,11 @@ export default function Text({ value }) {
   const [showMarkdown, setShowMarkdown] = useStorage("markdown", false);
   const [markdown, setMarkdown] = useState();
   const text = useMemo(() => <>{!showMarkdown ? value : markdown && parse(markdown)}</>, [value, showMarkdown, markdown]);
-  const { Text, speechStatus, start, stop } = useSpeech({
-    text,
-    highlightText: true,
-    highlightProps: { style: { backgroundColor: "yellow", color: "black" } },
-  });
+  const { Text, speechStatus, start, stop } = useSpeech({ text, highlightText: true });
 
   useLayoutEffect(() => {
     stop();
-    setMarkdown(document.querySelector("[data-markdown]")?.innerHTML);
+    setMarkdown(document.querySelector(".rtts-markdown")?.innerHTML);
   }, [value]);
 
   function copy() {
@@ -46,15 +42,15 @@ export default function Text({ value }) {
           <button className="scale-150" onClick={toggleMarkdown}>
             {showMarkdown ? <TbMarkdownOff title="Disable markdown" /> : <TbMarkdown title="Enable markdown" />}
           </button>
-          <button className="scale-125">{speechStatus === "started" ? <HiVolumeOff title="Stop speech" onClick={stop} /> : <HiVolumeUp title="Start speech" onClick={start} />}</button>
+          <button>{speechStatus === "started" ? <HiVolumeOff title="Stop speech" onClick={stop} /> : <HiVolumeUp title="Start speech" onClick={start} />}</button>
         </div>
       </div>
       <div className="markdown">
         <Text />
-        <Markdown data-markdown className={(!showMarkdown || markdown) && "hidden"} remarkPlugins={[remarkGfm]}>
-          {value}
-        </Markdown>
       </div>
+      <Markdown className={`rtts-markdown markdown ${(!showMarkdown || markdown) && "hidden"}`} remarkPlugins={[remarkGfm]}>
+        {value}
+      </Markdown>
     </div>
   );
 }
