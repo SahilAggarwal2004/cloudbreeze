@@ -12,8 +12,8 @@ import useStorage from "../hooks/useStorage";
 
 export default function Text({ value }) {
   const [showMarkdown, setShowMarkdown] = useStorage("markdown", false);
-  const [markdown, setMarkdown] = useState();
-  const text = useMemo(() => <>{!showMarkdown ? value : markdown && parse(markdown)}</>, [value, markdown]);
+  const [markdown, setMarkdown] = useState("");
+  const text = useMemo(() => <>{showMarkdown ? parse(markdown) : value}</>, [value, markdown]);
   const { Text, speechStatus, start, stop } = useSpeech({ text, highlightText: true });
 
   useLayoutEffect(() => {
@@ -48,9 +48,11 @@ export default function Text({ value }) {
       <div className="markdown">
         <Text />
       </div>
-      {showMarkdown && <Markdown className="rtts-markdown hidden" remarkPlugins={[remarkGfm]}>
-        {value}
-      </Markdown>}
+      {showMarkdown && (
+        <Markdown className="rtts-markdown hidden" remarkPlugins={[remarkGfm]}>
+          {value}
+        </Markdown>
+      )}
     </div>
   );
 }
