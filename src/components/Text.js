@@ -48,7 +48,7 @@ export default function Text({ value }) {
       <div className="markdown">
         <Text />
       </div>
-      <Markdown className={`rtts-markdown markdown ${(!showMarkdown || markdown) && "hidden"}`} remarkPlugins={[remarkGfm]}>
+      <Markdown className="rtts-markdown hidden" remarkPlugins={[remarkGfm]}>
         {value}
       </Markdown>
     </div>
