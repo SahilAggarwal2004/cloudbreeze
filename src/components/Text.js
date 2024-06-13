@@ -13,13 +13,13 @@ import useStorage from "../hooks/useStorage";
 export default function Text({ value }) {
   const [showMarkdown, setShowMarkdown] = useStorage("markdown", false);
   const [markdown, setMarkdown] = useState();
-  const text = useMemo(() => <>{!showMarkdown ? value : markdown && parse(markdown)}</>, [value, showMarkdown, markdown]);
+  const text = useMemo(() => <>{!showMarkdown ? value : markdown && parse(markdown)}</>, [value, markdown]);
   const { Text, speechStatus, start, stop } = useSpeech({ text, highlightText: true });
 
   useLayoutEffect(() => {
     stop();
     setMarkdown(document.querySelector(".rtts-markdown")?.innerHTML);
-  }, [value]);
+  }, [value, showMarkdown]);
 
   function copy() {
     navigator.clipboard.writeText(value);
@@ -48,9 +48,9 @@ export default function Text({ value }) {
       <div className="markdown">
         <Text />
       </div>
-      <Markdown className="rtts-markdown hidden" remarkPlugins={[remarkGfm]}>
+      {showMarkdown && <Markdown className="rtts-markdown hidden" remarkPlugins={[remarkGfm]}>
         {value}
-      </Markdown>
+      </Markdown>}
     </div>
   );
 }
