@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { FaXmark } from "react-icons/fa6";
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
@@ -22,12 +22,13 @@ export default function PeerCard({ data: { name, conn }, names, sizes, totalSize
   }, []);
   const prevBytes = useMemo(() => sizes.slice(0, count).reduce((size, cur) => size + cur, 0), [count]);
   const totalBytes = prevBytes + bytes;
+  const readerRef = useRef();
 
   function sendFile() {
     conn.send({ name: names[count], size, type: "initial" });
     let bytesSent = 0;
     const channel = conn.dataChannel;
-    const reader = new FileReader();
+    const reader = (readerRef.current = new FileReader());
     const readChunk = () => reader.readAsArrayBuffer(file.slice(bytesSent, bytesSent + chunkSize));
     reader.onload = async ({ target: { result, error } }) => {
       if (error || !conn.open) return readChunk();
@@ -57,6 +58,11 @@ export default function PeerCard({ data: { name, conn }, names, sizes, totalSize
   }, []);
 
   useEffect(() => {
+    if (readerRef.current) {
+      readerRef.current.onload = null;
+      readerRef.current.abort();
+    }
+    setBytes(0);
     conn.on("data", acceptData);
     if (count && count < names.length) sendFile();
     return () => {

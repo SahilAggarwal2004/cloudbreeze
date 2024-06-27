@@ -19,11 +19,13 @@ export default function Id({ router }) {
   const [size, setSize] = useState(0);
   const [text, setText] = useState();
   const [{ symbol, size: unitSize }, setUnit] = useState({});
-  const [bytes, setBytes] = useState(-1);
   const [time, setTime] = useState(0);
   const [error, setError] = useState();
-  const downPercent = Math.round((bytes * 100) / size);
-  const isDownloading = bytes >= 0;
+  const [prevBytes, setPrevBytes] = useState(-1);
+  const [bytes, setBytes] = useState(0);
+  const totalBytes = prevBytes + bytes;
+  const downPercent = Math.round((totalBytes * 100) / size);
+  const isDownloading = totalBytes >= 0;
 
   const abort = () => writerRef.current?.abort();
 
@@ -34,28 +36,48 @@ export default function Id({ router }) {
 
   function connect() {
     let fileSize, bytesReceived, timeout;
+    let ready = false;
     const conn = (connection.current = peerRef.current.connect(roomId, { metadata: getStorage("username"), reliable: true }));
     const { createWriteStream } = require("streamsaver");
 
+    function requestNextFile() {
+      conn.send({ type: "next" });
+      setPrevBytes((old) => old + fileSize);
+      ready = false;
+      setBytes(0);
+      setTime(Date.now());
+    }
+
     conn.on("open", () => {
       peerRef.current.off("error");
-      setBytes(-1);
+      setPrevBytes(-1);
+      setBytes(0);
       setError();
       toast.success("Connection established");
     });
     conn.on("data", async (data) => {
       const { byteLength, name, size, text, totalSize, type } = data;
       if (!type) {
-        setBytes((old) => old + byteLength);
+        if (!ready) return;
         writerRef.current.write(new Uint8Array(data));
-        if ((bytesReceived += byteLength) !== fileSize) return;
-        conn.send({ type: "next" });
-        writerRef.current.ready.then(() => writerRef.current.close());
+        bytesReceived += byteLength;
+        setBytes(bytesReceived);
+        if (bytesReceived === fileSize) {
+          requestNextFile();
+          writerRef.current.close();
+        }
       } else if (type === "initial") {
         fileSize = size;
         bytesReceived = 0;
-        const writer = (writerRef.current = createWriteStream(name, { size }).getWriter());
-        writer.closed.then(() => toast.success("File downloaded successfully!")).catch(() => toast.error("Couldn't download file"));
+        ready = true;
+        setTime(Date.now());
+        writerRef.current = createWriteStream(name, { size }).getWriter();
+        writerRef.current.closed
+          .then(() => toast.success("File downloaded successfully!"))
+          .catch(() => {
+            requestNextFile();
+            toast.error("Couldn't download file");
+          });
       } else if (type === "details") {
         setFile(name);
         setSize(totalSize);
@@ -87,8 +109,7 @@ export default function Id({ router }) {
 
   function request() {
     connection.current?.send({ type: "request" });
-    setBytes(0);
-    setTime(Date.now());
+    setPrevBytes(0);
   }
 
   function retry(manual = false) {
@@ -98,7 +119,8 @@ export default function Id({ router }) {
     connect();
     setFile();
     setText();
-    setBytes(-1);
+    setPrevBytes(-1);
+    setBytes(0);
     setError();
   }
 
@@ -150,7 +172,7 @@ export default function Id({ router }) {
                 {isDownloading && (
                   <>
                     <BarProgress percent={downPercent} className="col-span-2 max-w-[100%]" />
-                    {bytes !== size && (
+                    {totalBytes < size && (
                       <div className="col-span-2 w-full text-center">
                         Speed: {speed(bytes, unitSize, time)} {symbol}/s
                       </div>
