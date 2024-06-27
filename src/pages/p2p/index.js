@@ -23,6 +23,8 @@ function reducer(state, { conn, name, peer, type = "add" }) {
         .forEach((conn) => (newState[conn[0]] = conn[1]));
       toast.error(`${name} disconnected`);
       return newState;
+    case "reset":
+      return [];
     default:
       return state;
   }
@@ -75,6 +77,7 @@ export default function P2p({ router }) {
   }
 
   function reset() {
+    dispatchConnections({ type: "reset" });
     peerRef.current?.removeAllListeners();
     peerRef.current?.destroy();
     setTimeout(() => {

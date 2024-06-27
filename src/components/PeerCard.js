@@ -8,14 +8,14 @@ import { chunkSize, maxBufferSize, sizes as unitSizes } from "../constants";
 import { bytesToFraction, bytesToUnit, speed } from "../modules/functions";
 import "react-circular-progressbar/dist/styles.css";
 import { useFileContext } from "../contexts/ContextProvider";
+import useStateRef from "../hooks/useStateRef";
 
 export default function PeerCard({ data: { name, conn }, names, sizes, totalSize }) {
   const { files } = useFileContext();
-  const [count, setCount] = useState(0);
+  const [count, countRef, setCount] = useStateRef(0);
   const [bytes, setBytes] = useState(0);
   const [time, setTime] = useState(0);
   const file = useMemo(() => files[count], [count]);
-  const size = useMemo(() => sizes[count], [count]);
   const { symbol, size: unitSize } = useMemo(() => {
     const symbol = bytesToUnit(totalSize);
     return { symbol, size: unitSizes[symbol] };
@@ -25,7 +25,8 @@ export default function PeerCard({ data: { name, conn }, names, sizes, totalSize
   const readerRef = useRef();
 
   function sendFile() {
-    conn.send({ name: names[count], size, type: "initial" });
+    const size = sizes[countRef.current];
+    conn.send({ name: names[countRef.current], size, type: "initial" });
     let bytesSent = 0;
     const channel = conn.dataChannel;
     const reader = (readerRef.current = new FileReader());
@@ -46,11 +47,17 @@ export default function PeerCard({ data: { name, conn }, names, sizes, totalSize
       toast.success(`Transferring file(s) to ${name}`);
       sendFile();
     } else if (type === "next") {
-      setCount(count + 1);
+      if (readerRef.current) {
+        readerRef.current.onload = null;
+        readerRef.current.abort();
+      }
+      setCount(countRef.current + 1);
+      setBytes(0);
     }
   }
 
   useEffect(() => {
+    conn.on("data", acceptData);
     return () => {
       conn.removeAllListeners();
       conn.close();
@@ -58,24 +65,14 @@ export default function PeerCard({ data: { name, conn }, names, sizes, totalSize
   }, []);
 
   useEffect(() => {
-    if (readerRef.current) {
-      readerRef.current.onload = null;
-      readerRef.current.abort();
-    }
-    setBytes(0);
-    conn.on("data", acceptData);
     if (count && count < names.length) sendFile();
-    return () => {
-      conn.off("data");
-      setBytes(0);
-    };
   }, [count]);
 
   return (
     <div className="relative flex min-w-[270px] flex-col justify-center rounded border bg-gray-50 p-4 pb-0 text-center transition-all duration-300 hover:bg-transparent hover:shadow-lg">
       <FaXmark className="absolute right-2 top-2 scale-110" onClick={() => conn.close()} />
       <h4 className="font-medium">{name}</h4>
-      <CircularProgressbarWithChildren value={bytes} maxValue={size} strokeWidth={2.5} className="scale-75" styles={{ path: { stroke: "#48BB6A" } }}>
+      <CircularProgressbarWithChildren value={totalBytes} maxValue={totalSize} strokeWidth={2.5} className="scale-75" styles={{ path: { stroke: "#48BB6A" } }}>
         <div className="w-1/2 space-y-1 break-words text-center text-sm md:text-base">
           <div>
             {bytesToFraction(totalBytes, totalSize, unitSize)} {symbol}
