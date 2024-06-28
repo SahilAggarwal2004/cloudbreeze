@@ -44,7 +44,6 @@ export default function FileDownload({ fileIdFromUrl = false }) {
 
     async function downloadFile(blob, name) {
       try {
-        setProgress(100);
         if (!blob) throw new Error();
         try {
           if (!unzipFile || !regex.test(name)) throw new Error();
@@ -56,10 +55,12 @@ export default function FileDownload({ fileIdFromUrl = false }) {
           nameList = [name];
           await download(blob, name);
         }
+        setProgress(100);
         toast.success("File(s) downloaded successfully!");
         if (server) return;
         setDownloadFiles((prev) => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt, daysLimit }));
       } catch {
+        setProgress(-1);
         toast.error("Couldn't download file(s)");
       }
     }
