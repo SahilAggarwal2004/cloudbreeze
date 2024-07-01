@@ -62,10 +62,7 @@ export default function Id({ router }) {
         writerRef.current.write(new Uint8Array(data));
         bytesReceived += byteLength;
         setBytes(bytesReceived);
-        if (bytesReceived === fileSize) {
-          requestNextFile();
-          writerRef.current.close();
-        }
+        if (bytesReceived === fileSize) writerRef.current.close();
       } else if (type === "initial") {
         fileSize = size;
         bytesReceived = 0;
@@ -74,10 +71,8 @@ export default function Id({ router }) {
         writerRef.current = createWriteStream(name, { size }).getWriter();
         writerRef.current.closed
           .then(() => toast.success("File downloaded successfully!"))
-          .catch(() => {
-            requestNextFile();
-            toast.error("Couldn't download file");
-          });
+          .catch(() => toast.error("Couldn't download file"))
+          .finally(requestNextFile);
       } else if (type === "details") {
         setFile(name);
         setSize(totalSize);
