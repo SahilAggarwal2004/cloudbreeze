@@ -9,7 +9,7 @@ import { getStorage, setStorage } from "../../modules/storage";
 import { types } from "../../constants";
 
 export default function Account() {
-  const { uploadFiles, transferFiles, downloadFiles, logout, setModal, type } = useFileContext();
+  const { uploadFiles, transferFiles, downloadFiles, logout, activateModal, type } = useFileContext();
   const guest = !types.includes(type);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function Account() {
               <div className="cursor-pointer hover:text-black" onClick={() => logout("manual")}>
                 Logout
               </div>
-              <div className="cursor-pointer hover:text-black" onClick={() => setModal({ active: true, type: "deleteUser" })}>
+              <div className="cursor-pointer hover:text-black" onClick={() => activateModal({ type: "deleteUser" })}>
                 Delete Account
               </div>
             </>

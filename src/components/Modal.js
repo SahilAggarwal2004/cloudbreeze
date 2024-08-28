@@ -1,3 +1,4 @@
+import { FaXmark } from "react-icons/fa6";
 import { useFileContext } from "../contexts/ContextProvider";
 import { getDeleteUrl } from "../modules/functions";
 import Info from "./Info";
@@ -6,7 +7,7 @@ import Scanner from "./Scanner";
 export default function Modal() {
   const {
     modal: { active, type, ...props },
-    setModal,
+    closeModal,
     setProgress,
     fetchApp,
     logout,
@@ -14,11 +15,10 @@ export default function Modal() {
     clearHistory,
   } = useFileContext();
   const { fileId, filter, downloadCount } = props;
-  const handleCancel = () => setModal({ active: false });
 
   async function deleteFile(id) {
+    closeModal();
     const [fileId, server] = id.split("@");
-    setModal({ active: false });
     const { success, files } = await fetchApp({ url: getDeleteUrl(fileId, server), method: "DELETE" });
     if (!success) return;
     if (server) clearHistory(id, "transfer");
@@ -26,7 +26,7 @@ export default function Modal() {
   }
 
   async function deleteUser() {
-    setModal({ active: false });
+    closeModal();
     setProgress(100 / 3);
     const { success, error } = await fetchApp({ url: "auth/delete", method: "DELETE" });
     setProgress(100);
@@ -35,8 +35,9 @@ export default function Modal() {
 
   return (
     <>
-      <div className={`${active ? "bg-opacity-50" : "invisible bg-opacity-0"} fixed inset-0 z-40 bg-black transition-all duration-700`} onClick={handleCancel} />
-      <div className={`center z-50 max-h-[98vh] w-max max-w-[90vw] overflow-y-auto rounded-md bg-white py-4 text-center ${type === "showFile" ? "px-1" : type === "qrScanner" ? "px-0" : "px-3"} ${active ? "opacity-100" : "hidden"}`}>
+      <div className={`${active ? "bg-opacity-50" : "invisible bg-opacity-0"} fixed inset-0 z-40 bg-black transition-all duration-700`} onClick={closeModal} />
+      <div className={`center z-50 max-h-[98vh] w-max max-w-[90vw] overflow-y-auto rounded-md bg-white pb-4 pt-5 text-center ${type === "showFile" ? "px-1" : type === "qrScanner" ? "px-0" : "px-4"} ${active ? "opacity-100" : "hidden"}`}>
+        <FaXmark className="absolute right-1.5 top-2 scale-110" onClick={closeModal} />
         {type === "deleteUser" ? (
           <div>
             <h3 className="font-bold">Delete account?</h3>
@@ -45,7 +46,7 @@ export default function Modal() {
               <button className="button-animation rounded border px-3 py-1" onClick={deleteUser}>
                 Yes
               </button>
-              <button className="button-animation rounded border px-3 py-1" onClick={handleCancel}>
+              <button className="button-animation rounded border px-3 py-1" onClick={closeModal}>
                 No
               </button>
             </div>
@@ -58,7 +59,7 @@ export default function Modal() {
               <button className="button-animation rounded border px-3 py-1" onClick={() => deleteFile(fileId)}>
                 Yes
               </button>
-              <button className="button-animation rounded border px-3 py-1" onClick={handleCancel}>
+              <button className="button-animation rounded border px-3 py-1" onClick={closeModal}>
                 No
               </button>
             </div>

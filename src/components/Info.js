@@ -5,8 +5,8 @@ import { FaShareSquare } from "react-icons/fa";
 import Link from "next/link";
 
 export default function Info({ fileId, roomId, filter, downloadCount, modal = false }) {
-  const link = fileId ? `${window.location.origin}/file/${fileId}` : `${window.location.origin}/p2p/${roomId}`;
-  const { setModal, clearHistory } = useFileContext();
+  const link = window.location.origin + fileId ? `/file/${fileId}` : `/p2p/${roomId}`;
+  const { activateModal, closeModal, clearHistory } = useFileContext();
 
   function share(type = "URL") {
     const id = fileId || roomId;
@@ -43,31 +43,33 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
       {modal && filter === "upload" && <div className="pb-2 text-sm">Download Count: {downloadCount}</div>}
       {modal && (
         <div className="mx-4 mt-2 grid grid-cols-2 gap-2 text-sm">
-          {filter === "upload" || filter === "transfer" ? (
-            <>
-              <Link href={link} className="button-animation col-span-2 rounded border px-3 py-1" onClick={() => setModal({ active: false })}>
-                Download
-              </Link>
-              <button className="button-animation rounded border px-3 py-1" onClick={() => setModal({ active: true, type: "deleteFile", fileId })}>
-                Delete
-              </button>
-            </>
+          {filter === "download" ? (
+            <button
+              className="button-animation col-span-2 rounded border px-3 py-1"
+              onClick={() => {
+                closeModal();
+                clearHistory(fileId, "download");
+              }}
+            >
+              Clear History
+            </button>
           ) : (
-            filter === "download" && (
-              <button
-                className="button-animation rounded border px-3 py-1"
-                onClick={() => {
-                  setModal({ active: false });
-                  clearHistory(fileId, "download");
-                }}
-              >
-                Clear History
-              </button>
+            (filter === "upload" || filter === "transfer") && (
+              <>
+                <Link href={link} className="button-animation col-span-2 rounded border px-3 py-1" onClick={closeModal}>
+                  Download
+                </Link>
+                {filter === "upload" && (
+                  <Link href={`/file/upload?fileId=${fileId}`} className="button-animation rounded border px-3 py-1" onClick={closeModal}>
+                    Edit
+                  </Link>
+                )}
+                <button className={`button-animation rounded border px-3 py-1 ${filter === "transfer" ? "col-span-2" : ""}`} onClick={() => activateModal({ type: "deleteFile", fileId })}>
+                  Delete
+                </button>
+              </>
             )
           )}
-          <button className="button-animation rounded border px-3 py-1" onClick={() => setModal({ active: false })}>
-            Close
-          </button>
         </div>
       )}
     </div>

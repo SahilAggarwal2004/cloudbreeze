@@ -8,7 +8,7 @@ import { verifyUrl } from "../modules/functions";
 
 export default function Scanner() {
   const router = useRouter();
-  const { setModal } = useFileContext();
+  const { closeModal } = useFileContext();
   const [message, setMessage] = useState("");
   const video = useRef();
 
@@ -18,7 +18,7 @@ export default function Scanner() {
       ({ data }) => {
         const { verified, pathname } = verifyUrl(data);
         if (!verified) return setMessage("Please scan a valid QR Code");
-        setModal({ active: false });
+        closeModal();
         toast.success("Successfuly scanned the QR Code");
         router.push(pathname);
       },
@@ -26,18 +26,16 @@ export default function Scanner() {
     );
     qrScanner
       .start()
-      .then(() => {
-        setMessage("Scan QR Code using camera");
-      })
+      .then(() => setMessage("Scan QR Code using camera"))
       .catch(() => {
-        setModal({ active: false });
+        closeModal();
         toast.error("Camera not accessible");
       });
     return () => qrScanner.stop();
   }, []);
 
   return (
-    <div className={`flex flex-col items-center justify-center space-y-3 px-3 text-center ${!message && "hidden"}`}>
+    <div className={`flex flex-col items-center justify-center space-y-3 px-3 text-center ${message ? "" : "hidden"}`}>
       <span className="text-xs xs:text-sm md:text-base">{message}</span>
       <video ref={video} className="max-h-[50vh] w-[80vw] max-w-96" />
     </div>

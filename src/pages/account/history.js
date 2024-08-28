@@ -6,7 +6,7 @@ import { useFileContext } from "../../contexts/ContextProvider";
 import { relativeTime } from "../../modules/functions";
 
 export default function History({ router }) {
-  const { uploadFiles, transferFiles, downloadFiles, clearHistory, setModal } = useFileContext();
+  const { uploadFiles, transferFiles, downloadFiles, clearHistory, activateModal } = useFileContext();
   const { filter = "upload" } = router.query;
   const history = filter === "upload" ? uploadFiles : filter === "transfer" ? transferFiles : filter === "download" ? downloadFiles : [];
 
@@ -49,7 +49,7 @@ export default function History({ router }) {
                   if (minutesLeft < 0) return clearHistory(fileId, filter);
 
                   return (
-                    <tr key={fileId} className="border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => setModal({ active: true, type: "showFile", fileId, filter, downloadCount })}>
+                    <tr key={fileId} className="border-b bg-white transition duration-300 ease-in-out hover:bg-gray-100" onClick={() => activateModal({ type: "showFile", fileId, filter, downloadCount })}>
                       <td className="px-[1.0625rem] py-4 text-sm font-medium text-gray-900">{i + 1}</td>
                       <td className="px-[1.0625rem] py-4 text-sm font-light text-gray-900" style={{ wordBreak: "break-word" }}>
                         <ul className="space-y-1">

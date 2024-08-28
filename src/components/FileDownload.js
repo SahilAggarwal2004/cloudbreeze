@@ -13,7 +13,7 @@ import useStorage from "../hooks/useStorage";
 import { regex } from "../constants";
 
 export default function FileDownload({ fileIdFromUrl = false }) {
-  const { setDownloadFiles, fetchApp, setModal } = useFileContext();
+  const { setDownloadFiles, fetchApp, activateModal } = useFileContext();
   const fileRef = useRef();
   const password = useRef();
   const [unzipFile, setUnzip] = useStorage("unzip", false);
@@ -120,7 +120,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         !fileIdFromUrl && (
           <div className="text-center">
             <div className="mb-3 font-bold">OR</div>
-            <div className="flex cursor-pointer select-none items-center justify-center space-x-1 font-medium text-gray-800" onClick={() => setModal({ active: true, type: "qrScanner" })}>
+            <div className="flex cursor-pointer select-none items-center justify-center space-x-1 font-medium text-gray-800" onClick={() => activateModal({ type: "qrScanner" })}>
               <FaQrcode />
               <span>Scan a QR Code</span>
             </div>

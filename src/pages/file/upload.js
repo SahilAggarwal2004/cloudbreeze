@@ -13,7 +13,7 @@ import Select from "../../components/Select";
 
 export default function Upload({ router }) {
   const { fetchApp, files, setFiles, setUploadFiles, setTransferFiles, type } = useFileContext();
-  const { share } = router.query;
+  const { fileId: fileIdFromUrl, share } = router.query;
   const filesRef = useRef();
   const fileIdRef = useRef();
   const password = useRef();
@@ -26,6 +26,7 @@ export default function Upload({ router }) {
   const isUploading = progress >= 0;
   const isUploaded = link && link !== "error";
   const length = files.length;
+  const edit = Boolean(fileIdFromUrl);
 
   const verifyFileId = (e) => (e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, ""));
   const verifyDownloadLimit = (e) => (e.target.value = Math.abs(e.target.value) || "");
@@ -72,7 +73,7 @@ export default function Upload({ router }) {
     for (const file of files) body.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
     body.append("length", length);
     const nameList = Array.from(files).map(({ name }) => name);
-    if ((fileId = fileIdRef.current.value)) {
+    if ((fileId = fileIdFromUrl || fileIdRef.current.value)) {
       if (unavailable.includes(fileId)) {
         toast.warning(`File Id cannot be ${fileId}`);
         return setProgress(-1);
@@ -80,12 +81,12 @@ export default function Upload({ router }) {
       body.append("fileId", fileId);
     }
     if (length > 1) body.append("nameList", nameList);
-    if (password.current.value) body.append("password", password.current.value);
+    if (password.current?.value) body.append("password", password.current.value);
     if (daysLimit.current?.value) body.append("daysLimit", daysLimit.current.value);
     if (downloadLimit.current.value) body.append("downloadLimit", downloadLimit.current.value);
 
     if (mode === "save") {
-      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId } });
+      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId, edit } });
       if (!verified) return setProgress(-1);
     } else {
       servers = Array.from(Array(process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT).keys());
@@ -135,7 +136,7 @@ export default function Upload({ router }) {
         setActive={setMode}
         values={[
           { value: "save", label: "Save to Cloud" },
-          { value: "transfer", label: "Transfer file" },
+          { value: "transfer", label: "Transfer file", disabled: edit },
         ]}
       />
       <div className="flex flex-col items-center justify-center space-y-5 px-4 pb-5 text-sm sm:text-base">
@@ -144,10 +145,14 @@ export default function Upload({ router }) {
           {share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div> : <input type="file" id="files" ref={filesRef} onChange={updateFile} disabled={isUploading} required multiple />}
 
           <label htmlFor="file-id">File Id: </label>
-          <input type="text" id="file-id" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />
+          {edit ? <div>{fileIdFromUrl}</div> : <input type="text" id="file-id" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />}
 
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" ref={password} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
+          {!edit && (
+            <>
+              <label htmlFor="password">Password:</label>
+              <input type="password" id="password" ref={password} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
+            </>
+          )}
 
           {mode === "save" && (
             <>
