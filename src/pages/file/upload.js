@@ -148,15 +148,11 @@ export default function Upload({ router }) {
           <label htmlFor="files">File(s):</label>
           {share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div> : <input type="file" id="files" ref={filesRef} onChange={updateFile} disabled={isUploading} required multiple />}
 
-          <label htmlFor="file-id">File Id: </label>
-          {edit ? <div>{fileIdFromUrl}</div> : <input type="text" id="file-id" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />}
+          <label htmlFor="fileId">File Id: </label>
+          {edit ? <div>{fileIdFromUrl}</div> : <input type="text" id="fileId" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />}
 
-          {!edit && (
-            <>
-              <label htmlFor="password">Password:</label>
-              <input type="password" id="password" ref={password} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
-            </>
-          )}
+          <label htmlFor="password">Password:</label>
+          <input type="password" id="password" ref={password} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
 
           {mode === "save" && (
             <>
