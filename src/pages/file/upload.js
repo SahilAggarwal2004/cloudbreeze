@@ -12,13 +12,13 @@ import BarProgress from "../../components/BarProgress";
 import Select from "../../components/Select";
 
 export default function Upload({ router }) {
-  const { fetchApp, files, setFiles, setUploadFiles, setTransferFiles, type } = useFileContext();
+  const { fetchApp, files, setFiles, uploadFiles, setUploadFiles, setTransferFiles, type } = useFileContext();
   const { fileId: fileIdFromUrl, share } = router.query;
   const filesRef = useRef();
   const fileIdRef = useRef();
   const password = useRef();
-  const daysLimit = useRef();
-  const downloadLimit = useRef();
+  const daysLimitRef = useRef();
+  const downloadLimitRef = useRef();
   const [mode, setMode] = useState("save");
   const [link, setLink] = useState();
   const [progress, setProgress] = useState(-1);
@@ -27,6 +27,7 @@ export default function Upload({ router }) {
   const isUploaded = link && link !== "error";
   const length = files.length;
   const edit = Boolean(fileIdFromUrl);
+  const file = useMemo(() => uploadFiles.find(({ _id }) => _id === fileIdFromUrl), [fileIdFromUrl]);
 
   const verifyFileId = (e) => (e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, ""));
   const verifyDownloadLimit = (e) => (e.target.value = Math.abs(e.target.value) || "");
@@ -82,8 +83,10 @@ export default function Upload({ router }) {
     }
     if (length > 1) body.append("nameList", nameList);
     if (password.current?.value) body.append("password", password.current.value);
-    if (daysLimit.current?.value) body.append("daysLimit", daysLimit.current.value);
-    if (downloadLimit.current.value) body.append("downloadLimit", downloadLimit.current.value);
+    const daysLimit = daysLimitRef.current?.value,
+      downloadLimit = downloadLimitRef.current?.value;
+    if (daysLimit) body.append("daysLimit", daysLimit);
+    if (downloadLimit) body.append("downloadLimit", downloadLimit);
 
     if (mode === "save") {
       var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId, edit } });
@@ -115,8 +118,17 @@ export default function Upload({ router }) {
     if (mode === "transfer") setTransferFiles((prev) => prev.concat({ _id: fileId, nameList, createdAt: Date.now(), daysLimit: 1 / 24 }));
     else
       setUploadFiles((prev) => {
-        if (edit) return prev.map((item) => (item._id === fileId ? { ...item, name, nameList, daysLimit: daysLimit.current.value || maxDaysLimit } : item));
-        return prev.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit });
+        if (edit)
+          return prev.map((item) => {
+            if (item._id === fileId) {
+              item.name = name;
+              item.nameList = nameList;
+              if (daysLimit) item.daysLimit = daysLimit;
+              if (downloadLimit) item.downloadLimit = downloadLimit;
+            }
+            return item;
+          });
+        return prev.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit || maxDaysLimit, downloadLimit });
       });
   }
 
@@ -151,18 +163,22 @@ export default function Upload({ router }) {
           <label htmlFor="fileId">File Id: </label>
           {edit ? <div>{fileIdFromUrl}</div> : <input type="text" id="fileId" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />}
 
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" ref={password} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
+          {!edit && (
+            <>
+              <label htmlFor="password">Password:</label>
+              <input type="password" id="password" ref={password} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
+            </>
+          )}
 
           {mode === "save" && (
             <>
               <label htmlFor="days-limit">Days Limit:</label>
-              <input type="number" id="days-limit" ref={daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={1} max={maxDaysLimit} />
+              <input type="number" id="days-limit" ref={daysLimitRef} defaultValue={file?.daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={1} max={maxDaysLimit} />
             </>
           )}
 
           <label htmlFor="download-limit">Download Limit:</label>
-          <input type="number" id="download-limit" ref={downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="No limit" min={1} />
+          <input type="number" id="download-limit" ref={downloadLimitRef} defaultValue={file?.downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="No limit" min={1} />
 
           <button type="submit" disabled={isUploading} className="primary-button">
             Upload
