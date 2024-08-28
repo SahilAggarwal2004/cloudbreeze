@@ -112,8 +112,12 @@ export default function Upload({ router }) {
     }
     setLink(fileId);
 
-    if (mode === "save") setUploadFiles((prev) => prev.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit }));
-    else setTransferFiles((prev) => prev.concat({ _id: fileId, nameList, createdAt: Date.now(), daysLimit: 1 / 24 }));
+    if (mode === "transfer") setTransferFiles((prev) => prev.concat({ _id: fileId, nameList, createdAt: Date.now(), daysLimit: 1 / 24 }));
+    else
+      setUploadFiles((prev) => {
+        if (edit) return prev.map((item) => (item._id === fileId ? { ...item, name, nameList, daysLimit: daysLimit.current.value || maxDaysLimit } : item));
+        return prev.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit.current.value || maxDaysLimit });
+      });
   }
 
   useEffect(() => {
