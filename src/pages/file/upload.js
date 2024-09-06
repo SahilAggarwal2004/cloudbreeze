@@ -72,8 +72,7 @@ export default function Upload({ router }) {
     setProgress(0);
     const body = new FormData();
     for (const file of files) body.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
-    body.append("length", length);
-    const nameList = Array.from(files).map(({ name }) => name);
+    const nameList = length ? Array.from(files).map(({ name }) => name) : undefined;
     if ((fileId = fileIdFromUrl || fileIdRef.current.value)) {
       if (unavailable.includes(fileId)) {
         toast.warning(`File Id cannot be ${fileId}`);
@@ -81,7 +80,7 @@ export default function Upload({ router }) {
       }
       body.append("fileId", fileId);
     }
-    if (length > 1) body.append("nameList", nameList);
+    if (nameList) body.append("nameList", nameList);
     if (password.current?.value) body.append("password", password.current.value);
     const daysLimit = daysLimitRef.current?.value,
       downloadLimit = downloadLimitRef.current?.value;
@@ -121,8 +120,8 @@ export default function Upload({ router }) {
         if (edit)
           return prev.map((item) => {
             if (item._id === fileId) {
-              item.name = name;
-              item.nameList = nameList;
+              if (name) item.name = name;
+              if (nameList) item.nameList = nameList;
               if (daysLimit) item.daysLimit = daysLimit;
               if (downloadLimit) item.downloadLimit = downloadLimit;
             }
@@ -158,7 +157,7 @@ export default function Upload({ router }) {
       <div className="flex flex-col items-center justify-center space-y-5 px-4 pb-5 text-sm sm:text-base">
         <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] items-center gap-3">
           <label htmlFor="files">File(s):</label>
-          {share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div> : <input type="file" id="files" ref={filesRef} onChange={updateFile} disabled={isUploading} required multiple />}
+          {share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div> : <input type="file" id="files" ref={filesRef} onChange={updateFile} disabled={isUploading} required={!edit} multiple />}
 
           <label htmlFor="fileId">File Id: </label>
           {edit ? <div>{fileIdFromUrl}</div> : <input type="text" id="fileId" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />}
@@ -181,7 +180,7 @@ export default function Upload({ router }) {
           <input type="number" id="download-limit" ref={downloadLimitRef} defaultValue={file?.downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="No limit" min={1} />
 
           <button type="submit" disabled={isUploading} className="primary-button">
-            Upload
+            {edit ? "Edit" : "Upload"}
           </button>
           {isUploaded && (
             <button type="reset" className="col-span-2 rounded border border-black bg-gray-100 py-1 font-medium text-gray-800" onClick={reset}>
