@@ -21,7 +21,7 @@
     "react-icons": "^5.3.0",
     "react-markdown": "^9.0.1",
     "react-qr-code": "^2.0.15",
-    "react-text-to-speech": "^0.18.0",
+    "react-text-to-speech": "^0.19.0",
     "react-textarea-autosize": "^8.5.3",
     "react-toastify": "^10.0.5",
     "react-top-loading-bar": "^2.3.1",
@@ -37,7 +37,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.11",
-    "postcss": "^8.4.45",
+    "postcss": "^8.4.47",
     "prettier-plugin-tailwindcss": "^0.6.6",
     "serwist": "^9.0.7",
     "tailwindcss": "^3.4.11"
