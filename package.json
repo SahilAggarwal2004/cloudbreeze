@@ -21,7 +21,7 @@
     "react-icons": "^5.3.0",
     "react-markdown": "^9.0.1",
     "react-qr-code": "^2.0.15",
-    "react-text-to-speech": "^0.19.0",
+    "react-text-to-speech": "^0.19.2",
     "react-textarea-autosize": "^8.5.3",
     "react-toastify": "^10.0.5",
     "react-top-loading-bar": "^2.3.1",
