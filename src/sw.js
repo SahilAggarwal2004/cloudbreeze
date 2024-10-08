@@ -29,11 +29,11 @@ const serwist = new Serwist({
     },
     {
       matcher: /\.(?:mp3|wav|ogg)$/i,
-      handler: new CacheFirst({ cacheName: "static-audio-assets", plugins: [RangeRequestsPlugin] }),
+      handler: new CacheFirst({ cacheName: "static-audio-assets", plugins: [new RangeRequestsPlugin()] }),
     },
     {
       matcher: /\.(?:mp4)$/i,
-      handler: new CacheFirst({ cacheName: "static-video-assets", plugins: [RangeRequestsPlugin] }),
+      handler: new CacheFirst({ cacheName: "static-video-assets", plugins: [new RangeRequestsPlugin()] }),
     },
     {
       matcher: /\.(?:js)$/i,
