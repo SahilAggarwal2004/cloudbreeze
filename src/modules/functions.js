@@ -76,10 +76,11 @@ export async function resolvePromises(promises) {
 }
 
 export async function download(blob, name) {
-  const url = window.URL.createObjectURL(blob);
+  const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
   a.download = name; // giving default name to download prompt
   a.click();
+  URL.revokeObjectURL(url);
   await wait(100);
 }
