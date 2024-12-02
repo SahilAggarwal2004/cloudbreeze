@@ -5,7 +5,7 @@ import { FaShareSquare } from "react-icons/fa";
 import Link from "next/link";
 
 export default function Info({ fileId, roomId, filter, downloadCount, modal = false }) {
-  const link = window.location.origin + fileId ? `/file/${fileId}` : `/p2p/${roomId}`;
+  const link = window.location.origin + (fileId ? `/file/${fileId}` : `/p2p/${roomId}`);
   const { activateModal, closeModal, clearHistory } = useFileContext();
 
   function share(type = "URL") {
