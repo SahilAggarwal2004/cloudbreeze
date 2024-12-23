@@ -1,34 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useLayoutEffect, useMemo, useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import { TbMarkdown, TbMarkdownOff } from "react-icons/tb";
+import { useRemark } from "react-remarkify";
 import { useSpeech } from "react-text-to-speech";
 import { HiVolumeOff, HiVolumeUp } from "react-text-to-speech/icons";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import parse from "html-react-parser";
 import { toast } from "react-toastify";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
+import remarkGfm from "remark-gfm";
 import useStorage from "../hooks/useStorage";
 
 export default function Text({ value }) {
   const [showMarkdown, setShowMarkdown] = useStorage("markdown", false);
-  const [markdown, setMarkdown] = useState("");
-  const text = useMemo(() => <>{showMarkdown ? parse(markdown) : value}</>, [value, markdown]);
-  const { Text, speechStatus, start, stop } = useSpeech({ text, highlightText: true });
-
-  useLayoutEffect(() => {
-    stop();
-    setMarkdown(document.querySelector(".rtts-markdown")?.innerHTML);
-  }, [value, showMarkdown]);
+  const reactContent = useRemark({ markdown: value, rehypePlugins: [rehypeRaw, rehypeSanitize], remarkPlugins: [remarkGfm], remarkToRehypeOptions: { allowDangerousHtml: true } });
+  const { Text, speechStatus, start, stop } = useSpeech({ text: showMarkdown ? reactContent : value, highlightText: true });
 
   function copy() {
     navigator.clipboard.writeText(value);
     toast.success("Text copied to clipboard!");
-  }
-
-  function toggleMarkdown() {
-    stop();
-    setTimeout(() => setShowMarkdown((prev) => !prev), 1);
   }
 
   return (
@@ -39,7 +28,7 @@ export default function Text({ value }) {
           <button title="Copy text" onClick={copy}>
             <FaCopy />
           </button>
-          <button className="scale-150" onClick={toggleMarkdown}>
+          <button className="scale-150" onClick={() => setShowMarkdown((prev) => !prev)}>
             {showMarkdown ? <TbMarkdownOff title="Disable markdown" /> : <TbMarkdown title="Enable markdown" />}
           </button>
           <button>{speechStatus === "started" ? <HiVolumeOff title="Stop speech" onClick={stop} /> : <HiVolumeUp title="Start speech" onClick={start} />}</button>
@@ -48,11 +37,6 @@ export default function Text({ value }) {
       <div className="markdown">
         <Text />
       </div>
-      {showMarkdown && (
-        <Markdown className="rtts-markdown hidden" remarkPlugins={[remarkGfm]}>
-          {value}
-        </Markdown>
-      )}
     </div>
   );
 }
