@@ -35,7 +35,7 @@ export default function MyApp({ Component, pageProps }) {
 
         <link rel="preconnect" href={api} />
 
-        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; img-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src *; worker-src 'self' blob:; frame-src 'self' https://jimmywarting.github.io/" />
+        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; img-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; connect-src *; worker-src 'self' blob:; frame-src 'self' https://jimmywarting.github.io/" />
 
         <meta name="google-site-verification" content="5_rdfkDpTLo7tXDzIkEfmQb1wH_0AmpbcQOAPhLNBLQ" />
 
@@ -160,8 +160,8 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
 
       {/* Google tag (gtag.js) */}
-      <Script src="https://www.googletagmanager.com/gtag/js?id=G-VDY08PZTBH" strategy="worker" />
-      <Script id="google-analytics" strategy="worker">
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-VDY08PZTBH" strategy="afterInteractive" />
+      <Script id="google-analytics" strategy="afterInteractive">
         {`window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
@@ -170,7 +170,7 @@ export default function MyApp({ Component, pageProps }) {
       </Script>
 
       {/* Google adsense */}
-      {/* <Script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8121166207556471" strategy="worker" crossOrigin="anonymous" /> */}
+      {/* <Script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8121166207556471" strategy="afterInteractive" crossOrigin="anonymous" /> */}
 
       <ContextProvider router={router}>
         {!loading && router.isReady && (
