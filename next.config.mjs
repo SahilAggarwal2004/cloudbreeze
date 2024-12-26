@@ -14,6 +14,10 @@ const withPWA = withSerwistInit({
 });
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    nextScriptWorkers: true,
+  },
+};
 
 export default withPWA(nextConfig);

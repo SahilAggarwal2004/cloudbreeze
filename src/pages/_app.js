@@ -160,8 +160,8 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
 
       {/* Google tag (gtag.js) */}
-      <Script src="https://www.googletagmanager.com/gtag/js?id=G-VDY08PZTBH" strategy="afterInteractive" />
-      <Script id="google-analytics" strategy="afterInteractive">
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-VDY08PZTBH" strategy="worker" />
+      <Script id="google-analytics" strategy="worker">
         {`window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
@@ -170,7 +170,7 @@ export default function MyApp({ Component, pageProps }) {
       </Script>
 
       {/* Google adsense */}
-      {/* <Script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8121166207556471" strategy="afterInteractive" crossOrigin="anonymous" /> */}
+      {/* <Script src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8121166207556471" strategy="worker" crossOrigin="anonymous" /> */}
 
       <ContextProvider router={router}>
         {!loading && router.isReady && (
