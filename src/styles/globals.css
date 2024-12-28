@@ -3,50 +3,50 @@
 @tailwind utilities;
 
 .center {
-    @apply fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
 }
 
 .x-center {
-    @apply absolute left-1/2 -translate-x-1/2
+  @apply absolute left-1/2 -translate-x-1/2;
 }
 
 .y-center {
-    @apply absolute top-1/2 -translate-y-1/2
+  @apply absolute top-1/2 -translate-y-1/2;
 }
 
 .password-icon {
-    @apply y-center right-3 text-gray-400 hover:bg-gray-100 rounded-full p-1 box-content
+  @apply y-center right-3 box-content rounded-full p-1 text-gray-400 hover:bg-gray-100;
 }
 
 .primary-button {
-    @apply col-span-2 mt-3 py-1 border border-black rounded bg-gray-100 disabled:opacity-50 font-medium text-gray-800
+  @apply col-span-2 mt-3 rounded border border-black bg-gray-100 py-1 font-medium text-gray-800 disabled:opacity-50;
 }
 
 .button-animation {
-    @apply border-black text-black bg-gray-100 hover:text-white hover:bg-black transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black
+  @apply border-black bg-gray-100 text-black transition-all duration-300 hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
 }
 
 .image-container {
-    @apply shadow-md rounded-lg w-80 h-80 max-w-[90vw] max-h-[35vh] cursor-pointer select-none hover:shadow-2xl transition-all duration-300 relative flex justify-center pt-4 pb-12 sm:flex-[0_0_40%]
+  @apply relative flex h-80 max-h-[35vh] w-80 max-w-[90vw] cursor-pointer select-none justify-center rounded-lg pb-12 pt-4 shadow-md transition-all duration-300 hover:shadow-2xl sm:flex-[0_0_40%];
 }
 
 .markdown {
-    @apply prose max-w-[90vw] overflow-x-scroll whitespace-pre-wrap break-words leading-snug *:my-0 *:w-max *:max-w-full prose-headings:my-1 prose-pre:w-full prose-li:my-0 prose-table:w-full prose-table:table-fixed prose-th:border prose-th:p-2 prose-td:border prose-td:p-2
+  @apply prose grid max-w-[90vw] grid-cols-1 overflow-x-scroll whitespace-pre-wrap break-words leading-snug *:my-0 *:w-max *:max-w-full prose-headings:my-1 prose-pre:w-full prose-li:my-0 prose-table:w-full prose-table:table-fixed prose-th:border prose-th:p-2 prose-td:border prose-td:p-2;
 }
 
 * {
-    -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
 ::-webkit-scrollbar {
-    width: 2.5px;
-    height: 0;
+  width: 2.5px;
+  height: 0;
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgb(128, 128, 128, 0.75);
+  background-color: rgb(128, 128, 128, 0.75);
 }
