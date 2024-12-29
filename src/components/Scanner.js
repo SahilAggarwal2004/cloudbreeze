@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useRouter } from "next/router";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 import { toast } from "react-toastify";
 import { useFileContext } from "../contexts/ContextProvider";
@@ -12,7 +12,7 @@ export default function Scanner() {
   const [message, setMessage] = useState("");
   const video = useRef();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const qrScanner = new QrScanner(
       video.current,
       ({ data }) => {
