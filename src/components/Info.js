@@ -45,7 +45,7 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
         <div className="mx-4 mt-2 grid grid-cols-2 gap-2 text-sm">
           {filter === "download" ? (
             <button
-              className="button-animation col-span-2 rounded border px-3 py-1"
+              className="button-animation col-span-2 rounded-sm border px-3 py-1"
               onClick={() => {
                 closeModal();
                 clearHistory(fileId, "download");
@@ -56,15 +56,15 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
           ) : (
             (filter === "upload" || filter === "transfer") && (
               <>
-                <Link href={link} className="button-animation col-span-2 rounded border px-3 py-1" onClick={closeModal}>
+                <Link href={link} className="button-animation col-span-2 rounded-sm border px-3 py-1" onClick={closeModal}>
                   Download
                 </Link>
                 {filter === "upload" && (
-                  <Link href={`/file/upload?fileId=${fileId}`} className="button-animation rounded border px-3 py-1" onClick={closeModal}>
+                  <Link href={`/file/upload?fileId=${fileId}`} className="button-animation rounded-sm border px-3 py-1" onClick={closeModal}>
                     Edit
                   </Link>
                 )}
-                <button className={`button-animation rounded border px-3 py-1 ${filter === "transfer" ? "col-span-2" : ""}`} onClick={() => activateModal({ type: "deleteFile", fileId })}>
+                <button className={`button-animation rounded-sm border px-3 py-1 ${filter === "transfer" ? "col-span-2" : ""}`} onClick={() => activateModal({ type: "deleteFile", fileId })}>
                   Delete
                 </button>
               </>

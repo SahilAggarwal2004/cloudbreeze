@@ -35,9 +35,9 @@ export default function Signup({ router }) {
             </p>
           </div>
           <form className="mt-8 space-y-6" onSubmit={submit}>
-            <div className="-space-y-px rounded-md shadow-sm">
-              <input ref={name} type="text" autoComplete="name" required minLength={3} maxLength={20} className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-none focus:ring-black sm:text-sm" placeholder="Your name" />
-              <input ref={email} type="email" autoComplete="email" required className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-none focus:ring-black sm:text-sm" placeholder="Email address" />
+            <div className="-space-y-px rounded-md shadow-xs">
+              <input ref={name} type="text" autoComplete="name" required minLength={3} maxLength={20} className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-hidden focus:ring-black sm:text-sm" placeholder="Your name" />
+              <input ref={email} type="email" autoComplete="email" required className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-hidden focus:ring-black sm:text-sm" placeholder="Email address" />
               <Password password={password} />
             </div>
             <button type="submit" disabled={progress > 0} className="button-animation relative flex w-full justify-center rounded-md border px-4 py-2 text-sm font-medium">

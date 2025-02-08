@@ -1,9 +1,42 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+
+  --animate-spin-fast: spin 0.6s ease infinite;
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  ::file-selector-button {
+    @apply cursor-pointer rounded-xs border border-gray-500 bg-gray-100 px-1.5 py-0.5 hover:bg-gray-200;
+  }
+}
 
 .center {
-  @apply fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2;
+  @apply fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
 }
 
 .x-center {
@@ -15,23 +48,23 @@
 }
 
 .password-icon {
-  @apply y-center right-3 box-content rounded-full p-1 text-gray-400 hover:bg-gray-100;
+  @apply absolute top-1/2 right-3 box-content -translate-y-1/2 rounded-full p-1 text-gray-400 hover:bg-gray-100;
 }
 
 .primary-button {
-  @apply col-span-2 mt-3 rounded border border-black bg-gray-100 py-1 font-medium text-gray-800 disabled:opacity-50;
+  @apply col-span-2 mt-3 rounded-sm border border-black bg-gray-100 py-1 font-medium text-gray-800 disabled:opacity-50;
 }
 
 .button-animation {
-  @apply border-black bg-gray-100 text-black transition-all duration-300 hover:bg-black hover:text-white focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
+  @apply border-black bg-gray-100 text-black transition-all duration-300 hover:bg-black hover:text-white focus:ring-2 focus:ring-black focus:ring-offset-2 focus:outline-hidden;
 }
 
 .image-container {
-  @apply relative flex h-80 max-h-[35vh] w-80 max-w-[90vw] cursor-pointer select-none justify-center rounded-lg pb-12 pt-4 shadow-md transition-all duration-300 hover:shadow-2xl sm:flex-[0_0_40%];
+  @apply relative flex h-80 max-h-[35vh] w-80 max-w-[90vw] cursor-pointer justify-center rounded-lg pt-4 pb-12 shadow-md transition-all duration-300 select-none hover:shadow-2xl sm:flex-[0_0_40%];
 }
 
 .markdown {
-  @apply prose grid max-w-full grid-cols-1 overflow-y-scroll whitespace-pre-wrap break-words *:my-0 *:w-max *:max-w-full *:whitespace-pre-wrap prose-headings:my-1 prose-pre:my-1 prose-pre:w-full prose-li:my-0 prose-table:w-full prose-table:table-fixed prose-th:border prose-th:p-2 prose-td:border prose-td:p-2;
+  @apply prose prose-th:w-screen prose-th:max-w-full prose-th:border prose-td:border prose-th:p-2 prose-td:p-2 prose-ul:whitespace-normal prose-ol:whitespace-normal prose-headings:my-1 prose-pre:my-1 grid max-w-full grid-cols-1 overflow-y-scroll break-words whitespace-pre-wrap *:my-0 *:w-full *:whitespace-pre-wrap;
 }
 
 * {

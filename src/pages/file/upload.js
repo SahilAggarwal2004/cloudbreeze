@@ -160,30 +160,30 @@ export default function Upload({ router }) {
           {share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div> : <input type="file" id="files" ref={filesRef} onChange={updateFile} disabled={isUploading} required={!edit} multiple />}
 
           <label htmlFor="fileId">File Id: </label>
-          {edit ? <div>{fileIdFromUrl}</div> : <input type="text" id="fileId" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />}
+          {edit ? <div>{fileIdFromUrl}</div> : <input type="text" id="fileId" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />}
 
           {!edit && (
             <>
               <label htmlFor="password">Password:</label>
-              <input type="password" id="password" ref={password} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
+              <input type="password" id="password" ref={password} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="new-password" placeholder="No protection" />
             </>
           )}
 
           {mode === "save" && (
             <>
               <label htmlFor="days-limit">Days Limit:</label>
-              <input type="number" id="days-limit" ref={daysLimitRef} defaultValue={file?.daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={1} max={maxDaysLimit} />
+              <input type="number" id="days-limit" ref={daysLimitRef} defaultValue={file?.daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={1} max={maxDaysLimit} />
             </>
           )}
 
           <label htmlFor="download-limit">Download Limit:</label>
-          <input type="number" id="download-limit" ref={downloadLimitRef} defaultValue={file?.downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="No limit" min={1} />
+          <input type="number" id="download-limit" ref={downloadLimitRef} defaultValue={file?.downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="No limit" min={1} />
 
           <button type="submit" disabled={isUploading} className="primary-button">
             {edit ? "Edit" : "Upload"}
           </button>
           {isUploaded && (
-            <button type="reset" className="col-span-2 rounded border border-black bg-gray-100 py-1 font-medium text-gray-800" onClick={reset}>
+            <button type="reset" className="col-span-2 rounded-sm border border-black bg-gray-100 py-1 font-medium text-gray-800" onClick={reset}>
               Reset
             </button>
           )}

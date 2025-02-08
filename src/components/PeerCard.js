@@ -69,7 +69,7 @@ export default function PeerCard({ data: { name, conn }, names, sizes, totalSize
   }, [count]);
 
   return (
-    <div className="relative flex min-w-[270px] flex-col justify-center rounded border bg-gray-50 p-4 pb-0 text-center transition-all duration-300 hover:bg-transparent hover:shadow-lg">
+    <div className="relative flex min-w-[270px] flex-col justify-center rounded-sm border bg-gray-50 p-4 pb-0 text-center transition-all duration-300 hover:bg-transparent hover:shadow-lg">
       <FaXmark className="absolute right-2 top-2 scale-110" onClick={() => conn.close()} />
       <h4 className="font-medium">{name}</h4>
       <CircularProgressbarWithChildren value={totalBytes} maxValue={totalSize} strokeWidth={2.5} className="scale-75" styles={{ path: { stroke: "#48BB6A" } }}>

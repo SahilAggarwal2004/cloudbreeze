@@ -129,9 +129,9 @@ export default function P2p({ router }) {
             <label htmlFor="text" className="self-start pt-1 sm:pt-0.5">
               Text:{" "}
             </label>
-            <Textarea id="text" minRows={3} maxRows={20} className="rounded border px-2 py-0.5 placeholder:py-0.5 placeholder:text-sm" placeholder="Text / Description (Optional)" onChange={(e) => setText(e.target.value)} />
+            <Textarea id="text" minRows={3} maxRows={20} className="rounded-sm border px-2 py-0.5 placeholder:py-0.5 placeholder:text-sm" placeholder="Text / Description (Optional)" onChange={(e) => setText(e.target.value)} />
             <label htmlFor="room-id">Room Id: </label>
-            <input type="text" id="room-id" ref={shareRoom} onInput={verifyRoomId} disabled={disable} className="rounded border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />
+            <input type="text" id="room-id" ref={shareRoom} onInput={verifyRoomId} disabled={disable} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />
             {link ? (
               <button type="button" className="primary-button" disabled={text === oldText} onClick={edit}>
                 Edit Text
@@ -142,7 +142,7 @@ export default function P2p({ router }) {
               </button>
             )}
             {link && (
-              <button type="reset" className="col-span-2 rounded border border-black bg-gray-100 py-1 font-medium text-gray-800" onClick={reset}>
+              <button type="reset" className="col-span-2 rounded-sm border border-black bg-gray-100 py-1 font-medium text-gray-800" onClick={reset}>
                 Reset
               </button>
             )}
@@ -154,7 +154,7 @@ export default function P2p({ router }) {
             <div className="flex flex-col items-center space-y-5">
               <form onSubmit={enterRoom} className="grid grid-cols-[auto_1fr] items-center gap-3">
                 <label htmlFor="fileId">Room Id or Link:</label>
-                <input type="text" id="fileId" ref={receiveRoom} onInput={verifyRoomId} className="rounded border px-2 py-0.5" required autoComplete="off" />
+                <input type="text" id="fileId" ref={receiveRoom} onInput={verifyRoomId} className="rounded-sm border px-2 py-0.5" required autoComplete="off" />
                 <button type="submit" className="primary-button">
                   Receive
                 </button>

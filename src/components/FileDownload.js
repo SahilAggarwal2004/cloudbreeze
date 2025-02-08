@@ -94,11 +94,11 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         {!fileIdFromUrl && (
           <>
             <label htmlFor="fileId">File Id or Link:</label>
-            <input type="text" id="fileId" ref={fileRef} className="rounded border px-2 py-0.5" required autoComplete="off" />
+            <input type="text" id="fileId" ref={fileRef} className="rounded-sm border px-2 py-0.5" required autoComplete="off" />
           </>
         )}
         <label htmlFor="password">Password (if any):</label>
-        <input type="password" id="password" ref={password} className="rounded border px-2 py-0.5" autoComplete="new-password" />
+        <input type="password" id="password" ref={password} className="rounded-sm border px-2 py-0.5" autoComplete="new-password" />
         <label className="relative col-span-2 inline-flex cursor-pointer items-center place-self-center">
           <input type="checkbox" checked={unzipFile} className="peer sr-only" onChange={() => setUnzip((prev) => !prev)} />
           <div className="peer relative flex aspect-[1.8] w-9 items-center rounded-full bg-gray-200 after:absolute after:left-[8%] after:aspect-square after:w-[42%] after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-black peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-2 peer-focus:ring-gray-300" />
