@@ -1,4 +1,4 @@
-import { CacheFirst, NetworkFirst, NetworkOnly, RangeRequestsPlugin, Serwist, StaleWhileRevalidate } from "serwist";
+import { CacheFirst, ExpirationPlugin, NetworkFirst, NetworkOnly, RangeRequestsPlugin, Serwist, StaleWhileRevalidate } from "serwist";
 
 const matcher = ({ request }) => request.destination === "document";
 
@@ -11,6 +11,13 @@ const serwist = new Serwist({
   precacheOptions: { cleanupOutdatedCaches: true, ignoreURLParametersMatching: [/.*/] },
   fallbacks: { entries: [{ url: "/_offline", matcher }] },
   runtimeCaching: [
+    {
+      matcher: ({ url }) => url.pathname === "/manifest.json",
+      handler: new CacheFirst({
+        cacheName: "manifest",
+        plugins: [new ExpirationPlugin({ maxAgeSeconds: 60 })],
+      }),
+    },
     {
       matcher,
       handler: new NetworkOnly(),

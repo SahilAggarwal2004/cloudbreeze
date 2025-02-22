@@ -20,10 +20,7 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     setLoading(false);
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.addEventListener("controllerchange", handleVersionUpdate);
-      return () => navigator.serviceWorker.removeEventListener("controllerchange", handleVersionUpdate);
-    }
+    if ("serviceWorker" in navigator) window.serwist.register().then(handleVersionUpdate);
   }, []);
 
   return (
