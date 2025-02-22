@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useRouter } from "next/router";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import Script from "next/script";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-import ContextProvider from "../contexts/ContextProvider";
-import Navbar from "../components/Navbar";
+
 import Modal from "../components/Modal";
+import Navbar from "../components/Navbar";
 import { hideNavbar, showModal } from "../constants";
+import ContextProvider from "../contexts/ContextProvider";
+import { handleVersionUpdate } from "../modules/update";
 import "../styles/globals.css";
-import "react-toastify/dist/ReactToastify.css";
 
 const api = process.env.NEXT_PUBLIC_API;
 
@@ -19,6 +20,10 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     setLoading(false);
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.addEventListener("controllerchange", handleVersionUpdate);
+      return () => navigator.serviceWorker.removeEventListener("controllerchange", handleVersionUpdate);
+    }
   }, []);
 
   return (
