@@ -28,51 +28,42 @@ export default function Upload({ router }) {
   const length = files.length;
   const edit = Boolean(fileIdFromUrl);
   const file = useMemo(() => uploadFiles.find(({ _id }) => _id === fileIdFromUrl), [fileIdFromUrl]);
+  const size = useMemo(() => {
+    const { totalSize } = fileDetails(files);
+    if (!totalSize && share) toast.warning("Empty file(s)");
+    else if (totalSize > transferLimit) {
+      toast("Switched to Peer-to-peer transfer for large files");
+      router.push("/p2p?share=true");
+    } else if (mode === "save" && totalSize > cloudLimit) {
+      toast(`Switched to transfer mode for large files`);
+      setMode("transfer");
+    }
+    return totalSize;
+  }, [files]);
 
   const verifyFileId = (e) => (e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, ""));
   const verifyDownloadLimit = (e) => (e.target.value = Math.abs(e.target.value) || "");
   const verifyDaysLimit = (e) => (e.target.value = Math.min(Math.abs(e.target.value), maxDaysLimit) || "");
 
-  function handleMessage({ data: { files } }) {
-    setFiles(files);
-    if (fileDetails(files).totalSize > transferLimit) router.replace("/p2p?share=true");
-  }
-
   async function updateFile({ target }) {
     const files = target.files || [target.file];
     const size = fileDetails(files).totalSize;
-    if (!size) {
-      target.value = "";
-      return toast.warning("Empty file(s)");
-    }
-    if (size > transferLimit) {
-      toast("Try Peer-to-peer transfer for large files");
-      setFiles(files);
-      return router.push("/p2p?share=true");
-    }
-    if (mode === "save" && size > cloudLimit) {
-      toast(`Try transfer mode for large files upto ${transferLimitGB}GB`);
-      setMode("transfer");
-    }
-    setFiles(files);
+    if (size) return setFiles(files);
+    target.value = "";
+    toast.warning("Empty file(s)");
   }
 
   function reset() {
-    // Don't remove the setTimeout as file reset doesn't work without it (idk why)
-    setTimeout(() => {
-      setFiles([]);
-      setLink();
-      setProgress(-1);
-    }, 0);
+    setFiles([]);
+    setLink();
+    setProgress(-1);
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (mode === "save" && fileDetails(files).totalSize > cloudLimit) return toast.warning(`File size must not exceed ${cloudLimitMB}MB`);
+    if (mode === "save" && size > cloudLimit) return toast.warning(`File size must not exceed ${cloudLimitMB}MB`);
     setProgress(0);
     const body = new FormData();
-    for (const file of files) body.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
-    const nameList = length ? Array.from(files).map(({ name }) => name) : undefined;
     if ((fileId = fileIdFromUrl || fileIdRef.current.value)) {
       if (unavailable.includes(fileId)) {
         toast.warning(`File Id cannot be ${fileId}`);
@@ -80,6 +71,8 @@ export default function Upload({ router }) {
       }
       body.append("fileId", fileId);
     }
+    for (const file of files) body.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
+    const nameList = length ? Array.from(files).map(({ name }) => name) : undefined;
     if (nameList) body.append("nameList", nameList);
     if (password.current?.value) body.append("password", password.current.value);
     const daysLimit = daysLimitRef.current?.value,
@@ -132,7 +125,8 @@ export default function Upload({ router }) {
   }
 
   useEffect(() => {
-    if (!share) setFiles([]);
+    if (!share && files.length) setFiles([]);
+    const handleMessage = ({ data: { files } }) => setFiles(files);
     navigator.serviceWorker?.addEventListener("message", handleMessage);
     return () => navigator.serviceWorker?.removeEventListener("message", handleMessage);
   }, []);

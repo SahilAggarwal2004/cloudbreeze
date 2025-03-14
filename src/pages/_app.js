@@ -20,7 +20,10 @@ export default function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     setLoading(false);
-    if ("serviceWorker" in navigator) window.serwist.register().then(handleVersionUpdate);
+    if ("serviceWorker" in navigator && window.serwist) {
+      window.serwist.register().then(() => window.serwist.addEventListener("controlling", handleVersionUpdate));
+      return () => window.serwist.removeEventListener("controlling", handleVersionUpdate);
+    }
   }, []);
 
   return (
