@@ -30,8 +30,7 @@ export default function Upload({ router }) {
   const file = useMemo(() => uploadFiles.find(({ _id }) => _id === fileIdFromUrl), [fileIdFromUrl]);
   const size = useMemo(() => {
     const { totalSize } = fileDetails(files);
-    if (!totalSize && share) toast.warning("Empty file(s)");
-    else if (totalSize > transferLimit) {
+    if (totalSize > transferLimit) {
       toast("Switched to Peer-to-peer transfer for large files");
       router.push("/p2p?share=true");
     } else if (mode === "save" && totalSize > cloudLimit) {
@@ -47,10 +46,7 @@ export default function Upload({ router }) {
 
   async function updateFile({ target }) {
     const files = target.files || [target.file];
-    const size = fileDetails(files).totalSize;
-    if (size) return setFiles(files);
-    target.value = "";
-    toast.warning("Empty file(s)");
+    setFiles(files)
   }
 
   function reset() {
@@ -61,6 +57,7 @@ export default function Upload({ router }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!size) return toast.warning("Empty file(s)");
     if (mode === "save" && size > cloudLimit) return toast.warning(`File size must not exceed ${cloudLimitMB}MB`);
     setProgress(0);
     const body = new FormData();
