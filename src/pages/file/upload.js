@@ -46,7 +46,7 @@ export default function Upload({ router }) {
 
   async function updateFile({ target }) {
     const files = target.files || [target.file];
-    setFiles(files)
+    setFiles(files);
   }
 
   function reset() {
@@ -173,11 +173,9 @@ export default function Upload({ router }) {
           <button type="submit" disabled={isUploading} className="primary-button">
             {edit ? "Edit" : "Upload"}
           </button>
-          {isUploaded && (
-            <button type="reset" className="col-span-2 rounded-sm border border-black bg-gray-100 py-1 font-medium text-gray-800" onClick={reset}>
-              Reset
-            </button>
-          )}
+          <button type="reset" className={`col-span-2 rounded-sm border border-black bg-gray-100 py-1 font-medium text-gray-800 ${isUploaded ? "" : "hidden"}`} onClick={reset}>
+            Reset
+          </button>
         </form>
 
         {!link &&
