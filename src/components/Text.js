@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { FaCopy } from "react-icons/fa";
 import { TbMarkdown, TbMarkdownOff } from "react-icons/tb";
 import { useRemark } from "react-remarkify";

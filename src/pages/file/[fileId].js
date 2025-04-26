@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import Head from "next/head";
 import FileDownload from "../../components/FileDownload";
 

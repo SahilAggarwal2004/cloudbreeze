@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import Head from "next/head";
 import Link from "next/link";
 import { options } from "../../constants";

@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useRef, useState } from "react";
 import { File } from "megajs";
 import axios from "axios";
