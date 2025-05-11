@@ -1,4 +1,3 @@
-
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";
@@ -40,7 +39,17 @@ export default function MyApp({ Component, pageProps }) {
 
         <link rel="preconnect" href={api} />
 
-        <meta httpEquiv="Content-Security-Policy" content="default-src 'self'; img-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; connect-src *; worker-src 'self' blob:; frame-src 'self' https://jimmywarting.github.io/" />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="
+            default-src 'self';
+            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.googleads.g.doubleclick.net https://www.google.co.in;
+            style-src 'self' 'unsafe-inline';
+            img-src * data:;
+            connect-src *;
+            worker-src 'self' blob:;
+            frame-src 'self' https://jimmywarting.github.io/"
+        />
 
         <meta name="google-site-verification" content="5_rdfkDpTLo7tXDzIkEfmQb1wH_0AmpbcQOAPhLNBLQ" />
 
@@ -165,8 +174,8 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
 
       {/* Google tag (gtag.js) */}
-      <Script src="https://www.googletagmanager.com/gtag/js?id=G-VDY08PZTBH" strategy="worker" />
-      <Script id="google-analytics" strategy="worker">
+      <Script src="https://www.googletagmanager.com/gtag/js?id=G-VDY08PZTBH" strategy="afterInteractive" />
+      <Script id="google-analytics" strategy="afterInteractive">
         {`window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
