@@ -67,6 +67,18 @@
   @apply prose prose-th:w-screen prose-th:max-w-full prose-th:border prose-td:border prose-th:p-2 prose-td:p-2 prose-ul:whitespace-normal prose-ol:whitespace-normal prose-headings:my-1 prose-pre:my-1 grid max-w-full grid-cols-1 overflow-y-scroll break-words whitespace-pre-wrap *:my-0 *:w-full *:whitespace-pre-wrap;
 }
 
+.preview-container > div *:not(svg):not(svg *) {
+  @apply max-h-96 w-full max-w-[90vh] whitespace-pre-line;
+}
+
+.preview-container > div iframe {
+  @apply h-96;
+}
+
+.preview-container > div audio {
+  @apply w-80!;
+}
+
 * {
   -webkit-tap-highlight-color: transparent;
 }

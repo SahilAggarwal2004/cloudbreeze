@@ -39,18 +39,6 @@ export default function MyApp({ Component, pageProps }) {
 
         <link rel="preconnect" href={api} />
 
-        <meta
-          httpEquiv="Content-Security-Policy"
-          content="
-            default-src 'self';
-            script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.googleads.g.doubleclick.net https://www.google.co.in;
-            style-src 'self' 'unsafe-inline';
-            img-src * data:;
-            connect-src *;
-            worker-src 'self' blob:;
-            frame-src 'self' https://jimmywarting.github.io/"
-        />
-
         <meta name="google-site-verification" content="5_rdfkDpTLo7tXDzIkEfmQb1wH_0AmpbcQOAPhLNBLQ" />
 
         <meta name="mobile-web-app-capable" content="yes" />

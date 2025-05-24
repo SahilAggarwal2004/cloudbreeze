@@ -1,10 +1,12 @@
-
-import { useRef, useState } from "react";
-import { File } from "megajs";
+/* eslint-disable react-hooks/exhaustive-deps */
+import FileViewer from "@afzalimdad9/react-file-preview";
 import axios from "axios";
+import { File } from "megajs";
+import { useEffect, useRef, useState } from "react";
 import { FaQrcode } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { unzip } from "unzipit";
+
 import Loader from "./Loader";
 import { useFileContext } from "../contexts/ContextProvider";
 import { download, generateId, getDownloadUrl, resolvePromises } from "../modules/functions";
@@ -17,19 +19,21 @@ export default function FileDownload({ fileIdFromUrl = false }) {
   const fileRef = useRef();
   const password = useRef();
   const [unzipFile, setUnzip] = useStorage("unzip", false);
+  const [fileData, setFileData] = useState({ url: null });
   const [progress, setProgress] = useState(-1);
   const isDownloaded = progress === 100;
   const isDownloading = progress >= 0 && !isDownloaded;
 
-  async function submit(e) {
-    e.preventDefault();
+  async function submit(event) {
+    event.preventDefault?.();
     const id = fileIdFromUrl || generateId(fileRef.current.value, "file");
     if (!id) return;
     setProgress(0);
+    const mode = event.type === "preview" ? "preview" : "download";
     const [fileId, server] = id.split("@");
 
     async function fetchDownload() {
-      const options = server ? { url: getDownloadUrl(fileId, server), method: "POST", data: { pass: password.current.value } } : { url: link, method: "GET" };
+      const options = server ? { url: getDownloadUrl(fileId, mode, server), method: "POST", data: { pass: password.current.value } } : { url: link, method: "GET" };
       try {
         return await axios({
           ...options,
@@ -44,6 +48,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
 
     async function downloadFile(blob, name) {
       try {
+        if (mode === "preview") return setFileData({ url: URL.createObjectURL(blob), name, createdAt, daysLimit });
         if (!blob) throw new Error();
         try {
           if (!unzipFile || !regex.test(name)) throw new Error();
@@ -57,20 +62,21 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         }
         setProgress(100);
         toast.success("File(s) downloaded successfully!");
-        if (server) return;
-        setDownloadFiles((prev) => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt, daysLimit }));
+        if (!server) setDownloadFiles((prev) => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt: fileData.createdAt || createdAt, daysLimit: fileData.daysLimit || daysLimit }));
       } catch {
         setProgress(-1);
-        toast.error("Couldn't download file(s)");
+        if (mode === "download") toast.error("Couldn't download file(s)");
       }
     }
 
+    if (fileData.url) return downloadFile(fileData.url, fileData.name);
+
     if (server) {
       const { data, headers } = await fetchDownload();
-      return downloadFile(data, headers.filename);
+      return downloadFile(data, headers?.filename);
     }
 
-    const { createdAt, daysLimit, error, link, name, size } = await fetchApp({ url: getDownloadUrl(fileId), method: "POST", body: { pass: password.current.value } });
+    var { createdAt, daysLimit, error, link, name, size } = await fetchApp({ url: getDownloadUrl(fileId, mode), method: "POST", body: { pass: password.current.value }, showToast: mode === "download" });
     if (error) return setProgress(-1);
     try {
       const file = File.fromURL(link);
@@ -88,6 +94,10 @@ export default function FileDownload({ fileIdFromUrl = false }) {
     }
   }
 
+  useEffect(() => {
+    if (fileIdFromUrl) submit({ type: "preview" });
+  }, []);
+
   return (
     <div className="flex flex-col items-center justify-center space-y-5 px-4 pb-5 text-sm sm:text-base">
       <form onSubmit={submit} className="grid grid-cols-[auto_1fr] items-center gap-3">
@@ -99,20 +109,24 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         )}
         <label htmlFor="password">Password (if any):</label>
         <input type="password" id="password" ref={password} className="rounded-sm border px-2 py-0.5" autoComplete="new-password" />
-        <label className="relative col-span-2 inline-flex cursor-pointer items-center place-self-center">
-          <input type="checkbox" checked={unzipFile} className="peer sr-only" onChange={() => setUnzip((prev) => !prev)} />
-          <div className="peer relative flex aspect-[1.8] w-9 items-center rounded-full bg-gray-200 after:absolute after:left-[8%] after:aspect-square after:w-[42%] after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-black peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:ring-2 peer-focus:ring-gray-300" />
-          <span className="ml-3 text-sm">Extract files</span>
-        </label>
         <div className="col-span-2 text-center text-xs sm:text-sm">
           <span className="font-semibold text-gray-800">Tip:</span> No need of password if you are the author of the file!
         </div>
+        <label className="relative col-span-2 inline-flex cursor-pointer items-center place-self-center">
+          <input type="checkbox" checked={unzipFile} className="peer sr-only" onChange={() => setUnzip((prev) => !prev)} />
+          <div className="peer relative flex aspect-[1.8] w-9 items-center rounded-full bg-gray-200 peer-checked:bg-black peer-focus:ring-2 peer-focus:ring-gray-300 after:absolute after:left-[8%] after:aspect-square after:w-[42%] after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:after:translate-x-full peer-checked:after:border-white" />
+          <span className="ml-3 text-sm">Extract files</span>
+        </label>
         <button type="submit" disabled={isDownloading} className="primary-button">
-          {isDownloaded ? "Download Again" : "Download"}
+          {fileData.url || !isDownloaded ? "Download" : "Download Again"}
         </button>
       </form>
-
-      {progress > 0 ? (
+      {fileData.url ? (
+        <div className="preview-container mt-2 flex flex-col items-center justify-center space-y-2">
+          <div className="font-medium">File Preview:</div>
+          <FileViewer src={fileData.url} fileName={fileData.name} loader={<Loader />} />
+        </div>
+      ) : progress > 0 ? (
         <BarProgress percent={progress} />
       ) : progress === 0 ? (
         <Loader className="flex items-center space-x-3" text="Please wait, accessing the file(s)..." />
@@ -120,7 +134,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         !fileIdFromUrl && (
           <div className="text-center">
             <div className="mb-3 font-bold">OR</div>
-            <div className="flex cursor-pointer select-none items-center justify-center space-x-1 font-medium text-gray-800" onClick={() => activateModal({ type: "qrScanner" })}>
+            <div className="flex cursor-pointer items-center justify-center space-x-1 font-medium text-gray-800 select-none" onClick={() => activateModal({ type: "qrScanner" })}>
               <FaQrcode />
               <span>Scan a QR Code</span>
             </div>

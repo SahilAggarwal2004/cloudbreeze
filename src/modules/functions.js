@@ -9,7 +9,7 @@ export const round = (number, digits = 2) => (digits ? number.toFixed(digits) : 
 
 export const getUploadUrl = (mode, server) => (production ? `https://cloudbreeze-${mode === "save" ? "upload" : mode}-${server}.onrender.com` : mode === "save" ? "http://localhost:5002" : "") + "/file/upload";
 
-export const getDownloadUrl = (fileId, server) => (server && production ? `https://cloudbreeze-transfer-${server}.onrender.com` : "") + `/file/get/${fileId}`;
+export const getDownloadUrl = (fileId, mode, server) => (server && production ? `https://cloudbreeze-transfer-${server}.onrender.com` : "") + `/file/get/${fileId}` + `?mode=${mode}`;
 
 export const getDeleteUrl = (fileId, server) => (server && production ? `https://cloudbreeze-transfer-${server}.onrender.com` : "") + `/file/delete/${fileId}`;
 
@@ -75,12 +75,17 @@ export async function resolvePromises(promises) {
   } catch {}
 }
 
-export async function download(blob, name) {
-  const url = URL.createObjectURL(blob);
+export async function download(source, name) {
+  if (source instanceof Blob) {
+    var url = URL.createObjectURL(source);
+    var shouldRevoke = true;
+  } else url = source;
+
   const a = document.createElement("a");
   a.href = url;
-  a.download = name; // giving default name to download prompt
+  a.download = name;
   a.click();
-  URL.revokeObjectURL(url);
+
+  if (shouldRevoke) URL.revokeObjectURL(url);
   await wait(100);
 }
