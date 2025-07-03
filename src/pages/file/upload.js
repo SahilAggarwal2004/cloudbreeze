@@ -163,12 +163,12 @@ export default function Upload({ router }) {
           {mode === "save" && (
             <>
               <label htmlFor="days-limit">Days Limit:</label>
-              <input type="number" id="days-limit" ref={daysLimitRef} defaultValue={file?.daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={1} max={maxDaysLimit} />
+              <input type="number" id="days-limit" ref={daysLimitRef} defaultValue={file?.daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={file ? Math.ceil((Date.now() - new Date(file.createdAt)) / (1000 * 60 * 60 * 24)) : 1} max={maxDaysLimit} />
             </>
           )}
 
           <label htmlFor="download-limit">Download Limit:</label>
-          <input type="number" id="download-limit" ref={downloadLimitRef} defaultValue={file?.downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="No limit" min={1} />
+          <input type="number" id="download-limit" ref={downloadLimitRef} defaultValue={file?.downloadLimit} onInput={verifyDownloadLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="No limit" min={(file?.downloadCount || 0) + 1} />
 
           <button type="submit" disabled={isUploading} className="primary-button">
             {edit ? "Edit" : "Upload"}
