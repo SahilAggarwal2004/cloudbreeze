@@ -1,4 +1,3 @@
-
 import { FaCopy } from "react-icons/fa";
 import { TbMarkdown, TbMarkdownOff } from "react-icons/tb";
 import { useRemark } from "react-remarkify";
@@ -21,7 +20,7 @@ export default function Text({ value }) {
   }
 
   return (
-    <div className="flex flex-col items-center space-y-3 px-4 text-justify sm:px-5 md:px-6">
+    <div className="flex flex-col items-center space-y-3 px-4 sm:px-5 md:px-6">
       <div className="flex w-[80vw] max-w-60 justify-around">
         <span className="text-lg font-medium">Text</span>
         <div className="flex items-center space-x-3">
@@ -34,9 +33,7 @@ export default function Text({ value }) {
           <button>{speechStatus === "started" ? <HiVolumeOff title="Stop speech" onClick={stop} /> : <HiVolumeUp title="Start speech" onClick={start} />}</button>
         </div>
       </div>
-      <div className="markdown">
-        <Text />
-      </div>
+      <Text className="prose prose-th:w-screen prose-th:max-w-full prose-th:border prose-td:border prose-th:p-2 prose-td:p-2! prose-ul:whitespace-normal prose-ol:whitespace-normal prose-headings:my-2 prose-pre:my-2 prose-table:my-2 prose-table:block prose-table:overflow-x-auto grid max-w-full grid-cols-1 break-words whitespace-pre-wrap *:my-0 *:w-full *:whitespace-pre-wrap" />
     </div>
   );
 }

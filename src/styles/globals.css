@@ -63,10 +63,6 @@
   @apply relative flex h-80 max-h-[35vh] w-80 max-w-[90vw] cursor-pointer justify-center rounded-lg pt-4 pb-12 shadow-md transition-all duration-300 select-none hover:shadow-2xl sm:flex-[0_0_40%];
 }
 
-.markdown {
-  @apply prose prose-th:w-screen prose-th:max-w-full prose-th:border prose-td:border prose-th:p-2 prose-td:p-2 prose-ul:whitespace-normal prose-ol:whitespace-normal prose-headings:my-1 prose-pre:my-1 grid max-w-full grid-cols-1 overflow-y-scroll break-words whitespace-pre-wrap *:my-0 *:w-full *:whitespace-pre-wrap;
-}
-
 .preview-container > div *:not(svg):not(svg *) {
   @apply max-h-96 w-full max-w-[90vh] whitespace-pre-line;
 }
