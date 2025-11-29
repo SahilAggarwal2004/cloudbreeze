@@ -32,7 +32,7 @@ function reducer(state, { conn, name, peer, type = "add" }) {
 
 export default function P2p({ router }) {
   const { activateModal, progress, setProgress, files, setFiles } = useFileContext();
-  const { share } = router.query;
+  const { share, title, text: queryText, url } = router.query;
   const shareRoom = useRef();
   const receiveRoom = useRef();
   const peerRef = useRef();
@@ -113,6 +113,13 @@ export default function P2p({ router }) {
 
   useEffect(() => {
     if (!share) setFiles([]);
+    else {
+      let markdown = "";
+      if (title) markdown += `# ${title}\n\n`;
+      if (queryText) markdown += `${queryText}\n\n`;
+      if (url) markdown += `${url}`;
+      setText(markdown);
+    }
     return reset;
   }, []);
 
@@ -129,7 +136,7 @@ export default function P2p({ router }) {
             <label htmlFor="text" className="self-start pt-1 sm:pt-0.5">
               Text:{" "}
             </label>
-            <Textarea id="text" minRows={3} maxRows={20} className="rounded-sm border px-2 py-0.5 placeholder:py-0.5 placeholder:text-sm" placeholder="Text / Description (Optional)" onChange={(e) => setText(e.target.value)} />
+            <Textarea id="text" minRows={3} maxRows={20} className="rounded-sm border px-2 py-0.5 placeholder:py-0.5 placeholder:text-sm" value={text} placeholder="Text / Description (Optional)" onChange={(e) => setText(e.target.value)} />
             <label htmlFor="room-id">Room Id: </label>
             <input type="text" id="room-id" ref={shareRoom} onInput={verifyRoomId} disabled={disable} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />
             {link ? (
@@ -161,7 +168,7 @@ export default function P2p({ router }) {
               </form>
               <div className="text-center">
                 <div className="mb-3 font-bold">OR</div>
-                <div className="flex cursor-pointer select-none items-center justify-center space-x-1 font-medium text-gray-800" onClick={() => activateModal({ type: "qrScanner" })}>
+                <div className="flex cursor-pointer items-center justify-center space-x-1 font-medium text-gray-800 select-none" onClick={() => activateModal({ type: "qrScanner" })}>
                   <FaQrcode />
                   <span>Scan a QR Code</span>
                 </div>

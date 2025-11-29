@@ -15,14 +15,15 @@ export default function PeerCard({ data: { name, conn }, names, sizes, totalSize
   const [count, countRef, setCount] = useStateRef(0);
   const [bytes, setBytes] = useState(0);
   const [time, setTime] = useState(0);
-  const file = useMemo(() => files[count], [count]);
+  const readerRef = useRef();
+
+  const file = files[count];
   const { symbol, size: unitSize } = useMemo(() => {
     const symbol = bytesToUnit(totalSize);
     return { symbol, size: unitSizes[symbol] };
-  }, []);
-  const prevBytes = useMemo(() => sizes.slice(0, count).reduce((size, cur) => size + cur, 0), [count]);
+  }, [totalSize]);
+  const prevBytes = useMemo(() => sizes.slice(0, count).reduce((size, cur) => size + cur, 0), [count, sizes]);
   const totalBytes = prevBytes + bytes;
-  const readerRef = useRef();
 
   function sendFile() {
     const size = sizes[countRef.current];
@@ -70,10 +71,10 @@ export default function PeerCard({ data: { name, conn }, names, sizes, totalSize
 
   return (
     <div className="relative flex min-w-[270px] flex-col justify-center rounded-sm border bg-gray-50 p-4 pb-0 text-center transition-all duration-300 hover:bg-transparent hover:shadow-lg">
-      <FaXmark className="absolute right-2 top-2 scale-110" onClick={() => conn.close()} />
+      <FaXmark className="absolute top-2 right-2 scale-110" onClick={() => conn.close()} />
       <h4 className="font-medium">{name}</h4>
       <CircularProgressbarWithChildren value={totalBytes} maxValue={totalSize} strokeWidth={2.5} className="scale-75" styles={{ path: { stroke: "#48BB6A" } }}>
-        <div className="w-1/2 space-y-1 break-words text-center text-sm md:text-base">
+        <div className="w-1/2 space-y-1 text-center text-sm wrap-break-word md:text-base">
           <div>
             {bytesToFraction(totalBytes, totalSize, unitSize)} {symbol}
           </div>

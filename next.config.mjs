@@ -10,7 +10,7 @@ const withPWA = withSerwistInit({
   swSrc: "src/sw.js",
   swDest: "public/sw.js",
   exclude: [/public\/sw.js/],
-  disable: process.env.NODE_ENV === "development",
+  disable: process.env.NODE_ENV !== "production",
   register: false,
   reloadOnOnline: false,
   additionalPrecacheEntries: pages.concat(images).map((url) => ({ url, revision })),
@@ -18,6 +18,7 @@ const withPWA = withSerwistInit({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactCompiler: true,
   experimental: {
     nextScriptWorkers: true,
   },

@@ -150,7 +150,7 @@ export default function Id({ router }) {
       ) : !file && !text ? (
         <Loader text="Connecting to the peer..." className="center flex flex-col items-center space-y-2 text-lg" />
       ) : (
-        <div className="mb-[4.5rem] space-y-8" style={{ wordBreak: "break-word" }}>
+        <div className="mb-8 space-y-8" style={{ wordBreak: "break-word" }}>
           {file && (
             <div className="flex justify-center">
               <div className="grid w-max min-w-[90vw] max-w-full grid-cols-[auto_1fr] gap-2 px-3 sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw]">
@@ -166,7 +166,7 @@ export default function Id({ router }) {
                 </button>
                 {isDownloading && (
                   <>
-                    <BarProgress percent={downPercent} className="col-span-2 max-w-[100%]" />
+                    <BarProgress percent={downPercent} className="col-span-2 max-w-full" />
                     {totalBytes < size && (
                       <div className="col-span-2 w-full text-center">
                         Speed: {speed(bytes, unitSize, time)} {symbol}/s

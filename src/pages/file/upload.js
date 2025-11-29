@@ -5,7 +5,7 @@ import Head from "next/head";
 import { randomElement } from "utility-kit";
 import { useFileContext } from "../../contexts/ContextProvider";
 import { fileDetails, getUploadUrl, remove } from "../../modules/functions";
-import { cloudLimit, cloudLimitMB, transferLimit, transferLimitGB, unavailable } from "../../constants";
+import { cloudLimit, cloudLimitMB, transferLimit, unavailable } from "../../constants";
 import Loader from "../../components/Loader";
 import Info from "../../components/Info";
 import BarProgress from "../../components/BarProgress";
@@ -22,23 +22,13 @@ export default function Upload({ router }) {
   const [mode, setMode] = useState("save");
   const [link, setLink] = useState();
   const [progress, setProgress] = useState(-1);
-  const maxDaysLimit = useMemo(() => (type === "premium" ? 365 : type === "normal" ? 30 : 7), [type]);
+  const maxDaysLimit = type === "premium" ? 365 : type === "normal" ? 30 : 7;
   const isUploading = progress >= 0;
   const isUploaded = link && link !== "error";
   const length = files.length;
   const edit = Boolean(fileIdFromUrl);
-  const file = useMemo(() => uploadFiles.find(({ _id }) => _id === fileIdFromUrl), [fileIdFromUrl]);
-  const size = useMemo(() => {
-    const { totalSize } = fileDetails(files);
-    if (totalSize > transferLimit) {
-      toast("Switched to Peer-to-peer transfer for large files");
-      router.push("/p2p?share=true");
-    } else if (mode === "save" && totalSize > cloudLimit) {
-      toast(`Switched to transfer mode for large files`);
-      setMode("transfer");
-    }
-    return totalSize;
-  }, [files]);
+  const file = uploadFiles.find(({ _id }) => _id === fileIdFromUrl);
+  const size = useMemo(() => fileDetails(files).totalSize, [files]);
 
   const verifyFileId = (e) => (e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, ""));
   const verifyDownloadLimit = (e) => (e.target.value = Math.abs(e.target.value) || "");
@@ -122,11 +112,42 @@ export default function Upload({ router }) {
   }
 
   useEffect(() => {
-    if (!share && files.length) setFiles([]);
-    const handleMessage = ({ data: { files } }) => setFiles(files);
-    navigator.serviceWorker?.addEventListener("message", handleMessage);
-    return () => navigator.serviceWorker?.removeEventListener("message", handleMessage);
+    if (!share) {
+      setFiles([]);
+      return;
+    }
+
+    const handleMessage = ({ data: { title, text, url, files } }) => {
+      if (files.length) return setFiles(files);
+      const params = new URLSearchParams({ share: true });
+      if (title) params.set("title", title);
+      if (text) params.set("text", text);
+      if (url) params.set("url", url);
+      router.push(`/p2p?${params.toString()}`);
+    };
+    const sendReady = () => navigator.serviceWorker.controller?.postMessage("ready");
+
+    navigator.serviceWorker.addEventListener("message", handleMessage);
+    if (navigator.serviceWorker.controller) sendReady();
+    else {
+      const onControllerChange = () => {
+        sendReady();
+        navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+      };
+      navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
+    }
+    return () => navigator.serviceWorker.removeEventListener("message", handleMessage);
   }, []);
+
+  useEffect(() => {
+    if (size > transferLimit) {
+      toast("Switched to Peer-to-peer transfer for large files");
+      router.push("/p2p?share=true");
+    } else if (mode === "save" && size > cloudLimit) {
+      toast(`Switched to transfer mode for large files`);
+      setMode("transfer");
+    }
+  }, [size]);
 
   useEffect(() => {
     if (isUploaded) window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
