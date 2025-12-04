@@ -1,0 +1,6 @@
+onlyBuiltDependencies:
+  - sharp
+  - unrs-resolver
+
+overrides:
+  react: "19.2.1"
