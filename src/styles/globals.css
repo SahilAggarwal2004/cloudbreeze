@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@plugin '@tailwindcss/typography';
+@plugin "@tailwindcss/typography";
 
 @theme {
   --breakpoint-*: initial;
@@ -64,7 +64,7 @@
 }
 
 .preview-container > div *:not(svg):not(svg *) {
-  @apply max-h-96 w-full max-w-[90vh] whitespace-pre-line;
+  @apply max-h-96 max-w-[90vh] whitespace-pre-line;
 }
 
 .preview-container > div iframe {

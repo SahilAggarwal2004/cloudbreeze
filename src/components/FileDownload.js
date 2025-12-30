@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import FileViewer from "@afzalimdad9/react-file-preview";
 import axios from "axios";
 import { File } from "megajs";
 import { useEffect, useRef, useState } from "react";
+import FilePreviewer from "react-file-preview-engine";
 import { FaQrcode } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { unzip } from "unzipit";
@@ -124,7 +124,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
       {fileData.url ? (
         <div className="preview-container mt-2 flex flex-col items-center justify-center space-y-2">
           <div className="font-medium">File Preview:</div>
-          <FileViewer src={fileData.url} fileName={fileData.name} loader={<Loader />} />
+          <FilePreviewer src={fileData.url} fileName={fileData.name} />
         </div>
       ) : progress > 0 ? (
         <BarProgress percent={progress} />
