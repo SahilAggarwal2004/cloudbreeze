@@ -9,7 +9,7 @@ import Info from "../../components/Info";
 import PeerCard from "../../components/PeerCard";
 import { peerOptions } from "../../constants";
 import { useFileContext } from "../../contexts/ContextProvider";
-import { fileDetails, generateId } from "../../modules/functions";
+import { fileDetails, generateId } from "../../lib/functions";
 
 function reducer(state, { conn, name, peer, type = "add" }) {
   switch (type) {

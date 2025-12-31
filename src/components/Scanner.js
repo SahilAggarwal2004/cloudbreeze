@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 import { toast } from "react-toastify";
 import { useFileContext } from "../contexts/ContextProvider";
-import { verifyUrl } from "../modules/functions";
+import { verifyUrl } from "../lib/functions";
 
 export default function Scanner() {
   const router = useRouter();

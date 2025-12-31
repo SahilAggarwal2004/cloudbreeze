@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useFileContext } from "../../contexts/ContextProvider";
 import Logo from "../../components/Logo";
 import Password from "../../components/Password";
-import { removeStorage, setStorage } from "../../modules/storage";
+import { removeStorage, setStorage } from "../../lib/storage";
 import Head from "next/head";
 
 export default function Login({ router }) {

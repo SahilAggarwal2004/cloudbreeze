@@ -6,8 +6,8 @@ import { toast } from "react-toastify";
 import BarProgress from "../../components/BarProgress";
 import Loader from "../../components/Loader";
 import { peerOptions, sizes } from "../../constants";
-import { bytesToUnit, round, speed } from "../../modules/functions";
-import { getStorage } from "../../modules/storage";
+import { bytesToUnit, round, speed } from "../../lib/functions";
+import { getStorage } from "../../lib/storage";
 import Text from "../../components/Text";
 
 export default function Id({ router }) {

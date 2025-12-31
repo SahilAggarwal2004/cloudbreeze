@@ -4,6 +4,8 @@ const accounts = [
   { username: "de634c5368a4108018a3592d", credential: "HAvcyZqALRzC7EFG" },
 ];
 
+export const autoExtractZipRegex = /^cloudbreeze_.*\.zip$/;
+
 export const sizes = { B: 1, KB: 1024, MB: 1048576, GB: 1073741824 }; // In bytes
 
 export const chunkSize = 64 * sizes.KB;
@@ -37,8 +39,6 @@ export const peerOptions = {
 };
 
 export const showModal = ["/account", "/account/history", "/file/download", "/p2p"];
-
-export const regex = /^cloudbreeze_.*\.zip$/;
 
 const transferLimitGB = 2;
 

@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { fetchHistory, onlyGuest, types } from "../constants";
 import useStorage from "../hooks/useStorage";
-import { getStorage, removeStorage, setStorage } from "../modules/storage";
+import { getStorage, removeStorage, setStorage } from "../lib/storage";
 import useModal from "../hooks/useModal";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API;

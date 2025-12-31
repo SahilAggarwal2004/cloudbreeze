@@ -89,3 +89,9 @@ export async function download(source, name) {
   if (shouldRevoke) URL.revokeObjectURL(url);
   await wait(100);
 }
+
+export async function fetchResource(src, type, signal) {
+  const res = await fetch(src, { signal });
+  if (!res.ok) throw new Error();
+  return res[type]();
+}

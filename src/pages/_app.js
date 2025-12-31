@@ -8,7 +8,7 @@ import Modal from "../components/Modal";
 import Navbar from "../components/Navbar";
 import { hideNavbar, showModal } from "../constants";
 import ContextProvider from "../contexts/ContextProvider";
-import { handleVersionUpdate } from "../modules/update";
+import { handleVersionUpdate } from "../lib/update";
 import "../styles/globals.css";
 
 const api = process.env.NEXT_PUBLIC_API;

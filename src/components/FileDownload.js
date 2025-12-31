@@ -7,12 +7,13 @@ import { FaQrcode } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { unzip } from "unzipit";
 
-import Loader from "./Loader";
-import { useFileContext } from "../contexts/ContextProvider";
-import { download, generateId, getDownloadUrl, resolvePromises } from "../modules/functions";
 import BarProgress from "./BarProgress";
+import { autoExtractZipRegex } from "../constants";
+import { useFileContext } from "../contexts/ContextProvider";
 import useStorage from "../hooks/useStorage";
-import { regex } from "../constants";
+import Loader from "./Loader";
+import { download, generateId, getDownloadUrl, resolvePromises } from "../lib/functions";
+import { markdownRenderer } from "../lib/renderers";
 
 export default function FileDownload({ fileIdFromUrl = false }) {
   const { setDownloadFiles, fetchApp, activateModal } = useFileContext();
@@ -51,7 +52,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         if (mode === "preview") return setFileData({ url: URL.createObjectURL(blob), name, createdAt, daysLimit });
         if (!blob) throw new Error();
         try {
-          if (!unzipFile || !regex.test(name)) throw new Error();
+          if (!unzipFile || !autoExtractZipRegex.test(name)) throw new Error();
           const { entries } = await unzip(blob);
           var nameList = Object.keys(entries);
           const blobs = await resolvePromises(Object.values(entries).map((e) => e.blob()));
@@ -124,7 +125,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
       {fileData.url ? (
         <div className="preview-container mt-2 flex flex-col items-center justify-center space-y-2">
           <div className="font-medium">File Preview:</div>
-          <FilePreviewer src={fileData.url} fileName={fileData.name} />
+          <FilePreviewer src={fileData.url} fileName={fileData.name} customRenderers={[markdownRenderer]} />
         </div>
       ) : progress > 0 ? (
         <BarProgress percent={progress} />

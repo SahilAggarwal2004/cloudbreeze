@@ -5,7 +5,7 @@ import { FaXmark } from "react-icons/fa6";
 import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { wait } from "utility-kit";
 import { chunkSize, maxBufferSize, sizes as unitSizes } from "../constants";
-import { bytesToFraction, bytesToUnit, speed } from "../modules/functions";
+import { bytesToFraction, bytesToUnit, speed } from "../lib/functions";
 import "react-circular-progressbar/dist/styles.css";
 import { useFileContext } from "../contexts/ContextProvider";
 import useStateRef from "../hooks/useStateRef";

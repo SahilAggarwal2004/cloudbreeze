@@ -1,6 +1,6 @@
 import { FaXmark } from "react-icons/fa6";
 import { useFileContext } from "../contexts/ContextProvider";
-import { getDeleteUrl } from "../modules/functions";
+import { getDeleteUrl } from "../lib/functions";
 import Info from "./Info";
 import Scanner from "./Scanner";
 

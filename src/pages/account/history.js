@@ -3,7 +3,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { options } from "../../constants";
 import { useFileContext } from "../../contexts/ContextProvider";
-import { relativeTime } from "../../modules/functions";
+import { relativeTime } from "../../lib/functions";
 
 export default function History({ router }) {
   const { uploadFiles, transferFiles, downloadFiles, clearHistory, activateModal } = useFileContext();

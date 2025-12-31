@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { BsPatchCheckFill } from "react-icons/bs";
 import Head from "next/head";
 import { useFileContext } from "../../contexts/ContextProvider";
-import { getStorage, setStorage } from "../../modules/storage";
+import { getStorage, setStorage } from "../../lib/storage";
 import { types } from "../../constants";
 
 export default function Account() {

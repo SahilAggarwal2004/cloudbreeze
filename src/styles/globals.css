@@ -63,15 +63,15 @@
   @apply relative flex h-80 max-h-[35vh] w-80 max-w-[90vw] cursor-pointer justify-center rounded-lg pt-4 pb-12 shadow-md transition-all duration-300 select-none hover:shadow-2xl sm:flex-[0_0_40%];
 }
 
-.preview-container > div *:not(svg):not(svg *) {
+.preview-container > div > *:not(svg):not(.markdown-renderer) {
   @apply max-h-96 max-w-[90vh] whitespace-pre-line;
 }
 
-.preview-container > div iframe {
+.preview-container > div > iframe {
   @apply h-96;
 }
 
-.preview-container > div audio {
+.preview-container > div > audio {
   @apply w-80!;
 }
 

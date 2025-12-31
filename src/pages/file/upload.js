@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import Head from "next/head";
 import { randomElement } from "utility-kit";
 import { useFileContext } from "../../contexts/ContextProvider";
-import { fileDetails, getUploadUrl, remove } from "../../modules/functions";
+import { fileDetails, getUploadUrl, remove } from "../../lib/functions";
 import { cloudLimit, cloudLimitMB, transferLimit, unavailable } from "../../constants";
 import Loader from "../../components/Loader";
 import Info from "../../components/Info";
