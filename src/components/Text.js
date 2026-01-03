@@ -13,7 +13,7 @@ export default function Text({ value, preview = false, className = "" }) {
   const [showMarkdown, setShowMarkdown] = useStorage("markdown", false);
   const shouldRenderMarkdown = preview || showMarkdown;
   const reactContent = useRemark({ markdown: value, rehypePlugins: [rehypeRaw, rehypeSanitize], remarkPlugins: [remarkGfm], remarkToRehypeOptions: { allowDangerousHtml: true } });
-  const { Text, speechStatus, start, stop } = useSpeech({ text: shouldRenderMarkdown ? reactContent : value, highlightText: true });
+  const { Text, speechStatus, start, stop } = useSpeech({ text: shouldRenderMarkdown ? reactContent : value, stableText: true, highlightText: true });
 
   function copy() {
     navigator.clipboard.writeText(value);
