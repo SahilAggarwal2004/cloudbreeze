@@ -33,8 +33,8 @@ importers:
         specifier: ^19.2.3
         version: 19.2.3(react@19.2.3)
       react-file-preview-engine:
-        specifier: ^0.1.6
-        version: 0.1.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: ^0.1.8
+        version: 0.1.8(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react-icons:
         specifier: ^5.5.0
         version: 5.5.0(react@19.2.3)
@@ -42,14 +42,14 @@ importers:
         specifier: ^2.0.18
         version: 2.0.18(react@19.2.3)
       react-remarkify:
-        specifier: ^0.8.1
-        version: 0.8.1(react@19.2.3)
+        specifier: ^0.8.2
+        version: 0.8.2(react@19.2.3)
       react-text-to-speech:
-        specifier: ^5.1.3
-        version: 5.1.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: ^5.1.4
+        version: 5.1.4(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react-textarea-autosize:
         specifier: ^8.5.9
-        version: 8.5.9(@types/react@19.2.7)(react@19.2.3)
+        version: 8.5.9(@types/react@19.2.8)(react@19.2.3)
       react-toastify:
         specifier: ^11.0.5
         version: 11.0.5(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -72,15 +72,15 @@ importers:
         specifier: ^1.4.3
         version: 1.4.3
       utility-kit:
-        specifier: 0.9.0
-        version: 0.9.0
+        specifier: 0.9.1
+        version: 0.9.1
     devDependencies:
       '@builder.io/partytown':
         specifier: ^0.10.3
         version: 0.10.3
       '@serwist/next':
-        specifier: ^9.4.2
-        version: 9.4.2(next@16.1.1(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
+        specifier: ^9.5.0
+        version: 9.5.0(next@16.1.1(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
       '@tailwindcss/postcss':
         specifier: ^4.1.18
         version: 4.1.18
@@ -88,8 +88,8 @@ importers:
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.1.18)
       '@types/react':
-        specifier: ^19.2.7
-        version: 19.2.7
+        specifier: ^19.2.8
+        version: 19.2.8
       babel-plugin-react-compiler:
         specifier: ^1.0.0
         version: 1.0.0
@@ -109,8 +109,8 @@ importers:
         specifier: ^0.7.2
         version: 0.7.2(prettier@3.7.4)
       serwist:
-        specifier: ^9.4.2
-        version: 9.4.2(typescript@5.9.3)
+        specifier: ^9.5.0
+        version: 9.5.0(typescript@5.9.3)
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
@@ -502,8 +502,8 @@ packages:
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
 
-  '@serwist/build@9.4.2':
-    resolution: {integrity: sha512-DVwXEs8zbYxkm9FlwRVGtsnakWuJ5wfre4UL9CABbjh4lzkqrLidkrZZA0zc33kqUtDEfxhG/QWukOl+ujJDlA==}
+  '@serwist/build@9.5.0':
+    resolution: {integrity: sha512-8D330WwYjBI5MadyVOphwUqJLMNQK76KWBoDykIPrbtt0C3uGFPxG4XNZCFXBkRG3O1QLedv9BWqH27SeqhcLg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: '>=5.0.0'
@@ -511,11 +511,11 @@ packages:
       typescript:
         optional: true
 
-  '@serwist/next@9.4.2':
-    resolution: {integrity: sha512-S7LYUGDd1Cc/HGrfitSPeeew1I++VAVcgTFToXe6lejz1JpjjlyTmM060r3aZvqb6lAvyukZ27DT21WUjSogSA==}
+  '@serwist/next@9.5.0':
+    resolution: {integrity: sha512-amJUpLzOd3F9xY8/Le0W9pf47PtDvRZrJ27gDSJESohsfoBRfnabsatjNuQdUnVE8rgl0YFIMYyVgLejNOb06g==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
-      '@serwist/cli': ^9.4.2
+      '@serwist/cli': ^9.5.0
       next: '>=14.0.0'
       react: '>=18.0.0'
       typescript: '>=5.0.0'
@@ -525,8 +525,11 @@ packages:
       typescript:
         optional: true
 
-  '@serwist/webpack-plugin@9.4.2':
-    resolution: {integrity: sha512-pj7NxWkEB9yG6xQJ3NKGnbw+sFdzIi66eLgfvVIPco2toBbNllC/SFLo3+VtE0ITi5XcMAgfT87dT1Y/0iVGVA==}
+  '@serwist/utils@9.5.0':
+    resolution: {integrity: sha512-DBzmJgL63/VYcQ/TpSYXW1FJKRILesOxytu+1MHY0vW2WFhW7pYkLgVuHqksP5K+3ypt54M3+2QNDDMixrnutQ==}
+
+  '@serwist/webpack-plugin@9.5.0':
+    resolution: {integrity: sha512-76o1GZRS6r5nUtfam55c3T/Fe5NoqqW70RyFTjZAIPj6jjIRufcHXQHBpedT5jfew/7toCCmvtZ8GI60aFigVg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       typescript: '>=5.0.0'
@@ -537,8 +540,8 @@ packages:
       webpack:
         optional: true
 
-  '@serwist/window@9.4.2':
-    resolution: {integrity: sha512-v1PqWOHj/ysNg9G84hq2ej4FzOQZsbld74QmsI4AXGYCji/dP+wcpvz/I6kw+fRH2/9ZhX3KuJHWHPUebBe5+Q==}
+  '@serwist/window@9.5.0':
+    resolution: {integrity: sha512-WqmEZjJ+u841sbUJh2LAbtPNrz8mU/wCTo9sEVqsMOk+EM5oBz5FRpF3kDzx1cF5rTIfXer1df0D354lIdFw1Q==}
     peerDependencies:
       typescript: '>=5.0.0'
     peerDependenciesMeta:
@@ -671,8 +674,8 @@ packages:
   '@types/offscreencanvas@2019.7.3':
     resolution: {integrity: sha512-ieXiYmgSRXUDeOntE1InxjWyvEelZGP63M+cGuquuRLuIKKT1osnkXjxev9B7d1nXSug5vpunx+gNlbVxMlC9A==}
 
-  '@types/react@19.2.7':
-    resolution: {integrity: sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==}
+  '@types/react@19.2.8':
+    resolution: {integrity: sha512-3MbSL37jEchWZz2p2mjntRZtPt837ij10ApxKfgmXCTuHWagYg7iA5bqPw6C8BMPfwidlvfPI/fxOc42HLhcyg==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -2260,8 +2263,8 @@ packages:
       react: ^19.0.0 || ^18.0.0 || ^17.0.0 || ^16.2.0
       react-dom: ^19.0.0 || ^18.0.0 || ^17.0.0 || ^16.2.0
 
-  react-file-preview-engine@0.1.6:
-    resolution: {integrity: sha512-0cHyNrh10xuitgTpgwDIYXng+4oRfiTGf6uuBW0VHxgQ3EOkqvHvgolw/9wAoT/5EfjnSHEHl1Wbvy3PkA0lMg==}
+  react-file-preview-engine@0.1.8:
+    resolution: {integrity: sha512-S+8XuUsO3EJASf1JByoFmzth8PuYfC3/gTTfAzxa3f6eReZrEdhSt5RY43Os9fJQkD1R+jIUPT9DgCkVPPovIA==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -2279,13 +2282,13 @@ packages:
     peerDependencies:
       react: '*'
 
-  react-remarkify@0.8.1:
-    resolution: {integrity: sha512-Jhufhzs15XP2N8+UeV6c8TQi+z7RmvNmYO/utMA8XQyaXgQ2qnFwFBSnIrjG5Q6ummQhfrnUUTVeE36hOK/jrg==}
+  react-remarkify@0.8.2:
+    resolution: {integrity: sha512-hA+znkEIEBVV617ePQ+sxUGvFQLMKBJZwdFvB1RKVoIG2vsvW1XZAdA1KFNIHTag6qxCvyDuaV07QppW+FY7Qg==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  react-text-to-speech@5.1.3:
-    resolution: {integrity: sha512-r69XhqsWE5UhfZgwKfLv7GXv8YQ+wGbNCcvWYPBVmjtZgss289TP9hXLg4Ngy8SddjkNOVpZTd4hLWA/UnX+UA==}
+  react-text-to-speech@5.1.4:
+    resolution: {integrity: sha512-vpwcfdjpW6sRD1ShDR8+cmcf2iXjbfW9jSebynRcXOd4Bicu1Qzdyo5vNRElWoZFCwVGwXMin76eph7xLCQ4wA==}
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -2398,8 +2401,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  serwist@9.4.2:
-    resolution: {integrity: sha512-IHbZjUTAOdUstD/ZWRxgG4aCaxyZtQVLxkvVIGHJh3u0+uIMXweBSDaOOXZCP8luXYdbpfb5AdSU8oQiFKlHCQ==}
+  serwist@9.5.0:
+    resolution: {integrity: sha512-wjrsPWHI5ZM20jIsVKZGN/uAdS2aKOgmIOE4dqUaFhK6SVIzgoJZjTnZ3v29T+NmneuD753jlhGui9eYypsj0A==}
     peerDependencies:
       typescript: '>=5.0.0'
     peerDependenciesMeta:
@@ -2694,8 +2697,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  utility-kit@0.9.0:
-    resolution: {integrity: sha512-bQpyF+a8HYozLqnwy9g+fIeKmbr/tuN2MTpzYq3KmNWTBtXgsaype53mpaSmqwJyiPc1rLLvSjWUM5fwys5t7g==}
+  utility-kit@0.9.1:
+    resolution: {integrity: sha512-/DjBvVBA06b+qtxc0YU+GdLs1lqDyIt/VF9RriP6ObfsDcw8VkQPgArmEuq9PHdAb8ZXO8AMwVrAc9gusa8arg==}
 
   uzip-module@1.0.3:
     resolution: {integrity: sha512-AMqwWZaknLM77G+VPYNZLEruMGWGzyigPK3/Whg99B3S6vGHuqsyl5ZrOv1UUF3paGK1U6PM0cnayioaryg/fA==}
@@ -2771,11 +2774,11 @@ packages:
     peerDependencies:
       zod: ^3.25.0 || ^4.0.0
 
-  zod@4.1.13:
-    resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
-
   zod@4.2.1:
     resolution: {integrity: sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==}
+
+  zod@4.3.5:
+    resolution: {integrity: sha512-k7Nwx6vuWx1IJ9Bjuf4Zt1PEllcwe7cls3VNzm4CQ1/hgtFUK2bRNG3rvnpPUhFjmqJKAKtjV576KnUkHocg/g==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -3144,46 +3147,51 @@ snapshots:
 
   '@rtsao/scc@1.1.0': {}
 
-  '@serwist/build@9.4.2(typescript@5.9.3)':
+  '@serwist/build@9.5.0(typescript@5.9.3)':
     dependencies:
+      '@serwist/utils': 9.5.0
       common-tags: 1.8.2
       glob: 10.5.0
       pretty-bytes: 6.1.1
       source-map: 0.8.0-beta.0
-      zod: 4.2.1
+      zod: 4.3.5
     optionalDependencies:
       typescript: 5.9.3
 
-  '@serwist/next@9.4.2(next@16.1.1(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)(typescript@5.9.3)':
+  '@serwist/next@9.5.0(next@16.1.1(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react@19.2.3)(typescript@5.9.3)':
     dependencies:
-      '@serwist/build': 9.4.2(typescript@5.9.3)
-      '@serwist/webpack-plugin': 9.4.2(typescript@5.9.3)
-      '@serwist/window': 9.4.2(typescript@5.9.3)
+      '@serwist/build': 9.5.0(typescript@5.9.3)
+      '@serwist/utils': 9.5.0
+      '@serwist/webpack-plugin': 9.5.0(typescript@5.9.3)
+      '@serwist/window': 9.5.0(typescript@5.9.3)
       browserslist: 4.28.1
       glob: 10.5.0
       kolorist: 1.8.0
       next: 16.1.1(@babel/core@7.28.5)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react: 19.2.3
       semver: 7.7.3
-      serwist: 9.4.2(typescript@5.9.3)
-      zod: 4.2.1
+      serwist: 9.5.0(typescript@5.9.3)
+      zod: 4.3.5
     optionalDependencies:
       typescript: 5.9.3
     transitivePeerDependencies:
       - webpack
 
-  '@serwist/webpack-plugin@9.4.2(typescript@5.9.3)':
+  '@serwist/utils@9.5.0': {}
+
+  '@serwist/webpack-plugin@9.5.0(typescript@5.9.3)':
     dependencies:
-      '@serwist/build': 9.4.2(typescript@5.9.3)
+      '@serwist/build': 9.5.0(typescript@5.9.3)
+      '@serwist/utils': 9.5.0
       pretty-bytes: 6.1.1
-      zod: 4.2.1
+      zod: 4.3.5
     optionalDependencies:
       typescript: 5.9.3
 
-  '@serwist/window@9.4.2(typescript@5.9.3)':
+  '@serwist/window@9.5.0(typescript@5.9.3)':
     dependencies:
       '@types/trusted-types': 2.0.7
-      serwist: 9.4.2(typescript@5.9.3)
+      serwist: 9.5.0(typescript@5.9.3)
     optionalDependencies:
       typescript: 5.9.3
 
@@ -3296,7 +3304,7 @@ snapshots:
 
   '@types/offscreencanvas@2019.7.3': {}
 
-  '@types/react@19.2.7':
+  '@types/react@19.2.8':
     dependencies:
       csstype: 3.2.3
 
@@ -3983,8 +3991,8 @@ snapshots:
       '@babel/parser': 7.28.5
       eslint: 9.39.1(jiti@2.6.1)
       hermes-parser: 0.25.1
-      zod: 4.1.13
-      zod-validation-error: 4.0.2(zod@4.1.13)
+      zod: 4.2.1
+      zod-validation-error: 4.0.2(zod@4.2.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -5227,7 +5235,7 @@ snapshots:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
-  react-file-preview-engine@0.1.6(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+  react-file-preview-engine@0.1.8(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       mime: 4.1.0
       react: 19.2.3
@@ -5246,8 +5254,9 @@ snapshots:
       qr.js: 0.0.0
       react: 19.2.3
 
-  react-remarkify@0.8.1(react@19.2.3):
+  react-remarkify@0.8.2(react@19.2.3):
     dependencies:
+      hast-util-to-jsx-runtime: 2.3.6
       react: 19.2.3
       rehype-react: 8.0.0
       remark-parse: 11.0.0
@@ -5256,17 +5265,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-text-to-speech@5.1.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+  react-text-to-speech@5.1.4(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
-  react-textarea-autosize@8.5.9(@types/react@19.2.7)(react@19.2.3):
+  react-textarea-autosize@8.5.9(@types/react@19.2.8)(react@19.2.3):
     dependencies:
       '@babel/runtime': 7.28.4
       react: 19.2.3
-      use-composed-ref: 1.4.0(@types/react@19.2.7)(react@19.2.3)
-      use-latest: 1.3.0(@types/react@19.2.7)(react@19.2.3)
+      use-composed-ref: 1.4.0(@types/react@19.2.8)(react@19.2.3)
+      use-latest: 1.3.0(@types/react@19.2.8)(react@19.2.3)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -5412,8 +5421,9 @@ snapshots:
 
   semver@7.7.3: {}
 
-  serwist@9.4.2(typescript@5.9.3):
+  serwist@9.5.0(typescript@5.9.3):
     dependencies:
+      '@serwist/utils': 9.5.0
       idb: 8.0.3
     optionalDependencies:
       typescript: 5.9.3
@@ -5795,28 +5805,28 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  use-composed-ref@1.4.0(@types/react@19.2.7)(react@19.2.3):
+  use-composed-ref@1.4.0(@types/react@19.2.8)(react@19.2.3):
     dependencies:
       react: 19.2.3
     optionalDependencies:
-      '@types/react': 19.2.7
+      '@types/react': 19.2.8
 
-  use-isomorphic-layout-effect@1.2.1(@types/react@19.2.7)(react@19.2.3):
+  use-isomorphic-layout-effect@1.2.1(@types/react@19.2.8)(react@19.2.3):
     dependencies:
       react: 19.2.3
     optionalDependencies:
-      '@types/react': 19.2.7
+      '@types/react': 19.2.8
 
-  use-latest@1.3.0(@types/react@19.2.7)(react@19.2.3):
+  use-latest@1.3.0(@types/react@19.2.8)(react@19.2.3):
     dependencies:
       react: 19.2.3
-      use-isomorphic-layout-effect: 1.2.1(@types/react@19.2.7)(react@19.2.3)
+      use-isomorphic-layout-effect: 1.2.1(@types/react@19.2.8)(react@19.2.3)
     optionalDependencies:
-      '@types/react': 19.2.7
+      '@types/react': 19.2.8
 
   util-deprecate@1.0.2: {}
 
-  utility-kit@0.9.0: {}
+  utility-kit@0.9.1: {}
 
   uzip-module@1.0.3: {}
 
@@ -5914,12 +5924,12 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod-validation-error@4.0.2(zod@4.1.13):
+  zod-validation-error@4.0.2(zod@4.2.1):
     dependencies:
-      zod: 4.1.13
-
-  zod@4.1.13: {}
+      zod: 4.2.1
 
   zod@4.2.1: {}
+
+  zod@4.3.5: {}
 
   zwitch@2.0.4: {}

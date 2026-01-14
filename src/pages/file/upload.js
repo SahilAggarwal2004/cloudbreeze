@@ -51,24 +51,25 @@ export default function Upload({ router }) {
     if (mode === "save" && size > cloudLimit) return toast.warning(`File size must not exceed ${cloudLimitMB}MB`);
     setProgress(0);
     const body = new FormData();
-    if ((fileId = fileIdFromUrl || fileIdRef.current.value)) {
-      if (unavailable.includes(fileId)) {
-        toast.warning(`File Id cannot be ${fileId}`);
+    const fileIdInput = fileIdFromUrl || fileIdRef.current.value;
+    if (fileIdInput) {
+      if (unavailable.includes(fileIdInput)) {
+        toast.warning(`File Id cannot be ${fileIdInput}`);
         return setProgress(-1);
       }
-      body.append("fileId", fileId);
+      body.append("fileId", fileIdInput);
     }
     for (const file of files) body.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
     const nameList = length ? Array.from(files).map(({ name }) => name) : undefined;
+    const daysLimit = daysLimitRef.current?.value;
+    const downloadLimit = downloadLimitRef.current?.value;
     if (nameList) body.append("nameList", nameList);
     if (password.current?.value) body.append("password", password.current.value);
-    const daysLimit = daysLimitRef.current?.value,
-      downloadLimit = downloadLimitRef.current?.value;
     if (daysLimit) body.append("daysLimit", daysLimit);
     if (downloadLimit) body.append("downloadLimit", downloadLimit);
 
     if (mode === "save") {
-      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId, edit } });
+      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId: fileIdInput, edit } });
       if (!verified) return setProgress(-1);
     } else {
       servers = Array.from(Array(process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT).keys());
