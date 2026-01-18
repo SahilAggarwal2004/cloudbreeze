@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { downloadZip } from "client-zip";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import Head from "next/head";
-import { randomElement } from "utility-kit";
+import { generateID, randomElement } from "utility-kit";
+
 import { useFileContext } from "../../contexts/ContextProvider";
 import { fileDetails, getUploadUrl, remove } from "../../lib/functions";
 import { cloudLimit, cloudLimitMB, transferLimit, unavailable } from "../../constants";
@@ -23,11 +25,11 @@ export default function Upload({ router }) {
   const [link, setLink] = useState();
   const [progress, setProgress] = useState(-1);
   const maxDaysLimit = type === "premium" ? 365 : type === "normal" ? 30 : 7;
+  const isProcessing = progress === 0 || progress === 100;
   const isUploading = progress >= 0;
   const isUploaded = link && link !== "error";
-  const length = files.length;
   const edit = Boolean(fileIdFromUrl);
-  const file = uploadFiles.find(({ _id }) => _id === fileIdFromUrl);
+  const file = uploadFiles.find(({ fileId }) => fileId === fileIdFromUrl);
   const size = useMemo(() => fileDetails(files).totalSize, [files]);
 
   const verifyFileId = (e) => (e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, ""));
@@ -51,16 +53,31 @@ export default function Upload({ router }) {
     if (mode === "save" && size > cloudLimit) return toast.warning(`File size must not exceed ${cloudLimitMB}MB`);
     setProgress(0);
     const body = new FormData();
-    const fileIdInput = fileIdFromUrl || fileIdRef.current.value;
-    if (fileIdInput) {
-      if (unavailable.includes(fileIdInput)) {
-        toast.warning(`File Id cannot be ${fileIdInput}`);
-        return setProgress(-1);
-      }
-      body.append("fileId", fileIdInput);
+    const fileId = fileIdFromUrl || fileIdRef.current.value || generateID();
+    if (unavailable.includes(fileId)) {
+      toast.warning(`File Id cannot be ${fileId}`);
+      return setProgress(-1);
     }
-    for (const file of files) body.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
-    const nameList = length ? Array.from(files).map(({ name }) => name) : undefined;
+    body.append("fileId", fileId);
+
+    if (mode === "save") {
+      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId, edit } });
+      if (!verified) return setProgress(-1);
+    } else {
+      servers = Array.from(Array(process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT).keys());
+      server = randomElement(servers);
+    }
+
+    const filesArray = Array.from(files);
+    if (files.length === 1) var fileToUpload = files[0];
+    else {
+      const zipResponse = downloadZip(filesArray.map((file) => ({ name: file.name, input: file })));
+      const zippedBlob = await zipResponse.blob();
+      var fileToUpload = new File([zippedBlob], `cloudbreeze_${fileId}.zip`);
+    }
+    body.append("files", fileToUpload); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
+
+    const nameList = files.length ? filesArray.map(({ name }) => name) : undefined;
     const daysLimit = daysLimitRef.current?.value;
     const downloadLimit = downloadLimitRef.current?.value;
     if (nameList) body.append("nameList", nameList);
@@ -68,20 +85,12 @@ export default function Upload({ router }) {
     if (daysLimit) body.append("daysLimit", daysLimit);
     if (downloadLimit) body.append("downloadLimit", downloadLimit);
 
-    if (mode === "save") {
-      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId: fileIdInput, edit } });
-      if (!verified) return setProgress(-1);
-    } else {
-      servers = Array.from(Array(process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT).keys());
-      server = randomElement(servers);
-    }
-
     while (!success) {
       if (!servers.length) {
         setLink("error");
         return setProgress(-1);
       }
-      var { fileId, name, success } = await fetchApp({
+      var { success, name } = await fetchApp({
         url: getUploadUrl(mode, server),
         method: "POST",
         body,
@@ -95,20 +104,20 @@ export default function Upload({ router }) {
     }
     setLink(fileId);
 
-    if (mode === "transfer") setTransferFiles((prev) => prev.concat({ _id: fileId, nameList, createdAt: Date.now(), daysLimit: 1 / 24 }));
+    if (mode === "transfer") setTransferFiles((prev) => prev.concat({ fileId, nameList, createdAt: Date.now(), daysLimit: 1 / 24 }));
     else
       setUploadFiles((prev) => {
         if (edit)
-          return prev.map((item) => {
-            if (item._id === fileId) {
-              if (name) item.name = name;
-              if (nameList) item.nameList = nameList;
-              if (daysLimit) item.daysLimit = daysLimit;
-              if (downloadLimit) item.downloadLimit = downloadLimit;
+          return prev.map((file) => {
+            if (file.fileId === fileId) {
+              if (name) file.name = name;
+              if (nameList) file.nameList = nameList;
+              if (daysLimit) file.daysLimit = daysLimit;
+              if (downloadLimit) file.downloadLimit = downloadLimit;
             }
-            return item;
+            return file;
           });
-        return prev.concat({ _id: fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit || maxDaysLimit, downloadLimit });
+        return prev.concat({ fileId, name, nameList, downloadCount: 0, createdAt: Date.now(), daysLimit: daysLimit || maxDaysLimit, downloadLimit });
       });
   }
 
@@ -170,7 +179,7 @@ export default function Upload({ router }) {
       <div className="flex flex-col items-center justify-center space-y-5 px-4 pb-5 text-sm sm:text-base">
         <form onSubmit={handleSubmit} className="grid grid-cols-[auto_1fr] items-center gap-3">
           <label htmlFor="files">File(s):</label>
-          {share && length ? <div>{length > 1 ? `${length} files` : files[0]?.name} selected</div> : <input type="file" id="files" ref={filesRef} onChange={updateFile} disabled={isUploading} required={!edit} multiple />}
+          {share && files.length ? <div>{files.length > 1 ? `${files.length} files` : files[0]?.name} selected</div> : <input type="file" id="files" ref={filesRef} onChange={updateFile} disabled={isUploading} required={!edit} multiple />}
 
           <label htmlFor="fileId">File Id: </label>
           {edit ? <div>{fileIdFromUrl}</div> : <input type="text" id="fileId" ref={fileIdRef} onInput={verifyFileId} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder="Auto" maxLength={30} />}
@@ -201,7 +210,7 @@ export default function Upload({ router }) {
         </form>
 
         {!link &&
-          (progress === 100 ? (
+          (isProcessing ? (
             <Loader className="flex items-center space-x-3">
               <div>
                 <div>Please wait, processing the file(s)...</div>

@@ -67,9 +67,9 @@ export default function ContextProvider({ children, router }) {
   }
 
   function clearHistory(fileId, filter) {
-    if (filter === "upload") setUploadFiles((prev) => prev.filter(({ _id }) => _id !== fileId));
-    else if (filter === "transfer") setTransferFiles((prev) => prev.filter(({ _id }) => _id !== fileId));
-    else if (filter === "download") setDownloadFiles((prev) => prev.filter(({ _id }) => _id !== fileId));
+    if (filter === "upload") setUploadFiles((prev) => prev.filter((file) => file.fileId !== fileId));
+    else if (filter === "transfer") setTransferFiles((prev) => prev.filter((file) => file.fileId !== fileId));
+    else if (filter === "download") setDownloadFiles((prev) => prev.filter((file) => file.fileId !== fileId));
   }
 
   useEffect(() => {

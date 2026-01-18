@@ -63,7 +63,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         }
         setProgress(100);
         toast.success("File(s) downloaded successfully!");
-        if (!server) setDownloadFiles((prev) => prev.filter(({ _id }) => _id !== fileId).concat({ nameList, _id: fileId, createdAt: fileData.createdAt || createdAt, daysLimit: fileData.daysLimit || daysLimit }));
+        if (!server) setDownloadFiles((prev) => prev.filter((file) => file.fileId !== fileId).concat({ nameList, fileId, createdAt: fileData.createdAt || createdAt, daysLimit: fileData.daysLimit || daysLimit }));
       } catch {
         setProgress(-1);
         if (mode === "download") toast.error("Couldn't download file(s)");
