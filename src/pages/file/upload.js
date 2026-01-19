@@ -53,15 +53,15 @@ export default function Upload({ router }) {
     if (mode === "save" && size > cloudLimit) return toast.warning(`File size must not exceed ${cloudLimitMB}MB`);
     setProgress(0);
     const body = new FormData();
-    const fileId = fileIdFromUrl || fileIdRef.current.value || generateID();
-    if (unavailable.includes(fileId)) {
-      toast.warning(`File Id cannot be ${fileId}`);
+    const fileIdInput = fileIdFromUrl || fileIdRef.current.value || generateID();
+    if (unavailable.includes(fileIdInput)) {
+      toast.warning(`File Id cannot be ${fileIdInput}`);
       return setProgress(-1);
     }
-    body.append("fileId", fileId);
+    body.append("fileId", fileIdInput);
 
     if (mode === "save") {
-      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId, edit } });
+      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId: fileIdInput, edit } });
       if (!verified) return setProgress(-1);
     } else {
       servers = Array.from(Array(process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT).keys());
@@ -73,7 +73,7 @@ export default function Upload({ router }) {
     else {
       const zipResponse = downloadZip(filesArray.map((file) => ({ name: file.name, input: file })));
       const zippedBlob = await zipResponse.blob();
-      filesToUpload = [new File([zippedBlob], `cloudbreeze_${fileId}.zip`)];
+      filesToUpload = [new File([zippedBlob], `cloudbreeze_${fileIdInput}.zip`)];
     }
     for (const file of filesToUpload) body.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
 
@@ -90,7 +90,7 @@ export default function Upload({ router }) {
         setLink("error");
         return setProgress(-1);
       }
-      var { success, name } = await fetchApp({
+      var { success, fileId, name } = await fetchApp({
         url: getUploadUrl(mode, server),
         method: "POST",
         body,
