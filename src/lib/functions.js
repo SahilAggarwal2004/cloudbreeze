@@ -1,6 +1,6 @@
 import { wait } from "utility-kit";
 import { toast } from "react-toastify";
-import { sizes } from "../constants";
+import { iosRegex, mobileRegex, sizes } from "../constants";
 
 const { KB, MB } = sizes;
 const production = process.env.NODE_ENV === "production";
@@ -94,4 +94,10 @@ export async function fetchResource(src, type, signal) {
   const res = await fetch(src, { signal });
   if (!res.ok) throw new Error();
   return res[type]();
+}
+
+export function isMobile(iOS = true) {
+  let result = navigator.userAgentData?.mobile;
+  result ??= mobileRegex.test(navigator.userAgent) || (iOS && iosRegex.test(navigator.userAgent));
+  return result;
 }

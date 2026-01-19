@@ -18,7 +18,15 @@ export const fetchHistory = ["/account", "/account/history"];
 
 export const hideNavbar = ["/_error", "/account/confirm/[token]"];
 
+export const iosRegex = /iPhone|iPad|iPod/i;
+
 export const maxBufferSize = 4 * chunkSize;
+
+export const mobileRegex = /Android|webOS|BlackBerry|IEMobile|Opera Mini/i;
+
+const mobileZipLimitMB = 512;
+
+export const mobileZipLimit = mobileZipLimitMB * sizes.MB;
 
 export const onlyGuest = ["/account/signup", "/account/login", "/account/forgot"];
 

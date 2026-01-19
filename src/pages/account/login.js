@@ -45,7 +45,7 @@ export default function Login({ router }) {
           </div>
           <form className="mt-8 space-y-6" onSubmit={submit}>
             <div className="-space-y-px rounded-md shadow-xs">
-              <input ref={email} type="email" autoComplete="email" required className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:outline-hidden focus:ring-black sm:text-sm" placeholder="Email address" />
+              <input ref={email} type="email" autoComplete="email" required className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:ring-black focus:outline-hidden sm:text-sm" placeholder="Email address" />
               <Password password={password} />
             </div>
 

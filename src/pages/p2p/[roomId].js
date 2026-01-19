@@ -153,7 +153,7 @@ export default function Id({ router }) {
         <div className="mb-8 space-y-8" style={{ wordBreak: "break-word" }}>
           {file && (
             <div className="flex justify-center">
-              <div className="grid w-max min-w-[90vw] max-w-full grid-cols-[auto_1fr] gap-2 px-3 sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw]">
+              <div className="grid w-max max-w-full min-w-[90vw] grid-cols-[auto_1fr] gap-2 px-3 sm:min-w-[60vw] md:min-w-[40vw] lg:min-w-[25vw]">
                 <span className="col-span-2 text-center text-lg font-medium">Files</span>
                 <span>File:</span>
                 <span className="text-right">{file}</span>

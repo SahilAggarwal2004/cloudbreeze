@@ -1,8 +1,10 @@
-import QRCode from "react-qr-code";
-import { useFileContext } from "../contexts/ContextProvider";
-import { toast } from "react-toastify";
-import { FaShareSquare } from "react-icons/fa";
 import Link from "next/link";
+import { FaShareSquare } from "react-icons/fa";
+import QRCode from "react-qr-code";
+import { toast } from "react-toastify";
+
+import { useFileContext } from "../contexts/ContextProvider";
+import { isMobile } from "../lib/functions";
 
 export default function Info({ fileId, roomId, filter, downloadCount, modal = false }) {
   const link = window.location.origin + (fileId ? `/file/${fileId}` : `/p2p/${roomId}`);
@@ -11,8 +13,7 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
   function share(type = "URL") {
     const id = fileId || roomId;
     const data = type === "URL" ? { url: link } : { text: id };
-    if (navigator.canShare?.(data) && navigator.userAgentData?.mobile)
-      navigator.share(data); // navigator.userAgentData?.mobile checks if the device is a mobile device or not
+    if (isMobile() && navigator.canShare?.(data)) navigator.share(data);
     else {
       navigator.clipboard.writeText(type === "URL" ? link : id);
       toast.success(`${type} copied to clipboard!`);
@@ -23,15 +24,15 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
     <div className="max-w-[95vw] space-y-2 bg-white text-center text-sm text-black sm:text-base">
       {modal && <h2 className="mb-2 text-lg font-bold">File Details</h2>}
       {fileId ? (
-        <div className="mx-auto mb-4 w-fit cursor-pointer break-all px-1" onClick={() => share("File Id")}>
+        <div className="mx-auto mb-4 w-fit cursor-pointer px-1 break-all" onClick={() => share("File Id")}>
           File Id: <span className="font-medium">{fileId}</span>
         </div>
       ) : (
-        <div className="mx-auto mb-4 w-fit cursor-pointer break-all px-1" onClick={() => share("Room Id")}>
+        <div className="mx-auto mb-4 w-fit cursor-pointer px-1 break-all" onClick={() => share("Room Id")}>
           Room Id: <span className="font-medium">{roomId}</span>
         </div>
       )}
-      <div className="mx-auto flex w-fit cursor-pointer select-none items-center space-x-1 font-medium text-gray-800" onClick={() => share()}>
+      <div className="mx-auto flex w-fit cursor-pointer items-center space-x-1 font-medium text-gray-800 select-none" onClick={() => share()}>
         <FaShareSquare />
         <span>Click here to share the url</span>
       </div>

@@ -10,19 +10,19 @@ export default function Navbar() {
   return (
     <>
       <LoadingBar color="#ffffff" progress={progress} waitingTime={300} onLoaderFinished={() => setProgress(0)} />
-      <nav className="sticky inset-0 z-30 flex items-center justify-between bg-black p-2 text-white shadow-lg xs:px-4 sm:px-5">
+      <nav className="xs:px-4 sticky inset-0 z-30 flex items-center justify-between bg-black p-2 text-white shadow-lg sm:px-5">
         {/* title attribute displays text on element hover */}
         <div className="flex items-center space-x-3 sm:space-x-4">
           <Link href="/account">
             <FaUserAlt className="xs:scale-110" title="Your Account" />
           </Link>
           <Link href="/">
-            <h1 className="cursor-pointer select-none text-lg font-medium xs:text-xl" title="Home">
+            <h1 className="xs:text-xl cursor-pointer text-lg font-medium select-none" title="Home">
               CloudBreeze
             </h1>
           </Link>
         </div>
-        <div className="flex space-x-4 xs:space-x-5 sm:space-x-6">
+        <div className="xs:space-x-5 flex space-x-4 sm:space-x-6">
           <Link href="/account/history?filter=upload">
             <FaHistory className="hidden scale-110 sm:block sm:scale-125" title="History" />
           </Link>

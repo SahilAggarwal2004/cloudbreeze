@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { downloadZip } from "client-zip";
+import Head from "next/head";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import Head from "next/head";
 import { generateID, randomElement } from "utility-kit";
 
 import { useFileContext } from "../../contexts/ContextProvider";
-import { fileDetails, getUploadUrl, remove } from "../../lib/functions";
-import { cloudLimit, cloudLimitMB, transferLimit, unavailable } from "../../constants";
+import { fileDetails, getUploadUrl, isMobile, remove } from "../../lib/functions";
+import { cloudLimit, cloudLimitMB, mobileZipLimit, transferLimit, unavailable } from "../../constants";
 import Loader from "../../components/Loader";
 import Info from "../../components/Info";
 import BarProgress from "../../components/BarProgress";
@@ -69,13 +69,13 @@ export default function Upload({ router }) {
     }
 
     const filesArray = Array.from(files);
-    if (files.length === 1) var fileToUpload = files[0];
+    if (files.length === 1 || (isMobile() && size > mobileZipLimit)) var filesToUpload = files;
     else {
       const zipResponse = downloadZip(filesArray.map((file) => ({ name: file.name, input: file })));
       const zippedBlob = await zipResponse.blob();
-      var fileToUpload = new File([zippedBlob], `cloudbreeze_${fileId}.zip`);
+      filesToUpload = [new File([zippedBlob], `cloudbreeze_${fileId}.zip`)];
     }
-    body.append("files", fileToUpload); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
+    for (const file of filesToUpload) body.append("files", file); // (attribute, value), this is the attribute that we will accept in backend as upload.single/array(attribute which contains the files) where upload is a multer function
 
     const nameList = files.length ? filesArray.map(({ name }) => name) : undefined;
     const daysLimit = daysLimitRef.current?.value;

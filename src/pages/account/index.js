@@ -39,7 +39,7 @@ export default function Account() {
           </div>
           {type === "premium" && <BsPatchCheckFill className="inline scale-90" title="Premium User" />}
         </div>
-        <div className="flex flex-col items-center space-y-5 text-sm sm:flex-row sm:justify-center sm:space-x-10 sm:space-y-0">
+        <div className="flex flex-col items-center space-y-5 text-sm sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-10">
           <Link href="/account/history?filter=upload">
             <div className="text-lg font-semibold sm:text-xl">{uploadFiles.length}</div>
             Files Uploaded

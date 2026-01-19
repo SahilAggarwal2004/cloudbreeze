@@ -36,7 +36,7 @@ export default function Scanner() {
 
   return (
     <div className={`flex flex-col items-center justify-center space-y-3 px-3 text-center ${message ? "" : "hidden"}`}>
-      <span className="text-xs xs:text-sm md:text-base">{message}</span>
+      <span className="xs:text-sm text-xs md:text-base">{message}</span>
       <video ref={video} className="max-h-[50vh] w-[80vw] max-w-96" />
     </div>
   );
