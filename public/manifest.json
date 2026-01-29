@@ -1,8 +1,8 @@
 {
   "short_name": "CloudBreeze",
   "name": "CloudBreeze - Breeze your files on the cloud!",
-  "version": "3.0.0",
-  "id": "3.0.0",
+  "version": "3.0.1",
+  "id": "3.0.1",
   "manifest_version": 2,
   "description": "CloudBreeze is an online platform where you can share files via cloud or p2p between your friends for free.",
   "author": "Sahil Aggarwal",
