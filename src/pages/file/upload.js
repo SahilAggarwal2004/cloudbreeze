@@ -7,7 +7,7 @@ import { generateID, randomElement } from "utility-kit";
 
 import { useFileContext } from "../../contexts/ContextProvider";
 import { fileDetails, getUploadUrl, isMobile, remove } from "../../lib/functions";
-import { cloudLimit, cloudLimitMB, mobileZipLimit, transferLimit, unavailable } from "../../constants";
+import { cloudLimit, cloudLimitMB, mobileZipLimit, transferLimit, unavailable, unitDurations } from "../../constants";
 import Loader from "../../components/Loader";
 import Info from "../../components/Info";
 import BarProgress from "../../components/BarProgress";
@@ -24,12 +24,13 @@ export default function Upload({ router }) {
   const [mode, setMode] = useState("save");
   const [link, setLink] = useState();
   const [progress, setProgress] = useState(-1);
-  const maxDaysLimit = type === "premium" ? 365 : type === "normal" ? 30 : 7;
   const isProcessing = progress === 0 || progress === 100;
   const isUploading = progress >= 0;
   const isUploaded = link && link !== "error";
   const edit = Boolean(fileIdFromUrl);
-  const file = uploadFiles.find(({ fileId }) => fileId === fileIdFromUrl);
+  const file = edit && uploadFiles.find(({ fileId }) => fileId === fileIdFromUrl);
+  const minDaysLimit = file ? Math.ceil((Date.now() - new Date(file.createdAt)) / unitDurations.day) : 1;
+  const maxDaysLimit = type === "premium" ? 365 : type === "normal" ? 30 : 7;
   const size = useMemo(() => fileDetails(files).totalSize, [files]);
 
   const verifyFileId = (e) => (e.target.value = e.target.value.replace(/[^a-zA-Z0-9_-]/g, ""));
@@ -194,7 +195,7 @@ export default function Upload({ router }) {
           {mode === "save" && (
             <>
               <label htmlFor="days-limit">Days Limit:</label>
-              <input type="number" id="days-limit" ref={daysLimitRef} defaultValue={file?.daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={file ? Math.ceil((Date.now() - new Date(file.createdAt)) / (1000 * 60 * 60 * 24)) : 1} max={maxDaysLimit} />
+              <input type="number" id="days-limit" ref={daysLimitRef} defaultValue={file?.daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={minDaysLimit} max={maxDaysLimit} />
             </>
           )}
 
