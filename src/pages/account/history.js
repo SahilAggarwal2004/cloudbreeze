@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
-import { options } from "../../constants";
+import { options, unitDurations } from "../../constants";
 import { useFileContext } from "../../contexts/ContextProvider";
 import { relativeTime } from "../../lib/functions";
 
@@ -8,6 +8,7 @@ export default function History({ router }) {
   const { uploadFiles, transferFiles, downloadFiles, clearHistory, activateModal } = useFileContext();
   const { filter = "upload" } = router.query;
   const history = filter === "upload" ? uploadFiles : filter === "transfer" ? transferFiles : filter === "download" ? downloadFiles : [];
+  const now = new Date();
 
   return (
     <>
@@ -44,7 +45,7 @@ export default function History({ router }) {
               <tbody className="cursor-pointer">
                 {history.map(({ nameList, name, fileId, createdAt, daysLimit, downloadCount }, i) => {
                   if (!nameList[0]) nameList = [name];
-                  const minutesLeft = daysLimit * 24 * 60 - Math.ceil((Date.now() - new Date(createdAt)) / (60 * 1000));
+                  const minutesLeft = Math.ceil((daysLimit * unitDurations.day - (now - new Date(createdAt))) / unitDurations.minute);
                   if (minutesLeft < 0) return clearHistory(fileId, filter);
 
                   return (

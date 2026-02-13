@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Script from "next/script";

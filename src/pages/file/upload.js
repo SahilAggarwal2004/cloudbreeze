@@ -7,7 +7,7 @@ import { generateID, randomElement } from "utility-kit";
 
 import { useFileContext } from "../../contexts/ContextProvider";
 import { fileDetails, getUploadUrl, isMobile, remove } from "../../lib/functions";
-import { cloudLimit, cloudLimitMB, mobileZipLimit, transferLimit, unavailable } from "../../constants";
+import { cloudLimit, cloudLimitMB, mobileZipLimit, transferLimit, unavailable, unitDurations } from "../../constants";
 import Loader from "../../components/Loader";
 import Info from "../../components/Info";
 import BarProgress from "../../components/BarProgress";
@@ -194,7 +194,7 @@ export default function Upload({ router }) {
           {mode === "save" && (
             <>
               <label htmlFor="days-limit">Days Limit:</label>
-              <input type="number" id="days-limit" ref={daysLimitRef} defaultValue={file?.daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={file ? Math.ceil((Date.now() - new Date(file.createdAt)) / (1000 * 60 * 60 * 24)) : 1} max={maxDaysLimit} />
+              <input type="number" id="days-limit" ref={daysLimitRef} defaultValue={file?.daysLimit} onInput={verifyDaysLimit} disabled={isUploading} className="rounded-sm border px-2 py-0.5 placeholder:text-sm" autoComplete="off" placeholder={`${maxDaysLimit} (max)`} min={file ? Math.ceil((Date.now() - new Date(file.createdAt)) / unitDurations.day) : 1} max={maxDaysLimit} />
             </>
           )}
 
