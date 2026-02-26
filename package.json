@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint ."
   },
-  "packageManager": "pnpm@10.29.3",
+  "packageManager": "pnpm@10.30.3",
   "dependencies": {
     "axios": "^1.13.5",
     "client-zip": "^2.5.0",
@@ -19,11 +19,11 @@
     "react": "^19.2.4",
     "react-circular-progressbar": "^2.2.0",
     "react-dom": "^19.2.4",
-    "react-file-preview-engine": "^0.1.8",
+    "react-file-preview-engine": "^0.1.9",
     "react-icons": "^5.5.0",
     "react-qr-code": "^2.0.18",
-    "react-remarkify": "^0.8.2",
-    "react-text-to-speech": "^5.1.4",
+    "react-remarkify": "^0.8.3",
+    "react-text-to-speech": "^5.1.6",
     "react-textarea-autosize": "^8.5.9",
     "react-toastify": "^11.0.5",
     "react-top-loading-bar": "^3.0.2",
@@ -32,12 +32,12 @@
     "remark-gfm": "^4.0.1",
     "streamsaver": "^2.0.6",
     "unzipit": "^1.4.3",
-    "utility-kit": "0.10.0"
+    "utility-kit": "0.10.2"
   },
   "devDependencies": {
     "@builder.io/partytown": "^0.10.3",
-    "@serwist/next": "^9.5.5",
-    "@tailwindcss/postcss": "^4.1.18",
+    "@serwist/next": "^9.5.6",
+    "@tailwindcss/postcss": "^4.2.1",
     "@tailwindcss/typography": "^0.5.19",
     "@types/react": "^19.2.14",
     "babel-plugin-react-compiler": "^1.0.0",
@@ -46,7 +46,7 @@
     "postcss": "^8.5.6",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "serwist": "^9.5.5",
-    "tailwindcss": "^4.1.18"
+    "serwist": "^9.5.6",
+    "tailwindcss": "^4.2.1"
   }
 }
