@@ -9,7 +9,7 @@ export default function Modal() {
     modal: { active, type, ...props },
     closeModal,
     setProgress,
-    fetchApp,
+    fetchApi,
     logout,
     setUploadFiles,
     clearHistory,
@@ -19,7 +19,7 @@ export default function Modal() {
   async function deleteFile(id) {
     closeModal();
     const [fileId, server] = id.split("@");
-    const { success, files } = await fetchApp({ url: getDeleteUrl(fileId, server), method: "DELETE" });
+    const { success, files } = await fetchApi({ url: getDeleteUrl(fileId, server), method: "DELETE" });
     if (!success) return;
     if (server) clearHistory(id, "transfer");
     else setUploadFiles(files);
@@ -28,7 +28,7 @@ export default function Modal() {
   async function deleteUser() {
     closeModal();
     setProgress(100 / 3);
-    const { success, error } = await fetchApp({ url: "auth/delete", method: "DELETE" });
+    const { success, error } = await fetchApi({ url: "auth/delete", method: "DELETE" });
     setProgress(100);
     if (success || error === "User not found!") logout("redirect");
   }

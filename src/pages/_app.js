@@ -7,12 +7,10 @@ import { ToastContainer } from "react-toastify";
 
 import Modal from "../components/Modal";
 import Navbar from "../components/Navbar";
-import { hideNavbar, showModal } from "../constants";
+import { apiUrl, hideNavbar, showModal } from "../constants";
 import ContextProvider from "../contexts/ContextProvider";
 import { handleVersionUpdate } from "../lib/update";
 import "../styles/globals.css";
-
-const api = process.env.NEXT_PUBLIC_API;
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -39,7 +37,7 @@ export default function MyApp({ Component, pageProps }) {
         <meta name="description" content="CloudBreeze is an online platform where you can share files via cloud or p2p between your friends for free. We respect your privacy and that's why we make sure your files are totally encrypted and password protected." />
         <link rel="manifest" href="/manifest.json" />
 
-        <link rel="preconnect" href={api} />
+        <link rel="preconnect" href={apiUrl} />
 
         <meta name="google-site-verification" content="5_rdfkDpTLo7tXDzIkEfmQb1wH_0AmpbcQOAPhLNBLQ" />
 

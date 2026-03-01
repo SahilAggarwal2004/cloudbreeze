@@ -6,14 +6,14 @@ import Logo from "../../components/Logo";
 import Password from "../../components/Password";
 
 export default function Signup({ router }) {
-  const { fetchApp, progress } = useFileContext();
+  const { fetchApi, progress } = useFileContext();
   const name = useRef();
   const email = useRef();
   const password = useRef();
 
   async function submit(e) {
     e.preventDefault();
-    const { error } = await fetchApp({ url: "auth/signup", method: "POST", body: { name: name.current.value, email: email.current.value, password: password.current.value } });
+    const { error } = await fetchApi({ url: "auth/signup", method: "POST", body: { name: name.current.value, email: email.current.value, password: password.current.value } });
     if (!error) router.replace("/account/login");
   }
 

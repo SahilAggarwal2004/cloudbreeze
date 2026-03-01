@@ -7,13 +7,13 @@ import { removeStorage, setStorage } from "../../lib/storage";
 import Head from "next/head";
 
 export default function Login({ router }) {
-  const { fetchApp, progress, setDownloadFiles, setTransferFiles, setType, setUploadFiles } = useFileContext();
+  const { fetchApi, progress, setDownloadFiles, setTransferFiles, setType, setUploadFiles } = useFileContext();
   const email = useRef();
   const password = useRef();
 
   async function submit(e) {
     e.preventDefault();
-    const { success, name, type, token, files } = await fetchApp({ url: "auth/login", method: "POST", body: { email: email.current.value, password: password.current.value } });
+    const { success, name, type, token, files } = await fetchApi({ url: "auth/login", method: "POST", body: { email: email.current.value, password: password.current.value } });
     if (success) {
       setStorage("username", name);
       setStorage("token", token);

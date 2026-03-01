@@ -16,7 +16,7 @@ import { download, generateId, getDownloadUrl, resolvePromises } from "../lib/fu
 import { markdownRenderer } from "../lib/renderers";
 
 export default function FileDownload({ fileIdFromUrl = false }) {
-  const { setDownloadFiles, fetchApp, activateModal } = useFileContext();
+  const { setDownloadFiles, fetchApi, activateModal } = useFileContext();
   const fileRef = useRef();
   const password = useRef();
   const [unzipFile, setUnzip] = useStorage("unzip", false);
@@ -77,7 +77,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
       return downloadFile(data, headers?.filename);
     }
 
-    var { createdAt, daysLimit, error, link, name, size } = await fetchApp({ url: getDownloadUrl(fileId, mode), method: "POST", body: { pass: password.current.value }, showToast: mode === "download" });
+    var { createdAt, daysLimit, error, link, name, size } = await fetchApi({ url: getDownloadUrl(fileId, mode), method: "POST", body: { pass: password.current.value }, showToast: mode === "download" });
     if (error) return setProgress(-1);
     try {
       const file = File.fromURL(link);

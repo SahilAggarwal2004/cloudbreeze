@@ -2,10 +2,10 @@ import Head from "next/head";
 import { useFileContext } from "../../../contexts/ContextProvider";
 
 export default function Confirm({ router }) {
-  const { fetchApp } = useFileContext();
+  const { fetchApi } = useFileContext();
 
   async function verify() {
-    const { success } = await fetchApp({ url: "auth/confirm", method: "PUT", token: router.query.token });
+    const { success } = await fetchApi({ url: "auth/confirm", method: "PUT", token: router.query.token });
     if (success) router.replace("/account/login");
   }
 

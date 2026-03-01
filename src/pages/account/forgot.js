@@ -6,7 +6,7 @@ import Password from "../../components/Password";
 import Head from "next/head";
 
 export default function Forgot({ router }) {
-  const { fetchApp, progress } = useFileContext();
+  const { fetchApi, progress } = useFileContext();
   const email = useRef();
   const otp = useRef();
   const password = useRef();
@@ -15,10 +15,10 @@ export default function Forgot({ router }) {
   async function submit(e) {
     e.preventDefault();
     if (!stage) {
-      const { success, error } = await fetchApp({ url: "auth/otp", method: "POST", body: { email: email.current.value } });
+      const { success, error } = await fetchApi({ url: "auth/otp", method: "POST", body: { email: email.current.value } });
       if (success || error === "OTP already sent!") setStage(1);
     } else {
-      const { success } = await fetchApp({ url: "auth/forgot", method: "PUT", body: { email: email.current.value, otp: otp.current.value, password: password.current.value } });
+      const { success } = await fetchApi({ url: "auth/forgot", method: "PUT", body: { email: email.current.value, otp: otp.current.value, password: password.current.value } });
       if (success) router.push("/account/login");
     }
   }

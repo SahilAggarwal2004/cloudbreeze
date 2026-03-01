@@ -7,14 +7,14 @@ import { generateID, randomElement } from "utility-kit";
 
 import { useFileContext } from "../../contexts/ContextProvider";
 import { fileDetails, getUploadUrl, isMobile, remove } from "../../lib/functions";
-import { cloudLimit, cloudLimitMB, mobileZipLimit, transferLimit, unavailable, unitDurations } from "../../constants";
+import { cloudLimit, cloudLimitMB, mobileZipLimit, transferLimit, transferServerCount, unavailable, unitDurations } from "../../constants";
 import Loader from "../../components/Loader";
 import Info from "../../components/Info";
 import BarProgress from "../../components/BarProgress";
 import Select from "../../components/Select";
 
 export default function Upload({ router }) {
-  const { fetchApp, files, setFiles, uploadFiles, setUploadFiles, setTransferFiles, type } = useFileContext();
+  const { fetchApi, files, setFiles, uploadFiles, setUploadFiles, setTransferFiles, type } = useFileContext();
   const { fileId: fileIdFromUrl, share } = router.query;
   const filesRef = useRef();
   const fileIdRef = useRef();
@@ -62,10 +62,10 @@ export default function Upload({ router }) {
     body.append("fileId", fileIdInput);
 
     if (mode === "save") {
-      var { success: verified, token, server, servers } = await fetchApp({ url: "file/verify", method: "POST", body: { fileId: fileIdInput, edit } });
+      var { success: verified, token, server, servers } = await fetchApi({ url: "file/verify", method: "POST", body: { fileId: fileIdInput, edit } });
       if (!verified) return setProgress(-1);
     } else {
-      servers = Array.from(Array(process.env.NEXT_PUBLIC_TRANSFER_SERVER_COUNT).keys());
+      servers = Array.from(Array(transferServerCount).keys());
       server = randomElement(servers);
     }
 
@@ -91,7 +91,7 @@ export default function Upload({ router }) {
         setLink("error");
         return setProgress(-1);
       }
-      var { success, fileId, name } = await fetchApp({
+      var { success, fileId, name } = await fetchApi({
         url: getUploadUrl(mode, server),
         method: "POST",
         body,

@@ -1,19 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import { randomName } from "utility-kit";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, use, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { fetchHistory, onlyGuest, types } from "../constants";
+import { apiUrl, fetchHistory, onlyGuest, types } from "../constants";
 import useStorage from "../hooks/useStorage";
 import { getStorage, removeStorage, setStorage } from "../lib/storage";
 import useModal from "../hooks/useModal";
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_API;
+axios.defaults.baseURL = apiUrl;
 
 const dimensions = typeof screen !== "undefined" && screen.width + screen.height;
 
 const Context = createContext();
-export const useFileContext = () => useContext(Context);
+export const useFileContext = () => use(Context);
 
 export default function ContextProvider({ children, router }) {
   const [uploadFiles, setUploadFiles] = useStorage("upload-files", []);
@@ -36,33 +36,39 @@ export default function ContextProvider({ children, router }) {
     setDownloadFiles([]);
   }
 
-  async function fetchApp({ url, token, method = "GET", type = "application/json", body = {}, options = {}, showToast = true, showProgress = true }) {
+  async function fetchApi({ url, token, method = "GET", type = "application/json", body, options = {}, showToast = true, showProgress = true, onSuccess, onError }) {
+    if (showProgress) setProgress(100 / 3);
+
+    let data;
+
     try {
-      if (showProgress) setProgress(100 / 3);
-      var { data } = await axios({
+      const response = await axios({
         url,
         method,
         data: body,
-        ...options,
         headers: {
           "Content-Type": type,
           dimensions,
           token: token || getStorage("token"),
           guest: getStorage("guest"),
         },
+        ...options,
       });
-      if (showToast) toast.success(data.msg);
+      data = response.data;
+      await onSuccess?.(data);
+      if (showToast && data.message) toast.success(data.message);
     } catch (error) {
-      if (!data) {
-        data = error.response?.data;
-        if (!data) data = { success: false, error: "Please check your internet connectivity" };
-        else if (typeof data === "string") data = { success: false, error: data };
-        const authenticationError = data.error.toLowerCase().includes("session expired");
-        if (authenticationError) logout("redirect");
-        if (showToast === true || authenticationError) toast.error(data.error);
-      }
+      if (error?.response?.data) data = error.response.data;
+      else if (error?.code === "ECONNABORTED") data = { success: false, error: { type: "timeout", message: "Request timed out. Please try again." } };
+      else data = { success: false, error: { type: "network", message: "Please check your internet connectivity." } };
+      await onError?.(data.error);
+      const authenticationError = data.error?.type === "authentication";
+      if (authenticationError) logout("redirect");
+      if (showToast === true || authenticationError) toast.error(data.error?.message);
+    } finally {
+      if (showProgress) setProgress(100);
     }
-    if (showProgress) setProgress(100);
+
     return data;
   }
 
@@ -79,8 +85,8 @@ export default function ContextProvider({ children, router }) {
   useEffect(() => {
     if (!type) logout();
     else if (types.includes(type) && onlyGuest.includes(router.pathname)) router.replace("/account");
-    else if (fetchHistory.includes(router.pathname)) fetchApp({ url: "file/history", method: "POST", showToast: false }).then(({ success, files }) => success && setUploadFiles(files));
+    else if (fetchHistory.includes(router.pathname)) fetchApi({ url: "file/history", method: "POST", showToast: false }).then(({ success, files }) => success && setUploadFiles(files));
   }, [router.pathname]);
 
-  return <Context.Provider value={{ uploadFiles, setUploadFiles, transferFiles, setTransferFiles, downloadFiles, setDownloadFiles, fetchApp, progress, setProgress, logout, clearHistory, modal, activateModal, closeModal, files, setFiles, type, setType }}>{children}</Context.Provider>;
+  return <Context value={{ uploadFiles, setUploadFiles, transferFiles, setTransferFiles, downloadFiles, setDownloadFiles, fetchApi, progress, setProgress, logout, clearHistory, modal, activateModal, closeModal, files, setFiles, type, setType }}>{children}</Context>;
 }
