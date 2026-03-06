@@ -1,9 +1,12 @@
-import { useState, useRef } from "react";
+import Head from "next/head";
 import Link from "next/link";
-import { useFileContext } from "../../contexts/ContextProvider";
+import { useState, useRef } from "react";
 import Logo from "../../components/Logo";
 import Password from "../../components/Password";
-import Head from "next/head";
+import { charLimit } from "../../constants";
+import { useFileContext } from "../../contexts/ContextProvider";
+
+const { otp: otpLength } = charLimit;
 
 export default function Forgot({ router }) {
   const { fetchApi, progress } = useFileContext();
@@ -45,7 +48,7 @@ export default function Forgot({ router }) {
               <input ref={email} type="email" autoComplete="email" required className={`relative block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 ${stage ? "rounded-b-none" : ""} focus:z-10 focus:border-black focus:ring-black focus:outline-hidden sm:text-sm`} placeholder="Email address" />
               {Boolean(stage) && (
                 <>
-                  <input ref={otp} type="text" autoComplete="new-password" minLength={6} maxLength={6} required className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:ring-black focus:outline-hidden sm:text-sm" placeholder="Enter OTP" />
+                  <input ref={otp} type="text" autoComplete="new-password" minLength={otpLength} maxLength={otpLength} required className="relative block w-full appearance-none rounded-none border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-black focus:ring-black focus:outline-hidden sm:text-sm" placeholder="Enter OTP" />
                   <Password password={password} />
                 </>
               )}

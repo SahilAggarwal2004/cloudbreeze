@@ -8,6 +8,12 @@ export const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export const autoExtractZipRegex = /^cloudbreeze_.*\.zip$/;
 
+export const charLimit = {
+  name: { min: 3, max: 20 },
+  otp: 6,
+  password: { min: 8, max: 64 },
+};
+
 export const sizes = { B: 1, KB: 1024, MB: 1048576, GB: 1073741824 }; // In bytes
 
 export const chunkSize = 64 * sizes.KB;
