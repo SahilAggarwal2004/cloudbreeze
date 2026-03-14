@@ -3,6 +3,7 @@ import axios from "axios";
 import { File } from "megajs";
 import { useEffect, useRef, useState } from "react";
 import FilePreviewer from "react-file-preview-engine";
+import "react-file-preview-engine/style.css";
 import { FaQrcode } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { unzip } from "unzipit";
