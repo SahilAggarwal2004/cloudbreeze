@@ -50,7 +50,11 @@ export default function FileDownload({ fileIdFromUrl = false }) {
 
     async function downloadFile(blob, name) {
       try {
-        if (mode === "preview") return setFileData({ url: URL.createObjectURL(blob), name, createdAt, daysLimit });
+        if (mode === "preview") {
+          setProgress(-1);
+          setFileData({ url: URL.createObjectURL(blob), name, createdAt, daysLimit });
+          return;
+        }
         if (!blob) throw new Error();
         try {
           if (!unzipFile || !autoExtractZipRegex.test(name)) throw new Error();
@@ -120,7 +124,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
           <span className="ml-3 text-sm">Extract files</span>
         </label>
         <button type="submit" disabled={isDownloading} className="primary-button">
-          {fileData.url || !isDownloaded ? "Download" : "Download Again"}
+          {isDownloaded ? "Download Again" : "Download"}
         </button>
       </form>
       {fileData.url ? (

@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@builder.io/partytown": "^0.10.3",
-    "@serwist/next": "^9.5.6",
+    "@serwist/next": "^9.5.7",
     "@tailwindcss/postcss": "^4.2.1",
     "@tailwindcss/typography": "^0.5.19",
     "@types/react": "^19.2.14",
@@ -46,7 +46,7 @@
     "postcss": "^8.5.8",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "serwist": "^9.5.6",
+    "serwist": "^9.5.7",
     "tailwindcss": "^4.2.1"
   }
 }
