@@ -36,7 +36,7 @@ export default function Text({ value, preview = false, className = "" }) {
           </div>
         </div>
       )}
-      <Text className="prose prose-th:w-screen prose-th:max-w-full prose-th:border prose-td:border prose-th:p-2 prose-td:p-2! prose-ul:whitespace-normal prose-ol:whitespace-normal prose-headings:my-2 prose-pre:my-2 prose-table:my-2 prose-table:block prose-table:overflow-x-auto xs:max-w-[80vw] grid max-h-[calc(100vh-10rem)] w-full max-w-[90vw] grid-cols-1 overflow-y-scroll rounded-xs border p-2 wrap-break-word whitespace-pre-wrap *:my-0 *:w-full *:whitespace-pre-wrap" />
+      <Text className="prose prose-table:my-2 prose-table:block prose-table:overflow-x-auto prose-th:w-screen prose-th:max-w-full prose-th:border prose-td:border prose-th:p-2 prose-td:p-2! prose-ul:whitespace-normal prose-ol:whitespace-normal prose-headings:my-2 prose-pre:my-2 xs:max-w-[80vw] prose-hr:my-2 grid max-h-[calc(100vh-10rem)] w-full max-w-[90vw] grid-cols-1 overflow-y-scroll rounded-xs border p-2 wrap-break-word whitespace-pre-wrap *:my-0 *:w-full *:whitespace-pre-wrap" />
     </div>
   );
 }
