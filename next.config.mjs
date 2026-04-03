@@ -19,9 +19,6 @@ const withPWA = withSerwistInit({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactCompiler: true,
-  experimental: {
-    nextScriptWorkers: true,
-  },
 };
 
 const manifestPath = "./public/manifest.json";
