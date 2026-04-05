@@ -11,6 +11,7 @@ import { unzip } from "unzipit";
 import BarProgress from "./BarProgress";
 import { autoExtractZipRegex } from "../constants";
 import { useFileContext } from "../contexts/ContextProvider";
+import useStateRef from "../hooks/useStateRef";
 import useStorage from "../hooks/useStorage";
 import Loader from "./Loader";
 import { download, generateId, getDownloadUrl, resolvePromises } from "../lib/functions";
@@ -21,8 +22,8 @@ export default function FileDownload({ fileIdFromUrl = false }) {
   const fileRef = useRef();
   const password = useRef();
   const [unzipFile, setUnzip] = useStorage("unzip", false);
-  const [fileData, setFileData] = useState({ url: null });
   const [progress, setProgress] = useState(-1);
+  const [fileData, fileDataRef, setFileData] = useStateRef({ url: null });
   const isDownloaded = progress === 100;
   const isDownloading = progress >= 0 && !isDownloaded;
 
@@ -60,7 +61,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
           if (!unzipFile || !autoExtractZipRegex.test(name)) throw new Error();
           const { entries } = await unzip(blob);
           var nameList = Object.keys(entries);
-          const blobs = await resolvePromises(Object.values(entries).map((e) => e.blob()));
+          const blobs = await resolvePromises(Object.values(entries).map((entry) => entry.blob()));
           for (let i = 0; i < nameList.length; i++) await download(blobs[i], nameList[i]);
         } catch {
           nameList = [name];
@@ -68,14 +69,14 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         }
         setProgress(100);
         toast.success("File(s) downloaded successfully!");
-        if (!server) setDownloadFiles((prev) => prev.filter((file) => file.fileId !== fileId).concat({ nameList, fileId, createdAt: fileData.createdAt || createdAt, daysLimit: fileData.daysLimit || daysLimit }));
+        if (!server) setDownloadFiles((prev) => prev.filter((file) => file.fileId !== fileId).concat({ nameList, fileId, createdAt: fileDataRef.current.createdAt || createdAt, daysLimit: fileDataRef.current.daysLimit || daysLimit }));
       } catch {
         setProgress(-1);
         if (mode === "download") toast.error("Couldn't download file(s)");
       }
     }
 
-    if (fileData.url) return downloadFile(fileData.url, fileData.name);
+    if (fileDataRef.current.url) return downloadFile(fileDataRef.current.url, fileDataRef.current.name);
 
     if (server) {
       const { data, headers } = await fetchDownload();
@@ -101,8 +102,31 @@ export default function FileDownload({ fileIdFromUrl = false }) {
   }
 
   useEffect(() => {
-    if (fileIdFromUrl) submit({ type: "preview" });
+    if (!fileIdFromUrl) return;
+
+    const previewFile = () => submit({ type: "preview" });
+
+    const handlePageShow = (event) => {
+      if (!event.persisted) return;
+
+      if (fileDataRef.current.url) URL.revokeObjectURL(fileDataRef.current.url);
+      setFileData({ url: null });
+      previewFile();
+    };
+
+    previewFile();
+
+    // Refetch preview on back/forward navigation to avoid stale data (bfcache restores page from memory)
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => window.removeEventListener("pageshow", handlePageShow);
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (fileData.url) URL.revokeObjectURL(fileData.url);
+    };
+  }, [fileData]);
 
   return (
     <div className="flex flex-col items-center justify-center space-y-5 px-4 pb-5 text-sm sm:text-base">
