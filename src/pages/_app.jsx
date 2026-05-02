@@ -5,8 +5,8 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 
-import Modal from "../components/Modal";
-import Navbar from "../components/Navbar";
+import Modal from "../components/modal/Modal";
+import Navbar from "../components/layout/Navbar";
 import { apiUrl, hideNavbar, showModal } from "../constants";
 import ContextProvider from "../contexts/ContextProvider";
 import { handleVersionUpdate } from "../lib/update";

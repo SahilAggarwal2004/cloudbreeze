@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
-import useStorage from "../hooks/useStorage";
+
+import useStorage from "../../hooks/useStorage";
 
 export default function Text({ value, preview = false, className = "" }) {
   const [showMarkdown, setShowMarkdown] = useStorage("markdown", false);

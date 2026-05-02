@@ -4,12 +4,14 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { BsPatchCheckFill } from "react-icons/bs";
 import Head from "next/head";
+
+import DeleteUser from "../../components/modal/DeleteUser";
 import { useFileContext } from "../../contexts/ContextProvider";
-import { getStorage, setStorage } from "../../lib/storage";
 import { types } from "../../constants";
+import { getStorage, setStorage } from "../../lib/storage";
 
 export default function Account() {
-  const { uploadFiles, transferFiles, downloadFiles, logout, activateModal, type } = useFileContext();
+  const { uploadFiles, transferFiles, downloadFiles, logout, openModal, type } = useFileContext();
   const guest = !types.includes(type);
 
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function Account() {
               <div className="cursor-pointer hover:text-black" onClick={() => logout("manual")}>
                 Logout
               </div>
-              <div className="cursor-pointer hover:text-black" onClick={() => activateModal({ type: "deleteUser" })}>
+              <div className="cursor-pointer hover:text-black" onClick={() => openModal({ Component: DeleteUser })}>
                 Delete Account
               </div>
             </>

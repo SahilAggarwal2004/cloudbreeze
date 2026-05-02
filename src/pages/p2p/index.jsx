@@ -5,8 +5,10 @@ import Head from "next/head";
 import Textarea from "react-textarea-autosize";
 import { FaQrcode } from "react-icons/fa";
 import { toast } from "react-toastify";
-import Info from "../../components/Info";
-import PeerCard from "../../components/PeerCard";
+
+import Scanner from "../../components/modal/Scanner";
+import PeerCard from "../../components/peer/PeerCard";
+import ResourceDetails from "../../components/resource/ResourceDetails";
 import { peerOptions } from "../../constants";
 import { useFileContext } from "../../contexts/ContextProvider";
 import { fileDetails, generateId } from "../../lib/functions";
@@ -31,7 +33,7 @@ function reducer(state, { conn, name, peer, type = "add" }) {
 }
 
 export default function P2p({ router }) {
-  const { activateModal, progress, setProgress, files, setFiles } = useFileContext();
+  const { openModal, progress, setProgress, files, setFiles } = useFileContext();
   const { share, title, text: queryText, url } = router.query;
   const shareRoom = useRef();
   const receiveRoom = useRef();
@@ -156,7 +158,7 @@ export default function P2p({ router }) {
           </form>
           <div className="col-span-1 m-0 border-[0.5px] border-black p-0 md:h-[calc(100%+2.5rem)]" />
           {link ? (
-            <Info roomId={link} />
+            <ResourceDetails roomId={link} />
           ) : (
             <div className="flex flex-col items-center space-y-5">
               <form onSubmit={enterRoom} className="grid grid-cols-[auto_1fr] items-center gap-3">
@@ -168,7 +170,7 @@ export default function P2p({ router }) {
               </form>
               <div className="text-center">
                 <div className="mb-3 font-bold">OR</div>
-                <div className="flex cursor-pointer items-center justify-center space-x-1 font-medium text-gray-800 select-none" onClick={() => activateModal({ type: "qrScanner" })}>
+                <div className="flex cursor-pointer items-center justify-center space-x-1 font-medium text-gray-800 select-none" onClick={() => openModal({ Component: Scanner, containerProps: { style: { paddingInline: 0 } } })}>
                   <FaQrcode />
                   <span>Scan a QR Code</span>
                 </div>

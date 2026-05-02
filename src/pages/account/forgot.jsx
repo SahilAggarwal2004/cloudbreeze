@@ -1,8 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useState, useRef } from "react";
-import Logo from "../../components/Logo";
-import Password from "../../components/Password";
+
+import Logo from "../../components/common/Logo";
+import Password from "../../components/common/Password";
 import { charLimit } from "../../constants";
 import { useFileContext } from "../../contexts/ContextProvider";
 

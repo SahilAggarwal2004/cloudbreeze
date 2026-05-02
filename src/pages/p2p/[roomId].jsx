@@ -3,12 +3,13 @@ import Head from "next/head";
 import Peer from "peerjs";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import BarProgress from "../../components/BarProgress";
-import Loader from "../../components/Loader";
+
+import BarProgress from "../../components/common/BarProgress";
+import Loader from "../../components/common/Loader";
+import Text from "../../components/common/Text";
 import { peerOptions, sizes } from "../../constants";
 import { bytesToUnit, round, speed } from "../../lib/functions";
 import { getStorage } from "../../lib/storage";
-import Text from "../../components/Text";
 
 export default function Id({ router }) {
   const { roomId } = router.query;

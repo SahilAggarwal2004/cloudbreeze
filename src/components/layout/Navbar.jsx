@@ -2,7 +2,8 @@ import Link from "next/link";
 import { FaUpload, FaDownload, FaUserAlt, FaHistory } from "react-icons/fa";
 import { GrSend } from "react-icons/gr";
 import LoadingBar from "react-top-loading-bar";
-import { useFileContext } from "../contexts/ContextProvider";
+
+import { useFileContext } from "../../contexts/ContextProvider";
 
 export default function Navbar() {
   const { progress, setProgress } = useFileContext();

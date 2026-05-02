@@ -1,4 +1,5 @@
 import Head from "next/head";
+
 import { useFileContext } from "../../../contexts/ContextProvider";
 
 export default function Confirm({ router }) {

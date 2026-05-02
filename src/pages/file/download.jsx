@@ -1,5 +1,6 @@
 import Head from "next/head";
-import FileDownload from "../../components/FileDownload";
+
+import FileDownload from "../../components/file/FileDownload";
 
 export default function Download() {
   return (

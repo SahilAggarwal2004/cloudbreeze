@@ -8,17 +8,18 @@ import { FaQrcode } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { unzip } from "unzipit";
 
-import BarProgress from "./BarProgress";
-import { autoExtractZipRegex } from "../constants";
-import { useFileContext } from "../contexts/ContextProvider";
-import useStateRef from "../hooks/useStateRef";
-import useStorage from "../hooks/useStorage";
-import Loader from "./Loader";
-import { download, generateId, getDownloadUrl, resolvePromises } from "../lib/functions";
-import { markdownRenderer } from "../lib/renderers";
+import BarProgress from "../common/BarProgress";
+import Loader from "../common/Loader";
+import { autoExtractZipRegex } from "../../constants";
+import { useFileContext } from "../../contexts/ContextProvider";
+import useStateRef from "../../hooks/useStateRef";
+import useStorage from "../../hooks/useStorage";
+import { download, generateId, getDownloadUrl, resolvePromises } from "../../lib/functions";
+import { markdownRenderer } from "../../lib/renderers";
+import Scanner from "../modal/Scanner";
 
 export default function FileDownload({ fileIdFromUrl = false }) {
-  const { setDownloadFiles, fetchApi, activateModal } = useFileContext();
+  const { setDownloadFiles, fetchApi, openModal } = useFileContext();
   const fileRef = useRef();
   const password = useRef();
   const [unzipFile, setUnzip] = useStorage("unzip", false);
@@ -164,7 +165,7 @@ export default function FileDownload({ fileIdFromUrl = false }) {
         !fileIdFromUrl && (
           <div className="text-center">
             <div className="mb-3 font-bold">OR</div>
-            <div className="flex cursor-pointer items-center justify-center space-x-1 font-medium text-gray-800 select-none" onClick={() => activateModal({ type: "qrScanner" })}>
+            <div className="flex cursor-pointer items-center justify-center space-x-1 font-medium text-gray-800 select-none" onClick={() => openModal({ Component: Scanner, containerProps: { style: { paddingInline: 0 } } })}>
               <FaQrcode />
               <span>Scan a QR Code</span>
             </div>

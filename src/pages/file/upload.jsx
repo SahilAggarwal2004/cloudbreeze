@@ -5,13 +5,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { generateID, randomElement } from "utility-kit";
 
+import BarProgress from "../../components/common/BarProgress";
+import Loader from "../../components/common/Loader";
+import Select from "../../components/common/Select";
+import ResourceDetails from "../../components/resource/ResourceDetails";
+import { cloudLimit, cloudLimitMB, mobileZipLimit, transferLimit, transferServerCount, unavailable, unitDurations } from "../../constants";
 import { useFileContext } from "../../contexts/ContextProvider";
 import { fileDetails, getUploadUrl, isMobile, remove } from "../../lib/functions";
-import { cloudLimit, cloudLimitMB, mobileZipLimit, transferLimit, transferServerCount, unavailable, unitDurations } from "../../constants";
-import Loader from "../../components/Loader";
-import Info from "../../components/Info";
-import BarProgress from "../../components/BarProgress";
-import Select from "../../components/Select";
 
 export default function Upload({ router }) {
   const { fetchApi, files, setFiles, uploadFiles, setUploadFiles, setTransferFiles, type } = useFileContext();
@@ -224,7 +224,7 @@ export default function Upload({ router }) {
 
         {isUploaded && (
           <div className="pb-16">
-            <Info fileId={link} />
+            <ResourceDetails fileId={link} />
           </div>
         )}
       </div>

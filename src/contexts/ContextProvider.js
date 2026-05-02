@@ -3,10 +3,11 @@ import axios from "axios";
 import { randomName } from "utility-kit";
 import { createContext, use, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+
 import { apiUrl, fetchHistory, onlyGuest, types } from "../constants";
 import useStorage from "../hooks/useStorage";
-import { getStorage, removeStorage, setStorage } from "../lib/storage";
 import useModal from "../hooks/useModal";
+import { getStorage, removeStorage, setStorage } from "../lib/storage";
 
 axios.defaults.baseURL = apiUrl;
 
@@ -22,7 +23,7 @@ export default function ContextProvider({ children, router }) {
   const [type, setType] = useStorage("type", "");
   const [progress, setProgress] = useState(0);
   const [files, setFiles] = useState([]);
-  const { modal, activateModal, closeModal } = useModal();
+  const { modal, openModal, closeModal } = useModal();
 
   async function logout(type) {
     if (type === "manual") toast.success("Logged out successfully");
@@ -88,5 +89,5 @@ export default function ContextProvider({ children, router }) {
     else if (fetchHistory.includes(router.pathname)) fetchApi({ url: "file/history", method: "POST", showToast: false }).then(({ success, files }) => success && setUploadFiles(files));
   }, [router.pathname]);
 
-  return <Context value={{ uploadFiles, setUploadFiles, transferFiles, setTransferFiles, downloadFiles, setDownloadFiles, fetchApi, progress, setProgress, logout, clearHistory, modal, activateModal, closeModal, files, setFiles, type, setType }}>{children}</Context>;
+  return <Context value={{ uploadFiles, setUploadFiles, transferFiles, setTransferFiles, downloadFiles, setDownloadFiles, fetchApi, progress, setProgress, logout, clearHistory, modal, openModal, closeModal, files, setFiles, type, setType }}>{children}</Context>;
 }

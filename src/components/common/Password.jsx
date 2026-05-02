@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { charLimit } from "../constants";
+
+import { charLimit } from "../../constants";
 
 const {
   password: { min: minPassword, max: maxPassword },

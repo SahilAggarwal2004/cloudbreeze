@@ -3,12 +3,13 @@ import { FaShareSquare } from "react-icons/fa";
 import QRCode from "react-qr-code";
 import { toast } from "react-toastify";
 
-import { useFileContext } from "../contexts/ContextProvider";
-import { isMobile } from "../lib/functions";
+import { useFileContext } from "../../contexts/ContextProvider";
+import { isMobile } from "../../lib/functions";
+import DeleteFile from "../modal/DeleteFile";
 
-export default function Info({ fileId, roomId, filter, downloadCount, modal = false }) {
+export default function ResourceDetails({ fileId, roomId, filter, downloadCount, modal = false }) {
   const link = window.location.origin + (fileId ? `/file/${fileId}` : `/p2p/${roomId}`);
-  const { activateModal, closeModal, clearHistory } = useFileContext();
+  const { openModal, closeModal, clearHistory } = useFileContext();
 
   function share(type = "URL") {
     const id = fileId || roomId;
@@ -65,7 +66,7 @@ export default function Info({ fileId, roomId, filter, downloadCount, modal = fa
                     Edit
                   </Link>
                 )}
-                <button className={`button-animation rounded-sm border px-3 py-1 ${filter === "transfer" ? "col-span-2" : ""}`} onClick={() => activateModal({ type: "deleteFile", fileId })}>
+                <button className={`button-animation rounded-sm border px-3 py-1 ${filter === "transfer" ? "col-span-2" : ""}`} onClick={() => openModal({ Component: DeleteFile, props: { id: fileId } })}>
                   Delete
                 </button>
               </>

@@ -1,10 +1,11 @@
 import { useRef } from "react";
-import Link from "next/link";
-import { useFileContext } from "../../contexts/ContextProvider";
-import Logo from "../../components/Logo";
-import Password from "../../components/Password";
-import { removeStorage, setStorage } from "../../lib/storage";
 import Head from "next/head";
+import Link from "next/link";
+
+import Logo from "../../components/common/Logo";
+import Password from "../../components/common/Password";
+import { useFileContext } from "../../contexts/ContextProvider";
+import { removeStorage, setStorage } from "../../lib/storage";
 
 export default function Login({ router }) {
   const { fetchApi, progress, setDownloadFiles, setTransferFiles, setType, setUploadFiles } = useFileContext();
