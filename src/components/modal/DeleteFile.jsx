@@ -1,3 +1,4 @@
+import { useFileContext } from "../../contexts/ContextProvider";
 import { getDeleteUrl } from "../../lib/functions";
 
 export default function DeleteFile({ id }) {

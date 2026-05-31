@@ -1,6 +1,8 @@
-onlyBuiltDependencies:
-  - sharp
-  - unrs-resolver
+allowBuilds:
+  sharp: true
+  unrs-resolver: true
+minimumReleaseAgeExclude:
+  - postcss@8.5.10
+  - brace-expansion@5.0.6
 overrides:
-  follow-redirects@<=1.15.11: '>=1.16.0'
-  postcss@<8.5.10: '>=8.5.10'
+  postcss@<8.5.10: ^8.5.10
